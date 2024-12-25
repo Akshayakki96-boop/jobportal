@@ -7,6 +7,7 @@ import Header from './Header/header';
 import Footer from './Footer/footer';
 import Copyright from './Copyright/copyright';
 import Breadcumb from './Breadcumb/breadcumb';
+import SignUp from './SignUp/signUp';
 
 
 
@@ -57,6 +58,7 @@ class App extends React.Component {
 
                 <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/SignUp" element={<SignUp />} />
                   {/* Other routes can be added here */}
                 </Routes>
               {/* {this.state.hasMSSalesAccess === false && (
