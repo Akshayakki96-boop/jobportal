@@ -6,7 +6,7 @@ import Login from './Login/login';
 import Header from './Header/header';
 import Footer from './Footer/footer';
 import Copyright from './Copyright/copyright';
-
+import Breadcumb from './Breadcumb/breadcumb';
 
 
 
@@ -48,6 +48,7 @@ class App extends React.Component {
       <div className="App">
         <Router>
         <Header />
+        <Breadcumb />
           <div className="wrapper">
             <div id="content">
               <div className="mb-10">
