@@ -8,25 +8,16 @@ class Breadcumb extends React.Component {
         };
 
     }
-    componentDidMount() {
-
-    }
-
-
-
-
-
-   
+    componentDidMount() {}
 
     render() {
         return (
-            
             <div className="rbt-breadcrumb-default ptb--100 ptb_md--50 ptb_sm--30 bg-gradient-1">
             <div className="container">
               <div className="row">
                 <div className="col-lg-12">
                   <div className="breadcrumb-inner text-center">
-                    <h2 className="title">Login</h2>
+                    <h2 className="title">{this.props.componentName}</h2>
                     <ul className="page-list">
                       <li className="rbt-breadcrumb-item">
                         <a href="index.html">Home</a>
@@ -36,7 +27,7 @@ class Breadcumb extends React.Component {
                           <i className="feather-chevron-right"></i>
                         </div>
                       </li>
-                      <li className="rbt-breadcrumb-item active">Login</li>
+                      <li className="rbt-breadcrumb-item active">{this.props.ComponentValue}</li>
                     </ul>
                   </div>
                 </div>

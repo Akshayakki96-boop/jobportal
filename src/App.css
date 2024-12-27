@@ -36,3 +36,41 @@
     transform: rotate(360deg);
   }
 }
+.rbt-progress-parent {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  z-index: 1000;
+  transition: opacity 0.3s;
+}
+
+.rbt-backto-top-active {
+  opacity: 1;
+}
+
+.rbt-progress-parent path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+button.back-to-top {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  background-color: #000;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: none; /* Hide button initially */
+}
+
+.rbt-backto-top-active button.back-to-top {
+  display: block; /* Show button when active */
+}
+
+
+iframe#webpack-dev-server-client-overlay {
+  display: none !important
+}

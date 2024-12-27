@@ -1,20 +1,42 @@
 import React from 'react';
-
 class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            isSticky: false,
         };
-
+        this.headerRef = React.createRef(); // Reference for the header element
+        this.placeholderRef = React.createRef();
     }
     componentDidMount() {
-
-    }
+        this.handleScroll();
+        window.addEventListener('scroll', this.handleScroll);
+      }
+    
+      componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll);
+      }
+      handleScroll = () => {
+        const headerContainer = this.headerRef.current;
+        const placeholder = this.placeholderRef.current;
+        const headerContainerHeight = headerContainer ? headerContainer.offsetHeight : 0;
+        const topHeaderHeight = document.querySelector('.rbt-header-top') ? document.querySelector('.rbt-header-top').offsetHeight : 0;
+        const targetScroll = topHeaderHeight + 200;
+    
+        if (window.scrollY > targetScroll) {
+          headerContainer.classList.add('rbt-sticky');
+          if (placeholder) placeholder.style.height = `${headerContainerHeight}px`;
+          this.setState({ isSticky: true });
+        } else {
+          headerContainer.classList.remove('rbt-sticky');
+          if (placeholder) placeholder.style.height = '0';
+          this.setState({ isSticky: false });
+        }
+      };
     render() {
         return (
             <header className="rbt-header rbt-header-10">
-                <div className="rbt-sticky-placeholder"></div>
+                <div ref={this.placeholderRef} className="rbt-sticky-placeholder"></div>
 
                 {/* Start Header Top */}
                 <div className="rbt-header-top rbt-header-top-1 header-space-betwween bg-not-transparent bg-color-darker top-expended-activation">
@@ -83,7 +105,7 @@ class Header extends React.Component {
                 </div>
 {/* admin dashboard */}
 
-                <div className="rbt-header-wrapper header-space-betwween header-sticky">
+                <div  ref={this.headerRef} className={`rbt-header-wrapper header-space-betwween ${this.state.isSticky ? 'rbt-sticky' : ''}`}>
                     <div className="container-fluid">
                         <div className="mainbar-row rbt-navigation-center align-items-center">
                             <div className="header-left rbt-header-content">
@@ -445,6 +467,7 @@ class Header extends React.Component {
 </div>
 {/*end Search Dropdown */}
                 </div>
+                
             </header>
 
         );
