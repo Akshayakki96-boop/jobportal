@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import Breadcumb from '../Breadcumb/breadcumb';
+import withNavigation from '../withNavigation';
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -103,8 +104,9 @@ class SignUp extends React.Component {
         const signupUrl = `${baseUrl}/api/signup`;
         const signupData = {
             "username": this.state.values.username,
-            "password": this.state.values.password,
+            "password":  btoa(this.state.values.password), 
             "email": this.state.values.email,
+            // "confirmPassword":btoa(this.state.values.confirmPassword),
             "companyName": this.state.values.company,
         };
 
@@ -116,9 +118,14 @@ class SignUp extends React.Component {
             .then((response) => {
                 console.log('Signup Success:', response.data);
                 this.setState({
-                    responseMessage: 'Signup successful!',
+                    responseMessage: (
+                        <span>
+                            Signup successful! <a href="/Login" style={{ color: 'blue', textDecoration: 'underline' }}>Go to Login</a>
+                        </span>
+                    ),
                     alertVariant: 'success', // Success alert variant
                 });
+                //this.props.navigate('/Login'); // Use `navigate`
             })
             .catch((error) => {
                 console.error('Signup Error:', error.response?.data || error.message);
@@ -126,8 +133,11 @@ class SignUp extends React.Component {
                     responseMessage: 'Signup failed. Please try again.',
                     alertVariant: 'danger', // Error alert variant
                 });
-
             });
+    };
+
+    handleNavigation = (path) => {
+        this.props.navigate(path); // Use `navigate`
     };
 
     render() {
@@ -256,4 +266,4 @@ class SignUp extends React.Component {
     }
 }
 
-export default SignUp;
+export default withNavigation(SignUp);
