@@ -31,12 +31,12 @@ class SignUp extends React.Component {
         window.addEventListener('scroll', function () {
             var header = document.querySelector('.rbt-header-wrapper');
             if (window.scrollY > 50) { // Change 50 to whatever scroll position you want
-              header.classList.add('header-sticky');
+                header.classList.add('header-sticky');
             } else {
-              header.classList.remove('header-sticky');
+                header.classList.remove('header-sticky');
             }
-          });
-          
+        });
+
     }
 
 
@@ -100,11 +100,12 @@ class SignUp extends React.Component {
 
 
     handleSignup = () => {
+        this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
         const signupUrl = `${baseUrl}/api/signup`;
         const signupData = {
             "username": this.state.values.username,
-            "password":  btoa(this.state.values.password), 
+            "password": btoa(this.state.values.password),
             "email": this.state.values.email,
             // "confirmPassword":btoa(this.state.values.confirmPassword),
             "companyName": this.state.values.company,
@@ -117,6 +118,7 @@ class SignUp extends React.Component {
         })
             .then((response) => {
                 console.log('Signup Success:', response.data);
+                this.setState({ keepSpinner: false });
                 this.setState({
                     responseMessage: (
                         <span>
@@ -129,6 +131,7 @@ class SignUp extends React.Component {
             })
             .catch((error) => {
                 console.error('Signup Error:', error.response?.data || error.message);
+                this.setState({ keepSpinner: false });
                 this.setState({
                     responseMessage: 'Signup failed. Please try again.',
                     alertVariant: 'danger', // Error alert variant
@@ -155,6 +158,10 @@ class SignUp extends React.Component {
                                 </Alert>
                             )}
                         </div>
+                        {this.state.keepSpinner && <div class="custom-loader">
+                            <div class="loader-spinner"></div>
+                            <p class="loader-text">Please Wait...</p>
+                        </div>}
                         <div className="row gy-5 row--30">
                             <div className="col-lg-6 mx-auto">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
