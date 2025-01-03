@@ -28,10 +28,6 @@ jobs:
       - name: Build React app
         run: CI=false npm run build
 
-      # Debugging: List the contents of the directory to verify 'build' exists
-      - name: List directory contents
-        run: ls -al
-
       # Step 5: Upload build artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
@@ -50,13 +46,17 @@ jobs:
         with:
           name: build
 
-      # Step 2: Deploy to IIS via FTP
+      # Step 2: List the contents of the directory for debugging
+      - name: List directory contents
+        run: ls -al /home/runner/work/jobportal/jobportal
+
+      # Step 3: Deploy to IIS via FTP
       - name: Deploy to IIS via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.0.0
         with:
           server: ${{ secrets.FTP_SERVER }}  # Use the FTP server address stored in GitHub Secrets
           username: ${{ secrets.FTP_USERNAME }}  # Use the FTP username stored in GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}  # Use the FTP password stored in GitHub Secrets
-          local-dir: ./build/  # Path to your React build directory (ensure it ends with /)
+          local-dir: /home/runner/work/jobportal/jobportal/build/  # Update to the correct path
           server-dir: /stage.zobskill.com/  # Ensure this is a folder path and ends with /
           dry-run: false  # Set to false to perform actual deployment
