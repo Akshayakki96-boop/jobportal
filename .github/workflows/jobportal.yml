@@ -50,17 +50,17 @@ jobs:
         with:
           name: build
 
-      # Step 2: List the contents of the job directory for debugging
-      - name: List directory contents
+      # Step 2: List the contents of the downloaded directory for debugging
+      - name: List downloaded directory contents
         run: ls -al /home/runner/work/jobportal/jobportal/
 
-      # Step 3: Check if the 'build' folder exists
-      - name: Check if 'build' folder exists
+      # Step 3: Check if the 'build' folder exists after download
+      - name: Check if 'build' folder exists after download
         run: |
           if [ -d "/home/runner/work/jobportal/jobportal/build" ]; then
-            echo "'build' folder exists."
+            echo "'build' folder exists after download."
           else
-            echo "'build' folder does not exist."
+            echo "'build' folder does not exist after download."
             exit 1  # Fail the deployment if 'build' folder is not found
           fi
 
