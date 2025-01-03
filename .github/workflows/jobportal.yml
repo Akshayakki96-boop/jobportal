@@ -28,7 +28,11 @@ jobs:
       - name: Build React app
         run: CI=false npm run build
 
-      # Step 5: Upload build artifact
+      # Step 5: List the build directory contents (for debugging)
+      - name: List build directory contents
+        run: ls -al ./build
+
+      # Step 6: Upload build artifact
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
