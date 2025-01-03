@@ -54,5 +54,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}  # Use the FTP username stored in GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}  # Use the FTP password stored in GitHub Secrets
           local-dir: ./build/  # Path to your React build directory (ensure it ends with /)
-          server-dir: /stage.zobskill.com  # Replace with the IIS website path, e.g., /MyReactApp
+          server-dir: /stage.zobskill.com/  # Ensure this is a folder path and ends with /
           dry-run: false  # Set to false to perform actual deployment
