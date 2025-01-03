@@ -29,3 +29,24 @@ jobs:
         with:
           name: build
           path: build/
+    deploy:
+    runs-on: ubuntu-latest
+    needs: build  # Deploy only after the build step completes successfully
+
+    steps:
+      # Step 1: Download build artifacts from the build job
+      - name: Download build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+
+      # Step 2: Deploy to IIS via FTP
+      - name: Deploy to IIS via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.0.0
+        with:
+          ftp-server: ${{ secrets.FTP_SERVER }}  # Use the FTP server address stored in GitHub Secrets
+          ftp-username: ${{ secrets.FTP_USERNAME }}  # Use the FTP username stored in GitHub Secrets
+          ftp-password: ${{ secrets.FTP_PASSWORD }}  # Use the FTP password stored in GitHub Secrets
+          local-dir: ./build  # Path to your React build directory
+          server-dir: /stage.zobskill.com  # Replace with the IIS website path, e.g., /MyReactApp
+          dry-run: false  # Set to false to perform actual deployment
