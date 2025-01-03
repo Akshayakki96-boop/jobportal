@@ -50,7 +50,7 @@ jobs:
         with:
           name: build
 
-      # Step 2: List the contents of the downloaded directory for debugging
+      # Step 2: List the contents of the downloaded directory
       - name: List downloaded directory contents
         run: ls -al /home/runner/work/jobportal/jobportal/
 
