@@ -106,7 +106,7 @@ class SignUp extends React.Component {
             "username": this.state.values.username,
             "password":  btoa(this.state.values.password), 
             "email": this.state.values.email,
-            // "confirmPassword":btoa(this.state.values.confirmPassword),
+            "confirmPassword":btoa(this.state.values.confirmPassword),
             "companyName": this.state.values.company,
         };
 
