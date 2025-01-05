@@ -1,0 +1,191 @@
+import React from 'react';
+import axios from 'axios';
+import withNavigation from '../withNavigation';
+import UserDashBoard from './UserDashBoard';
+import MyProfile from './MyProfile';
+import EnrolledCourses from './EnrolledCourses';
+import MyCourses from './MyCourses';
+import Announcement from './Announcement';
+import Assignment from './Assignment';
+
+class Dashboard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showUserDashboard: true
+        };
+
+    }
+    componentDidMount() {
+
+    }
+
+    setActiveComponent = (componentName) => {
+        this.setState({
+            showUserDashboard: false,
+            showProfile: false,
+            showEnrollCourse: false,
+            showMyCourses: false,
+            showAssignment: false
+        });
+
+        switch (componentName) {
+            case 'dashboard':
+                this.setState({ showUserDashboard: true });
+                break;
+            case 'profile':
+                this.setState({ showProfile: true });
+                break;
+            case 'enrolledCourses':
+                this.setState({ showEnrollCourse: true });
+                break;
+            case 'myCourses':
+                this.setState({ showMyCourses: true });
+                break;
+            case 'announcements':
+                this.setState({ showAnnouncement: true });
+                break;
+                case 'assignments':
+                    this.setState({ showAssignment: true });
+                    break;
+            // Add more cases for other components as needed
+            default:
+                this.setState({ showUserDashboard: true });
+                break;
+        }
+    };
+
+
+    render() {
+
+        return (
+            <><div className="rbt-page-banner-wrapper">
+                {/* Start Banner BG Image  */}
+                <div className="rbt-banner-image"></div>
+                {/*  End Banner BG Image */}
+            </div><div>
+                    {/*Start Card Style */}
+                    <div className="rbt-dashboard-area rbt-section-overlayping-top rbt-section-gapBottom">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    {/* Start Dashboard Top */}
+                                    <div className="rbt-dashboard-content-wrapper">
+                                        <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
+                                        {/* Start Tutor Information */}
+                                        <div className="rbt-tutor-information">
+                                            <div className="rbt-tutor-information-left">
+                                                <div className="thumbnail rbt-avatars size-lg">
+                                                    <img src="assets/images/team/avatar.jpg" alt="Instructor" />
+                                                </div>
+                                                <div className="tutor-content">
+                                                    <h5 className="title">John Due</h5>
+                                                    <div className="rbt-review">
+                                                        <div className="rating">
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                        </div>
+                                                        <span className="rating-count"> (15 Reviews)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="rbt-tutor-information-right">
+                                                <div className="tutor-btn">
+                                                    <a className="rbt-btn btn-md hover-icon-reverse" href="#">
+                                                        <span className="icon-reverse-wrapper">
+                                                            <span className="btn-text">Create a New Course</span>
+                                                            <span className="btn-icon">
+                                                                <i className="feather-arrow-right"></i>
+                                                            </span>
+                                                            <span className="btn-icon">
+                                                                <i className="feather-arrow-right"></i>
+                                                            </span>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* End Tutor Information */}
+                                    </div>
+                                    {/* End Dashboard Top */}
+                                    <div class="row g-5">
+                                        <div class="col-lg-3">
+                                            {/* Start Dashboard Sidebar  */}
+                                            <div className="rbt-default-sidebar sticky-top rbt-shadow-box rbt-gradient-border">
+                                                <div className="inner">
+                                                    <div className="content-item-content">
+
+                                                        <div className="rbt-default-sidebar-wrapper">
+                                                            <div className="section-title mb--20">
+                                                                <h6 className="rbt-title-style-2">Welcome, Jone Due</h6>
+                                                            </div>
+                                                            <nav className="mainmenu-nav">
+                                                                <ul className="dashboard-mainmenu rbt-default-sidebar-list">
+                                                                    <li>
+                                                                        <a className={this.state.showUserDashboard ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('dashboard'); }} href="#">
+                                                                            <i className="feather-home"></i><span>Dashboard</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showProfile ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('profile'); }} href="#">
+                                                                            <i className="feather-user"></i><span>My Profile</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showEnrollCourse ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('enrolledCourses'); }} href="#">
+                                                                            <i className="feather-book-open"></i><span>Enrolled Courses</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myCourses'); }} href="#">
+                                                                            <i className="feather-monitor"></i><span>My Courses</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showAnnouncement ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('announcements'); }} href="#">
+                                                                            <i className="feather-volume-2"></i><span>Announcements</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showAssignment ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('assignments'); }} href="#">
+                                                                            <i className="feather-list"></i><span>Assignments</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a href="index.html">
+                                                                            <i className="feather-log-out"></i><span>Logout</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </nav>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* End Dashboard Sidebar   */}
+                                        </div>
+                                        {this.state.showUserDashboard && <UserDashBoard />}
+                                        {this.state.showProfile && <MyProfile />}
+                                        {this.state.showEnrollCourse && <EnrolledCourses />}
+                                        {this.state.showMyCourses && <MyCourses />}
+                                        {this.state.showAnnouncement && <Announcement />}
+                                        {this.state.showAssignment && <Assignment />}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/*End Card Style */}
+                </div></>
+        );
+    }
+}
+
+export default withNavigation(Dashboard);
