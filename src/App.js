@@ -9,6 +9,7 @@ import Copyright from './Copyright/copyright';
 import Home from './Home/home';
 import SignUp from './SignUp/signUp';
 import Wrapper from './Wrapper/wrapper';
+import Dashboard from './Dashboard/Dashboard';
 
 
 
@@ -58,9 +59,11 @@ class App extends React.Component {
               </div>
 
                 <Routes>
+                <Route path="/" element={<Home />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/SignUp" element={<SignUp />} />
-                <Route path="/" element={<Home />} />
+                <Route path="/Dashboard" element={<Dashboard />} />
+               
                   {/* Other routes can be added here */}
                 </Routes>
               {/* {this.state.hasMSSalesAccess === false && (
