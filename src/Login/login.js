@@ -66,14 +66,15 @@ class Login extends React.Component {
         .then((response) => {
             console.log('Login Success:', response.data);
             this.setState({ keepSpinner: false });
-            this.setState({
-                responseMessage: (
-                    <span>
-                        Login successful!
-                    </span>
-                ),
-                alertVariant: 'success', // Success alert variant
-            });
+            localStorage.setItem('authToken', response.data.token);
+            // this.setState({
+            //     responseMessage: (
+            //         <span>
+            //             Login successful!
+            //         </span>
+            //     ),
+            //     alertVariant: 'success', // Success alert variant
+            // });
             this.props.navigate('/Dashboard'); // Use `navigate`
         })
         .catch((error) => {

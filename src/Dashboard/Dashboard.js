@@ -7,6 +7,7 @@ import EnrolledCourses from './EnrolledCourses';
 import MyCourses from './MyCourses';
 import Announcement from './Announcement';
 import Assignment from './Assignment';
+import Header from '../Header/header';
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -54,12 +55,35 @@ class Dashboard extends React.Component {
                 break;
         }
     };
+    handleLogout=()=>{
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const logoutUrl = `${baseUrl}/api/Logout/Logout`;
+        const logoutData = {};
+        const token = localStorage.getItem('authToken');
+        axios.post(logoutUrl, logoutData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('Logout Success:', response.data);
+                this.setState({ keepSpinner: false });
 
+                this.props.navigate('/Login'); // Use `navigate`
+            })
+            .catch((error) => {
+                console.error('Signup Error:', error.response?.data || error.message);
+                this.setState({ keepSpinner: false });
+            });
+    }
 
     render() {
 
         return (
-            <><div className="rbt-page-banner-wrapper">
+            <>
+            <Header />
+            <div className="rbt-page-banner-wrapper">
                 {/* Start Banner BG Image  */}
                 <div className="rbt-banner-image"></div>
                 {/*  End Banner BG Image */}
@@ -155,7 +179,7 @@ class Dashboard extends React.Component {
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a href="index.html">
+                                                                        <a  onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                                             <i className="feather-log-out"></i><span>Logout</span>
                                                                         </a>
                                                                     </li>
