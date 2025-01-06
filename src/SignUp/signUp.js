@@ -36,6 +36,10 @@ class SignUp extends React.Component {
                 header.classList.remove('header-sticky');
             }
         });
+        let url=window.location.search;
+        var urlParams= new URLSearchParams(url);
+        var reqType= urlParams.get('role_id');
+        this.role_id=reqType;
 
     }
 
@@ -109,6 +113,7 @@ class SignUp extends React.Component {
             "email": this.state.values.email,
             "confirmPassword":btoa(this.state.values.confirmPassword),
             "companyName": this.state.values.company,
+            "role_id":this.role_id
         };
 
         axios.post(signupUrl, signupData, {

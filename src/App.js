@@ -47,10 +47,17 @@ class App extends React.Component {
   }
 
   render() {
+    const currentPath = window.location.pathname;
+    const searchParams = new URLSearchParams(window.location.search);
+
+    // Check if the current path is Login or SignUp (with or without query parameters)
+    const hideHeader =
+      currentPath === '/Login' ||
+      (currentPath.includes('/SignUp'));
     return (
       <div className="App">
         <Router>
-        <Header />
+        {!hideHeader && <Header />}
         {/* <Breadcumb /> */}
           <div className="wrapper">
             <div id="content">

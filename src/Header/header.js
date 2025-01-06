@@ -1,4 +1,5 @@
 import React from 'react';
+import withNavigation from '../withNavigation';
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -33,6 +34,9 @@ class Header extends React.Component {
           this.setState({ isSticky: false });
         }
       };
+      handleNavigation=(roleId)=>{
+        this.props.navigate(`/SignUp?role_id=${roleId}`); 
+      }
     render() {
         return (
             <header className="rbt-header rbt-header-10">
@@ -131,13 +135,13 @@ class Header extends React.Component {
                                             <a href="#">Jobs</a>
                                         </li>
                                         <li>
-                                            <a href="#">Candidate</a>
+                                            <a  href="/SignUp?role_id=1">Candidate</a>
                                         </li>
                                         <li>
-                                            <a href="#">Employer</a>
+                                            <a href="/SignUp?role_id=2">Employer</a>
                                         </li>
                                         <li>
-                                            <a href="#">Trainer</a>
+                                            <a href="/SignUp?role_id=3">Trainer</a>
                                         </li>
                                         <li>
                                             <a href="#">Community</a>
@@ -154,7 +158,11 @@ class Header extends React.Component {
                                             <i className="feather-search"></i>
                                         </a>
                                     </li>
-
+                                    <li className="access-icon rbt-mini-cart">
+                                        <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
+                                        Login
+                                        </a>
+                                    </li>
                                     <li className="access-icon rbt-mini-cart">
                                         <a className="rbt-cart-sidenav-activation rbt-round-btn" href="#">
                                             <i className="feather-shopping-cart"></i>
@@ -474,4 +482,4 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+export default withNavigation(Header);

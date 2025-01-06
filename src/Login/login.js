@@ -132,15 +132,20 @@ validateForm = () => {
                     </div>
 
                     <div className="row mb--30">
-                      <div className="col-lg-6">
+                      {/* <div className="col-lg-6">
                         <div className="rbt-checkbox">
                           <input type="checkbox" id="rememberme" name="rememberme" />
                           <label htmlFor="rememberme">Remember me</label>
                         </div>
+                      </div> */}
+                      <div className="col-lg-4">
+                        <div className="rbt-lost-password text-end">
+                          <a className="rbt-btn-link" href="#">Lost your password?</a>
+                        </div>
                       </div>
                       <div className="col-lg-6">
                         <div className="rbt-lost-password text-end">
-                          <a className="rbt-btn-link" href="#">Lost your password?</a>
+                          <a className="rbt-btn-link" href="/SignUp">Register</a>
                         </div>
                       </div>
                     </div>
