@@ -57,7 +57,6 @@ class App extends React.Component {
     return (
       <div className="App">
         <Router>
-        {!hideHeader && <Header />}
         {/* <Breadcumb /> */}
           <div className="wrapper">
             <div id="content">
