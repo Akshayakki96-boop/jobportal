@@ -18,7 +18,57 @@ class Dashboard extends React.Component {
 
     }
     componentDidMount() {
+        this.getDashboardUser();
 
+    }
+
+    getDashboardUser = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/Dashboard`;
+        const token = localStorage.getItem('authToken');
+
+        axios.post(url, "", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('dashboard data', response.data);
+                this.getUserProfile(response.data.user_id);
+                this.setState({dashBoardData:response.data.data});
+                this.setState({ keepSpinner: false });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+
+    getUserProfile = (userId) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/GetProfile`;
+        const token = localStorage.getItem('authToken');
+        const userData = {
+            "Id": userId,
+        };
+        axios.post(url, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('user data', response.data);
+                this.setState({userData:response.data.data})
+                this.setState({ keepSpinner: false });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
     }
 
     setActiveComponent = (componentName) => {
@@ -46,16 +96,16 @@ class Dashboard extends React.Component {
             case 'announcements':
                 this.setState({ showAnnouncement: true });
                 break;
-                case 'assignments':
-                    this.setState({ showAssignment: true });
-                    break;
+            case 'assignments':
+                this.setState({ showAssignment: true });
+                break;
             // Add more cases for other components as needed
             default:
                 this.setState({ showUserDashboard: true });
                 break;
         }
     };
-    handleLogout=()=>{
+    handleLogout = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const logoutUrl = `${baseUrl}/api/Logout/Logout`;
         const logoutData = {};
@@ -73,7 +123,8 @@ class Dashboard extends React.Component {
                 this.props.navigate('/Login'); // Use `navigate`
             })
             .catch((error) => {
-                console.error('Signup Error:', error.response?.data || error.message);
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
                 this.setState({ keepSpinner: false });
             });
     }
@@ -82,12 +133,12 @@ class Dashboard extends React.Component {
 
         return (
             <>
-            <Header />
-            <div className="rbt-page-banner-wrapper">
-                {/* Start Banner BG Image  */}
-                <div className="rbt-banner-image"></div>
-                {/*  End Banner BG Image */}
-            </div><div>
+                <Header dashBoardData={this.state.dashBoardData} />
+                <div className="rbt-page-banner-wrapper">
+                    {/* Start Banner BG Image  */}
+                    <div className="rbt-banner-image"></div>
+                    {/*  End Banner BG Image */}
+                </div><div>
                     {/*Start Card Style */}
                     <div className="rbt-dashboard-area rbt-section-overlayping-top rbt-section-gapBottom">
                         <div className="container">
@@ -179,7 +230,7 @@ class Dashboard extends React.Component {
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a  onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
+                                                                        <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                                             <i className="feather-log-out"></i><span>Logout</span>
                                                                         </a>
                                                                     </li>
@@ -194,7 +245,7 @@ class Dashboard extends React.Component {
                                             {/* End Dashboard Sidebar   */}
                                         </div>
                                         {this.state.showUserDashboard && <UserDashBoard />}
-                                        {this.state.showProfile && <MyProfile />}
+                                        {this.state.showProfile && <MyProfile userData={this.state.userData} />}
                                         {this.state.showEnrollCourse && <EnrolledCourses />}
                                         {this.state.showMyCourses && <MyCourses />}
                                         {this.state.showAnnouncement && <Announcement />}

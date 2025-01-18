@@ -1,5 +1,6 @@
 import React from 'react';
 import withNavigation from '../withNavigation';
+import axios from 'axios';
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -12,32 +13,58 @@ class Header extends React.Component {
     componentDidMount() {
         this.handleScroll();
         window.addEventListener('scroll', this.handleScroll);
-      }
-    
-      componentWillUnmount() {
+    }
+
+    componentWillUnmount() {
         window.removeEventListener('scroll', this.handleScroll);
-      }
-      handleScroll = () => {
+    }
+    handleScroll = () => {
         const headerContainer = this.headerRef.current;
         const placeholder = this.placeholderRef.current;
         const headerContainerHeight = headerContainer ? headerContainer.offsetHeight : 0;
         const topHeaderHeight = document.querySelector('.rbt-header-top') ? document.querySelector('.rbt-header-top').offsetHeight : 0;
         const targetScroll = topHeaderHeight + 200;
-    
+
         if (window.scrollY > targetScroll) {
-          headerContainer.classList.add('rbt-sticky');
-          if (placeholder) placeholder.style.height = `${headerContainerHeight}px`;
-          this.setState({ isSticky: true });
+            headerContainer.classList.add('rbt-sticky');
+            if (placeholder) placeholder.style.height = `${headerContainerHeight}px`;
+            this.setState({ isSticky: true });
         } else {
-          headerContainer.classList.remove('rbt-sticky');
-          if (placeholder) placeholder.style.height = '0';
-          this.setState({ isSticky: false });
+            headerContainer.classList.remove('rbt-sticky');
+            if (placeholder) placeholder.style.height = '0';
+            this.setState({ isSticky: false });
         }
-      };
-      handleNavigation=(roleId)=>{
-        this.props.navigate(`/SignUp?role_id=${roleId}`); 
-      }
+    };
+    handleNavigation = (roleId) => {
+        this.props.navigate(`/SignUp?role_id=${roleId}`);
+    }
+
+    handleLogout = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const logoutUrl = `${baseUrl}/api/Logout/Logout`;
+        const logoutData = {};
+        const token = localStorage.getItem('authToken');
+        axios.post(logoutUrl, logoutData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('Logout Success:', response.data);
+                this.setState({ keepSpinner: false });
+
+                this.props.navigate('/Login'); // Use `navigate`
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+                this.setState({ keepSpinner: false });
+            });
+    }
     render() {
+        const currentPath = window.location.pathname;
+        const searchParams = new URLSearchParams(window.location.search);
         return (
             <header className="rbt-header rbt-header-10">
                 <div ref={this.placeholderRef} className="rbt-sticky-placeholder"></div>
@@ -107,16 +134,16 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-{/* admin dashboard */}
+                {/* admin dashboard */}
 
-                <div  ref={this.headerRef} className={`rbt-header-wrapper header-space-betwween ${this.state.isSticky ? 'rbt-sticky' : ''}`}>
+                <div ref={this.headerRef} className={`rbt-header-wrapper header-space-betwween ${this.state.isSticky ? 'rbt-sticky' : ''}`}>
                     <div className="container-fluid">
                         <div className="mainbar-row rbt-navigation-center align-items-center">
                             <div className="header-left rbt-header-content">
                                 <div className="header-info">
                                     <div className="logo logo-dark">
                                         <a href="index.html">
-                                            <img src="assets/images/logo.png" alt="Logo Images" />
+                                            <img src="assets/images/Zobskill.gif" alt="Logo Images" />
                                         </a>
                                     </div>
                                 </div>
@@ -135,7 +162,7 @@ class Header extends React.Component {
                                             <a href="#">Jobs</a>
                                         </li>
                                         <li>
-                                            <a  href="/SignUp?role_id=1">Candidate</a>
+                                            <a href="/SignUp?role_id=1">Candidate</a>
                                         </li>
                                         <li>
                                             <a href="/SignUp?role_id=2">Employer</a>
@@ -158,21 +185,16 @@ class Header extends React.Component {
                                             <i className="feather-search"></i>
                                         </a>
                                     </li>
-                                    <li className="access-icon rbt-mini-cart">
+                                    {currentPath === '/' && <li className="access-icon rbt-mini-cart">
                                         <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
-                                        Login
+                                            Login
                                         </a>
-                                    </li>
-                                    <li className="access-icon rbt-mini-cart">
-                                        <a className="rbt-cart-sidenav-activation rbt-round-btn" href="#">
-                                            <i className="feather-shopping-cart"></i>
-                                            <span className="rbt-cart-count">4</span>
-                                        </a>
-                                    </li>
+                                    </li>}
 
-                                    <li className="account-access rbt-user-wrapper d-none d-xl-block">
+
+                                    {this.props.dashBoardData?.username && <li className="account-access rbt-user-wrapper d-none d-xl-block">
                                         <a href="#">
-                                            <i className="feather-user"></i>Admin
+                                            <i className="feather-user"></i>{this.props.dashBoardData?.username}
                                         </a>
                                         <div className="rbt-user-menu-list-wrapper">
                                             <div className="inner">
@@ -183,90 +205,30 @@ class Header extends React.Component {
                                                             alt="User Images"
                                                         />
                                                     </div>
-                                                    <div className="admin-info">
-                                                        <span className="name">RainbowIT</span>
-                                                        <a className="rbt-btn-link color-primary" href="#">
-                                                            View Profile
-                                                        </a>
-                                                    </div>
                                                 </div>
+
+
                                                 <ul className="user-list-wrapper">
                                                     <li>
-                                                        <a href="#">
-                                                            <i className="feather-home"></i>
-                                                            <span>My Dashboard</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-bookmark"></i>
-                                                            <span>Bookmark</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-shopping-bag"></i>
-                                                            <span>Enrolled Courses</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-heart"></i>
-                                                            <span>Wishlist</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-star"></i>
-                                                            <span>Reviews</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-list"></i>
-                                                            <span>My Quiz Attempts</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-clock"></i>
-                                                            <span>Order History</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-message-square"></i>
-                                                            <span>Question & Answer</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <hr className="mt--10 mb--10" />
-                                                <ul className="user-list-wrapper">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-book-open"></i>
-                                                            <span>Getting Started</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <hr className="mt--10 mb--10" />
-                                                <ul className="user-list-wrapper">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-settings"></i>
-                                                            <span>Settings</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="index.html">
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                             <i className="feather-log-out"></i>
                                                             <span>Logout</span>
                                                         </a>
                                                     </li>
                                                 </ul>
+                                                {/* Start Mobile-Menu-Bar */}
+                                                <div className="mobile-menu-bar d-block d-xl-none">
+                                                    <div className="hamberger">
+                                                        <button className="hamberger-button rbt-round-btn">
+                                                            <i className="feather-menu"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                {/* End Mobile-Menu-Bar */}
+
                                             </div>
                                         </div>
-                                    </li>
+                                    </li>}
 
                                     <li className="access-icon rbt-user-wrapper d-block d-xl-none">
                                         <a className="rbt-round-btn" href="#">
@@ -382,100 +344,100 @@ class Header extends React.Component {
 
                     {/*start Search Dropdown */}
                     <div className="rbt-search-dropdown">
-    <div className="wrapper">
-        <div className="row">
-            <div className="col-lg-12">
-                <form action="#">
-                    <input type="text" placeholder="What are you looking for?" />
-                    <div className="submit-btn">
-                        <a className="rbt-btn btn-gradient btn-md" href="#">Search</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div className="rbt-separator-mid">
-            <hr className="rbt-separator m-0" />
-        </div>
-
-        <div className="row g-4 pt--30 pb--60">
-            <div className="col-lg-12">
-                <div className="section-title">
-                    <h5 className="rbt-title-style-2">Our Top Course</h5>
-                </div>
-            </div>
-
-            {/* Start Single Card */}
-            <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div className="rbt-card variation-01 rbt-hover">
-                    <div className="rbt-card-img">
-                        <a href="course-details.html">
-                            <img src="assets/images/course/course-online-01.jpg" alt="Card image" />
-                        </a>
-                    </div>
-                    <div className="rbt-card-body">
-                        <h5 className="rbt-card-title"><a href="course-details.html">React Js</a></h5>
-                        <div className="rbt-review">
-                            <div className="rating">
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
+                        <div className="wrapper">
+                            <div className="row">
+                                <div className="col-lg-12">
+                                    <form action="#">
+                                        <input type="text" placeholder="What are you looking for?" />
+                                        <div className="submit-btn">
+                                            <a className="rbt-btn btn-gradient btn-md" href="#">Search</a>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                            <span className="rating-count"> (15 Reviews)</span>
-                        </div>
-                        <div className="rbt-card-bottom">
-                            <div className="rbt-price">
-                                <span className="current-price">$15</span>
-                                <span className="off-price">$25</span>
+
+                            <div className="rbt-separator-mid">
+                                <hr className="rbt-separator m-0" />
                             </div>
+
+                            <div className="row g-4 pt--30 pb--60">
+                                <div className="col-lg-12">
+                                    <div className="section-title">
+                                        <h5 className="rbt-title-style-2">Our Top Course</h5>
+                                    </div>
+                                </div>
+
+                                {/* Start Single Card */}
+                                <div className="col-lg-3 col-md-4 col-sm-6 col-12">
+                                    <div className="rbt-card variation-01 rbt-hover">
+                                        <div className="rbt-card-img">
+                                            <a href="course-details.html">
+                                                <img src="assets/images/course/course-online-01.jpg" alt="Card image" />
+                                            </a>
+                                        </div>
+                                        <div className="rbt-card-body">
+                                            <h5 className="rbt-card-title"><a href="course-details.html">React Js</a></h5>
+                                            <div className="rbt-review">
+                                                <div className="rating">
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                </div>
+                                                <span className="rating-count"> (15 Reviews)</span>
+                                            </div>
+                                            <div className="rbt-card-bottom">
+                                                <div className="rbt-price">
+                                                    <span className="current-price">$15</span>
+                                                    <span className="off-price">$25</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* End Single Card */}
+
+                                {/* Repeat the structure for other cards */}
+
+                                <div className="col-lg-3 col-md-4 col-sm-6 col-12">
+                                    <div className="rbt-card variation-01 rbt-hover">
+                                        <div className="rbt-card-img">
+                                            <a href="course-details.html">
+                                                <img src="assets/images/course/course-online-02.jpg" alt="Card image" />
+                                            </a>
+                                        </div>
+                                        <div className="rbt-card-body">
+                                            <h5 className="rbt-card-title"><a href="course-details.html">Java Program</a></h5>
+                                            <div className="rbt-review">
+                                                <div className="rating">
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                    <i className="fas fa-star"></i>
+                                                </div>
+                                                <span className="rating-count"> (15 Reviews)</span>
+                                            </div>
+                                            <div className="rbt-card-bottom">
+                                                <div className="rbt-price">
+                                                    <span className="current-price">$10</span>
+                                                    <span className="off-price">$40</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Continue for the rest of the cards */}
+
+                            </div>
+
                         </div>
                     </div>
+                    {/*end Search Dropdown */}
                 </div>
-            </div>
-            {/* End Single Card */}
 
-            {/* Repeat the structure for other cards */}
-
-            <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                <div className="rbt-card variation-01 rbt-hover">
-                    <div className="rbt-card-img">
-                        <a href="course-details.html">
-                            <img src="assets/images/course/course-online-02.jpg" alt="Card image" />
-                        </a>
-                    </div>
-                    <div className="rbt-card-body">
-                        <h5 className="rbt-card-title"><a href="course-details.html">Java Program</a></h5>
-                        <div className="rbt-review">
-                            <div className="rating">
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                                <i className="fas fa-star"></i>
-                            </div>
-                            <span className="rating-count"> (15 Reviews)</span>
-                        </div>
-                        <div className="rbt-card-bottom">
-                            <div className="rbt-price">
-                                <span className="current-price">$10</span>
-                                <span className="off-price">$40</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Continue for the rest of the cards */}
-
-        </div>
-
-    </div>
-</div>
-{/*end Search Dropdown */}
-                </div>
-                
             </header>
 
         );

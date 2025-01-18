@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from '../Header/header';
 
 class Home extends React.Component {
     constructor(props) {
@@ -19,7 +20,9 @@ class Home extends React.Component {
     render() {
 
         return (
-            <><div className="rbt-banner-area rbt-banner-1">
+            <>
+                <Header dashBoardData={""} />
+            <div className="rbt-banner-area rbt-banner-1">
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-md-12 pb--120 pt--70">
