@@ -13,6 +13,8 @@ import Dashboard from './Dashboard/Dashboard';
 import Jobs from './Jobs/jobs';
 import JobDetails from './Jobs/job-detail';
 import Community from './Community/Community';
+import Course from './Courses/Course';
+import CourseDetail from './Courses/CourseDetail';
 
 
 
@@ -75,6 +77,8 @@ class App extends React.Component {
                 <Route path="/Jobs" element={<Jobs/>} />
                 <Route path="/Job-details" element={<JobDetails/>} />
                 <Route path="/Community" element={<Community/>} />
+                <Route path="/Course" element={<Course/>} />
+                <Route path="/Course-Details" element={<CourseDetail/>} />
                
                   {/* Other routes can be added here */}
                 </Routes>

@@ -197,6 +197,31 @@ h3.title {
   text-align: -webkit-left;
 }
 
+.mentor .thumbnail{position: relative !important; display: inline-block;}
+.mentor .watermark {position: absolute; bottom: 10px; right: 10px; font-size: 30px; color: rgba(255, 255, 255, 0.5); font-weight: bold; pointer-events: none;}
+.mentor .badgs{position: absolute; top: 10px; right: 10px; text-align: right; pointer-events: none;} 
+.mentor .badgs img{width: 64px !important}
+
+.course-dp .title {
+  color: #000;
+}
+.course-dp .page-list li a {
+  color: #6b7385;
+}
+.course-dp .page-list li.active {
+  color: #6b7385;
+}
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fff; /* Ensure it has a background color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.mainmenu li.current a {
+  color: #007bff; /* Highlight color for active link */
+  font-weight: bold;
+}
 iframe#webpack-dev-server-client-overlay {
   display: none !important
 }

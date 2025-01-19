@@ -29,7 +29,6 @@ class Community extends React.Component {
             },
         })
             .then((response) => {
-                debugger;
                 console.log('dashboard data', response.data);
                 this.getUserProfile(response.data.user_id);
                 this.setState({ dashBoardData: response.data.data });
