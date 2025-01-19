@@ -10,6 +10,9 @@ import Home from './Home/home';
 import SignUp from './SignUp/signUp';
 import Wrapper from './Wrapper/wrapper';
 import Dashboard from './Dashboard/Dashboard';
+import Jobs from './Jobs/jobs';
+import JobDetails from './Jobs/job-detail';
+import Community from './Community/Community';
 
 
 
@@ -69,6 +72,9 @@ class App extends React.Component {
                 <Route path="/Login" element={<Login />} />
                 <Route path="/SignUp" element={<SignUp />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
+                <Route path="/Jobs" element={<Jobs/>} />
+                <Route path="/Job-details" element={<JobDetails/>} />
+                <Route path="/Community" element={<Community/>} />
                
                   {/* Other routes can be added here */}
                 </Routes>

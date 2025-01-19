@@ -53,35 +53,35 @@ class MyProfile extends React.Component {
                 // Set an error message if the file type is not valid
                 this.setState({ uploadStatus: 'Invalid file type! Please upload an image file.' });
                 return;
-              }
-          this.setState({
-            logo: file,
-            logoPreview: URL.createObjectURL(file), // Preview the uploaded file
-            uploadStatus: null, // Clear any previous error
-          });
-    
-          // Create FormData and append the file
-          const formData = new FormData();
-          formData.append('file', file);
-    
-          try {
-            // Call the API to upload the file
-            const response = await axios.post(url, formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${token}`,
-              },
+            }
+            this.setState({
+                logo: file,
+                logoPreview: URL.createObjectURL(file), // Preview the uploaded file
+                uploadStatus: null, // Clear any previous error
             });
-    
-            console.log('File uploaded successfully:', response.data);
-            this.setState({fileName:response.data.fileName})
-            this.setState({ uploadStatus: 'File uploaded successfully!' });
-          } catch (error) {
-            console.error('Error uploading file:', error);
-            this.setState({ uploadStatus: 'Error uploading file!' });
-          }
+
+            // Create FormData and append the file
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Call the API to upload the file
+                const response = await axios.post(url, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                console.log('File uploaded successfully:', response.data);
+                this.setState({ fileName: response.data.filePath })
+                this.setState({ uploadStatus: 'File uploaded successfully!' });
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                this.setState({ uploadStatus: 'Error uploading file!' });
+            }
         }
-      };
+    };
 
     // Save profile changes
     handleSaveProfile = () => {
@@ -99,7 +99,7 @@ class MyProfile extends React.Component {
             "companyName": this.state.updatedUserData.CompanyName,
             "role_id": this.state.updatedUserData.role_id,
             "Id": this.state.updatedUserData.user_id,
-            "designation":this.state.updatedUserData.designation,
+            "designation": this.state.updatedUserData.designation,
             "ipAddress": "192.168.1.1"
         };
 
@@ -132,7 +132,7 @@ class MyProfile extends React.Component {
     };
 
     render() {
-        const { showModal, updatedUserData,logoPreview,uploadStatus} = this.state;
+        const { showModal, updatedUserData, logoPreview, uploadStatus } = this.state;
         const { firstname, lastname, email, CompanyName, designation } = updatedUserData;
         return (
             <div className="col-lg-9">
@@ -162,126 +162,133 @@ class MyProfile extends React.Component {
                             </div>
                         </div>
                         {/* Profile Fields */}
-                        {['firstname', 'lastname', 'email', 'CompanyName', 'designation'].map((field, index) => (
+                        {[
+                            { label: 'First Name', key: 'firstname' },
+                            { label: 'Last Name', key: 'lastname' },
+                            { label: 'Email', key: 'email' },
+                            { label: 'Company Name', key: 'CompanyName' },
+                            { label: 'Designation', key: 'designation' }
+                        ].map((item, index) => (
                             <div key={index} className="rbt-profile-row row row--15 mt--15">
                                 <div className="col-lg-4 col-md-4">
-                                    <div className="rbt-profile-content b2">{field}</div>
+                                    <div className="rbt-profile-content b2">{item.label}</div>
                                 </div>
                                 <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">{updatedUserData[field]}</div>
+                                    <div className="rbt-profile-content b2">{updatedUserData[item.key]}</div>
                                 </div>
                             </div>
                         ))}
+
                     </div>
                 </div>
                 {/* End Instructor Profile */}
                 {/* Modal for Editing Profile */}
                 {showModal && (
-                 <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                 <div className="modal-dialog">
-                   <div className="modal-content">
-                     <div className="modal-header">
-                       <h5 className="modal-title">Edit Profile</h5>
-                       <button type="button" className="close" onClick={this.handleCloseModal}>
-                         &times;
-                       </button>
-                     </div>
-                     <div className="modal-body">
-                       <form>
-                         <div className="form-group floating-label">
-                           <input
-                             type="file"
-                             className="form-control"
-                             accept="image/*"
-                             id="companyLogo"
-                             onChange={this.handleFileChange}
-                           />
-                           <label htmlFor="companyLogo">Company Logo</label>
-                           {logoPreview && (
-                             <div className="mt-3">
-                               <img
-                                 src={logoPreview}
-                                 alt="Logo Preview"
-                                 style={{
-                                   width: '100px',
-                                   height: '100px',
-                                   objectFit: 'cover',
-                                   borderRadius: '8px',
-                                 }}
-                               />
-                             </div>
-                           )}
-                           {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
-                         </div>
-                         <div className="form-group floating-label">
-                           <input
-                             type="text"
-                             name="firstname"
-                             className="form-control"
-                             value={firstname}
-                             onChange={this.handleInputChange}
-                             id="firstname"
-                           />
-                           <label htmlFor="firstname">First Name</label>
-                         </div>
-                         <div className="form-group floating-label">
-                           <input
-                             type="text"
-                             name="lastname"
-                             className="form-control"
-                             value={lastname}
-                             onChange={this.handleInputChange}
-                             id="lastname"
-                           />
-                           <label htmlFor="lastname">Last Name</label>
-                         </div>
-                         <div className="form-group floating-label">
-                           <input
-                             type="email"
-                             name="email"
-                             className="form-control"
-                             value={email}
-                             readOnly
-                             id="email"
-                           />
-                           <label htmlFor="email">Email</label>
-                         </div>
-                         <div className="form-group floating-label">
-                           <input
-                             type="text"
-                             name="CompanyName"
-                             className="form-control"
-                             value={CompanyName}
-                             readOnly
-                             id="CompanyName"
-                           />
-                           <label htmlFor="CompanyName">Company Name</label>
-                         </div>
-                         <div className="form-group floating-label">
-                           <input
-                             type="text"
-                             name="designation"
-                             className="form-control"
-                             value={designation}
-                             onChange={this.handleInputChange}
-                             id="designation"
-                           />
-                           <label htmlFor="designation">Designation</label>
-                         </div>
-                       </form>
-                     </div>
-                     <div className="modal-footer">
-                       <button className="btn btn-secondary" onClick={this.handleCloseModal}>
-                         Cancel
-                       </button>
-                       <button className="btn btn-primary" onClick={this.handleSaveProfile}>
-                         Save Changes
-                       </button>
-                     </div>
-                   </div>
-                 </div>
-               </div>
-               
+                    <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <div className="modal-dialog">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Edit Profile</h5>
+                                    <button type="button" className="close" onClick={this.handleCloseModal}>
+                                        &times;
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <form>
+                                        <div className="form-group floating-label">
+                                            <input
+                                                type="file"
+                                                className="form-control"
+                                                accept="image/*"
+                                                id="companyLogo"
+                                                onChange={this.handleFileChange}
+                                            />
+                                            <label htmlFor="companyLogo">Company Logo</label>
+                                            {logoPreview && (
+                                                <div className="mt-3">
+                                                    <img
+                                                        src={logoPreview}
+                                                        alt="Logo Preview"
+                                                        style={{
+                                                            width: '100px',
+                                                            height: '100px',
+                                                            objectFit: 'cover',
+                                                            borderRadius: '8px',
+                                                        }}
+                                                    />
+                                                </div>
+                                            )}
+                                            {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
+                                        </div>
+                                        <div className="form-group floating-label">
+                                            <input
+                                                type="text"
+                                                name="firstname"
+                                                className="form-control"
+                                                value={firstname}
+                                                onChange={this.handleInputChange}
+                                                id="firstname"
+                                            />
+                                            <label htmlFor="firstname">First Name</label>
+                                        </div>
+                                        <div className="form-group floating-label">
+                                            <input
+                                                type="text"
+                                                name="lastname"
+                                                className="form-control"
+                                                value={lastname}
+                                                onChange={this.handleInputChange}
+                                                id="lastname"
+                                            />
+                                            <label htmlFor="lastname">Last Name</label>
+                                        </div>
+                                        <div className="form-group floating-label">
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                className="form-control"
+                                                value={email}
+                                                readOnly
+                                                id="email"
+                                            />
+                                            <label htmlFor="email">Email</label>
+                                        </div>
+                                        <div className="form-group floating-label">
+                                            <input
+                                                type="text"
+                                                name="CompanyName"
+                                                className="form-control"
+                                                value={CompanyName}
+                                                readOnly
+                                                id="CompanyName"
+                                            />
+                                            <label htmlFor="CompanyName">Company Name</label>
+                                        </div>
+                                        <div className="form-group floating-label">
+                                            <input
+                                                type="text"
+                                                name="designation"
+                                                className="form-control"
+                                                value={designation}
+                                                onChange={this.handleInputChange}
+                                                id="designation"
+                                            />
+                                            <label htmlFor="designation">Designation</label>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div className="modal-footer">
+                                    <button className="btn btn-secondary" onClick={this.handleCloseModal}>
+                                        Cancel
+                                    </button>
+                                    <button className="btn btn-primary" onClick={this.handleSaveProfile}>
+                                        Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 )}
             </div>
 
