@@ -153,13 +153,13 @@ class Header extends React.Component {
                                 <nav className="mainmenu-nav">
                                     <ul className="mainmenu">
                                         <li className="current">
-                                            <a href="#">Home</a>
+                                            <a href="/">Home</a>
                                         </li>
                                         <li>
                                             <a href="#">Course</a>
                                         </li>
                                         <li>
-                                            <a href="#">Jobs</a>
+                                            <a href="/Jobs">Jobs</a>
                                         </li>
                                         <li>
                                             <a href="/SignUp?role_id=1">Candidate</a>
@@ -171,7 +171,7 @@ class Header extends React.Component {
                                             <a href="/SignUp?role_id=3">Trainer</a>
                                         </li>
                                         <li>
-                                            <a href="#">Community</a>
+                                            <a href="/Community">Community</a>
                                         </li>
                                     </ul>
                                 </nav>

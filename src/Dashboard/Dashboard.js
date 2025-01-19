@@ -13,7 +13,8 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showUserDashboard: true
+            showUserDashboard: true,
+            dashBoardData:""
         };
 
     }
@@ -34,6 +35,7 @@ class Dashboard extends React.Component {
             },
         })
             .then((response) => {
+                debugger;
                 console.log('dashboard data', response.data);
                 this.getUserProfile(response.data.user_id);
                 this.setState({dashBoardData:response.data.data});
@@ -195,7 +197,7 @@ class Dashboard extends React.Component {
 
                                                         <div className="rbt-default-sidebar-wrapper">
                                                             <div className="section-title mb--20">
-                                                                <h6 className="rbt-title-style-2">Welcome, Jone Due</h6>
+                                                                <h6 className="rbt-title-style-2">Welcome, {this.state?.dashBoardData.username}</h6>
                                                             </div>
                                                             <nav className="mainmenu-nav">
                                                                 <ul className="dashboard-mainmenu rbt-default-sidebar-list">
