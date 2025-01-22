@@ -212,15 +212,15 @@ h3.title {
   color: #6b7385;
 }
 .sticky-top {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background-color: #fff; /* Ensure it has a background color */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff; /* Ensure it has a background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .mainmenu li.current a {
-  color: #007bff; /* Highlight color for active link */
-  font-weight: bold;
+    color: #007bff; /* Highlight color for active link */
+    font-weight: bold;
 }
 iframe#webpack-dev-server-client-overlay {
   display: none !important
