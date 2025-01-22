@@ -222,6 +222,42 @@ h3.title {
     color: #007bff; /* Highlight color for active link */
     font-weight: bold;
 }
+.form-group {
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: none;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #999;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+textarea:focus + label,
+.float-label {
+  top: -10px;
+  font-size: 0.8rem;
+  color: #007bff;
+}
+
 iframe#webpack-dev-server-client-overlay {
   display: none !important
 }
