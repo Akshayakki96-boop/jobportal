@@ -3,6 +3,8 @@ import Breadcumb from '../Breadcumb/breadcumb';
 import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
+import {setSingleRequest} from '../actions/SingleRequestAction';
+import {store} from '../index';
 
 class Login extends React.Component {
   constructor(props) {
@@ -75,7 +77,21 @@ class Login extends React.Component {
             //     ),
             //     alertVariant: 'success', // Success alert variant
             // });
-            this.props.navigate('/Dashboard'); // Use `navigate`
+            if(response.data.role_id=="2")
+            {
+              this.requestData={};
+              //this.requestData.showSuccessJobPost="";
+               store.dispatch(setSingleRequest(this.requestData));
+              this.props.navigate('/EmployeeDashboard'); // Use `navigate`
+            }
+            else if(response.data.role_id=="3")
+            {
+              this.props.navigate('/Dashboard'); // Use `navigate`
+            }
+            else{
+              this.props.navigate('/Dashboard'); // Use `navigate`
+            }
+         
         })
         .catch((error) => {
             console.error('Signup Error:', error.response?.data || error.message);

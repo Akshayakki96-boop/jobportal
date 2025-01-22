@@ -1,0 +1,1 @@
+export const SET_SINGLE_REQUEST = 'SET_SINGLE_REQUEST';
