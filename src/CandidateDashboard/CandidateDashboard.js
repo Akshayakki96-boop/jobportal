@@ -1,19 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import withNavigation from '../withNavigation';
-import UserDashBoard from './UserDashBoard';
+import UserDashBoard from './UserDashboard';
 import MyProfile from './MyProfile';
-import EnrolledJobs from './EnrolledJobs';
-import MyJobs from './MyJobs';
-import Announcement from './Announcement';
-import Assignment from './Assignment';
 import Header from '../Header/header';
 import { connect } from 'react-redux';
 import { Alert, Button } from 'react-bootstrap';
-import { setSingleRequest } from '../actions/SingleRequestAction';
-import { store } from '../index';
 
-class EmployerDashboard extends React.Component {
+
+class CandidateDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -25,30 +20,11 @@ class EmployerDashboard extends React.Component {
     }
     componentDidMount() {
         this.getDashboardUser();
-        let url=window.location.search;
-        var urlParams= new URLSearchParams(url);
-        var reqType= urlParams.get('message');
-        if(reqType=="success"){
-            this.setState({
-                responseMessage: (
-                    <span>
-                        Job Created Successfully!
-                    </span>
-                ),
-            });
-        }
-        if(reqType=="profilesuccess"){
-            this.setState({
-                responseMessage: (
-                    <span>
-                        Profile Updated Successfully!
-                    </span>
-                ),
-            });
-        }
+
 
     }
     componentDidUpdate(prevProps) {
+     
     }
 
     getDashboardUser = () => {
@@ -100,11 +76,15 @@ class EmployerDashboard extends React.Component {
             });
     }
 
+ 
+
+ 
+
     setActiveComponent = (componentName) => {
         this.setState({
             showUserDashboard: false,
             showProfile: false,
-            showMyJobs: false,
+
         });
 
         switch (componentName) {
@@ -114,11 +94,8 @@ class EmployerDashboard extends React.Component {
             case 'profile':
                 this.setState({ showProfile: true });
                 break;
-
-            case 'myJobs':
-                this.setState({ showMyJobs: true });
-                break;
-       
+        
+    
             // Add more cases for other components as needed
             default:
                 this.setState({ showUserDashboard: true });
@@ -172,10 +149,20 @@ class EmployerDashboard extends React.Component {
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
                                                 <div className="thumbnail rbt-avatars size-lg">
-                                                    <img src={this.state?.userData?.companylogo} alt="Instructor" />
+                                                    <img src="assets/images/team/avatar.jpg" alt="Instructor" />
                                                 </div>
                                                 <div className="tutor-content">
                                                     <h5 className="title">{this.state?.dashBoardData.username}</h5>
+                                                    <div className="rbt-review">
+                                                        <div className="rating">
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                        </div>
+                                                        <span className="rating-count"> (15 Reviews)</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className="rbt-tutor-information-right">
@@ -220,13 +207,26 @@ class EmployerDashboard extends React.Component {
                                                                             <i className="feather-user"></i><span>My Profile</span>
                                                                         </a>
                                                                     </li>
-                                                             
                                                                     <li>
-                                                                        <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
-                                                                            <i className="feather-monitor"></i><span>Jobs</span>
+                                                                        <a className={this.state.showEnrollCourse ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('enrolledCourses'); }} href="#">
+                                                                            <i className="feather-book-open"></i><span>Enrolled Jobs</span>
                                                                         </a>
                                                                     </li>
-                                                                 
+                                                                    <li>
+                                                                        <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
+                                                                            <i className="feather-monitor"></i><span>My Jobs</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showAnnouncement ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('announcements'); }} href="#">
+                                                                            <i className="feather-volume-2"></i><span>Announcements</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showAssignment ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('assignments'); }} href="#">
+                                                                            <i className="feather-list"></i><span>Assignments</span>
+                                                                        </a>
+                                                                    </li>
                                                                     <li>
                                                                         <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                                             <i className="feather-log-out"></i><span>Logout</span>
@@ -244,8 +244,6 @@ class EmployerDashboard extends React.Component {
                                         </div>
                                         {this.state.showUserDashboard && <UserDashBoard message={this.state.responseMessage} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
-                                        {this.state.showMyJobs && <MyJobs />}
-
                                     </div>
 
                                 </div>
@@ -261,4 +259,4 @@ class EmployerDashboard extends React.Component {
 const mapStateToProps = (state) => ({
     singleRequestData: state.SingleRequestReducer.singleRequestData,
 });
-export default connect(mapStateToProps)(withNavigation(EmployerDashboard));
+export default connect(mapStateToProps)(withNavigation(CandidateDashboard));

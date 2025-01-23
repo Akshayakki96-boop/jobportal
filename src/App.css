@@ -257,7 +257,19 @@ textarea:focus + label,
   font-size: 0.8rem;
   color: #007bff;
 }
+.jodit-container {
+  height: 500px; /* Adjust the height as needed */
+}
+.jodit-workplace {
+  min-height: 400px; /* Ensures enough typing area */
+}
+.rbt-profile-row {
+  text-align: left; /* Aligns text to the left */
+}
 
+.rbt-profile-content {
+  text-align: left; /* Ensures text alignment */
+}
 
 iframe#webpack-dev-server-client-overlay {
   display: none !important

@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from '../Header/header';
+import axios from 'axios'; 
 
 class Home extends React.Component {
     constructor(props) {
@@ -10,10 +11,30 @@ class Home extends React.Component {
 
     }
     componentDidMount() {
-
+        this.getDashboardUser();
     }
 
+    getDashboardUser = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/Dashboard`;
+        const token = localStorage.getItem('authToken');
 
+        axios.post(url, "", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('dashboard data', response.data);
+                this.setState({ dashBoardData: response.data.data });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.setState({ dashBoardData: "" });
+            });
+    }
 
 
 
@@ -21,7 +42,7 @@ class Home extends React.Component {
 
         return (
             <>
-                <Header dashBoardData={""} />
+                <Header dashBoardData={this.state.dashBoardData} />
             <div className="rbt-banner-area rbt-banner-1">
                 <div className="container-fluid">
                     <div className="row">

@@ -42,12 +42,6 @@ class Footer  extends React.Component {
                                     <li>
                                         <a href="#">support@zobskill.com</a>
                                     </li>
-                                    <li>
-                                        <a href="#">trainer@zobskill.com</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">employer@zobskill.com</a>
-                                    </li>
                                 </ul>
                             </div>
                         </div>

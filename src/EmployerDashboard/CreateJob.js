@@ -4,8 +4,10 @@ import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import Select from 'react-select';
 import withNavigation from '../withNavigation';
-import {setSingleRequest} from '../actions/SingleRequestAction';
-import {store} from '../index';
+import { setSingleRequest } from '../actions/SingleRequestAction';
+import { store } from '../index';
+import Header from '../Header/header';
+import JoditEditor from "jodit-react";
 
 class CreateJob extends React.Component {
     constructor(props) {
@@ -16,58 +18,77 @@ class CreateJob extends React.Component {
 
     }
     componentDidMount() {
+        this.getDashboardUser();
         this.getJobPostingData()
-        this.getAllCountry();
-     
+        this.bindCity();
+
+    }
+    getDashboardUser = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/Dashboard`;
+        const token = localStorage.getItem('authToken');
+
+        axios.post(url, "", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('dashboard data', response.data);
+                this.setState({ dashBoardData: response.data.data });
+                this.setState({ keepSpinner: false });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
     }
     validateForm = () => {
         const {
-          title,
-          selectedRole,
-          selectedExperience,
-          description,
-          selectedPackage,
-          openings,
-          selectedCountry,
-          selectedState,
-          selectedCity,
-          selectedEmpType,
-          selectedMode,
-          selectedKeySkills,
-          selectedEducation,
-          selectedIndustry,
-          selectedDepartment,
+            title,
+            selectedRole,
+            selectedExperience,
+            description,
+            selectedPackage,
+            openings,
+            selectedCity,
+            selectedEmpType,
+            selectedMode,
+            selectedKeySkills,
+            selectedEducation,
+            selectedIndustry,
+            selectedDepartment,
         } = this.state;
-      
+
         // Check if all fields have values
         const isFormValid =
-          title &&
-          selectedRole &&
-          selectedExperience &&
-          description &&
-          selectedPackage &&
-          openings &&
-          selectedCountry &&
-          selectedState &&
-          selectedCity &&
-          selectedEmpType &&
-          selectedMode &&
-          selectedKeySkills &&
-          selectedEducation &&
-          selectedIndustry &&
-          selectedDepartment;
-      
+            title &&
+            selectedRole &&
+            selectedExperience &&
+            description &&
+            selectedPackage &&
+            openings &&
+            selectedCity &&
+            selectedEmpType &&
+            selectedMode &&
+            selectedKeySkills &&
+            selectedEducation &&
+            selectedIndustry &&
+            selectedDepartment;
+
         this.setState({ isFormValid });
-      };
-      handleInputChange = (field, value) => {
+    };
+    handleInputChange = (field, value) => {
         this.setState({ [field]: value }, this.validateForm);
-      };
-    getJobPostingData=()=>{
+    };
+    getJobPostingData = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Master/GetJobPostingMasterData`;
         const token = localStorage.getItem('authToken');
-       var text= {
-            "freetext":""
+        var text = {
+            "freetext": ""
         }
         axios.post(url, text, {
             headers: {
@@ -79,12 +100,12 @@ class CreateJob extends React.Component {
                 console.log('jobpostingdata', response.data);
                 const transformToReactSelectOptions = (array) =>
                     array.map((item) => ({
-                      label: item.value,
-                      value: item.id,
+                        label: item.value,
+                        value: item.id,
                     }));
-                  
-                  // Map all fields
-                  const reactSelectOptions = {
+
+                // Map all fields
+                const reactSelectOptions = {
                     departments: transformToReactSelectOptions(response.data.departments),
                     keyskill: transformToReactSelectOptions(response.data.keyskill),
                     countries: transformToReactSelectOptions(response.data.countries),
@@ -95,10 +116,10 @@ class CreateJob extends React.Component {
                     jobMode: transformToReactSelectOptions(response.data.jobMode),
                     package: transformToReactSelectOptions(response.data.package),
                     roles: transformToReactSelectOptions(response.data.roles),
-                  };
-                  this.setState({ reactSelectOptions });
-                  // Example usage in React-Select
-                  console.log(reactSelectOptions);
+                };
+                this.setState({ reactSelectOptions });
+                // Example usage in React-Select
+                console.log(reactSelectOptions);
 
 
             })
@@ -107,88 +128,16 @@ class CreateJob extends React.Component {
                 this.props.navigate('/Login'); // Use `navigate`
             });
     }
-    getAllCountry = () => {
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Master/GetCountry`;
-        const token = localStorage.getItem('authToken');
-       var text= {
-            "freetext":""
-        }
-        axios.post(url, text, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                console.log('dashboard data', response.data);
-                const options = response.data.map((item) => ({
-                    value: item.id,
-                    label: item.value,
-                  }));
-                  this.setState({ countryOptions: options });
 
-                this.setState({ keepSpinner: false });
 
-            })
-            .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
-            });
-        }
-
-    handleCountryChange = (selectedOption) => {
-        this.handleInputChange('selectedCountry', selectedOption);
-        this.setState({ selectedCountry: selectedOption });
-        this.bindState(selectedOption.value);
-
-    }
-
-    bindState = (countryId) => {
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Master/GetState`;
-        const token = localStorage.getItem('authToken');
-       var text= {
-            "freetext":"",
-            "countryId":countryId,
-            "stateId":1,
-        }
-        axios.post(url, text, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                const options = response.data.map((item) => ({
-                    value: item.id,
-                    label: item.value,
-                  }));
-                  this.setState({ stateOptions: options });
-
-                this.setState({ keepSpinner: false });
-
-            })
-            .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
-            });
-    }
-
-    handleStateChange = (selectedOption) => {
-        this.handleInputChange('selectedState', selectedOption);
-        this.setState({ selectedState: selectedOption });
-        this.bindCity(selectedOption.value);
-    }
-
-    bindCity = (stateId) => {
+    bindCity = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Master/GetCity`;
         const token = localStorage.getItem('authToken');
-       var text= {
-            "freetext":"",
-            "cityId":2,
-            "stateId":stateId,
+        var text = {
+            "freetext": "",
+            "cityId": 0,
+            "stateId": 0,
         }
         axios.post(url, text, {
             headers: {
@@ -200,8 +149,8 @@ class CreateJob extends React.Component {
                 const options = response.data.map((item) => ({
                     value: item.id,
                     label: item.value,
-                  }));
-                  this.setState({ cityOptions: options });
+                }));
+                this.setState({ cityOptions: options });
 
                 this.setState({ keepSpinner: false });
 
@@ -215,103 +164,114 @@ class CreateJob extends React.Component {
         this.handleInputChange('selectedCity', selectedOption);
         this.setState({ selectedCity: selectedOption });
     }
-    handleTitle=(e)=>{
+    handleTitle = (e) => {
         this.handleInputChange('title', e.target.value);
-        this.setState({title:e.target.value})
+        this.setState({ title: e.target.value })
     };
-    handleRoles=(selectedOption)=>{
+    handleRoles = (selectedOption) => {
         this.handleInputChange('selectedRole', selectedOption);
-        this.setState({selectedRole:selectedOption})
+        this.setState({ selectedRole: selectedOption })
     };
 
-    handleExperience=(selectedOption)=>{
+    handleExperience = (selectedOption) => {
         this.handleInputChange('selectedExperience', selectedOption);
-        this.setState({selectedExperience:selectedOption})
+        this.setState({ selectedExperience: selectedOption })
     };
-    handleJobDescription=(e)=>{
-        this.handleInputChange('description', e.target.value);
-        this.setState({description:e.target.value})
+    handleJobDescription = (e) => {
+        this.handleInputChange('description', e);
+        this.setState({ description: e })
     };
-handlePostJob=()=>{
-    const baseUrl = process.env.REACT_APP_BASEURL;
-    const url = `${baseUrl}/api/Job/PostJob`;
-    const token = localStorage.getItem('authToken');
-   var request= {
-  
-    "title":this.state.title, 
-    "description": this.state.description,
-    "experienceFrom": this.state.selectedExperience.value,
-    "experienceTo": this.state.selectedExperience.value,
-    "packageId": this.state.selectedPackage.value,
-    "packageNotdisclosed": false,
-    "roleId": this.state.selectedRole.value,
-    "emptypeId": this.state.selectedEmpType.value,
-    "deptId": this.state.selectedDepartment.value,
-    "industryId": this.state.selectedIndustry.value,
-    "keyskillIds": this.state.selectedKeySkills.map((item) => item.value).join(','),
-    "educationId": this.state.selectedEducation.map((item) => item.value).join(','),
-    "noOfOpening": this.state.openings,
-    "isactive": false,
-    "ipAddress": "192.168.1.1",
-    "cityIds": this.state.selectedCity.map((item) => item.value).join(',')
-  }
-    axios.post(url, request, {
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-        },
-    })
-        .then((response) => {
-             console.log('jobpostingdata', response.data);
-             this.requestData={};
-             this.requestData.showSuccessJobPost=true;
-             store.dispatch(setSingleRequest(this.requestData));
-            this.props.navigate('/EmployeeDashboard?message=success'); // Use `navigate`
-            this.setState({ keepSpinner: false });
+    handlePostJob = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Job/PostJob`;
+        const token = localStorage.getItem('authToken');
+        var request = {
 
+            "title": this.state.title,
+            "description": this.state.description,
+            "experienceFrom": this.state.selectedExperience.value,
+            "experienceTo": this.state.selectedExperience.value,
+            "packageId": this.state.selectedPackage.value,
+            "packageNotdisclosed": false,
+            "roleId": this.state.selectedRole.value,
+            "emptypeId": this.state.selectedEmpType.value,
+            "deptId": this.state.selectedDepartment.value,
+            "industryId": this.state.selectedIndustry.value,
+            "keyskillIds": this.state.selectedKeySkills.map((item) => item.value).join(','),
+            "educationId": this.state.selectedEducation.map((item) => item.value).join(','),
+            "noOfOpening": this.state.openings,
+            "isactive": false,
+            "ipAddress": "192.168.1.1",
+            "cityIds": this.state.selectedCity.map((item) => item.value).join(',')
+        }
+        axios.post(url, request, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
         })
-        .catch((error) => {
-            localStorage.removeItem('authToken');
-            this.props.navigate('/Login'); // Use `navigate`
-        });
-}
-handlePackage=(selectedOption)=>{
-    this.handleInputChange('selectedPackage', selectedOption);
-    this.setState({selectedPackage:selectedOption})
-}
-handleOpenings=(e)=>{
-    this.handleInputChange('openings', e.target.value);
-    this.setState({openings:e.target.value})
-};
-handleJobType=(selectedOption)=>{  
-    this.handleInputChange('selectedEmpType', selectedOption);
-    this.setState({selectedEmpType:selectedOption})
-}
-handleJobMode=(selectedOption)=>{
-    this.handleInputChange('selectedMode', selectedOption);
-    this.setState({selectedMode:selectedOption})
-}
-handleKeySkills=(selectedOption)=>{
-    this.handleInputChange('selectedKeySkills', selectedOption);
-    this.setState({selectedKeySkills:selectedOption})
-}
-handleEducation=(selectedOption)=>{
-    this.handleInputChange('selectedEducation', selectedOption);
-    this.setState({selectedEducation:selectedOption})
-}
-handleIndustry=(selectedOption)=>{
-    this.handleInputChange('selectedIndustry', selectedOption);
-    this.setState({selectedIndustry:selectedOption})
-}
-handleDepartment=(selectedOption)=>{
-    this.handleInputChange('selectedDepartment', selectedOption);
-    this.setState({selectedDepartment:selectedOption})
-}
-    render() {
-const {reactSelectOptions} = this.state;
-        return (
+            .then((response) => {
+                console.log('jobpostingdata', response.data);
+                this.requestData = {};
+                this.requestData.showSuccessJobPost = true;
+                store.dispatch(setSingleRequest(this.requestData));
+                this.props.navigate('/EmployerDashboard?message=success'); // Use `navigate`
+                this.setState({ keepSpinner: false });
 
-            <div className="rbt-become-area bg-color-white rbt-section-gap">
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+    handlePackage = (selectedOption) => {
+        this.handleInputChange('selectedPackage', selectedOption);
+        this.setState({ selectedPackage: selectedOption })
+    }
+    handleOpenings = (e) => {
+        this.handleInputChange('openings', e.target.value);
+        this.setState({ openings: e.target.value })
+    };
+    handleJobType = (selectedOption) => {
+        this.handleInputChange('selectedEmpType', selectedOption);
+        this.setState({ selectedEmpType: selectedOption })
+    }
+    handleJobMode = (selectedOption) => {
+        this.handleInputChange('selectedMode', selectedOption);
+        this.setState({ selectedMode: selectedOption })
+    }
+    handleKeySkills = (selectedOption) => {
+        this.handleInputChange('selectedKeySkills', selectedOption);
+        this.setState({ selectedKeySkills: selectedOption })
+    }
+    handleEducation = (selectedOption) => {
+        this.handleInputChange('selectedEducation', selectedOption);
+        this.setState({ selectedEducation: selectedOption })
+    }
+    handleIndustry = (selectedOption) => {
+        this.handleInputChange('selectedIndustry', selectedOption);
+        this.setState({ selectedIndustry: selectedOption })
+    }
+    handleDepartment = (selectedOption) => {
+        this.handleInputChange('selectedDepartment', selectedOption);
+        this.setState({ selectedDepartment: selectedOption })
+    }
+    render() {
+        const { reactSelectOptions } = this.state;
+        const config = {
+            readonly: false, // All editing features are enabled
+            placeholder: "Start typing here...",
+            toolbar:true,
+            "inline": true,
+            "showWordsCounter": true,
+            "showXPathInStatusbar": false,
+            "buttons": "|,bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,outdent,indent,|,font,fontsize,brush,|,image,table,link,|,align,undo,redo,\n,selectall,cut,copy,paste,pastetext,|,hr,symbol,fullsize",
+            "uploader": {
+                "insertImageAsBase64URI": true
+            }
+          };
+        return (
+            <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
                 <div className="container">
 
                     <div className="row pt--60 g-5">
@@ -320,8 +280,7 @@ const {reactSelectOptions} = this.state;
                                 <img
                                     className="radius-10 w-100"
                                     src="assets/images/tab/tabs-10.jpg"
-                                    alt="Corporate Template"
-                                />
+                                    alt="Corporate Template" />
                             </div>
                         </div>
                         <div className="col-lg-8">
@@ -331,14 +290,14 @@ const {reactSelectOptions} = this.state;
                                 <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                            <input name="title" type="text" value={this.state.title} onChange={(e) => this.handleTitle(e)}/>
+                                            <input name="title" type="text" value={this.state.title} onChange={(e) => this.handleTitle(e)} />
                                             <label>Title*</label>
                                             <span className="focus-border" />
                                         </div>
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <Select
+                                            <Select
                                                 options={reactSelectOptions?.roles}
                                                 value={this.state.selectedRole}
                                                 placeholder="Select Role"
@@ -346,16 +305,15 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleRoles(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleRoles(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <Select
+                                            <Select
                                                 options={reactSelectOptions?.experience}
                                                 value={this.state.selectedExperience}
                                                 placeholder="Select Experience"
@@ -363,23 +321,16 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleExperience(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleExperience(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
+                              
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                            <textarea placeholder='Enter your Description upto 2000 characters.'  maxLength="2000" name="description" value={this.state.description} onChange={(e)=>this.handleJobDescription(e)}></textarea>
-                                            <label>Description*</label>
-                                            <span className="focus-border" />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                        <Select
+                                            <Select
                                                 options={reactSelectOptions?.package}
                                                 value={this.state.selectedPackage}
                                                 placeholder="Select Salary"
@@ -387,54 +338,17 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handlePackage(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handlePackage(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                            <input name="openings" type="text" value={this.state.openings} onChange={(e)=>this.handleOpenings(e)} />
+                                            <input name="openings" type="text" value={this.state.openings} onChange={(e) => this.handleOpenings(e)} />
                                             <label>Openings*</label>
 
-                                            <span className="focus-border" />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <Select
-                                                options={this.state.countryOptions}
-                                                value={this.state.selectedCountry}
-                                                placeholder="Select Country"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleCountryChange(selectedOption)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-
-                                            <label>State*</label>
-                                            <Select
-                                                //isMulti
-                                                options={this.state.stateOptions}
-                                                value={this.state.selectedState}
-                                                placeholder="Select State"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleStateChange(selectedOption)}
-                                            />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
@@ -450,10 +364,9 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleCityChange(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleCityChange(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
@@ -468,10 +381,9 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleJobType(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleJobType(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
@@ -486,10 +398,9 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleJobMode(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleJobMode(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
@@ -505,10 +416,9 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleKeySkills(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleKeySkills(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
@@ -524,10 +434,9 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleEducation(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleEducation(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
@@ -542,10 +451,9 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleIndustry(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleIndustry(selectedOption)} />
                                             <span className="focus-border" />
                                         </div>
                                     </div>
@@ -560,18 +468,26 @@ const {reactSelectOptions} = this.state;
                                                 classNamePrefix="select"
                                                 menuPortalTarget={document.body} // Render the dropdown to the body
                                                 styles={{
-                                                  menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleDepartment(selectedOption)}
-                                            />
+                                                onChange={(selectedOption) => this.handleDepartment(selectedOption)} />
                                             <span className="focus-border" />
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-12">
+                                        <div className="form-group">
+                                            <JoditEditor
+                                                value={this.state.description}
+                                                config={config}
+                                                onChange={(e) => this.handleJobDescription(e)}
+                                            />
                                         </div>
                                     </div>
 
                                     <div className="col-lg-12">
                                         <div className="form-submit-group">
                                             <button
-                                            disabled={!this.state.isFormValid}
+                                                disabled={!this.state.isFormValid}
                                                 type="button"
                                                 className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
                                                 onClick={this.handlePostJob}
@@ -594,7 +510,7 @@ const {reactSelectOptions} = this.state;
                         </div>
                     </div>
                 </div>
-            </div>
+            </div></>
 
 
         );

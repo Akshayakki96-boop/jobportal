@@ -12,6 +12,7 @@ class Header extends React.Component {
     }
     componentDidMount() {
         this.handleScroll();
+
         window.addEventListener('scroll', this.handleScroll);
     }
 
@@ -62,9 +63,20 @@ class Header extends React.Component {
                 this.setState({ keepSpinner: false });
             });
     }
+
+    handleredirection = () => {
+        if (this.props.dashBoardData.role_id == 1) {
+            this.props.navigate('/CandidateDashboard');
+        }
+        else if (this.props.dashBoardData.role_id == 2) {
+            this.props.navigate('/EmployerDashboard');
+        }
+        else {
+            this.props.navigate('/TrainerDashboard');
+        }
+    }
     render() {
-        const currentPath = window.location.pathname;
-        const searchParams = new URLSearchParams(window.location.search);
+        console.log("dashboard", this.props.dashBoardData);
         return (
             <header className="rbt-header rbt-header-10">
                 <div ref={this.placeholderRef} className="rbt-sticky-placeholder"></div>
@@ -155,24 +167,33 @@ class Header extends React.Component {
                                         <li className="current">
                                             <a href="/">Home</a>
                                         </li>
-                                        <li>
-                                            <a href="/Course">Course</a>
-                                        </li>
-                                        <li>
+                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
+                                            <li>
+                                                <a href="/Course">Course</a>
+                                            </li>
+                                        )}
+
+                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (<li>
                                             <a href="/Jobs">Jobs</a>
                                         </li>
-                                        <li>
+                                        )}
+                                        {this.props.dashBoardData === "" && <li>
                                             <a href="/SignUp?role_id=1">Candidate</a>
-                                        </li>
-                                        <li>
+                                        </li>}
+                                        {this.props.dashBoardData === "" && <li>
                                             <a href="/SignUp?role_id=2">Employer</a>
-                                        </li>
-                                        <li>
+                                        </li>}
+                                        {this.props.dashBoardData === "" && <li>
                                             <a href="/SignUp?role_id=3">Trainer</a>
-                                        </li>
-                                        <li>
-                                            <a href="/Community">Community</a>
-                                        </li>
+                                        </li>}
+                                        {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
+                                            <li>
+                                                <a href="/Community">Community</a>
+                                            </li>
+                                        )}
+
+
+
                                     </ul>
                                 </nav>
                             </div>
@@ -185,7 +206,7 @@ class Header extends React.Component {
                                             <i className="feather-search"></i>
                                         </a>
                                     </li>
-                                    {currentPath === '/' && <li className="access-icon rbt-mini-cart">
+                                    {!this.props.dashBoardData && <li className="access-icon rbt-mini-cart">
                                         <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
                                             Login
                                         </a>
@@ -209,6 +230,12 @@ class Header extends React.Component {
 
 
                                                 <ul className="user-list-wrapper">
+                                                    <li>
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleredirection(); }} href="#">
+                                                            <i className="feather-log-out"></i>
+                                                            <span>View Dashboard</span>
+                                                        </a>
+                                                    </li>
                                                     <li>
                                                         <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                             <i className="feather-log-out"></i>
