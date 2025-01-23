@@ -17,6 +17,8 @@ import Course from './Courses/Course';
 import CourseDetail from './Courses/CourseDetail';
 import EmployerDashboard from './EmployerDashboard/EmployerDashboard';
 import CreateJob from './EmployerDashboard/CreateJob';
+import CandidateDashboard from './CandidateDashboard/CandidateDashboard';
+import EditProfile from './EmployerDashboard/EditProfile';
 
 
 
@@ -75,14 +77,16 @@ class App extends React.Component {
                 <Route path="/" element={<Home />} />
                 <Route path="/Login" element={<Login />} />
                 <Route path="/SignUp" element={<SignUp />} />
-                <Route path="/Dashboard" element={<Dashboard />} />
+                <Route path="/TrainerDashboard" element={<Dashboard />} />
                 <Route path="/Jobs" element={<Jobs/>} />
                 <Route path="/Job-details" element={<JobDetails/>} />
                 <Route path="/Community" element={<Community/>} />
                 <Route path="/Course" element={<Course/>} />
                 <Route path="/Course-Details" element={<CourseDetail/>} />
-                <Route path="/EmployeeDashboard" element={<EmployerDashboard/>} />
+                <Route path="/EmployerDashboard" element={<EmployerDashboard/>} />
                 <Route path="/createnew" element={<CreateJob/>} />
+                <Route path="/CandidateDashboard" element={<CandidateDashboard/>} />
+                <Route path="/edit-profile" element={<EditProfile/>} />
                
                   {/* Other routes can be added here */}
                 </Routes>
