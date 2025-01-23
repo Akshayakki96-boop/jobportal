@@ -15,6 +15,7 @@ class MyJobs extends React.Component {
       pageSize: 4, // Number of records per page
       totalPages: 1,
       totalRecords: 0, // Total number of records
+      searchQuery: "", // State to store the search input
     };
 
   };
@@ -56,7 +57,7 @@ class MyJobs extends React.Component {
       .then((response) => {
         console.log('joblistingdata', response.data);
         const totalCount = response.data.data[0].TotalRecords;
-        this.setState({ joblistingdata: response.data.data, totalRecords: totalCount,keepSpinner:false });
+        this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, keepSpinner: false });
 
       })
       .catch((error) => {
@@ -71,17 +72,31 @@ class MyJobs extends React.Component {
       this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
     });
   };
-
+  handleSearchChange = (e) => {
+    this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
+  };
   render() {
-    const { joblistingdata, currentPage, pageSize, totalRecords } = this.state;
+    const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
     const startIndex = (currentPage - 1) * pageSize + 1;
     const endIndex = Math.min(currentPage * pageSize, totalRecords);
+
+    const filteredJobs = joblistingdata?.filter((job) => {
+      const jobId = job.jobid?.toString().toLowerCase() || ""; // Ensure it's a string
+      const jobTitle = job.jobtitle?.toLowerCase() || "";
+      const jobLocation = job.locations?.toLowerCase() || "";
+
+      return (
+        jobId.includes(searchQuery) ||
+        jobTitle.includes(searchQuery) ||
+        jobLocation.includes(searchQuery)
+      );
+    });
     return (
       <div className="col-lg-9">
-         {this.state.keepSpinner && <div class="custom-loader">
-              <div class="loader-spinner"></div>
-              <p class="loader-text">Please Wait while Jobs are loading...</p>
-            </div>}
+        {this.state.keepSpinner && <div class="custom-loader">
+          <div class="loader-spinner"></div>
+          <p class="loader-text">Please Wait while Jobs are loading...</p>
+        </div>}
         <div className="rbt-page-banner-wrapper">
           {/* Start Banner BG Image  */}
           <div className="rbt-banner-image" />
@@ -121,10 +136,12 @@ class MyJobs extends React.Component {
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                       <div className="rbt-short-item mt-5">
                         <form action="#" className="rbt-search-style me-0">
-                          <input type="text" placeholder="Search Your Jobs.." />
+                          <input type="text" placeholder="Search by Jobid,location,title.." value={this.state.searchQuery}
+                            onChange={this.handleSearchChange} />
                           <button
-                            type="submit"
+                            type="button"
                             className="rbt-search-btn rbt-round-btn"
+                            onClick={(e) => e.preventDefault()} // Prevent default form submission
                           >
                             <i className="feather-search" />
                           </button>
@@ -144,7 +161,7 @@ class MyJobs extends React.Component {
               <div className="col-lg-12 order-1 order-lg-2">
                 <div className="rbt-course-grid-column jobs-lst active-list-view">
                   {/* Start Single Card  */}
-                  {joblistingdata?.map((job) => (
+                  {filteredJobs?.map((job) => (
                     <div key={job.jobid} className="course-grid-3">
 
                       <div className="rbt-card variation-01 rbt-hover card-list-2">
@@ -199,55 +216,55 @@ class MyJobs extends React.Component {
                   {/* End Single Card  */}
                 </div>
                 <div className="row">
-          <div className="col-lg-12 mt--60">
-            <nav>
-              <ul className="rbt-pagination">
-                {/* Previous Button */}
-                <li>
-                  <a
-                    href="#"
-                    aria-label="Previous"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage > 1) this.handlePageChange(currentPage - 1);
-                    }}
-                  >
-                    <i className="feather-chevron-left" />
-                  </a>
-                </li>
+                  <div className="col-lg-12 mt--60">
+                    <nav>
+                      <ul className="rbt-pagination">
+                        {/* Previous Button */}
+                        <li>
+                          <a
+                            href="#"
+                            aria-label="Previous"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (currentPage > 1) this.handlePageChange(currentPage - 1);
+                            }}
+                          >
+                            <i className="feather-chevron-left" />
+                          </a>
+                        </li>
 
-                {/* Page Numbers */}
-                {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
-                  <li key={index} className={currentPage === index + 1 ? "active" : ""}>
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.handlePageChange(index + 1); // 1-based index
-                      }}
-                    >
-                      {index + 1}
-                    </a>
-                  </li>
-                ))}
+                        {/* Page Numbers */}
+                        {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
+                          <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                            <a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                this.handlePageChange(index + 1); // 1-based index
+                              }}
+                            >
+                              {index + 1}
+                            </a>
+                          </li>
+                        ))}
 
-                {/* Next Button */}
-                <li>
-                  <a
-                    href="#"
-                    aria-label="Next"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
-                    }}
-                  >
-                    <i className="feather-chevron-right" />
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+                        {/* Next Button */}
+                        <li>
+                          <a
+                            href="#"
+                            aria-label="Next"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
+                            }}
+                          >
+                            <i className="feather-chevron-right" />
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
