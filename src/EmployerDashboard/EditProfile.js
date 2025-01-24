@@ -16,6 +16,8 @@ class EditProfile extends React.Component {
             email: "",
             CompanyName: "",
             designation: "",
+            companylogo:"",
+            logoPreview: "",
             isFormValid: false, // New state variable
             userData:{}
         };
@@ -68,6 +70,12 @@ class EditProfile extends React.Component {
             .then((response) => {
                 console.log('user data', response.data);
                 this.setState({ userData: response.data.data })
+                const { companylogo } = response.data.data;
+                if (companylogo) {
+                  this.setState({
+                    logoPreview: `${process.env.REACT_APP_BASEURL}/Uploads/${companylogo}`,
+                  });
+                }
                 this.setState({ keepSpinner: false });
 
             })

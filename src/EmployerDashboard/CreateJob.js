@@ -14,6 +14,7 @@ class CreateJob extends React.Component {
         super(props);
         this.state = {
             isFormValid: false,
+            dashBoardData: {},
         };
 
     }
@@ -37,7 +38,6 @@ class CreateJob extends React.Component {
             .then((response) => {
                 console.log('dashboard data', response.data);
                 this.setState({ dashBoardData: response.data.data });
-                this.setState({ keepSpinner: false });
 
             })
             .catch((error) => {

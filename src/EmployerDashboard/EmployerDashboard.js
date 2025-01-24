@@ -18,17 +18,17 @@ class EmployerDashboard extends React.Component {
         super(props);
         this.state = {
             showUserDashboard: true,
-            dashBoardData: "",
+            dashBoardData: {},
             responseMessage: '',
         };
 
     }
     componentDidMount() {
         this.getDashboardUser();
-        let url=window.location.search;
-        var urlParams= new URLSearchParams(url);
-        var reqType= urlParams.get('message');
-        if(reqType=="success"){
+        let url = window.location.search;
+        var urlParams = new URLSearchParams(url);
+        var reqType = urlParams.get('message');
+        if (reqType == "success") {
             this.setState({
                 responseMessage: (
                     <span>
@@ -37,7 +37,7 @@ class EmployerDashboard extends React.Component {
                 ),
             });
         }
-        if(reqType=="profilesuccess"){
+        if (reqType == "profilesuccess") {
             this.setState({
                 responseMessage: (
                     <span>
@@ -66,7 +66,6 @@ class EmployerDashboard extends React.Component {
                 console.log('dashboard data', response.data);
                 this.getUserProfile(response.data.user_id);
                 this.setState({ dashBoardData: response.data.data });
-                this.setState({ keepSpinner: false });
 
             })
             .catch((error) => {
@@ -109,7 +108,7 @@ class EmployerDashboard extends React.Component {
 
         switch (componentName) {
             case 'dashboard':
-                this.setState({ showUserDashboard: true,responseMessage:'' });
+                this.setState({ showUserDashboard: true, responseMessage: '' });
                 break;
             case 'profile':
                 this.setState({ showProfile: true });
@@ -118,7 +117,7 @@ class EmployerDashboard extends React.Component {
             case 'myJobs':
                 this.setState({ showMyJobs: true });
                 break;
-       
+
             // Add more cases for other components as needed
             default:
                 this.setState({ showUserDashboard: true });
@@ -149,6 +148,14 @@ class EmployerDashboard extends React.Component {
             });
     }
 
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+        const parts = name.split(" ");
+        return parts.length > 1
+          ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+          : parts[0][0].toUpperCase();
+      };
+
     render() {
 
         return (
@@ -159,7 +166,7 @@ class EmployerDashboard extends React.Component {
                     <div className="rbt-banner-image"></div>
                     {/*  End Banner BG Image */}
                 </div><div>
-                
+
                     {/*Start Card Style */}
                     <div className="rbt-dashboard-area rbt-section-overlayping-top rbt-section-gapBottom">
                         <div className="container">
@@ -172,8 +179,31 @@ class EmployerDashboard extends React.Component {
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
                                                 <div className="thumbnail rbt-avatars size-lg">
-                                                    <img src={this.state?.userData?.companylogo} alt="Instructor" />
+                                                    {this.state?.userData?.companylogo ? (
+                                                        <img
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                            alt="Instructor"
+                                                        />
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                width: "60px", // Adjust as needed
+                                                                height: "60px", // Adjust as needed
+                                                                backgroundColor: "#ccc", // Default background color
+                                                                color: "#fff",
+                                                                borderRadius: "50%",
+                                                                fontWeight: "bold",
+                                                                fontSize: "18px", // Adjust font size as needed
+                                                            }}
+                                                        >
+                                                            {this.getInitials(this.state?.dashBoardData?.username || "User")}
+                                                        </div>
+                                                    )}
                                                 </div>
+
                                                 <div className="tutor-content">
                                                     <h5 className="title">{this.state?.dashBoardData.username}</h5>
                                                 </div>
@@ -220,13 +250,13 @@ class EmployerDashboard extends React.Component {
                                                                             <i className="feather-user"></i><span>My Profile</span>
                                                                         </a>
                                                                     </li>
-                                                             
+
                                                                     <li>
                                                                         <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
                                                                             <i className="feather-monitor"></i><span>Jobs</span>
                                                                         </a>
                                                                     </li>
-                                                                 
+
                                                                     <li>
                                                                         <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                                             <i className="feather-log-out"></i><span>Logout</span>
