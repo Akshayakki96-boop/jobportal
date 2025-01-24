@@ -2,130 +2,96 @@ import React from 'react';
 import axios from 'axios';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
+import parse from 'html-react-parser';
 
 class jobs extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showUserDashboard: true,
-            dashBoardData: ""
+            dashBoardData: "",
+            joblistingdata: [],
+            currentPage: 1, // Tracks the current page
+            pageSize: 4, // Number of records per page
+            totalPages: 1,
+            totalRecords: 0, // Total number of records
+            searchQuery: "", // State to store the search input
         };
 
     }
     componentDidMount() {
-        this.getDashboardUser();
+        this.getAllJobs(0, this.state.pageSize);
 
     }
 
-    getDashboardUser = () => {
+    getAllJobs = (pageIndex, pageSize) => {
+        this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Employer/Dashboard`;
+        const url = `${baseUrl}/api/Job/GetJobs`;
         const token = localStorage.getItem('authToken');
-
-        axios.post(url, "", {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                console.log('dashboard data', response.data);
-                this.getUserProfile(response.data.user_id);
-                this.setState({ dashBoardData: response.data.data });
-                this.setState({ keepSpinner: false });
-
-            })
-            .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
-            });
-    }
-
-    getUserProfile = (userId) => {
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Employer/GetProfile`;
-        const token = localStorage.getItem('authToken');
-        const userData = {
-            "Id": userId,
-        };
-        axios.post(url, userData, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                console.log('user data', response.data);
-                this.setState({ userData: response.data.data })
-                this.setState({ keepSpinner: false });
-
-            })
-            .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
-            });
-    }
-
-    setActiveComponent = (componentName) => {
-        this.setState({
-            showUserDashboard: false,
-            showProfile: false,
-            showEnrollCourse: false,
-            showMyCourses: false,
-            showAssignment: false
-        });
-
-        switch (componentName) {
-            case 'dashboard':
-                this.setState({ showUserDashboard: true });
-                break;
-            case 'profile':
-                this.setState({ showProfile: true });
-                break;
-            case 'enrolledCourses':
-                this.setState({ showEnrollCourse: true });
-                break;
-            case 'myCourses':
-                this.setState({ showMyCourses: true });
-                break;
-            case 'announcements':
-                this.setState({ showAnnouncement: true });
-                break;
-            case 'assignments':
-                this.setState({ showAssignment: true });
-                break;
-            // Add more cases for other components as needed
-            default:
-                this.setState({ showUserDashboard: true });
-                break;
+        var request = {
+            "jobId": 0,
+            "jobtitle": "",
+            "experienceFrom": 0,
+            "experienceTo": 0,
+            "packageId": 0,
+            "roleId": 0,
+            "emptypeId": 0,
+            "deptId": 0,
+            "industryId": 0,
+            "keyskillIds": "",
+            "educationId": "",
+            "active": false,
+            "user_id": 0,
+            "cityIds": "1,2",
+            pageIndex: pageIndex,
+            pagesize: pageSize,
         }
-    };
-    handleLogout = () => {
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const logoutUrl = `${baseUrl}/api/Logout/Logout`;
-        const logoutData = {};
-        const token = localStorage.getItem('authToken');
-        axios.post(logoutUrl, logoutData, {
+        axios.post(url, request, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+                // Authorization: `Bearer ${token}`,
             },
         })
             .then((response) => {
-                console.log('Logout Success:', response.data);
-                this.setState({ keepSpinner: false });
+                console.log('joblistingdata', response.data);
+                const totalCount = response.data.data[0].TotalRecords;
+                this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, keepSpinner: false });
 
-                this.props.navigate('/Login'); // Use `navigate`
             })
             .catch((error) => {
                 localStorage.removeItem('authToken');
                 this.props.navigate('/Login'); // Use `navigate`
-                this.setState({ keepSpinner: false });
             });
+
     }
+    // Handle page click
+    handlePageChange = (pageIndex) => {
+        this.setState({ currentPage: pageIndex }, () => {
+            this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
+        });
+    };
+    handleSearchChange = (e) => {
+        this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
+    };
+
 
     render() {
+        const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
+        const startIndex = (currentPage - 1) * pageSize + 1;
+        const endIndex = Math.min(currentPage * pageSize, totalRecords);
 
+        const filteredJobs = joblistingdata?.filter((job) => {
+            const jobId = job.jobid?.toString().toLowerCase() || ""; // Ensure it's a string
+            const jobTitle = job.jobtitle?.toLowerCase() || "";
+            const jobLocation = job.locations?.toLowerCase() || "";
+
+            return (
+                jobId.includes(searchQuery) ||
+                jobTitle.includes(searchQuery) ||
+                jobLocation.includes(searchQuery)
+            );
+        });
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
@@ -137,26 +103,15 @@ class jobs extends React.Component {
                         {/* Start Banner Content Top  */}
                         <div className="rbt-banner-content-top">
                             <div className="container">
+                                {this.state.keepSpinner && <div class="custom-loader">
+                                    <div class="loader-spinner"></div>
+                                    <p class="loader-text">Please Wait while Jobs are loading...</p>
+                                </div>}
                                 <div className="row">
                                     <div className="col-lg-12">
-                                        {/* Start Breadcrumb Area  */}
-                                        <ul className="page-list">
-                                            <li className="rbt-breadcrumb-item">
-                                                <a href="/">Home</a>
-                                            </li>
-                                            <li>
-                                                <div className="icon-right">
-                                                    <i className="feather-chevron-right" />
-                                                </div>
-                                            </li>
-                                            <li className="rbt-breadcrumb-item active">All Jobs</li>
-                                        </ul>
-                                        {/* End Breadcrumb Area  */}
+
                                         <div className=" title-wrapper">
                                             <h1 className="title mb--0">All Jobs</h1>
-                                            <a href="#" className="rbt-badge-2">
-                                                <div className="image">🎉</div> 50 Jobs
-                                            </a>
                                         </div>
                                         <p className="description">
                                             Jobs that help beginner designers become true unicorns.{" "}
@@ -172,23 +127,8 @@ class jobs extends React.Component {
                                 <div className="row g-5 align-items-center">
                                     <div className="col-lg-5 col-md-12">
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
-                                            <div className="rbt-short-item switch-layout-container">
-                                                <ul className="course-switch-layout">
-                                                    {/*                                        <li class="course-switch-item"><button class="rbt-grid-view" title="Grid Layout"><i class="feather-grid"></i> <span class="text">Grid</span></button></li>*/}
-                                                    <li className="course-switch-item">
-                                                        <button
-                                                            className="rbt-list-view active"
-                                                            title="List Layout"
-                                                            style={{ pointerEvents: "none" }}
-                                                        >
-                                                            <i className="feather-list" />{" "}
-                                                            <span className="text">List</span>
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            </div>
                                             <div className="rbt-short-item">
-                                                <span className="course-index">Showing 10 of 10 results</span>
+                                                <span className="course-index">Showing {startIndex} - {endIndex} of {totalRecords} results</span>
                                             </div>
                                         </div>
                                     </div>
@@ -196,29 +136,16 @@ class jobs extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                             <div className="rbt-short-item mt-5">
                                                 <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="Search Your Course.." />
+                                                    <input type="text" placeholder="Search by Jobid,location,title.." value={this.state.searchQuery}
+                                                        onChange={this.handleSearchChange} />
                                                     <button
-                                                        type="submit"
+                                                        type="button"
                                                         className="rbt-search-btn rbt-round-btn"
+                                                        onClick={(e) => e.preventDefault()} // Prevent default form submission
                                                     >
                                                         <i className="feather-search" />
                                                     </button>
                                                 </form>
-                                            </div>
-                                            <div className="rbt-short-item">
-                                                <div className="filter-select">
-                                                    <span className="select-label d-block">Short By</span>
-                                                    <div className="filter-select rbt-modern-select search-by-category">
-                                                        <select data-size={7}>
-                                                            <option>Default</option>
-                                                            <option>Latest</option>
-                                                            <option>Popularity</option>
-                                                            <option>Trending</option>
-                                                            <option>Price: low to high</option>
-                                                            <option>Price: high to low</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -331,676 +258,113 @@ class jobs extends React.Component {
                                         <div className="rbt-show-more-btn">Show More</div>
                                     </div>
                                     {/* End Widget Area  */}
-                                    {/* Start Widget Area  */}
-                                    <div className="rbt-single-widget rbt-widget-rating">
-                                        <div className="inner">
-                                            <h4 className="rbt-widget-title">Ratings</h4>
-                                            <ul className="rbt-sidebar-list-wrapper rating-list-check">
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-radio-1" type="radio" name="rbt-radio" />
-                                                    <label htmlFor="cat-radio-1">
-                                                        <span className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                        </span>
-                                                        <span className="rbt-lable count">5</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-radio-2" type="radio" name="rbt-radio" />
-                                                    <label htmlFor="cat-radio-2">
-                                                        <span className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                        </span>
-                                                        <span className="rbt-lable count">4</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-radio-3" type="radio" name="rbt-radio" />
-                                                    <label htmlFor="cat-radio-3">
-                                                        <span className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                        </span>
-                                                        <span className="rbt-lable count">3</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-radio-4" type="radio" name="rbt-radio" />
-                                                    <label htmlFor="cat-radio-4">
-                                                        <span className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                        </span>
-                                                        <span className="rbt-lable count">2</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-radio-5" type="radio" name="rbt-radio" />
-                                                    <label htmlFor="cat-radio-5">
-                                                        <span className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                            <i className="off fas fa-star" />
-                                                        </span>
-                                                        <span className="rbt-lable count">1</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {/* End Widget Area  */}
-                                    {/* Start Widget Area  */}
-                                    <div className="rbt-single-widget rbt-widget-instructor">
-                                        <div className="inner">
-                                            <h4 className="rbt-widget-title">Instructors</h4>
-                                            <ul className="rbt-sidebar-list-wrapper instructor-list-check">
-                                                <li className="rbt-check-group">
-                                                    <input id="ins-list-1" type="checkbox" name="ins-list-1" />
-                                                    <label htmlFor="ins-list-1">
-                                                        Slaughter <span className="rbt-lable count">15</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="ins-list-2" type="checkbox" name="ins-list-2" />
-                                                    <label htmlFor="ins-list-2">
-                                                        Patrick <span className="rbt-lable count">20</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="ins-list-3" type="checkbox" name="ins-list-3" />
-                                                    <label htmlFor="ins-list-3">
-                                                        Angela <span className="rbt-lable count">10</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="ins-list-4" type="checkbox" name="ins-list-4" />
-                                                    <label htmlFor="ins-list-4">
-                                                        Fatima Asrafy <span className="rbt-lable count">15</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {/* End Widget Area  */}
-                                    {/* Start Widget Area  */}
-                                    <div className="rbt-single-widget rbt-widget-prices">
-                                        <div className="inner">
-                                            <h4 className="rbt-widget-title">Prices</h4>
-                                            <ul className="rbt-sidebar-list-wrapper prices-list-check">
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="prices-list-1"
-                                                        type="checkbox"
-                                                        name="prices-list-1"
-                                                    />
-                                                    <label htmlFor="prices-list-1">
-                                                        All <span className="rbt-lable count">15</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="prices-list-2"
-                                                        type="checkbox"
-                                                        name="prices-list-2"
-                                                    />
-                                                    <label htmlFor="prices-list-2">
-                                                        Free <span className="rbt-lable count">0</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="prices-list-3"
-                                                        type="checkbox"
-                                                        name="prices-list-3"
-                                                    />
-                                                    <label htmlFor="prices-list-3">
-                                                        Paid <span className="rbt-lable count">10</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {/* End Widget Area  */}
-                                    {/* Start Widget Area  */}
-                                    <div className="rbt-single-widget rbt-widget-lavels">
-                                        <div className="inner">
-                                            <h4 className="rbt-widget-title">Levels</h4>
-                                            <ul className="rbt-sidebar-list-wrapper lavels-list-check">
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="lavels-list-1"
-                                                        type="checkbox"
-                                                        name="lavels-list-1"
-                                                    />
-                                                    <label htmlFor="lavels-list-1">
-                                                        All Levels<span className="rbt-lable count">15</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="lavels-list-2"
-                                                        type="checkbox"
-                                                        name="lavels-list-2"
-                                                    />
-                                                    <label htmlFor="lavels-list-2">
-                                                        Beginner <span className="rbt-lable count">0</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="lavels-list-3"
-                                                        type="checkbox"
-                                                        name="lavels-list-3"
-                                                    />
-                                                    <label htmlFor="lavels-list-3">
-                                                        Intermediate <span className="rbt-lable count">10</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="lavels-list-4"
-                                                        type="checkbox"
-                                                        name="lavels-list-4"
-                                                    />
-                                                    <label htmlFor="lavels-list-4">
-                                                        Expert <span className="rbt-lable count">10</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {/* End Widget Area  */}
+
                                 </aside>
                             </div>
                             <div className="col-lg-9 order-1 order-lg-2">
                                 <div className="rbt-course-grid-column jobs-lst active-list-view">
                                     {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Digital Marketing Executive</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED001
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> New York, NY
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Provide comprehensive patient care, administer medications,
-                                                    and assist with diagnostic procedures.
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 75000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
                                     {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Medical Assistant</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED002
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> Los Angeles, CA
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Assist physicians with patient examinations, perform
-                                                    administrative tasks, and manage patient record
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 45000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
+                                    {filteredJobs?.map((job) => (
+                                        <div key={job.jobid} className="course-grid-3">
+
+                                            <div className="rbt-card variation-01 rbt-hover card-list-2">
+                                                <div className="rbt-card-img">
+                                                    <a href="jobs-detail.html">
+                                                        <img
+                                                            src="assets/images/job-zob-img.jpg" // Use a default image if companylogo is missing
+                                                            alt="Card image"
+                                                        />
                                                     </a>
                                                 </div>
+                                                <div className="rbt-card-body">
+                                                    <div className="rbt-card-top">
+                                                        <div className="rbt-category">
+                                                            <a href="#">{job.empType || "Employment Type"}</a>
+                                                            <a href="#">{job.department || "Department"}</a>
+                                                        </div>
+                                                    </div>
+                                                    <h4 className="rbt-card-title">
+                                                        <a href={`/job-decription?jobId=${job.jobid}`}>{job.jobtitle || "Job Title Unavailable"}</a>
+                                                    </h4>
+                                                    <ul className="rbt-meta">
+                                                        <li>
+                                                            <i className="fas fa-building" /> {job.CompanyName || "Company Name"}
+                                                        </li>
+                                                        <li>
+                                                            <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
+                                                        </li>
+                                                    </ul>
+                                                    <p className="rbt-card-text">
+                                                        {parse(job.description)}
+                                                    </p>
+                                                    <div className="rbt-card-bottom">
+                                                        <div className="rbt-price">
+                                                            <span className="current-price">
+                                                                <i className="fas fa-rupee-sign" />{" "}
+                                                                {job.package_notdisclosed
+                                                                    ? "Package not disclosed"
+                                                                    : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}
+                                                            </span>
+                                                        </div>
+                                                        <a className="rbt-btn-link" href={`/job-decription?jobId=${job.jobid}`}>
+                                                            Learn More
+                                                            <i className="feather-arrow-right" />
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                         </div>
-                                    </div>
+                                    ))}
                                     {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Digital Marketing Executive</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED001
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> New York, NY
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Provide comprehensive patient care, administer medications,
-                                                    and assist with diagnostic procedures.
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 75000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Medical Assistant</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED002
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> Los Angeles, CA
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Assist physicians with patient examinations, perform
-                                                    administrative tasks, and manage patient record
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 45000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Digital Marketing Executive</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED001
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> New York, NY
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Provide comprehensive patient care, administer medications,
-                                                    and assist with diagnostic procedures.
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 75000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Medical Assistant</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED002
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> Los Angeles, CA
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Assist physicians with patient examinations, perform
-                                                    administrative tasks, and manage patient record
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 45000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Digital Marketing Executive</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED001
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> New York, NY
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Provide comprehensive patient care, administer medications,
-                                                    and assist with diagnostic procedures.
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 75000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Medical Assistant</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED002
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> Los Angeles, CA
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Assist physicians with patient examinations, perform
-                                                    administrative tasks, and manage patient record
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 45000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Digital Marketing Executive</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED001
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> New York, NY
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Provide comprehensive patient care, administer medications,
-                                                    and assist with diagnostic procedures.
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 75000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            <div className="rbt-card-img">
-                                                <a href="jobs-detail.html">
-                                                    <img src="assets/images/job-zob-img.jpg" alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-category">
-                                                        <a href="#">Full Time</a>
-                                                        <a href="#">Part Time</a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="jobs-detail.html">Medical Assistant</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="fas fa-building" /> MED002
-                                                    </li>
-                                                    <li>
-                                                        <i className="fas fa-map-marker-alt" /> Los Angeles, CA
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Assist physicians with patient examinations, perform
-                                                    administrative tasks, and manage patient record
-                                                </p>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">
-                                                            <i className="fas fa-rupee-sign" /> 45000.00 a month
-                                                        </span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Job-details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
+
+
                                 </div>
                                 <div className="row">
                                     <div className="col-lg-12 mt--60">
                                         <nav>
                                             <ul className="rbt-pagination">
+                                                {/* Previous Button */}
                                                 <li>
-                                                    <a href="#" aria-label="Previous">
+                                                    <a
+                                                        href="#"
+                                                        aria-label="Previous"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            if (currentPage > 1) this.handlePageChange(currentPage - 1);
+                                                        }}
+                                                    >
                                                         <i className="feather-chevron-left" />
                                                     </a>
                                                 </li>
+
+                                                {/* Page Numbers */}
+                                                {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
+                                                    <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                                                        <a
+                                                            href="#"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                this.handlePageChange(index + 1); // 1-based index
+                                                            }}
+                                                        >
+                                                            {index + 1}
+                                                        </a>
+                                                    </li>
+                                                ))}
+
+                                                {/* Next Button */}
                                                 <li>
-                                                    <a href="#">1</a>
-                                                </li>
-                                                <li className="active">
-                                                    <a href="#">2</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">3</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" aria-label="Next">
+                                                    <a
+                                                        href="#"
+                                                        aria-label="Next"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
+                                                        }}
+                                                    >
                                                         <i className="feather-chevron-right" />
                                                     </a>
                                                 </li>

@@ -164,37 +164,42 @@ class Header extends React.Component {
                             <div className="rbt-main-navigation d-none d-xl-block">
                                 <nav className="mainmenu-nav">
                                     <ul className="mainmenu">
-                                        <li className="current">
+                                        <li className={window.location.pathname === "/" ? "current active" : "current"}>
                                             <a href="/">Home</a>
                                         </li>
                                         {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
-                                            <li>
+                                            <li className={window.location.pathname === "/Course" ? "active" : ""}>
                                                 <a href="/Course">Course</a>
                                             </li>
                                         )}
 
-                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (<li>
-                                            <a href="/Jobs">Jobs</a>
-                                        </li>
+                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
+                                            <li className={window.location.pathname === "/Jobs" || window.location.pathname === "/job-decription" || window.location.pathname === "/Job-details" ? "active" : ""}>
+                                                <a href="/Jobs">Jobs</a>
+                                            </li>
                                         )}
-                                        {this.props.dashBoardData === "" && <li>
-                                            <a href="/SignUp?role_id=1">Candidate</a>
-                                        </li>}
-                                        {this.props.dashBoardData === "" && <li>
-                                            <a href="/SignUp?role_id=2">Employer</a>
-                                        </li>}
-                                        {this.props.dashBoardData === "" && <li>
-                                            <a href="/SignUp?role_id=3">Trainer</a>
-                                        </li>}
+                                        {this.props.dashBoardData === "" && (
+                                            <li className={window.location.pathname === "/SignUp?role_id=1" ? "active" : ""}>
+                                                <a href="/SignUp?role_id=1">Candidate</a>
+                                            </li>
+                                        )}
+                                        {this.props.dashBoardData === "" && (
+                                            <li className={window.location.pathname === "/SignUp?role_id=2" ? "active" : ""}>
+                                                <a href="/SignUp?role_id=2">Employer</a>
+                                            </li>
+                                        )}
+                                        {this.props.dashBoardData === "" && (
+                                            <li className={window.location.pathname === "/SignUp?role_id=3" ? "active" : ""}>
+                                                <a href="/SignUp?role_id=3">Trainer</a>
+                                            </li>
+                                        )}
                                         {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
-                                            <li>
+                                            <li className={window.location.pathname === "/Community" ? "active" : ""}>
                                                 <a href="/Community">Community</a>
                                             </li>
                                         )}
-
-
-
                                     </ul>
+
                                 </nav>
                             </div>
 
