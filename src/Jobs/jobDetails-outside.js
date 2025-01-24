@@ -5,7 +5,7 @@ import Header from '../Header/header';
 import { Alert, Button } from 'react-bootstrap';
 import parse from 'html-react-parser';
 
-class jobDetails extends React.Component {
+class jobDetailsOutside extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +16,7 @@ class jobDetails extends React.Component {
 
   }
   componentDidMount() {
-    this.getDashboardUser();
+    //this.getDashboardUser();
     let url = window.location.search;
     var urlParams = new URLSearchParams(url);
     var jobId = urlParams.get('jobId');
@@ -46,7 +46,7 @@ class jobDetails extends React.Component {
     axios.post(url, request, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        //Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
@@ -60,62 +60,6 @@ class jobDetails extends React.Component {
       });
 
   }
-
-  getDashboardUser = () => {
-    const baseUrl = process.env.REACT_APP_BASEURL;
-    const url = `${baseUrl}/api/Employer/Dashboard`;
-    const token = localStorage.getItem('authToken');
-
-    axios.post(url, "", {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        console.log('dashboard data', response.data);
-        this.setState({ dashBoardData: response.data.data });
-
-      })
-      .catch((error) => {
-        localStorage.removeItem('authToken');
-        this.props.navigate('/Login'); // Use `navigate`
-      });
-  }
-
-  handlePublish = () => {
-    const baseUrl = process.env.REACT_APP_BASEURL;
-    const url = `${baseUrl}/api/Job/ToggleJob`;
-    const token = localStorage.getItem('authToken');
-    const toggleData = {
-      "jobId": this.state.jobDescription.jobid,
-      "isactive": !this.state.isPublished,
-    }
-    axios.post(url, toggleData, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        this.setState({ isPublished: !this.state.isPublished });
-        this.setState({
-          responseMessage: (
-            <span>
-              Job Published Successfully!
-            </span>
-          ),
-          alertVariant: 'success', // Success alert variant
-        });
-
-      })
-      .catch((error) => {
-        localStorage.removeItem('authToken');
-        this.props.navigate('/Login'); // Use `navigate`
-      });
-  }
-
-
 
 
   render() {
@@ -262,11 +206,8 @@ class jobDetails extends React.Component {
                   <div className="col-lg-7 col-md-12">
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                       <div className="rbt-short-item">
-                        <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
-                          e.preventDefault(); // Prevent default link behavior
-                          this.handlePublish();
-                        }}>
-                          <span className="btn-text">{this.state.isPublished ? "Unpublish" : "Publish"}</span>
+                        <a className="rbt-btn btn-md btn-white icon-hover" href="/Login">
+                          <span className="btn-text">Login to apply</span>
                           <span className="btn-icon">
                             <i className="feather-arrow-right" />
                           </span>
@@ -298,9 +239,8 @@ class jobDetails extends React.Component {
                           <h4 className="title mb--10">Job description</h4>
                         </div>
                         <h5 className="title">About :</h5>
-                       
                         {parse(this.state.jobDescription?.description || "")}
-                      
+                        
                       </div>
                     </div>
                   </div>
@@ -717,4 +657,4 @@ class jobDetails extends React.Component {
   }
 }
 
-export default withNavigation(jobDetails);
+export default withNavigation(jobDetailsOutside);
