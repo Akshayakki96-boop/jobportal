@@ -11,9 +11,37 @@ class Header extends React.Component {
         this.placeholderRef = React.createRef();
     }
     componentDidMount() {
+        if(this.props.dashBoardData)
+        {
+            this.getUserProfile(this.props.dashBoardData.user_id);
+        }
         this.handleScroll();
 
         window.addEventListener('scroll', this.handleScroll);
+    }
+
+    getUserProfile = (userId) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/GetProfile`;
+        const token = localStorage.getItem('authToken');
+        const userData = {
+            "Id": userId,
+        };
+        axios.post(url, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('user data', response.data);
+                this.setState({ userData: response.data.data });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
     }
 
     componentWillUnmount() {
@@ -76,7 +104,6 @@ class Header extends React.Component {
         }
     }
     render() {
-        console.log("dashboard", this.props.dashBoardData);
         return (
             <header className="rbt-header rbt-header-10">
                 <div ref={this.placeholderRef} className="rbt-sticky-placeholder"></div>
@@ -227,7 +254,7 @@ class Header extends React.Component {
                                                 <div className="rbt-admin-profile">
                                                     <div className="admin-thumbnail">
                                                         <img
-                                                            src="assets/images/team/avatar.jpg"
+                                                               src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData?.companylogo}`}
                                                             alt="User Images"
                                                         />
                                                     </div>

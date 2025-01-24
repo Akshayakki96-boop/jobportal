@@ -6,7 +6,7 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            dashBoardData: {}
         };
 
     }
@@ -42,7 +42,7 @@ class Home extends React.Component {
 
         return (
             <>
-                <Header dashBoardData={this.state.dashBoardData} />
+            <Header dashBoardData={this.state.dashBoardData} />
             <div className="rbt-banner-area rbt-banner-1">
                 <div className="container-fluid">
                     <div className="row">
