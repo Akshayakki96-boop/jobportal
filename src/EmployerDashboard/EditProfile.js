@@ -19,7 +19,8 @@ class EditProfile extends React.Component {
             companylogo:"",
             logoPreview: "",
             isFormValid: false, // New state variable
-            userData:{}
+            userData:{},
+            dashBoardData: {},
         };
 
     }
@@ -43,9 +44,8 @@ class EditProfile extends React.Component {
         })
             .then((response) => {
                 console.log('dashboard data', response.data);
-                this.setState({ dashBoardData: response.data.data });
                 this.getUserProfile(this.userId);
-                this.setState({ keepSpinner: false });
+                this.setState({ dashBoardData: response.data.data });
 
             })
             .catch((error) => {
