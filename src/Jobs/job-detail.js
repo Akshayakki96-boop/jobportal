@@ -10,7 +10,7 @@ class jobDetails extends React.Component {
     super(props);
     this.state = {
       showUserDashboard: true,
-      dashBoardData: "",
+      dashBoardData: {},
       isPublished: false, // Initial state
     };
 
