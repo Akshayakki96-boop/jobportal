@@ -167,7 +167,7 @@ class Login extends React.Component {
                       </div>
                       <div className="col-lg-6">
                         <div className="rbt-lost-password text-end">
-                          <a className="rbt-btn-link" href="/SignUp">Register</a>
+                          <a className="rbt-btn-link" href="/SignUp?role_id=1">Register</a>
                         </div>
                       </div>
                     </div>

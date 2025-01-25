@@ -11,10 +11,10 @@ class Header extends React.Component {
         this.placeholderRef = React.createRef();
     }
     componentDidMount() {
-        if(this.props.dashBoardData)
-        {
+        if (this.props.dashBoardData && Object.keys(this.props.dashBoardData).length > 0) {
             this.getUserProfile(this.props.dashBoardData.user_id);
         }
+
         this.handleScroll();
 
         window.addEventListener('scroll', this.handleScroll);
@@ -254,7 +254,7 @@ class Header extends React.Component {
                                                 <div className="rbt-admin-profile">
                                                     <div className="admin-thumbnail">
                                                         <img
-                                                               src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData?.companylogo}`}
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData?.companylogo}`}
                                                             alt="User Images"
                                                         />
                                                     </div>
