@@ -11,7 +11,7 @@ class Header extends React.Component {
         this.placeholderRef = React.createRef();
     }
     componentDidMount() {
-        if (this.props.dashBoardData && Object.keys(this.props.dashBoardData).length > 0) {
+        if (this.props.dashBoardData) {
             this.getUserProfile(this.props.dashBoardData.user_id);
         }
 
@@ -27,21 +27,24 @@ class Header extends React.Component {
         const userData = {
             "Id": userId,
         };
-        axios.post(url, userData, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                console.log('user data', response.data);
-                this.setState({ userData: response.data.data });
-
+ 
+            axios.post(url, userData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
             })
-            .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
-            });
+                .then((response) => {
+                    console.log('user data', response.data);
+                    this.setState({ userData: response.data.data });
+    
+                })
+                .catch((error) => {
+                    //localStorage.removeItem('authToken');
+                    //this.props.navigate('/Login'); // Use `navigate`
+                });
+        
+    
     }
 
     componentWillUnmount() {
