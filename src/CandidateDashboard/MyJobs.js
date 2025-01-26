@@ -181,7 +181,7 @@ class MyJobs extends React.Component {
                             </div>
                           </div>
                           <h4 className="rbt-card-title">
-                            <a href={`/Job-details?jobId=${job.jobid}`}>{job.jobtitle || "Job Title Unavailable"}</a>
+                            <a href={`/Job-details?jobId=${job.jobid}&user=candidate`}>{job.jobtitle || "Job Title Unavailable"}</a>
                           </h4>
                           <ul className="rbt-meta">
                             <li>
@@ -203,7 +203,7 @@ class MyJobs extends React.Component {
                                   : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}
                               </span>
                             </div>
-                            <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}`}>
+                            <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}&user=candidate`}>
                               Learn More
                               <i className="feather-arrow-right" />
                             </a>

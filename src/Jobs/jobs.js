@@ -41,7 +41,7 @@ class jobs extends React.Component {
             "industryId": 0,
             "keyskillIds": "",
             "educationId": "",
-            "active": false,
+            "active": true,
             "user_id": 0,
             "cityIds": "1,2",
             pageIndex: pageIndex,
@@ -270,10 +270,10 @@ class jobs extends React.Component {
 
                                             <div className="rbt-card variation-01 rbt-hover card-list-2">
                                                 <div className="rbt-card-img">
-                                                    <a href="jobs-detail.html">
+                                                    <a href="#">
                                                         <img
-                                                            src="assets/images/job-zob-img.jpg" // Use a default image if companylogo is missing
-                                                            alt="Card image"
+                                                        src={job.companylogo?`${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}`:"assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
+                                                        alt="Card image"
                                                         />
                                                     </a>
                                                 </div>
