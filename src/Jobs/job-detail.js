@@ -12,14 +12,16 @@ class jobDetails extends React.Component {
       showUserDashboard: true,
       dashBoardData: {},
       isPublished: false, // Initial state
+      isApplied:false
     };
-
+    this.user="";
   }
   componentDidMount() {
     this.getDashboardUser();
     let url = window.location.search;
     var urlParams = new URLSearchParams(url);
     var jobId = urlParams.get('jobId');
+    this.user= urlParams.get('user');
     console.log('jobId', jobId);
     this.getAllJobs(jobId);
   }
@@ -119,7 +121,7 @@ class jobDetails extends React.Component {
 
 
   render() {
-
+console.log("user",this.user)
     return (
       <>
         <Header dashBoardData={this.state.dashBoardData} />
@@ -208,7 +210,7 @@ class jobDetails extends React.Component {
                               <i className="fa fa-rupee-sign" />
                               {this.state.jobDescription && this.state.jobDescription.package_notdisclosed
                                 ? "Not Disclosed"
-                                : `${this.state.jobDescription?.packagefrom || ""} - ${this.state.jobDescription?.packageto || ""} LPA`}
+                                : `${this.state.jobDescription?.packagefrom || 0} - ${this.state.jobDescription?.packageto || 0} LPA`}
 
                             </li>
                           </ul>
@@ -223,7 +225,7 @@ class jobDetails extends React.Component {
                       <div className="col-lg-3  d-flex flex-column justify-content-center">
                         <div className="job-det-pic">
                           <a href="#">
-                            <img src="assets/images/job-zob-img.jpg" alt="Card image" />
+                            <img src={this.state.jobDescription?.companylogo?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.jobDescription.companylogo}`:"assets/images/job-zob-img.jpg"} alt="Card image" />
                           </a>
                         </div>
                       </div>
@@ -261,7 +263,7 @@ class jobDetails extends React.Component {
                   </div>
                   <div className="col-lg-7 col-md-12">
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
-                      <div className="rbt-short-item">
+                     {!this.user ? <div className="rbt-short-item">
                         <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
                           e.preventDefault(); // Prevent default link behavior
                           this.handlePublish();
@@ -271,7 +273,18 @@ class jobDetails extends React.Component {
                             <i className="feather-arrow-right" />
                           </span>
                         </a>
+                      </div>:<div className="rbt-short-item">
+                        <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
+                          e.preventDefault(); // Prevent default link behavior
+                          this.handleApply();
+                        }}>
+                          <span className="btn-text">{this.state.isApplied ? "Applied" : "Apply"}</span>
+                          <span className="btn-icon">
+                            <i className="feather-arrow-right" />
+                          </span>
+                        </a>
                       </div>
+                      }
                       {/* <div className="rbt-short-item">
                         <a className="rbt-btn btn-md" href="#">
                           Login to apply

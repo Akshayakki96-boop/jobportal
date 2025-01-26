@@ -155,9 +155,12 @@ class MyProfile extends React.Component {
                             </div>
                             <div className="col-lg-6 col-md-6">
                                 <div className="expend-button text-start text-md-end">
-                                    <button className="rbt-btn btn-sm" onClick={this.handleEditProfile}>
+                                <a
+                                        href={`/edit-profile-candidate?user_Id=${this.state.updatedUserData.user_id}`}
+                                        className="rbt-btn btn-sm"
+                                    >
                                         <i className="feather-edit pl--0"></i> Edit Profile
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -182,114 +185,7 @@ class MyProfile extends React.Component {
                     </div>
                 </div>
                 {/* End Instructor Profile */}
-                {/* Modal for Editing Profile */}
-                {showModal && (
-                    <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title">Edit Profile</h5>
-                                    <button type="button" className="close" onClick={this.handleCloseModal}>
-                                        &times;
-                                    </button>
-                                </div>
-                                <div className="modal-body">
-                                    <form>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                accept="image/*"
-                                                id="companyLogo"
-                                                onChange={this.handleFileChange}
-                                            />
-                                            <label htmlFor="companyLogo">Company Logo</label>
-                                            {logoPreview && (
-                                                <div className="mt-3">
-                                                    <img
-                                                        src={logoPreview}
-                                                        alt="Logo Preview"
-                                                        style={{
-                                                            width: '100px',
-                                                            height: '100px',
-                                                            objectFit: 'cover',
-                                                            borderRadius: '8px',
-                                                        }}
-                                                    />
-                                                </div>
-                                            )}
-                                            {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="firstname"
-                                                className="form-control"
-                                                value={firstname}
-                                                onChange={this.handleInputChange}
-                                                id="firstname"
-                                            />
-                                            <label htmlFor="firstname">First Name</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="lastname"
-                                                className="form-control"
-                                                value={lastname}
-                                                onChange={this.handleInputChange}
-                                                id="lastname"
-                                            />
-                                            <label htmlFor="lastname">Last Name</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                className="form-control"
-                                                value={email}
-                                                readOnly
-                                                id="email"
-                                            />
-                                            <label htmlFor="email">Email</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="CompanyName"
-                                                className="form-control"
-                                                value={CompanyName}
-                                                readOnly
-                                                id="CompanyName"
-                                            />
-                                            <label htmlFor="CompanyName">Company Name</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="designation"
-                                                className="form-control"
-                                                value={designation}
-                                                onChange={this.handleInputChange}
-                                                id="designation"
-                                            />
-                                            <label htmlFor="designation">Designation</label>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div className="modal-footer">
-                                    <button className="btn btn-secondary" onClick={this.handleCloseModal}>
-                                        Cancel
-                                    </button>
-                                    <button className="btn btn-primary" onClick={this.handleSaveProfile}>
-                                        Save Changes
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                )}
+           
             </div>
 
 

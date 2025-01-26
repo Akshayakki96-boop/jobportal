@@ -106,6 +106,14 @@ class Header extends React.Component {
             this.props.navigate('/TrainerDashboard');
         }
     }
+
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+        const parts = name.split(" ");
+        return parts.length > 1
+          ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+          : parts[0][0].toUpperCase();
+      };
     render() {
         return (
             <header className="rbt-header rbt-header-10">
@@ -256,10 +264,29 @@ class Header extends React.Component {
                                             <div className="inner">
                                                 <div className="rbt-admin-profile">
                                                     <div className="admin-thumbnail">
+                                                    {this.state?.userData?.companylogo ? (
                                                         <img
-                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData?.companylogo}`}
-                                                            alt="User Images"
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                            alt="User Image"
                                                         />
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                width: "60px", // Adjust as needed
+                                                                height: "60px", // Adjust as needed
+                                                                backgroundColor: "#ccc", // Default background color
+                                                                color: "#fff",
+                                                                borderRadius: "50%",
+                                                                fontWeight: "bold",
+                                                                fontSize: "18px", // Adjust font size as needed
+                                                            }}
+                                                        >
+                                                            {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                        </div>
+                                                    )}
                                                     </div>
                                                 </div>
 

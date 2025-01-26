@@ -6,6 +6,7 @@ import MyProfile from './MyProfile';
 import Header from '../Header/header';
 import { connect } from 'react-redux';
 import { Alert, Button } from 'react-bootstrap';
+import MyJobs from './MyJobs';
 
 
 class CandidateDashboard extends React.Component {
@@ -13,8 +14,9 @@ class CandidateDashboard extends React.Component {
         super(props);
         this.state = {
             showUserDashboard: true,
-            dashBoardData: "",
+            dashBoardData: {},
             responseMessage: '',
+            showMyJobs: false,
         };
 
     }
@@ -24,7 +26,7 @@ class CandidateDashboard extends React.Component {
 
     }
     componentDidUpdate(prevProps) {
-     
+
     }
 
     getDashboardUser = () => {
@@ -40,9 +42,8 @@ class CandidateDashboard extends React.Component {
         })
             .then((response) => {
                 console.log('dashboard data', response.data);
-                this.getUserProfile(response.data.user_id);
+                this.getUserProfile(response.data.data.user_id);
                 this.setState({ dashBoardData: response.data.data });
-                this.setState({ keepSpinner: false });
 
             })
             .catch((error) => {
@@ -76,26 +77,30 @@ class CandidateDashboard extends React.Component {
             });
     }
 
- 
 
- 
+
+
 
     setActiveComponent = (componentName) => {
         this.setState({
             showUserDashboard: false,
             showProfile: false,
+            showMyJobs: false,
 
         });
 
         switch (componentName) {
             case 'dashboard':
-                this.setState({ showUserDashboard: true,responseMessage:'' });
+                this.setState({ showUserDashboard: true, responseMessage: '' });
                 break;
             case 'profile':
                 this.setState({ showProfile: true });
                 break;
-        
-    
+            case 'myJobs':
+                this.setState({ showMyJobs: true });
+                break;
+
+
             // Add more cases for other components as needed
             default:
                 this.setState({ showUserDashboard: true });
@@ -122,9 +127,15 @@ class CandidateDashboard extends React.Component {
             .catch((error) => {
                 localStorage.removeItem('authToken');
                 this.props.navigate('/Login'); // Use `navigate`
-                this.setState({ keepSpinner: false });
             });
     }
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+        const parts = name.split(" ");
+        return parts.length > 1
+            ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+            : parts[0][0].toUpperCase();
+    };
 
     render() {
 
@@ -136,7 +147,7 @@ class CandidateDashboard extends React.Component {
                     <div className="rbt-banner-image"></div>
                     {/*  End Banner BG Image */}
                 </div><div>
-                
+
                     {/*Start Card Style */}
                     <div className="rbt-dashboard-area rbt-section-overlayping-top rbt-section-gapBottom">
                         <div className="container">
@@ -149,7 +160,29 @@ class CandidateDashboard extends React.Component {
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
                                                 <div className="thumbnail rbt-avatars size-lg">
-                                                    <img src="assets/images/team/avatar.jpg" alt="Instructor" />
+                                                    {this.state?.userData?.companylogo ? (
+                                                        <img
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                            alt="Instructor"
+                                                        />
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                width: "60px", // Adjust as needed
+                                                                height: "60px", // Adjust as needed
+                                                                backgroundColor: "#ccc", // Default background color
+                                                                color: "#fff",
+                                                                borderRadius: "50%",
+                                                                fontWeight: "bold",
+                                                                fontSize: "18px", // Adjust font size as needed
+                                                            }}
+                                                        >
+                                                            {this.getInitials(this.state?.dashBoardData?.username || "User")}
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <div className="tutor-content">
                                                     <h5 className="title">{this.state?.dashBoardData.username}</h5>
@@ -165,7 +198,7 @@ class CandidateDashboard extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="rbt-tutor-information-right">
+                                            {/* <div className="rbt-tutor-information-right">
                                                 <div className="tutor-btn">
                                                     <a className="rbt-btn btn-md hover-icon-reverse" href="/createnew">
                                                         <span className="icon-reverse-wrapper">
@@ -179,7 +212,7 @@ class CandidateDashboard extends React.Component {
                                                         </span>
                                                     </a>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                         {/* End Tutor Information */}
                                     </div>
@@ -213,20 +246,20 @@ class CandidateDashboard extends React.Component {
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
-                                                                            <i className="feather-monitor"></i><span>My Jobs</span>
+                                                                        <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
+                                                                            <i className="feather-monitor"></i><span>Jobs</span>
                                                                         </a>
                                                                     </li>
-                                                                    <li>
+                                                                    {/* <li>
                                                                         <a className={this.state.showAnnouncement ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('announcements'); }} href="#">
                                                                             <i className="feather-volume-2"></i><span>Announcements</span>
                                                                         </a>
-                                                                    </li>
-                                                                    <li>
+                                                                    </li> */}
+                                                                    {/* <li>
                                                                         <a className={this.state.showAssignment ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('assignments'); }} href="#">
                                                                             <i className="feather-list"></i><span>Assignments</span>
                                                                         </a>
-                                                                    </li>
+                                                                    </li> */}
                                                                     <li>
                                                                         <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                                             <i className="feather-log-out"></i><span>Logout</span>
@@ -244,6 +277,7 @@ class CandidateDashboard extends React.Component {
                                         </div>
                                         {this.state.showUserDashboard && <UserDashBoard message={this.state.responseMessage} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
+                                        {this.state.showMyJobs && <MyJobs />}
                                     </div>
 
                                 </div>

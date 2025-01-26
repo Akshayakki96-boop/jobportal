@@ -270,6 +270,86 @@ textarea:focus + label,
 .rbt-profile-content {
   text-align: left; /* Ensures text alignment */
 }
+.employment-entry {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+}
+.button-group {
+  display: flex;
+  justify-content: flex-start; /* Align to the left */
+  align-items: center; /* Align vertically */
+  gap: 15px; /* Space between the icons */
+}
+
+.icon-circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px; /* Diameter of the circle */
+  height: 40px; /* Diameter of the circle */
+  border-radius: 50%; /* Makes it circular */
+  font-size: 20px; /* Size of the + or - sign */
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-icon {
+  background-color: #007bff; /* Blue color for Add */
+  color: white;
+  border: 2px solid #007bff;
+  transition: 0.3s ease;
+}
+
+.add-icon:hover {
+  background-color: white;
+  color: #007bff;
+}
+
+.remove-icon {
+  background-color: #dc3545; /* Red color for Remove */
+  color: white;
+  border: 2px solid #dc3545;
+  transition: 0.3s ease;
+}
+
+.remove-icon:hover {
+  background-color: white;
+  color: #dc3545;
+}
+
+/* Style for the dropdowns */
+.form-control {
+  font-size: 16px; /* Adjust the font size */
+  padding: 10px;   /* Adjust padding for better usability */
+}
+
+/* Style for the dropdown options */
+select.form-control option {
+  font-size: 16px; /* Adjust the font size for options */
+}
+
+.section-header {
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-content {
+  margin-bottom: 20px;
+  padding-left: 10px;
+}
+
+.section-header span {
+  font-size: 14px;
+  color: #007bff;
+}
 
 iframe#webpack-dev-server-client-overlay {
   display: none !important
