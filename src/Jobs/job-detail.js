@@ -54,6 +54,10 @@ class jobDetails extends React.Component {
       .then((response) => {
         console.log('joblistingdata', response.data.data);
         this.setState({ jobDescription: response.data.data[0] });
+        if(response.data.data[0].isactive)
+        {
+          this.setState({ isPublished: true });
+        }
 
       })
       .catch((error) => {
