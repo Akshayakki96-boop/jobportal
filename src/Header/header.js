@@ -27,24 +27,24 @@ class Header extends React.Component {
         const userData = {
             "Id": userId,
         };
- 
-            axios.post(url, userData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
+
+        axios.post(url, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('user data', response.data);
+                this.setState({ userData: response.data.data });
+
             })
-                .then((response) => {
-                    console.log('user data', response.data);
-                    this.setState({ userData: response.data.data });
-    
-                })
-                .catch((error) => {
-                    //localStorage.removeItem('authToken');
-                    //this.props.navigate('/Login'); // Use `navigate`
-                });
-        
-    
+            .catch((error) => {
+                //localStorage.removeItem('authToken');
+                //this.props.navigate('/Login'); // Use `navigate`
+            });
+
+
     }
 
     componentWillUnmount() {
@@ -111,9 +111,9 @@ class Header extends React.Component {
         if (!name) return "U"; // Default to "U" if name is not provided
         const parts = name.split(" ");
         return parts.length > 1
-          ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
-          : parts[0][0].toUpperCase();
-      };
+            ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+            : parts[0][0].toUpperCase();
+    };
     render() {
         return (
             <header className="rbt-header rbt-header-10">
@@ -244,11 +244,11 @@ class Header extends React.Component {
                             <div className="header-right">
                                 {/* Navbar Icons */}
                                 <ul className="quick-access">
-                                    <li className="access-icon">
+                                    {/* <li className="access-icon">
                                         <a className="search-trigger-active rbt-round-btn" href="#">
                                             <i className="feather-search"></i>
                                         </a>
-                                    </li>
+                                    </li> */}
                                     {!this.props.dashBoardData && <li className="access-icon rbt-mini-cart">
                                         <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
                                             Login
@@ -264,29 +264,29 @@ class Header extends React.Component {
                                             <div className="inner">
                                                 <div className="rbt-admin-profile">
                                                     <div className="admin-thumbnail">
-                                                    {this.state?.userData?.companylogo ? (
-                                                        <img
-                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
-                                                            alt="User Image"
-                                                        />
-                                                    ) : (
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                justifyContent: "center",
-                                                                width: "60px", // Adjust as needed
-                                                                height: "60px", // Adjust as needed
-                                                                backgroundColor: "#ccc", // Default background color
-                                                                color: "#fff",
-                                                                borderRadius: "50%",
-                                                                fontWeight: "bold",
-                                                                fontSize: "18px", // Adjust font size as needed
-                                                            }}
-                                                        >
-                                                            {this.getInitials(this.props?.dashBoardData?.username || "User")}
-                                                        </div>
-                                                    )}
+                                                        {this.state?.userData?.companylogo ? (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                                alt="User Image"
+                                                            />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
@@ -295,7 +295,14 @@ class Header extends React.Component {
                                                     <li>
                                                         <a onClick={(e) => { e.preventDefault(); this.handleredirection(); }} href="#">
                                                             <i className="feather-log-out"></i>
-                                                            <span>View Dashboard</span>
+                                                            <span>
+                                                                {this.props.dashBoardData?.role_id == 1
+                                                                    ? "CandidateDashboard"
+                                                                    : this.props.dashBoardData?.role_id == 2
+                                                                        ? "EmployerDashboard"
+                                                                        : "TrainerDashboard"}
+                                                            </span>
+
                                                         </a>
                                                     </li>
                                                     <li>
