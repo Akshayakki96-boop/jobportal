@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import Breadcumb from '../Breadcumb/breadcumb';
 import withNavigation from '../withNavigation';
+import Select from "react-select";
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -14,6 +15,8 @@ class SignUp extends React.Component {
                 password: false,
                 confirmPassword: false,
                 company: false,
+                mobile: false,
+                fullname: false,
             },
             values: {
                 email: "",
@@ -21,6 +24,9 @@ class SignUp extends React.Component {
                 password: "",
                 confirmPassword: "",
                 company: "",
+                mobile: "",
+                fullname: "",
+                countryCode: "+1", // Default to US country code,  // Default to USA
             },
             responseMessage: '',
             alertVariant: '',
@@ -36,10 +42,10 @@ class SignUp extends React.Component {
                 header.classList.remove('header-sticky');
             }
         });
-        let url=window.location.search;
-        var urlParams= new URLSearchParams(url);
-        var reqType= urlParams.get('role_id');
-        this.role_id=reqType;
+        let url = window.location.search;
+        var urlParams = new URLSearchParams(url);
+        var reqType = urlParams.get('role_id');
+        this.role_id = reqType;
 
     }
 
@@ -60,11 +66,28 @@ class SignUp extends React.Component {
         }));
     };
     handleChange = (field, event) => {
+        debugger;
         const value = event.target.value;
         let confirmPasswordMessage = this.state.confirmPasswordMessage;
         let passwordStrengthMessage = this.state.passwordStrengthMessage;
         let isPasswordValid = true;
+        const { countryCode } = this.state.values;
+        const countryPhoneLengths = {
+            "+1": 10,
+            "+91": 10,
+            "+44": 10,
+            "+61": 9,
+            "+49": 11,
+        };
 
+        let mobileNumberMessage = "";
+
+        if (field === "mobile") {
+            const expectedLength = countryPhoneLengths[countryCode] || 10; // Default to 10 if countryCode not in map
+            if (value.length !== expectedLength) {
+                mobileNumberMessage = `Mobile number must be ${expectedLength} digits for country code ${countryCode}.`;
+            }
+        }
         // Password strength validation
         if (field === "password") {
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -87,19 +110,30 @@ class SignUp extends React.Component {
 
         // Validate the form and password match
         const updatedValues = { ...this.state.values, [field]: value };
-        const isFormValid = updatedValues.company && updatedValues.email && updatedValues.username &&
-            updatedValues.password && updatedValues.confirmPassword &&
+        const isFormValid = (
+            (updatedValues.company || updatedValues.fullname) &&
+            updatedValues.email &&
+            updatedValues.username &&
+            updatedValues.password &&
+            updatedValues.confirmPassword &&
             updatedValues.password === updatedValues.confirmPassword &&
-            isPasswordValid;
+            isPasswordValid &&
+            !mobileNumberMessage
+        );
 
         this.setState({
             values: updatedValues,
             confirmPasswordMessage,
             passwordStrengthMessage,
+            mobileNumberMessage, // Update mobile validation message
             isFormValid, // Update form validation state
         });
     };
-
+    handleRoleChange = (field, selectedOption) => {
+        this.setState((prevState) => ({
+            values: { ...prevState.values, [field]: selectedOption.value },
+        }));
+    };
 
 
 
@@ -111,9 +145,11 @@ class SignUp extends React.Component {
             "username": this.state.values.username,
             "password": btoa(this.state.values.password),
             "email": this.state.values.email,
-            "confirmPassword":btoa(this.state.values.confirmPassword),
-            "companyName": this.state.values.company,
-            "role_id":this.role_id
+            "confirmPassword": btoa(this.state.values.confirmPassword),
+            "companyName": this.state.values.company ? this.state.values.company : this.state.values.fullname,
+            "mobileno": this.state.values.mobile,
+            "countrycode": this.state.values.countryCode,
+            "role_id": this.state.values.role,
         };
 
         axios.post(signupUrl, signupData, {
@@ -147,9 +183,27 @@ class SignUp extends React.Component {
     handleNavigation = (path) => {
         this.props.navigate(path); // Use `navigate`
     };
+    handleCountryCodeChange = (field, value) => {
+        this.setState((prevState) => ({
+            values: { ...prevState.values, [field]: value },
+            mobileNumberMessage: "",
+        }));
+    };
+
 
     render() {
         const { focusStates, values } = this.state;
+        const roleOptions = [
+            { value: 1, label: "Candidate" },
+            { value: 2, label: "Employer" },
+            { value: 3, label: "Trainer" },
+        ];
+        const countryCodes = [
+            { value: "+1", label: "🇺🇸 +1", length: 10 },  // USA: 10 digits
+            { value: "+91", label: "🇮🇳 +91", length: 10 }, // India: 10 digits
+            { value: "+44", label: "🇬🇧 +44", length: 11 }, // UK: 11 digits
+            { value: "+61", label: "🇦🇺 +61", length: 9 }   // Australia: 9 digits
+        ];
         return (
             <><div>
                 <Breadcumb componentName="SignUp" ComponentValue="SignUp" />
@@ -176,17 +230,50 @@ class SignUp extends React.Component {
                                         className="max-width-auto"
                                         onSubmit={(e) => e.preventDefault()} // Prevent form submission
                                     >
-                                        <div className={`form-group ${focusStates.company ? "focused" : ""}`}>
-                                            <input
-                                                name="company"
-                                                type="text"
-                                                value={values.company}
-                                                onFocus={() => this.handleFocus("company")}
-                                                onBlur={() => this.handleBlur("company")}
-                                                onChange={(e) => this.handleChange("company", e)} />
-                                            <label>Company *</label>
-                                            <span className="focus-border"></span>
+                                        {/* Role Type Dropdown */}
+                                        <div className={`form-group ${focusStates.role ? "focused" : ""}`}>
+                                            <label>Role Type *</label>
+                                            <Select
+                                                name="role"
+                                                placeholder="Select Role"
+                                                options={roleOptions}
+                                                value={roleOptions.find(option => option.value === values.role)}
+                                                menuPortalTarget={document.body} // Render the dropdown to the body
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                }}
+                                                onChange={(selectedOption) => this.handleRoleChange("role", selectedOption)}
+                                            />
                                         </div>
+                                        {values.role == 2 ? (
+                                            // Show Company Name if role is Employer (2)
+                                            <div className={`form-group ${focusStates.company ? "focused" : ""}`}>
+                                                <input
+                                                    name="company"
+                                                    type="text"
+                                                    value={values.company}
+                                                    onFocus={() => this.handleFocus("company")}
+                                                    onBlur={() => this.handleBlur("company")}
+                                                    onChange={(e) => this.handleChange("company", e)}
+                                                />
+                                                <label>Company Name *</label>
+                                                <span className="focus-border"></span>
+                                            </div>
+                                        ) : (
+                                            // Show Full Name for Candidate (1) and Trainer (3)
+                                            <div className={`form-group ${focusStates.fullname ? "focused" : ""}`}>
+                                                <input
+                                                    name="fullname"
+                                                    type="text"
+                                                    value={values.fullname}
+                                                    onFocus={() => this.handleFocus("fullname")}
+                                                    onBlur={() => this.handleBlur("fullname")}
+                                                    onChange={(e) => this.handleChange("fullname", e)}
+                                                />
+                                                <label>Full Name *</label>
+                                                <span className="focus-border"></span>
+                                            </div>
+                                        )}
                                         {/* Email Field */}
                                         <div className={`form-group ${focusStates.email ? "focused" : ""}`}>
                                             <input
@@ -244,6 +331,29 @@ class SignUp extends React.Component {
                                                 <span className={`form-text ${!this.state.confirmPasswordMessage.includes("do not match") ? 'text-success' : 'text-danger'}`}>
                                                     {this.state.confirmPasswordMessage}
                                                 </span>
+                                            )}
+                                        </div>
+                                        {/* Mobile Number Field */}
+                                        <div className="form-group">
+                                            <label className="mobile-label">Mobile Number *</label>
+                                            <div className="mobile-input">
+                                                <Select
+                                                    className="country-code-select"
+                                                    options={countryCodes}
+                                                    value={countryCodes.find(option => option.value === values.countryCode)}
+                                                    onChange={(selectedOption) => this.handleCountryCodeChange("countryCode", selectedOption.value)}
+                                                />
+                                                <input
+                                                    className="mobile-number-input"
+                                                    name="mobile"
+                                                    type="tel"
+                                                    value={values.mobile}
+                                                    onChange={(e) => this.handleChange("mobile", e)}
+                                                />
+                                            </div>
+                                            {/* Validation Message */}
+                                            {this.state.mobileNumberMessage && (
+                                                <span className="form-text text-danger">{this.state.mobileNumberMessage}</span>
                                             )}
                                         </div>
 

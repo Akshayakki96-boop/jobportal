@@ -350,6 +350,44 @@ select.form-control option {
   font-size: 14px;
   color: #007bff;
 }
+.form-group {
+  display: flex;
+  flex-direction: column; /* Stack label and input vertically */
+  gap: 8px; /* Add spacing between label and input */
+}
+
+.mobile-label {
+  font-size: 1rem; /* Adjust font size as needed */
+  font-weight: 500; /* Make the label bold */
+  color: #333;
+  top: 20px !important;
+    margin-left: 122px; /* Adjust label color */
+}
+
+.mobile-input {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add spacing between Select and input field */
+}
+
+.country-code-select {
+  width: 120px; /* Adjust width of the Select dropdown */
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.mobile-number-input {
+  flex: 1; /* Allow input to take remaining space */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem; /* Adjust font size */
+}
+
+.form-text.text-danger {
+  font-size: 2rem; /* Adjust validation message size */
+  color: red;
+  margin-top: 4px; /* Add spacing above the validation message */
+}
 
 iframe#webpack-dev-server-client-overlay {
   display: none !important
