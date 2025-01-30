@@ -156,6 +156,12 @@ class CandidateDashboard extends React.Component {
                                     {/* Start Dashboard Top */}
                                     <div className="rbt-dashboard-content-wrapper">
                                         <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
+                                        <div className="tranr-titl">
+                                            <div className="content text-center">
+                                                <h6 className="subtitle sal-animate" >Bootcamp Instructor</h6>
+                                                <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.fullname}</span></h3>
+                                            </div>
+                                        </div>
                                         {/* Start Tutor Information */}
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
@@ -216,6 +222,7 @@ class CandidateDashboard extends React.Component {
                                         </div>
                                         {/* End Tutor Information */}
                                     </div>
+
                                     {/* End Dashboard Top */}
                                     <div class="row g-5">
                                         <div class="col-lg-3">

@@ -4,7 +4,10 @@ import axios from 'axios';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
 import Select from 'react-select';
-import { DatePicker, DayOfWeek, defaultDatePickerStrings } from "@fluentui/react";
+import { DatePicker } from '@fluentui/react';
+import '@fluentui/react/dist/css/fabric.css';
+import { Alert} from 'react-bootstrap';
+
 
 class EditProfileCandidate extends React.Component {
     constructor(props) {
@@ -54,6 +57,11 @@ class EditProfileCandidate extends React.Component {
             showKeySkills: false,
             showCareerProfile: false,
             selectedDate: null,
+            resume_summary: "",
+            cityOptions: [],
+            resumePreview: "",
+            responseMessage: '',
+            alertVariant: '',
         };
 
     }
@@ -63,6 +71,8 @@ class EditProfileCandidate extends React.Component {
         this.userId = urlParams.get('user_Id');
         this.getDashboardUser();
         this.bindCity();
+        this.getNoticePeriod();
+        this.getIndustry();
     }
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -88,7 +98,7 @@ class EditProfileCandidate extends React.Component {
     }
     getUserProfile = (userId) => {
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Employer/GetProfile`;
+        const url = `${baseUrl}/api/Candidate/GetBasicProfile`;
         const token = localStorage.getItem('authToken');
         const userData = {
             "Id": userId,
@@ -102,13 +112,36 @@ class EditProfileCandidate extends React.Component {
             .then((response) => {
                 console.log('user data', response.data);
                 this.setState({ userData: response.data.data })
-                const { companylogo } = response.data.data;
-                if (companylogo) {
+                const { profile_image,resumefile } = response.data.data;
+                this.setState({ fullname: response.data.data.fullname, email: response.data.data.email, 
+                    mobile_no: response.data.data.mobile_no, profile_summary: response.data.data.profile_summary, 
+                    experience: response.data.data.experience, currentsalary: response.data.data.CTC, expectedsalary: response.data.data.ExpectedCTC, 
+                    resume_summary: response.data.data.resume_headline, 
+                    selectedCity: response.data.data.current_location?{value:response.data.data.city_id,label:response.data.data.current_location}:null, 
+                     selectedDate: response.data.data.DOB == "1900-01-01T00:00:00" ? new Date() : new Date(response.data.data.DOB), userId: response.data.data.user_id,languague_name:response.data.data.language_name,role_id:response.data.data.designation,noticePeriodSelected:response.data.data.notice_period ? { value: response.data.data.notice_period, label: response.data.data.notice_periods } : null });
+
+                var prefer_location = response.data.data.prefer_location;
+                var prefer_location_Id = response.data.data.preferred_location_id;
+                if (prefer_location && prefer_location_Id) {
+                    const preferredWorkLocation = prefer_location.split(',').map((location, index) => ({
+                        value: prefer_location_Id.split(',')[index],
+                        label: location,
+                    }));
+                    this.setState({ preferredWorkLocation });
+                }
+                if (profile_image) {
                     this.setState({
-                        logoPreview: `${process.env.REACT_APP_BASEURL}/Uploads/${companylogo}`,
+                        logoPreview: `${process.env.REACT_APP_BASEURL}/Uploads/${profile_image}`,
+                        fileName: profile_image,
                     });
                 }
-                this.setState({ keepSpinner: false });
+                if (resumefile) {
+                    this.setState({
+                        resumePreview: `${process.env.REACT_APP_BASEURL}/Uploads/${resumefile}`,
+                        resumefileName: resumefile,
+                    });
+
+                }
 
             })
             .catch((error) => {
@@ -116,6 +149,52 @@ class EditProfileCandidate extends React.Component {
                 this.props.navigate('/Login'); // Use `navigate`
             });
     }
+
+    getNoticePeriod = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Master/GetNoticePeriods`;
+        const token = localStorage.getItem('authToken');
+        axios.post(url, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                const noticePeriod = response.data.map((item) => ({
+                    value: item.id,
+                    label: item.value,
+                }));
+                this.setState({ noticePeriods: noticePeriod });
+            })
+            .catch((error) => {
+                //localStorage.removeItem('authToken');
+                //this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+
+    getIndustry = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Master/GetIndustry`;
+        const token = localStorage.getItem('authToken');
+        axios.post(url, {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                const industry = response.data.map((item) => ({
+                    value: item.id,
+                    label: item.value,
+                }));
+                this.setState({ industry: industry });
+            })
+            .catch((error) => {
+                //localStorage.removeItem('authToken');
+                //this.props.navigate('/Login'); // Use `navigate`
+            });
+    };
 
     bindCity = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -149,7 +228,7 @@ class EditProfileCandidate extends React.Component {
     }
 
     handleCityChange = (selectedOption) => {
-        this.handleInputChange('selectedCity', selectedOption);
+        //this.handleInputChange('selectedCity', selectedOption);
         this.setState({ selectedCity: selectedOption });
     }
     addEmployment = () => {
@@ -208,38 +287,86 @@ class EditProfileCandidate extends React.Component {
         this.setState({ projects: updatedProjects });
     };
 
-    handleFileChange = (event) => {
+    handleFileChange = async (event) => {
         const file = event.target.files[0]; // Get the selected file
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/FileUpload/uploadlogo`;
+        const token = localStorage.getItem('authToken');
         const validImageTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
 
         if (file && !validImageTypes.includes(file.type)) {
-            this.setState({ fileError: 'Please select a valid image file (JPEG, PNG, GIF).' });
+            this.setState({ uploadStatus: 'Please select a valid image file (JPEG, PNG, GIF).' });
             event.target.value = ''; // Reset the file input
         } else {
             this.setState({
                 logo: file,
                 logoPreview: URL.createObjectURL(file), // Preview the uploaded file
-                fileError: ''
+                uploadStatus: null,
                 // Clear any previous error
             }, this.validateForm);
             // Proceed with further processing
-            console.log('Selected file:', file);
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Call the API to upload the file
+                const response = await axios.post(url, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                console.log('File uploaded successfully:', response.data);
+                this.setState({ fileName: response.data.filePath })
+                this.setState({ uploadStatus: 'File uploaded successfully!' });
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                this.setState({ uploadStatus: 'Error uploading file!' });
+            }
         }
     };
 
-    handleFileResumeChange = (event) => {
+    handleFileResumeChange = async (event) => {
         const file = event.target.files[0]; // Get the selected file
+        const fileType = file.type;
         const validFileTypes = ['application/pdf', 'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/rtf']; // Allowed MIME types for resumes
 
         if (file && !validFileTypes.includes(file.type)) {
-            this.setState({ resumeError: 'Please select a valid file (PDF, DOC, DOCX, or RTF).' });
+            this.setState({ uploadResumeStatus: 'Please select a valid file (PDF, DOC, DOCX, or RTF).' });
             event.target.value = ''; // Reset the file input
         } else {
-            this.setState({ resumeError: '' });
-            // Proceed with further processing
-            console.log('Selected file:', file);
+            this.setState({
+                logo: file,
+                resumeType: fileType.includes("pdf") ? "pdf" : "other",
+                resumePreview: URL.createObjectURL(file), // Preview the uploaded file
+                uploadResumeStatus: null,
+                // Clear any previous error
+            }, this.validateForm);
+            const baseUrl = process.env.REACT_APP_BASEURL;
+            const url = `${baseUrl}/api/FileUpload/uploadlogo`;
+            const token = localStorage.getItem('authToken');
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Call the API to upload the file
+                const response = await axios.post(url, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                console.log('File uploaded successfully:', response.data);
+                this.setState({ resumefileName: response.data.filePath })
+                this.setState({ uploadResumeStatus: 'Resume uploaded successfully!' });
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                this.setState({ uploadResumeStatus: 'Error uploading file!' });
+            }
         }
     };
 
@@ -253,13 +380,101 @@ class EditProfileCandidate extends React.Component {
         this.setState({ selectedDate: date });
         console.log("Selected Date: ", date);
     };
+    handleCandidateInformation = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Candidate/UpdateBasicProfile`;
+        const token = localStorage.getItem('authToken');
+        var candidateData = {
+            "id": this.state.userId,
+            "designation": this.state.role_id,
+            "profile_image": this.state.fileName,
+            "resumefile": this.state.resumefileName?this.state.resumefileName:null,
+            "fullname": this.state.fullname,
+            "mobileno": this.state.mobile_no,
+            "ipaddress": "192.168.1.1",
+            "resumeheadline": this.state.resume_summary,
+            "profilesummary": this.state.profile_summary,
+            "expereince": this.state.experience,
+            "ctc": this.state.currentsalary,
+            "ex_ctc": this.state.expectedsalary,
+            "current_cities": this.state.selectedCity.value,
+            "preferred_location": this.state.preferredWorkLocation.map((item) => item.value).join(','),
+            "notice_period_id": this.state.noticePeriodSelected.value,
+            "languague_name": this.state.languague_name,
+            "dob": this.state.selectedDate ? `${this.state.selectedDate.getFullYear()}-${String(this.state.selectedDate.getMonth() + 1).padStart(2, '0')}-${String(this.state.selectedDate.getDate()).padStart(2, '0')}` : null
+        }
+
+        axios.post(url, candidateData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                this.setState({
+                    responseMessage: (
+                        <span>
+                            Profile Updated Successfully
+                        </span>
+                    ),
+                    alertVariant: 'success', // Success alert variant
+                });
+            })
+            .catch((error) => {
+                console.error('update failed:', error.response?.data || error.message);
+
+                this.setState({
+                    responseMessage: error.response?.data,
+                    alertVariant: 'danger', // Error alert variant
+                });
+            });
+            
+    }
+
+    handleFullNameChange = (event) => {
+        this.setState({ fullname: event.target.value });
+    };
+    handleEmailChange = (event) => {
+        this.setState({ email: event.target.value });
+    };
+    handleMobileChange = (event) => {
+        this.setState({ mobile_no: event.target.value });
+    };
+    handleDesignationChange = (event) => {
+        this.setState({ role_id: event.target.value });
+    };
+    handleResumeChange = (event) => {
+        this.setState({ resume_summary: event.target.value });
+    };
+    handleProfileChange = (event) => {
+        this.setState({ profile_summary: event.target.value });
+    };
+    handleExperienceChange = (event) => {
+        this.setState({ experience: event.target.value });
+    };
+    handleExpectedSalaryChange = (event) => {
+        this.setState({ expectedsalary: event.target.value });
+    };
+    handleCurrentSalaryChange = (event) => {
+        this.setState({ currentsalary: event.target.value });
+    };
+    handleLanguageChange = (event) => {
+        this.setState({ languague_name: event.target.value });
+    };
 
     render() {
-        const { firstname, lastname, mobile_no, profile_summary, coursename, specializations, keyskills_id, department_id, role_id, employments, experience, projects, currentsalary, expectedsalary, logoPreview, isBasicInfoExpanded, isEmploymentDetailsExpanded, isProjectDetailsExpanded, showEducation, showKeySkills, showCareerProfile, preferredShift, preferredWorkLocation, selectedDate } = this.state;
+        const { fullname, email, mobile_no, profile_summary, experience, currentsalary, expectedsalary, logoPreview, isBasicInfoExpanded, isEmploymentDetailsExpanded, isProjectDetailsExpanded, showEducation, showKeySkills, preferredWorkLocation, selectedDate, resume_summary, noticePeriods, employments, projects, preferredShift, specializations, keyskillsSelected, department_id, noticePeriodSelected, role_id, uploadStatus, languague_name, resumePreview } = this.state;
         return (
             <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
                 <div className="container">
-
+                <div className="container mt-5">
+                            {/* Render Bootstrap alert if there's a responseMessage */}
+                            {this.state.responseMessage && (
+                                <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                                    {this.state.responseMessage}
+                                </Alert>
+                            )}
+                        </div>
                     <div className="row pt--60 g-5">
                         <div className="col-lg-4">
                             <div className="thumbnail">
@@ -305,29 +520,29 @@ class EditProfileCandidate extends React.Component {
                                                     />
                                                 </div>
                                             )}
-                                            {this.state.fileError && <p className="error-text">{this.state.fileError}</p>}
+                                            {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
                                         </div>
                                         <div className="form-group">
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                id="firstname"
-                                                name="firstname"
-                                                value={firstname}
-                                                onChange={this.handleInputChange}
+                                                id="fullname"
+                                                name="fullname"
+                                                value={fullname}
+                                                onChange={this.handleFullNameChange}
                                             />
-                                            <label htmlFor="firstname">First Name</label>
+                                            <label htmlFor="fullname">Full Name</label>
                                         </div>
                                         <div className="form-group">
                                             <input
                                                 type="text"
                                                 className="form-control"
-                                                id="lastname"
-                                                name="lastname"
-                                                value={lastname}
-                                                onChange={this.handleInputChange}
+                                                id="email"
+                                                name="email"
+                                                value={email}
+                                                onChange={this.handleEmailChange}
                                             />
-                                            <label htmlFor="lastname">Last Name</label>
+                                            <label htmlFor="email">Email</label>
                                         </div>
                                         <div className="form-group">
                                             <input
@@ -336,7 +551,7 @@ class EditProfileCandidate extends React.Component {
                                                 id="mobile_no"
                                                 name="mobile_no"
                                                 value={mobile_no}
-                                                onChange={this.handleInputChange}
+                                                onChange={this.handleMobileChange}
                                             />
                                             <label htmlFor="mobile_no">Mobile Number</label>
                                         </div>
@@ -359,8 +574,6 @@ class EditProfileCandidate extends React.Component {
                                                 id="dob"
                                                 placeholder="Select a date..."
                                                 ariaLabel="Select a date"
-                                                firstDayOfWeek={DayOfWeek.Monday}
-                                                strings={defaultDatePickerStrings}
                                                 value={selectedDate}
                                                 onSelectDate={this.handleDateChange}
                                                 styles={{
@@ -389,9 +602,35 @@ class EditProfileCandidate extends React.Component {
                                             <label htmlFor="location">Location</label>
                                         </div>
                                         <div className="form-group">
+                                            <label htmlFor="preferredworklocation">Preferred Work Location</label>
                                             <Select
-                                                options={[]}
-                                                value={this.state.selectedNoticePeriod}
+                                                id="preferredworklocation"
+                                                name="preferredworklocation"
+                                                value={preferredWorkLocation}
+                                                options={[
+                                                    ...this.state.cityOptions,
+                                                    { value: 8, label: "Remote" },
+                                                    { value: 9, label: "On-Site" },
+                                                    { value: 10, label: "Hybrid" },
+                                                    // Spread dynamic options here
+                                                ]}
+                                                onChange={(selectedOptions) =>
+                                                    this.setState({ preferredWorkLocation: selectedOptions })
+                                                }
+                                                isMulti
+                                                placeholder="Type or select work location..."
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body} // Render the dropdown to the body
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <Select
+                                                options={noticePeriods}
+                                                value={noticePeriodSelected}
                                                 placeholder="Select Notice Period"
                                                 className="basic-multi-select"
                                                 classNamePrefix="select"
@@ -399,7 +638,9 @@ class EditProfileCandidate extends React.Component {
                                                 styles={{
                                                     menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
                                                 }}
-                                                onChange={(selectedOption) => this.handleRoles(selectedOption)} />
+                                                onChange={(selectedOptions) =>
+                                                    this.setState({ noticePeriodSelected: selectedOptions })
+                                                } />
                                             <label htmlFor="notice_period_id">Notice Period</label>
                                         </div>
                                         <div className="form-group">
@@ -408,7 +649,7 @@ class EditProfileCandidate extends React.Component {
                                                 id="profile_summary"
                                                 name="profile_summary"
                                                 value={profile_summary}
-                                                onChange={this.handleInputChange}
+                                                onChange={this.handleProfileChange}
                                             ></textarea>
                                             <label htmlFor="profile_summary">Profile Summary</label>
                                         </div>
@@ -421,18 +662,154 @@ class EditProfileCandidate extends React.Component {
                                                 onChange={this.handleFileResumeChange}
                                             />
                                             <label htmlFor="resume">Update Resume</label>
-                                            {this.state.resumeError && <p className="error-text">{this.state.resumeError}</p>}
+                                            {this.state.resumePreview && (
+                                                <div className="mt-3">
+                                                    {this.state.resumeType === "pdf" ? (
+                                                        // Show PDF in an iframe (works in most browsers)
+                                                        <iframe
+                                                            src={this.state.resumePreview}
+                                                            width="100%"
+                                                            height="200px"
+                                                            style={{ border: "1px solid #ccc", borderRadius: "8px" }}
+                                                        ></iframe>
+                                                    ) : (
+                                                        // Show download link for non-PDF files
+                                                        <div>
+                                                            <p>Preview not available. Download file:</p>
+                                                            <a
+                                                                href={this.state.resumePreview}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="btn btn-primary"
+                                                            >
+                                                                Download Resume
+                                                            </a>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {this.state.uploadResumeStatus && <small className="text-danger">{this.state.uploadResumeStatus}</small>}
                                         </div>
 
                                         <div className="form-group">
                                             <textarea
                                                 className="form-control"
-                                                id="profile_summary"
-                                                name="profile_summary"
-                                                value={profile_summary}
-                                                onChange={this.handleInputChange}
+                                                id="resume_summary"
+                                                name="resume_summary"
+                                                value={resume_summary}
+                                                onChange={this.handleResumeChange}
                                             ></textarea>
                                             <label htmlFor="resume_summary">Resume Headline</label>
+                                        </div>
+                                        {/* <div className="form-group">
+                                            <Select
+                                                id="Industry"
+                                                name="Industry"
+                                                value={this.state.industrySelected}
+                                                options={this.state.industry}
+                                                onChange={(selectedOptions) =>
+                                                    this.setState({ industrySelected: selectedOptions })
+                                                }
+                                                isMulti
+                                                placeholder="Type or select industry type..."
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body} // Render the dropdown to the body
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                }}
+                                            />
+                                            <label htmlFor="department_id">Department</label>
+                                        </div> */}
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="role_id"
+                                                name="role_id"
+                                                value={role_id}
+                                                onChange={this.handleDesignationChange}
+                                            />
+                                            <label htmlFor="role_id">Role</label>
+                                        </div>
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="experience"
+                                                name="experience"
+                                                value={experience}
+                                                onChange={this.handleExperienceChange}
+                                            />
+                                            <label htmlFor="experience">Total Experience</label>
+                                        </div>
+                                    
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="currentsalary"
+                                                name="currentsalary"
+                                                value={currentsalary}
+                                                onChange={this.handleCurrentSalaryChange}
+                                            />
+                                            <label htmlFor="currentsalary">Current Salary</label>
+                                        </div>
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="expectedsalary"
+                                                name="expectedsalary"
+                                                value={expectedsalary}
+                                                onChange={this.handleExpectedSalaryChange}
+                                            />
+                                            <label htmlFor="expectedsalary">Expected Salary</label>
+                                        </div>
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="language"
+                                                name="language"
+                                                value={languague_name}
+                                                onChange={this.handleLanguageChange}
+                                            />
+                                            <label htmlFor="language">Language</label>
+                                        </div>
+                                        {/* <div className="form-group">
+                                            <Select
+                                                id="employmenttype"
+                                                name="employmenttype"
+                                                value={""}
+                                                options={[]}
+                                                onChange={(selectedOptions) =>
+                                                    this.setState({ employmenttype: selectedOptions })
+                                                }
+                                                isMulti
+                                                placeholder="Type or select employment type..."
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                            />
+                                            <label htmlFor="employmenttype">Employment Type</label>
+                                        </div> */}
+
+                                        <div className="col-lg-12">
+                                            <div className="form-submit-group">
+                                                <button
+                                                    type="button"
+                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                    onClick={this.handleCandidateInformation}
+                                                >
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Update Information</span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     )}
@@ -572,17 +949,7 @@ class EditProfileCandidate extends React.Component {
 
                                                 </div>
                                             ))}
-                                            <div className="form-group">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="currentsalary"
-                                                    name="currentsalary"
-                                                    value={currentsalary}
-                                                    onChange={this.handleInputChange}
-                                                />
-                                                <label htmlFor="currentsalary">Current Salary</label>
-                                            </div>
+
                                         </div>
                                     )}
                                     {/* Candidate pROJECT Section */}
@@ -735,7 +1102,7 @@ class EditProfileCandidate extends React.Component {
                                                     className="form-control"
                                                     id="coursename"
                                                     name="coursename"
-                                                    value={coursename}
+                                                    value={''}
                                                     onChange={this.handleInputChange}
                                                 />
                                                 <label htmlFor="coursename">Course Name</label>
@@ -764,10 +1131,10 @@ class EditProfileCandidate extends React.Component {
                                                 <Select
                                                     id="keyskills_id"
                                                     name="keyskills_id"
-                                                    value={keyskills_id}
+                                                    value={keyskillsSelected}
                                                     options={[]}
                                                     onChange={(selectedOptions) =>
-                                                        this.setState({ keyskills_id: selectedOptions })
+                                                        this.setState({ keyskillsSelected: selectedOptions })
                                                     }
                                                     isMulti
                                                     placeholder="Type or select skills..."
@@ -779,132 +1146,10 @@ class EditProfileCandidate extends React.Component {
                                         </div>
                                     )}
 
-                                    {/* Candidate Career Profile Section */}
-                                    <h3 className="section-header" onClick={() => this.toggleSection("showCareerProfile")} style={{ cursor: "pointer" }}>
-                                        Career Profile<span style={{ marginLeft: '10px' }}>{showCareerProfile ? '[-]' : '[+]'}</span>
-                                    </h3>
-                                    {showCareerProfile && (
-                                        <div className="section-content">
-                                            <div className="form-group">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="department_id"
-                                                    name="department_id"
-                                                    value={department_id}
-                                                    onChange={this.handleInputChange}
-                                                />
-                                                <label htmlFor="department_id">Department</label>
-                                            </div>
-                                            <div className="form-group">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="role_id"
-                                                    name="role_id"
-                                                    value={role_id}
-                                                    onChange={this.handleInputChange}
-                                                />
-                                                <label htmlFor="role_id">Role</label>
-                                            </div>
-                                            <div className="form-group">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="experience"
-                                                    name="experience"
-                                                    value={experience}
-                                                    onChange={this.handleInputChange}
-                                                />
-                                                <label htmlFor="experience">Total Experience</label>
-                                            </div>
-                                            <div className="form-group">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="expectedsalary"
-                                                    name="expectedsalary"
-                                                    value={expectedsalary}
-                                                    onChange={this.handleInputChange}
-                                                />
-                                                <label htmlFor="expectedsalary">Expected Salary</label>
-                                            </div>
-                                            <div className="form-group">
-                                                <Select
-                                                    id="employmenttype"
-                                                    name="employmenttype"
-                                                    value={""}
-                                                    options={[]}
-                                                    onChange={(selectedOptions) =>
-                                                        this.setState({ employmenttype: selectedOptions })
-                                                    }
-                                                    isMulti
-                                                    placeholder="Type or select employment type..."
-                                                    className="basic-multi-select"
-                                                    classNamePrefix="select"
-                                                />
-                                                <label htmlFor="employmenttype">Employment Type</label>
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="preferredshift">Preferred Shift</label>
-                                                <Select
-                                                    id="preferredshift"
-                                                    name="preferredshift"
-                                                    value={preferredShift}
-                                                    options={[
-                                                        { value: "Day", label: "Day" },
-                                                        { value: "Night", label: "Night" },
-                                                    ]}
-                                                    onChange={(selectedOptions) =>
-                                                        this.setState({ preferredShift: selectedOptions })
-                                                    }
-                                                    isMulti
-                                                    placeholder="Type or select shift..."
-                                                    className="basic-multi-select"
-                                                    classNamePrefix="select"
-                                                />
-                                            </div>
-                                            <div className="form-group">
-                                                <label htmlFor="preferredworklocation">Preferred Work Location</label>
-                                                <Select
-                                                    id="preferredworklocation"
-                                                    name="preferredworklocation"
-                                                    value={preferredWorkLocation}
-                                                    options={[
-                                                        { value: "Remote", label: "Remote" },
-                                                        { value: "On-Site", label: "On-Site" },
-                                                        { value: "Hybrid", label: "Hybrid" },
-                                                    ]}
-                                                    onChange={(selectedOptions) =>
-                                                        this.setState({ preferredWorkLocation: selectedOptions })
-                                                    }
-                                                    isMulti
-                                                    placeholder="Type or select work location..."
-                                                    className="basic-multi-select"
-                                                    classNamePrefix="select"
-                                                />
-                                            </div>
-                                        </div>
-                                    )}
 
 
                                     {/* Submit Button */}
-                                    <div className="col-lg-12">
-                                        <div className="form-submit-group">
-                                            <button
-                                                type="button"
-                                                className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                onClick={this.handleSaveProfile}
-                                            >
-                                                <span className="icon-reverse-wrapper">
-                                                    <span className="btn-text">Save Profile</span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right" />
-                                                    </span>
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
+
                                 </form>
                             </div>
                         </div>

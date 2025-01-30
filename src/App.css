@@ -193,8 +193,6 @@ h3.title {
   padding: 0;
   margin: 0;
   list-style: none;
-  /* align-items: flex-end; */
-  text-align: -webkit-left;
 }
 
 .mentor .thumbnail{position: relative !important; display: inline-block;}
@@ -387,6 +385,69 @@ select.form-control option {
   font-size: 2rem; /* Adjust validation message size */
   color: red;
   margin-top: 4px; /* Add spacing above the validation message */
+}
+
+.tranr-titl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: 30%;
+  padding: 0 40px;
+  width: 100%;
+  z-index: 2;
+}
+
+.tranr-titl .content {
+  width: 100%;
+}
+
+.tranr-titl .content h6 {
+  color: #b3a5db;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.tranr-titl .content h3 {
+  color: #f7cdff;
+  text-transform: uppercase;
+  font-size: 42px;
+}
+.text-center {
+  text-align: center !important;
+}
+
+.log-regs-page {
+  display: flex;
+}
+
+.log-regs-bg {
+  width: 50%;
+  padding: 40px;
+  height: 100vh;
+  background: linear-gradient(60deg, rgba(158, 189, 19, 0.5), rgba(1, 73, 172, 0.7)), url("/src/assets/bg-image-14.jpg") center no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  align-content: center;
+  flex-direction: row;
+}
+.log-regs-bg h1 {
+  max-width: 420px;
+  color: #FFF;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+}
+
+.log-regs-frm {
+  width: 50%;
+  height: 100vh;
+  background: #F5F5F5;
+  padding: 70px;
+  align-content: center;
 }
 
 iframe#webpack-dev-server-client-overlay {
