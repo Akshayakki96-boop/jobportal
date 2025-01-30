@@ -111,91 +111,100 @@ class Login extends React.Component {
     return (
       <><div>
         <Breadcumb componentName="Login" ComponentValue="Login" />
-      </div><div className="rbt-elements-area bg-color-white rbt-section-gap">
-          <div className="container">
-            <div className="container mt-5">
+      </div>
+        <div className="rbt-elements-area bg-color-white">
+      
               {/* Render Bootstrap alert if there's a responseMessage */}
               {this.state.responseMessage && (
                 <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
                   {this.state.responseMessage}
                 </Alert>
               )}
-            </div>
             {this.state.keepSpinner && <div class="custom-loader">
               <div class="loader-spinner"></div>
               <p class="loader-text">Please Wait...</p>
             </div>}
-            <div className="row gy-5 row--30">
-              <div className="col-lg-6 mx-auto">
+          <div className="container-fluid p-0">
+            <div className="row">
+              <div className="log-regs-page">
+                <div className="log-regs-bg">
+                  <h1>
+                    Donec in dapibus augue sed nisi nunc suscipit eget enim sit amet
+                  </h1>
+                </div>
+                <div className="log-regs-frm">
                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                  <h3 className="title">Login</h3>
-                  <form className="max-width-auto" onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault(); // Prevent default form submission
-                      if (this.state.isFormValid) {
-                        this.handleLogin(); // Trigger login when Enter is pressed and the form is valid
-                      }
-                    }
-                  }}>
-                    <div className={`form-group ${focusStates.usernameOrEmail ? "focused" : ""}`}>
-                      <input name="usernameOrEmail" type="text" value={values.usernameOrEmail}
-                        onFocus={() => this.handleFocus("usernameOrEmail")}
-                        onBlur={() => this.handleBlur("usernameOrEmail")}
-                        onChange={(e) => this.handleChange("usernameOrEmail", e)} required />
-                      <label>Username or email *</label>
-                      <span className="focus-border"></span>
-                    </div>
-                    <div className={`form-group ${focusStates.password ? "focused" : ""}`}>
-                      <input name="password" type="password" value={values.password}
-                        onFocus={() => this.handleFocus("password")}
-                        onBlur={() => this.handleBlur("password")} onChange={(e) => this.handleChange("password", e)} required />
-                      <label>Password *</label>
-                      <span className="focus-border"></span>
-                    </div>
+                      <h3 className="title">Login</h3>
+                      <form className="max-width-auto" onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault(); // Prevent default form submission
+                          if (this.state.isFormValid) {
+                            this.handleLogin(); // Trigger login when Enter is pressed and the form is valid
+                          }
+                        }
+                      }}>
+                        <div className={`form-group ${focusStates.usernameOrEmail ? "focused" : ""}`}>
+                          <input name="usernameOrEmail" type="text" value={values.usernameOrEmail}
+                            onFocus={() => this.handleFocus("usernameOrEmail")}
+                            onBlur={() => this.handleBlur("usernameOrEmail")}
+                            onChange={(e) => this.handleChange("usernameOrEmail", e)} required />
+                          <label>Username or email *</label>
+                          <span className="focus-border"></span>
+                        </div>
+                        <div className={`form-group ${focusStates.password ? "focused" : ""}`}>
+                          <input name="password" type="password" value={values.password}
+                            onFocus={() => this.handleFocus("password")}
+                            onBlur={() => this.handleBlur("password")} onChange={(e) => this.handleChange("password", e)} required />
+                          <label>Password *</label>
+                          <span className="focus-border"></span>
+                        </div>
 
-                    <div className="row mb--30">
-                      {/* <div className="col-lg-6">
+                        <div className="row mb--30">
+                          {/* <div className="col-lg-6">
                         <div className="rbt-checkbox">
                           <input type="checkbox" id="rememberme" name="rememberme" />
                           <label htmlFor="rememberme">Remember me</label>
                         </div>
                       </div> */}
-                      <div className="col-lg-4">
-                        <div className="rbt-lost-password text-end">
-                          <a className="rbt-btn-link" href="#">Lost your password?</a>
+                          <div className="col-lg-4">
+                            <div className="rbt-lost-password text-end">
+                              <a className="rbt-btn-link" href="#">Lost your password?</a>
+                            </div>
+                          </div>
+                          <div className="col-lg-6">
+                            <div className="rbt-lost-password text-end">
+                              <a className="rbt-btn-link" href="/SignUp">Register</a>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div className="col-lg-6">
-                        <div className="rbt-lost-password text-end">
-                          <a className="rbt-btn-link" href="/SignUp?role_id=1">Register</a>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="form-submit-group">
-                      <button
-                        type="button"
-                        className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                        onClick={this.handleLogin}
-                        disabled={!isFormValid}
-                      >
-                        <span className="icon-reverse-wrapper">
-                          <span className="btn-text">Log In</span>
-                          <span className="btn-icon">
-                            <i className="feather-arrow-right"></i>
-                          </span>
-                          <span className="btn-icon">
-                            <i className="feather-arrow-right"></i>
-                          </span>
-                        </span>
-                      </button>
+                        <div className="form-submit-group">
+                          <button
+                            type="button"
+                            className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                            onClick={this.handleLogin}
+                            disabled={!isFormValid}
+                          >
+                            <span className="icon-reverse-wrapper">
+                              <span className="btn-text">Log In</span>
+                              <span className="btn-icon">
+                                <i className="feather-arrow-right"></i>
+                              </span>
+                              <span className="btn-icon">
+                                <i className="feather-arrow-right"></i>
+                              </span>
+                            </span>
+                          </button>
+                        </div>
+                      </form>
                     </div>
-                  </form>
                 </div>
               </div>
             </div>
           </div>
-        </div></>
+        </div>
+
+      </>
 
     );
   }

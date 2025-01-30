@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
 
-class UserDashBoard extends React.Component {
+class TrainerDashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -224,4 +224,4 @@ class UserDashBoard extends React.Component {
   }
 }
 
-export default withNavigation(UserDashBoard);
+export default withNavigation(TrainerDashboard);

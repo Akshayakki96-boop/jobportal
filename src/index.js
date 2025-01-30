@@ -8,6 +8,9 @@ import createSagaMiddleware from '@redux-saga/core';
 import rootSaga from './sagas/Index';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import { initializeIcons } from '@fluentui/react/lib/Icons';
+
+initializeIcons();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const sagaMiddleware = createSagaMiddleware();

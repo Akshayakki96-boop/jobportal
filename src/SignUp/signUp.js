@@ -66,7 +66,6 @@ class SignUp extends React.Component {
         }));
     };
     handleChange = (field, event) => {
-        debugger;
         const value = event.target.value;
         let confirmPasswordMessage = this.state.confirmPasswordMessage;
         let passwordStrengthMessage = this.state.passwordStrengthMessage;
@@ -205,185 +204,190 @@ class SignUp extends React.Component {
             { value: "+61", label: "🇦🇺 +61", length: 9 }   // Australia: 9 digits
         ];
         return (
-            <><div>
+            <>
+            <div>
                 <Breadcumb componentName="SignUp" ComponentValue="SignUp" />
-            </div><div className="rbt-elements-area bg-color-white rbt-section-gap">
-                    <div className="container">
-                        <div className="container mt-5">
-                            {/* Render Bootstrap alert if there's a responseMessage */}
-                            {this.state.responseMessage && (
-                                <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                                    {this.state.responseMessage}
-                                </Alert>
-                            )}
-                        </div>
-                        {this.state.keepSpinner && <div class="custom-loader">
-                            <div class="loader-spinner"></div>
-                            <p class="loader-text">Please Wait...</p>
-                        </div>}
-                        <div className="row gy-5 row--30">
-                            <div className="col-lg-6 mx-auto">
-                                <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                    <h3 className="title">Sign Up</h3>
-                                    {/* Add an onSubmit handler to prevent default form submission */}
-                                    <form
-                                        className="max-width-auto"
-                                        onSubmit={(e) => e.preventDefault()} // Prevent form submission
-                                    >
-                                        {/* Role Type Dropdown */}
-                                        <div className={`form-group ${focusStates.role ? "focused" : ""}`}>
-                                            <label>Role Type *</label>
-                                            <Select
-                                                name="role"
-                                                placeholder="Select Role"
-                                                options={roleOptions}
-                                                value={roleOptions.find(option => option.value === values.role)}
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleRoleChange("role", selectedOption)}
-                                            />
-                                        </div>
-                                        {values.role == 2 ? (
-                                            // Show Company Name if role is Employer (2)
-                                            <div className={`form-group ${focusStates.company ? "focused" : ""}`}>
-                                                <input
-                                                    name="company"
-                                                    type="text"
-                                                    value={values.company}
-                                                    onFocus={() => this.handleFocus("company")}
-                                                    onBlur={() => this.handleBlur("company")}
-                                                    onChange={(e) => this.handleChange("company", e)}
-                                                />
-                                                <label>Company Name *</label>
-                                                <span className="focus-border"></span>
-                                            </div>
-                                        ) : (
-                                            // Show Full Name for Candidate (1) and Trainer (3)
-                                            <div className={`form-group ${focusStates.fullname ? "focused" : ""}`}>
-                                                <input
-                                                    name="fullname"
-                                                    type="text"
-                                                    value={values.fullname}
-                                                    onFocus={() => this.handleFocus("fullname")}
-                                                    onBlur={() => this.handleBlur("fullname")}
-                                                    onChange={(e) => this.handleChange("fullname", e)}
-                                                />
-                                                <label>Full Name *</label>
-                                                <span className="focus-border"></span>
-                                            </div>
-                                        )}
-                                        {/* Email Field */}
-                                        <div className={`form-group ${focusStates.email ? "focused" : ""}`}>
-                                            <input
-                                                name="email"
-                                                type="email"
-                                                value={values.email}
-                                                onFocus={() => this.handleFocus("email")}
-                                                onBlur={() => this.handleBlur("email")}
-                                                onChange={(e) => this.handleChange("email", e)} />
-                                            <label>Email address *</label>
-                                            <span className="focus-border"></span>
-                                        </div>
-
-                                        {/* Username Field */}
-                                        <div className={`form-group ${focusStates.username ? "focused" : ""}`}>
-                                            <input
-                                                name="username"
-                                                type="text"
-                                                value={values.username}
-                                                onFocus={() => this.handleFocus("username")}
-                                                onBlur={() => this.handleBlur("username")}
-                                                onChange={(e) => this.handleChange("username", e)} />
-                                            <label>Username *</label>
-                                            <span className="focus-border"></span>
-                                        </div>
-
-                                        {/* Password Field */}
-                                        <div className={`form-group ${focusStates.password ? "focused" : ""}`}>
-                                            <input
-                                                name="password"
-                                                type="password"
-                                                value={values.password}
-                                                onFocus={() => this.handleFocus("password")}
-                                                onBlur={() => this.handleBlur("password")}
-                                                onChange={(e) => this.handleChange("password", e)} />
-                                            <label>Password *</label>
-                                            <span className="focus-border"></span>
-                                            {this.state.passwordStrengthMessage && (
-                                                <span className="form-text text-danger">{this.state.passwordStrengthMessage}</span>
-                                            )}
-                                        </div>
-
-                                        {/* Confirm Password Field */}
-                                        <div className={`form-group ${focusStates.confirmPassword ? "focused" : ""}`}>
-                                            <input
-                                                name="confirmPassword"
-                                                type="password"
-                                                value={values.confirmPassword}
-                                                onFocus={() => this.handleFocus("confirmPassword")}
-                                                onBlur={() => this.handleBlur("confirmPassword")}
-                                                onChange={(e) => this.handleChange("confirmPassword", e)} />
-                                            <label>Confirm Password *</label>
-                                            <span className="focus-border"></span>
-                                            {this.state.confirmPasswordMessage && (
-                                                <span className={`form-text ${!this.state.confirmPasswordMessage.includes("do not match") ? 'text-success' : 'text-danger'}`}>
-                                                    {this.state.confirmPasswordMessage}
-                                                </span>
-                                            )}
-                                        </div>
-                                        {/* Mobile Number Field */}
-                                        <div className="form-group">
-                                            <label className="mobile-label">Mobile Number *</label>
-                                            <div className="mobile-input">
-                                                <Select
-                                                    className="country-code-select"
-                                                    options={countryCodes}
-                                                    value={countryCodes.find(option => option.value === values.countryCode)}
-                                                    onChange={(selectedOption) => this.handleCountryCodeChange("countryCode", selectedOption.value)}
-                                                />
-                                                <input
-                                                    className="mobile-number-input"
-                                                    name="mobile"
-                                                    type="tel"
-                                                    value={values.mobile}
-                                                    onChange={(e) => this.handleChange("mobile", e)}
-                                                />
-                                            </div>
-                                            {/* Validation Message */}
-                                            {this.state.mobileNumberMessage && (
-                                                <span className="form-text text-danger">{this.state.mobileNumberMessage}</span>
-                                            )}
-                                        </div>
-
-                                        {/* Submit Button */}
-                                        <div className="form-submit-group">
-                                            <button
-                                                type="button" // Prevents triggering form submission
-                                                onClick={this.handleSignup}
-                                                disabled={!this.state.isFormValid} // Disable button if form is not valid
-                                                className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                            >
-                                                <span className="icon-reverse-wrapper">
-                                                    <span className="btn-text">Register</span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right"></i>
-                                                    </span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right"></i>
-                                                    </span>
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+            </div>
+            <div className="rbt-elements-area bg-color-white" style={{ paddingBottom: '100px', marginBottom: '100px' }}>
+                {/* Render Bootstrap alert if there's a responseMessage */}
+                {this.state.responseMessage && (
+                <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                    {this.state.responseMessage}
+                </Alert>
+                )}
+                {this.state.keepSpinner && <div className="custom-loader">
+                <div className="loader-spinner"></div>
+                <p className="loader-text">Please Wait...</p>
+                </div>}
+                <div className="container-fluid p-0">
+                <div className="row">
+                    <div className="log-regs-page">
+                    <div className="log-regs-bg">
+                        <h1>
+                        Donec in dapibus augue sed nisi nunc suscipit eget enim sit amet
+                        </h1>
+                    </div>
+                    <div className="log-regs-frm">
+                        <div className="rbt-contact-form contact-form-style-1 max-width-auto">
+                        <h3 className="title">SignUp</h3>
+                        <form
+                            className="max-width-auto"
+                            onSubmit={(e) => e.preventDefault()} // Prevent form submission
+                        >
+                            {/* Role Type Dropdown */}
+                            <div className={`form-group ${focusStates.role ? "focused" : ""}`}>
+                            <label>Role Type *</label>
+                            <Select
+                                name="role"
+                                placeholder="Select Role"
+                                options={roleOptions}
+                                value={roleOptions.find(option => option.value === values.role)}
+                                menuPortalTarget={document.body} // Render the dropdown to the body
+                                styles={{
+                                menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                }}
+                                onChange={(selectedOption) => this.handleRoleChange("role", selectedOption)}
+                            />
                             </div>
+                            {values.role == 2 ? (
+                            // Show Company Name if role is Employer (2)
+                            <div className={`form-group ${focusStates.company ? "focused" : ""}`}>
+                                <input
+                                name="company"
+                                type="text"
+                                value={values.company}
+                                onFocus={() => this.handleFocus("company")}
+                                onBlur={() => this.handleBlur("company")}
+                                onChange={(e) => this.handleChange("company", e)}
+                                />
+                                <label>Company Name *</label>
+                                <span className="focus-border"></span>
+                            </div>
+                            ) : (
+                            // Show Full Name for Candidate (1) and Trainer (3)
+                            <div className={`form-group ${focusStates.fullname ? "focused" : ""}`}>
+                                <input
+                                name="fullname"
+                                type="text"
+                                value={values.fullname}
+                                onFocus={() => this.handleFocus("fullname")}
+                                onBlur={() => this.handleBlur("fullname")}
+                                onChange={(e) => this.handleChange("fullname", e)}
+                                />
+                                <label>Full Name *</label>
+                                <span className="focus-border"></span>
+                            </div>
+                            )}
+                            {/* Email Field */}
+                            <div className={`form-group ${focusStates.email ? "focused" : ""}`}>
+                            <input
+                                name="email"
+                                type="email"
+                                value={values.email}
+                                onFocus={() => this.handleFocus("email")}
+                                onBlur={() => this.handleBlur("email")}
+                                onChange={(e) => this.handleChange("email", e)} />
+                            <label>Email address *</label>
+                            <span className="focus-border"></span>
+                            </div>
+
+                            {/* Username Field */}
+                            <div className={`form-group ${focusStates.username ? "focused" : ""}`}>
+                            <input
+                                name="username"
+                                type="text"
+                                value={values.username}
+                                onFocus={() => this.handleFocus("username")}
+                                onBlur={() => this.handleBlur("username")}
+                                onChange={(e) => this.handleChange("username", e)} />
+                            <label>Username *</label>
+                            <span className="focus-border"></span>
+                            </div>
+
+                            {/* Password Field */}
+                            <div className={`form-group ${focusStates.password ? "focused" : ""}`}>
+                            <input
+                                name="password"
+                                type="password"
+                                value={values.password}
+                                onFocus={() => this.handleFocus("password")}
+                                onBlur={() => this.handleBlur("password")}
+                                onChange={(e) => this.handleChange("password", e)} />
+                            <label>Password *</label>
+                            <span className="focus-border"></span>
+                            {this.state.passwordStrengthMessage && (
+                                <span className="form-text text-danger">{this.state.passwordStrengthMessage}</span>
+                            )}
+                            </div>
+
+                            {/* Confirm Password Field */}
+                            <div className={`form-group ${focusStates.confirmPassword ? "focused" : ""}`}>
+                            <input
+                                name="confirmPassword"
+                                type="password"
+                                value={values.confirmPassword}
+                                onFocus={() => this.handleFocus("confirmPassword")}
+                                onBlur={() => this.handleBlur("confirmPassword")}
+                                onChange={(e) => this.handleChange("confirmPassword", e)} />
+                            <label>Confirm Password *</label>
+                            <span className="focus-border"></span>
+                            {this.state.confirmPasswordMessage && (
+                                <span className={`form-text ${!this.state.confirmPasswordMessage.includes("do not match") ? 'text-success' : 'text-danger'}`}>
+                                {this.state.confirmPasswordMessage}
+                                </span>
+                            )}
+                            </div>
+                            {/* Mobile Number Field */}
+                            <div className="form-group">
+                            <label className="mobile-label">Mobile Number *</label>
+                            <div className="mobile-input">
+                                <Select
+                                className="country-code-select"
+                                options={countryCodes}
+                                value={countryCodes.find(option => option.value === values.countryCode)}
+                                onChange={(selectedOption) => this.handleCountryCodeChange("countryCode", selectedOption.value)}
+                                />
+                                <input
+                                className="mobile-number-input"
+                                name="mobile"
+                                type="tel"
+                                value={values.mobile}
+                                onChange={(e) => this.handleChange("mobile", e)}
+                                />
+                            </div>
+                            {/* Validation Message */}
+                            {this.state.mobileNumberMessage && (
+                                <span className="form-text text-danger">{this.state.mobileNumberMessage}</span>
+                            )}
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="form-submit-group">
+                            <button
+                                type="button" // Prevents triggering form submission
+                                onClick={this.handleSignup}
+                                disabled={!this.state.isFormValid} // Disable button if form is not valid
+                                className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                            >
+                                <span className="icon-reverse-wrapper">
+                                <span className="btn-text">Register</span>
+                                <span className="btn-icon">
+                                    <i className="feather-arrow-right"></i>
+                                </span>
+                                <span className="btn-icon">
+                                    <i className="feather-arrow-right"></i>
+                                </span>
+                                </span>
+                            </button>
+                            </div>
+                        </form>
                         </div>
                     </div>
-                </div></>
-
-
+                    </div>
+                </div>
+                </div>
+            </div>
+            </>
         );
     }
 }
