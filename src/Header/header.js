@@ -218,17 +218,17 @@ class Header extends React.Component {
                                         )}
                                         {this.props.dashBoardData === "" && (
                                             <li className={window.location.pathname === "/SignUp" ? "active" : ""}>
-                                                <a href="/SignUp?role_id=1">Candidate</a>
+                                                <a href="/SignUp">Candidate</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
                                             <li className={window.location.pathname === "/SignUp" ? "active" : ""}>
-                                                <a href="/SignUp?role_id=2">Employer</a>
+                                                <a href="/SignUp">Employer</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
                                             <li className={window.location.pathname === "/SignUp" ? "active" : ""}>
-                                                <a href="/SignUp?role_id=3">Trainer</a>
+                                                <a href="/SignUp">Trainer</a>
                                             </li>
                                         )}
                                         {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
