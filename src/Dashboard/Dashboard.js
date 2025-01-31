@@ -14,7 +14,7 @@ class Dashboard extends React.Component {
         super(props);
         this.state = {
             showUserDashboard: true,
-            dashBoardData:""
+            dashBoardData:{}
         };
 
     }
@@ -36,9 +36,9 @@ class Dashboard extends React.Component {
         })
             .then((response) => {
                 console.log('dashboard data', response.data);
-                this.getUserProfile(response.data.user_id);
                 this.setState({dashBoardData:response.data.data});
-                this.setState({ keepSpinner: false });
+                this.getUserProfile(response.data.user_id);
+                
 
             })
             .catch((error) => {

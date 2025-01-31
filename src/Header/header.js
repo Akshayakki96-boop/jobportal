@@ -11,20 +11,45 @@ class Header extends React.Component {
         this.placeholderRef = React.createRef();
     }
     componentDidMount() {
-        if (this.props.dashBoardData) {
-            if (this.props.dashBoardData.role_id == 2) {
-                this.getUserProfile(this.props.dashBoardData.user_id);
-            }
-            if (this.props.dashBoardData.role_id == 3) {
-                this.getTrainerProfile(this.props.dashBoardData.user_id);
-            }
+        this.getDashboardUser();
 
-        }
 
         this.handleScroll();
 
         window.addEventListener('scroll', this.handleScroll);
     }
+
+    getDashboardUser = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/Dashboard`;
+        const token = localStorage.getItem('authToken');
+
+        axios.post(url, "", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('dashboard data', response.data);
+                this.setState({ dashBoardData: response.data.data });
+
+                if (response.data.data.role_id == 2) {
+                    this.getUserProfile(response.data.data.user_id);
+                }
+                if (response.data.data.role_id == 3) {
+                    this.getTrainerProfile(response.data.data.user_id);
+                }
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+
+
+
 
     getTrainerProfile = (userId) => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -320,7 +345,7 @@ class Header extends React.Component {
                                                         )}
                                                     </div>
                                                     }
-                                                    {this.props.dashBoardData?.role_id==3 &&     <div className="admin-thumbnail">
+                                                    {this.props.dashBoardData?.role_id == 3 && <div className="admin-thumbnail">
                                                         {this.state?.userData?.profile_image ? (
                                                             <img
                                                                 src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
@@ -345,7 +370,7 @@ class Header extends React.Component {
                                                             </div>
                                                         )}
                                                     </div>
-    }
+                                                    }
                                                 </div>
 
 
