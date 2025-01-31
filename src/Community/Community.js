@@ -13,7 +13,7 @@ class Community extends React.Component {
 
     }
     componentDidMount() {
-        this.getDashboardUser();
+        //this.getDashboardUser();
 
     }
 

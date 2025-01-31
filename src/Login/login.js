@@ -5,6 +5,7 @@ import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
 import { setSingleRequest } from '../actions/SingleRequestAction';
 import { store } from '../index';
+import HeaderLoginSignUp from '../Header/headerLoginSignUp';
 
 class Login extends React.Component {
   constructor(props) {
@@ -109,7 +110,9 @@ class Login extends React.Component {
   render() {
     const { focusStates, values, isFormValid } = this.state;
     return (
-      <><div>
+      <>
+      <div>
+        <HeaderLoginSignUp />
         <Breadcumb componentName="Login" ComponentValue="Login" />
       </div>
         <div className="rbt-elements-area bg-color-white">
@@ -129,7 +132,7 @@ class Login extends React.Component {
               <div className="log-regs-page">
                 <div className="log-regs-bg">
                   <h1>
-                    Donec in dapibus augue sed nisi nunc suscipit eget enim sit amet
+                  Start your journey to success with industry-specific training and global opportunities.
                   </h1>
                 </div>
                 <div className="log-regs-frm">
