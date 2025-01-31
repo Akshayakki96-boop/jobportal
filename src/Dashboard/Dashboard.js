@@ -245,26 +245,14 @@ class Dashboard extends React.Component {
                                                                             <i className="feather-user"></i><span>My Profile</span>
                                                                         </a>
                                                                     </li>
-                                                                    <li>
-                                                                        <a className={this.state.showEnrollCourse ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('enrolledCourses'); }} href="#">
-                                                                            <i className="feather-book-open"></i><span>Enrolled Courses</span>
-                                                                        </a>
-                                                                    </li>
+                                                                
                                                                     <li>
                                                                         <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myCourses'); }} href="#">
                                                                             <i className="feather-monitor"></i><span>My Courses</span>
                                                                         </a>
                                                                     </li>
-                                                                    <li>
-                                                                        <a className={this.state.showAnnouncement ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('announcements'); }} href="#">
-                                                                            <i className="feather-volume-2"></i><span>Announcements</span>
-                                                                        </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a className={this.state.showAssignment ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('assignments'); }} href="#">
-                                                                            <i className="feather-list"></i><span>Assignments</span>
-                                                                        </a>
-                                                                    </li>
+                                                                 
+                                                                 
                                                                     <li>
                                                                         <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                                             <i className="feather-log-out"></i><span>Logout</span>
