@@ -49,7 +49,7 @@ class Dashboard extends React.Component {
 
     getUserProfile = (userId) => {
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Employer/GetProfile`;
+        const url = `${baseUrl}/api/Trainer/GetTrainerProfile`;
         const token = localStorage.getItem('authToken');
         const userData = {
             "Id": userId,
@@ -63,7 +63,6 @@ class Dashboard extends React.Component {
             .then((response) => {
                 console.log('user data', response.data);
                 this.setState({userData:response.data.data})
-                this.setState({ keepSpinner: false });
 
             })
             .catch((error) => {
@@ -130,6 +129,14 @@ class Dashboard extends React.Component {
             });
     }
 
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+        const parts = name.split(" ");
+        return parts.length > 1
+          ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+          : parts[0][0].toUpperCase();
+      };
+
     render() {
 
         return (
@@ -148,14 +155,42 @@ class Dashboard extends React.Component {
                                     {/* Start Dashboard Top */}
                                     <div className="rbt-dashboard-content-wrapper">
                                         <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
+                                        <div className="tranr-titl">
+                                            <div className="content text-center">
+                                                <h6 className="subtitle sal-animate" >Bootcamp Instructor</h6>
+                                                <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.fullname}</span></h3>
+                                            </div>
+                                        </div>
                                         {/* Start Tutor Information */}
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
-                                                <div className="thumbnail rbt-avatars size-lg">
-                                                    <img src="assets/images/team/avatar.jpg" alt="Instructor" />
+                                            <div className="thumbnail rbt-avatars size-lg">
+                                                    {this.state?.userData?.profile_image ? (
+                                                        <img
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                            alt="Instructor"
+                                                        />
+                                                    ) : (
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                width: "60px", // Adjust as needed
+                                                                height: "60px", // Adjust as needed
+                                                                backgroundColor: "#ccc", // Default background color
+                                                                color: "#fff",
+                                                                borderRadius: "50%",
+                                                                fontWeight: "bold",
+                                                                fontSize: "18px", // Adjust font size as needed
+                                                            }}
+                                                        >
+                                                            {this.getInitials(this.state?.dashBoardData?.username || "User")}
+                                                        </div>
+                                                    )}
                                                 </div>
                                                 <div className="tutor-content">
-                                                    <h5 className="title">John Due</h5>
+                                                    <h5 className="title">{this.state?.dashBoardData.username}</h5>
                                                     <div className="rbt-review">
                                                         <div className="rating">
                                                             <i className="fas fa-star"></i>
