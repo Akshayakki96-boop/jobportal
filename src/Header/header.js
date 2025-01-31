@@ -11,12 +11,19 @@ class Header extends React.Component {
         this.placeholderRef = React.createRef();
     }
     componentDidMount() {
-        this.getDashboardUser();
-
-
+  
         this.handleScroll();
 
         window.addEventListener('scroll', this.handleScroll);
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.dashBoardData !== this.props.dashBoardData) {
+            if(this.props.dashBoardData!="")
+            {
+                this.getDashboardUser();
+            }
+            
+        }  
     }
 
     getDashboardUser = () => {

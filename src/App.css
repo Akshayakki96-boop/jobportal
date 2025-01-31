@@ -425,7 +425,7 @@ select.form-control option {
   width: 50%;
   padding: 40px;
   height: 100vh;
-  background: linear-gradient(60deg, rgba(158, 189, 19, 0.5), rgba(1, 73, 172, 0.7)), url("/src/assets/bg-image-14.jpg") center no-repeat;
+  background: linear-gradient(60deg, rgba(158, 189, 19, 0.5), rgba(1, 73, 172, 0.7)), url("/src/assets/login_img.jpeg") center no-repeat;
   background-size: cover;
   display: flex;
   flex-wrap: wrap;
@@ -433,6 +433,27 @@ select.form-control option {
   justify-content: flex-end;
   align-content: center;
   flex-direction: row;
+}
+.log-regs-bg1 {
+  width: 50%;
+  padding: 40px;
+  height: 100vh;
+  background: linear-gradient(60deg, rgba(158, 189, 19, 0.5), rgba(1, 73, 172, 0.7)), url("/src/assets/SignUp_img.jpeg") center no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  align-content: center;
+  flex-direction: row;
+}
+
+.log-regs-bg1 h1 {
+  max-width: 420px;
+  color: #FFF;
+  text-align: right;
+  padding: 0;
+  margin: 0;
 }
 .log-regs-bg h1 {
   max-width: 420px;

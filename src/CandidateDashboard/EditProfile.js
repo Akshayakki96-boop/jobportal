@@ -7,6 +7,7 @@ import Select from 'react-select';
 import { DatePicker } from '@fluentui/react';
 import '@fluentui/react/dist/css/fabric.css';
 import { Alert} from 'react-bootstrap';
+import AdvancedBreadcumb from '../Breadcumb/advancebreadcrumb';
 
 
 class EditProfileCandidate extends React.Component {
@@ -465,7 +466,10 @@ class EditProfileCandidate extends React.Component {
     render() {
         const { fullname, email, mobile_no, profile_summary, experience, currentsalary, expectedsalary, logoPreview, isBasicInfoExpanded, isEmploymentDetailsExpanded, isProjectDetailsExpanded, showEducation, showKeySkills, preferredWorkLocation, selectedDate, resume_summary, noticePeriods, employments, projects, preferredShift, specializations, keyskillsSelected, department_id, noticePeriodSelected, role_id, uploadStatus, languague_name, resumePreview } = this.state;
         return (
-            <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
+            <>
+            <Header dashBoardData={this.state.dashBoardData} />
+            <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Candidate" />
+            <div className="rbt-become-area bg-color-white rbt-section-gap">   
                 <div className="container">
                 <div className="container mt-5">
                             {/* Render Bootstrap alert if there's a responseMessage */}

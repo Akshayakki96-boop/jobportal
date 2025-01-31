@@ -31,8 +31,9 @@ class Home extends React.Component {
 
             })
             .catch((error) => {
-                localStorage.removeItem('authToken');
                 this.setState({ dashBoardData: "" });
+                localStorage.removeItem('authToken');
+
             });
     }
 
