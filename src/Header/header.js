@@ -12,13 +12,44 @@ class Header extends React.Component {
     }
     componentDidMount() {
         if (this.props.dashBoardData) {
-            this.getUserProfile(this.props.dashBoardData.user_id);
+            if (this.props.dashBoardData.role_id == 2) {
+                this.getUserProfile(this.props.dashBoardData.user_id);
+            }
+            if (this.props.dashBoardData.role_id == 3) {
+                this.getTrainerProfile(this.props.dashBoardData.user_id);
+            }
+
         }
 
         this.handleScroll();
 
         window.addEventListener('scroll', this.handleScroll);
     }
+
+    getTrainerProfile = (userId) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Trainer/GetTrainerProfile`;
+        const token = localStorage.getItem('authToken');
+        const userData = {
+            "Id": userId,
+        };
+        axios.post(url, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('user data', response.data);
+                this.setState({ userData: response.data.data })
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+
 
     getUserProfile = (userId) => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -263,7 +294,7 @@ class Header extends React.Component {
                                         <div className="rbt-user-menu-list-wrapper">
                                             <div className="inner">
                                                 <div className="rbt-admin-profile">
-                                                    <div className="admin-thumbnail">
+                                                    {this.props.dashBoardData?.role_id == 2 && <div className="admin-thumbnail">
                                                         {this.state?.userData?.companylogo ? (
                                                             <img
                                                                 src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
@@ -288,6 +319,33 @@ class Header extends React.Component {
                                                             </div>
                                                         )}
                                                     </div>
+                                                    }
+                                                    {this.props.dashBoardData?.role_id==3 &&     <div className="admin-thumbnail">
+                                                        {this.state?.userData?.profile_image ? (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                                alt="User Image"
+                                                            />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                            </div>
+                                                        )}
+                                                    </div>
+    }
                                                 </div>
 
 

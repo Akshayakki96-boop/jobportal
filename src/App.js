@@ -22,6 +22,7 @@ import EditProfile from './EmployerDashboard/EditProfile';
 import JobDetailsOutside from './Jobs/jobDetails-outside';
 import EditProfileCandidate from './CandidateDashboard/EditProfile';
 import ActivateProfile from './ActivateProfile/ActivateProfile';
+import EditProfileTrainer from './Dashboard/EditProfile';
 
 
 
@@ -93,6 +94,7 @@ class App extends React.Component {
                 <Route path="/job-decription" element={<JobDetailsOutside/>} />
                 <Route path="/edit-profile-candidate" element={<EditProfileCandidate/>} />
                 <Route path="/ActivateProfile" element={<ActivateProfile/>} />
+                <Route path="/edit-profile-trainer" element={<EditProfileTrainer/>} />
                
                   {/* Other routes can be added here */}
                 </Routes>
