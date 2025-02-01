@@ -30,7 +30,7 @@ class EditProfileTrainer extends React.Component {
             experience: "",
             currentsalary: "",
             expectedsalary: "",
- 
+
             preferredShift: [], // Example: [{ value: "Day", label: "Day" }]
             preferredWorkLocation: [], // Example: [{ value: "Remote", label: "Remote" }]
             employmentType: [],
@@ -51,7 +51,7 @@ class EditProfileTrainer extends React.Component {
             keyskillsSelected: null,
             showEmploymentModal: false,
             currentEmploymentIndex: null,
-            employments:[],
+            employments: [],
             employmentForm: {
                 company_name: "",
                 jobtitle: "",
@@ -109,6 +109,7 @@ class EditProfileTrainer extends React.Component {
             });
     }
     getUserProfile = (userId) => {
+        debugger;
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Trainer/GetTrainerProfile`;
         const token = localStorage.getItem('authToken');
@@ -124,11 +125,11 @@ class EditProfileTrainer extends React.Component {
             .then((response) => {
                 console.log('user data', response.data);
                 this.setState({ userData: response.data.data })
-                const { profile_image, resume_file} = response.data.data.basic_info;
+                const { profile_image, resume_file } = response.data.data.basic_info;
                 const employment = response.data.data.employment;
                 const education = response.data.data.education;
-                const keySkills= response.data.data.keyskills;
-                const carrerInfo= response.data.data.carrierinfo;
+                const keySkills = response.data.data.keyskills;
+                const carrerInfo = response.data.data.carrierinfo;
                 this.setState({
                     fullname: response.data.data.basic_info.fullname,
                     email: response.data.data.basic_info.email,
@@ -159,46 +160,48 @@ class EditProfileTrainer extends React.Component {
                         resumePreview: `${process.env.REACT_APP_BASEURL}/Uploads/${resume_file}`,
                         resumefileName: resume_file,
                     });
+                }
 
-if(employment && employment.length > 0){
-                    this.setState({
-                        employments: employment.map((item) => ({
-                            company_name: item.Institution_Company,
-                            jobtitle: item.Role_Title,
-                            workedFromYear: item.year_from,
-                            workedToYear: item.year_to,
-                             trainer_employment_id: item.trainer_employment_id
-                        }))
-                    });
+                    if (employment && employment.length > 0) {
+                        this.setState({
+                            employments: employment.map((item) => ({
+                                company_name: item.Institution_Company,
+                                jobtitle: item.Role_Title,
+                                workedFromYear: item.year_from,
+                                workedToYear: item.year_to,
+                                trainer_employment_id: item.trainer_employment_id
+                            }))
+                        });
 
-                }
-                if(education && education.length > 0){
-                    this.setState({
-                        educationDetails: education.map((item) => ({
-                            institutionName: item.university_board,
-                            degree: item.education_title,
-                            fromYear: item.passing_year,
-                            trainer_education_id: item.trainer_edu_id
-                        }))
-                    });
-                }
-                if(keySkills && keySkills.length > 0){
-                    this.setState({
-                        keyskillsSelected: keySkills.map((item) => ({
-                            value: item.skill_id,
-                            label: item.keyskills
-                        }))
-                    });
-                }
-                if(carrerInfo){
-                    this.setState({
-                        trainerType: carrerInfo.trainer_type_id.split(',').map(type => ({ value: type, label: type })),
-                        totalExperience: carrerInfo.experience,
-                        modeOfTraining: carrerInfo.training_mode.split(',').map(mode => ({ value: mode, label: mode })),
-                        trainer_skill_id:carrerInfo.trainer_carrierinfo_id
-                    });
-                }
-            }
+                    }
+                    if (education && education.length > 0) {
+                        this.setState({
+                            educationDetails: education.map((item) => ({
+                                institutionName: item.university_board,
+                                degree: item.education_title,
+                                fromYear: item.passing_year,
+                                trainer_education_id: item.trainer_edu_id
+                            }))
+                        });
+                    }
+                    if (keySkills && keySkills.length > 0) {
+                        this.setState({
+                            keyskillsSelected: keySkills.map((item) => ({
+                                value: item.skill_id,
+                                label: item.keyskills
+                            }))
+                        });
+                    }
+                    if (carrerInfo && carrerInfo.length > 0) {
+                        const career = carrerInfo[0]; // Assuming you want the first item in the array
+                        this.setState({
+                            trainerType: career.trainer_type_id.split(',').map(type => ({ value: type, label: type })),
+                            totalExperience: career.experience,
+                            modeOfTraining: career.training_mode.split(',').map(mode => ({ value: mode, label: mode })),
+                            trainer_skill_id: career.trainer_carrierinfo_id
+                        });
+                    }
+                
 
             })
             .catch((error) => {
@@ -630,7 +633,7 @@ if(employment && employment.length > 0){
                 this.setState({
                     responseMessage: (
                         <span>
-                            Profile Updated Successfully
+                            Skills  Updated Successfully
                         </span>
                     ),
                     alertVariant: 'success', // Success alert variant
@@ -828,7 +831,7 @@ if(employment && employment.length > 0){
         const url = `${baseUrl}/api/Trainer/UpdateCarrierInfo`;
         const token = localStorage.getItem('authToken');
         const careerData = {
-            trainer_carrierinfo_id: this.state.trainer_skill_id?this.state.trainer_skill_id:0,
+            trainer_carrierinfo_id: this.state.trainer_skill_id ? this.state.trainer_skill_id : 0,
             user_id: this.state.userId,
             trainer_type_id: this.state.trainerType ? this.state.trainerType.map(type => type.value).join(",") : '',
             experience: parseInt(this.state.totalExperience, 10),
@@ -842,19 +845,19 @@ if(employment && employment.length > 0){
                 Authorization: `Bearer ${token}`,
             },
         })
-        .then((response) => {
-            this.setState({
-                responseMessage: 'Career information updated successfully!',
-                alertVariant: 'success'
+            .then((response) => {
+                this.setState({
+                    responseMessage: 'Career information updated successfully!',
+                    alertVariant: 'success'
+                });
+            })
+            .catch((error) => {
+                console.error('Error updating career information:', error.response?.data || error.message);
+                this.setState({
+                    responseMessage: 'Error updating career information!',
+                    alertVariant: 'danger'
+                });
             });
-        })
-        .catch((error) => {
-            console.error('Error updating career information:', error.response?.data || error.message);
-            this.setState({
-                responseMessage: 'Error updating career information!',
-                alertVariant: 'danger'
-            });
-        });
     };
 
     render() {
@@ -876,530 +879,414 @@ if(employment && employment.length > 0){
 
         return (
             <>
-            <Header dashBoardData={this.state.dashBoardData} />
-            <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Trainer" />
-            <div className="rbt-become-area bg-color-white rbt-section-gap">
-                <div className="container">
-                <div className="container mt-5">
-                    {this.state.responseMessage && (
-                    <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                        {this.state.responseMessage}
-                    </Alert>
-                    )}
-                </div>
-                <div className="row pt--60 g-5">
-                    <div className="col-lg-4">
-                    <div className="thumbnail">
-                        <img
-                        className="radius-10 w-100"
-                        src="assets/images/tab/tabs-10.jpg"
-                        alt="Corporate Template"
-                        />
-                    </div>
-                    </div>
-                    <div className="col-lg-8">
-                    <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                        <h3 className="title">Update Profile</h3>
-                        <hr className="mb--30" />
-                        <form onSubmit={(e) => e.preventDefault()} className="row row--15">
-                       { /* Candidate Basic Info Section */}
-                                                                        <h3 className="section-header" onClick={() => this.toggleSection('isBasicInfoExpanded')} style={{ cursor: 'pointer' }}>
-                                                                            Trainer Basic Information
-                                                                            <span style={{ marginLeft: '10px' }}>
-                                                                            {isBasicInfoExpanded ? '[-]' : '[+]'}
-                                                                            </span>
-                                                                        </h3>
-                                                                        {isBasicInfoExpanded && (
-                                                                            <div className="section-content">
-                                                                            <div className="form-group">
-                                                                                <input
-                                                                                type="file"
-                                                                                className="form-control"
-                                                                                accept="image/*"
-                                                                                id="profile_image"
-                                                                                onChange={this.handleFileChange}
-                                                                                />
-                                                                                <label htmlFor="profile_image">Profile Image</label>
-                                                                                {logoPreview && (
-                                                                                <div className="mt-3">
-                                                                                    <img
-                                                                                    src={logoPreview}
-                                                                                    alt="Logo Preview"
-                                                                                    style={{
-                                                                                        width: '100px',
-                                                                                        height: '100px',
-                                                                                        objectFit: 'cover',
-                                                                                        borderRadius: '8px',
-                                                                                    }}
-                                                                                    />
-                                                                                </div>
-                                                                                )}
-                                                                                {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                id="fullname"
-                                                                                name="fullname"
-                                                                                value={fullname}
-                                                                                onChange={this.handleFullNameChange}
-                                                                                />
-                                                                                <label htmlFor="fullname">Full Name</label>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                id="email"
-                                                                                name="email"
-                                                                                value={email}
-                                                                                onChange={this.handleEmailChange}
-                                                                                />
-                                                                                <label htmlFor="email">Email</label>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <label className="mobile-label">Mobile Number *</label>
-                                                                                <div className="mobile-input d-flex align-items-center">
-                                                                                <Select
-                                                                                    className="country-code-select"
-                                                                                    options={countryCodes}
-                                                                                    value={this.state.countryCode}
-                                                                                    onChange={this.handleCountryCodeChange}
-                                                                                    menuPortalTarget={document.body}
-                                                                                    styles={{
-                                                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                                                    container: (base) => ({
-                                                                                        ...base,
-                                                                                        flex: '0 0 100px', // Adjust the width as needed
-                                                                                    }),
-                                                                                    }}
-                                                                                />
-                                                                                <input
-                                                                                    type="text"
-                                                                                    className="mobile-number-input flex-grow-1"
-                                                                                    id="mobile_no"
-                                                                                    name="mobile_no"
-                                                                                    value={mobile_no}
-                                                                                    onChange={this.handleMobileChange}
-                                                                                />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="form-group" style={{ position: "relative" }}>
-                                                                                <label
-                                                                                htmlFor="dob"
-                                                                                style={{
-                                                                                    position: "absolute",
-                                                                                    top: "-12px",
-                                                                                    left: "10px",
-                                                                                    background: "white",
-                                                                                    padding: "0 4px",
-                                                                                    fontSize: "12px",
-                                                                                    color: "#6c757d",
-                                                                                }}
-                                                                                >
-                                                                                Date of Birth
-                                                                                </label>
-                                                                                <DatePicker
-                                                                                id="dob"
-                                                                                placeholder="Select a date..."
-                                                                                ariaLabel="Select a date"
-                                                                                value={selectedDate}
-                                                                                onSelectDate={this.handleDateChange}
-                                                                                styles={{
-                                                                                    root: {
-                                                                                    width: "100%",
-                                                                                    },
-                                                                                    textField: {
-                                                                                    width: "100%",
-                                                                                    },
-                                                                                }}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <Select
-                                                                                value={this.state.selectedGender}
-                                                                                options={[
-                                                                                    { value: 'Male', label: 'Male' },
-                                                                                    { value: 'Female', label: 'Female' },
-                                                                                    { value: 'Other', label: 'Other' }
-                                                                                ]}
-                                                                                placeholder="Select Gender"
-                                                                                className="basic-multi-select"
-                                                                                classNamePrefix="select"
-                                                                                menuPortalTarget={document.body}
-                                                                                styles={{
-                                                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                                                }}
-                                                                                onChange={this.handleGenderChange}
-                                                                                />
-                                                                                <label htmlFor="gender">Gender</label>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <label htmlFor="country">Country</label>
-                                                                                <Select
-                                                                                id="country"
-                                                                                name="country"
-                                                                                value={this.state.selectedCountry}
-                                                                                options={this.state.countryOptions}
-                                                                                onChange={this.handleCountryChange}
-                                                                                placeholder="Type or select country..."
-                                                                                className="basic-multi-select"
-                                                                                classNamePrefix="select"
-                                                                                menuPortalTarget={document.body}
-                                                                                styles={{
-                                                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                                                }}
-                                                                                />
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <Select
-                                                                                options={this.state.stateOptions}
-                                                                                value={this.state.selectedState}
-                                                                                placeholder="Select State"
-                                                                                className="basic-multi-select"
-                                                                                classNamePrefix="select"
-                                                                                menuPortalTarget={document.body}
-                                                                                styles={{
-                                                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                                                }}
-                                                                                onChange={this.handleStateChange}
-                                                                                />
-                                                                                <label htmlFor="state">State</label>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <Select
-                                                                                value={this.state.selectedCity}
-                                                                                options={this.state.cityOptions}
-                                                                                placeholder="Select City"
-                                                                                className="basic-multi-select"
-                                                                                classNamePrefix="select"
-                                                                                menuPortalTarget={document.body}
-                                                                                styles={{
-                                                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                                                }}
-                                                                                onChange={(selectedOption) => this.handleCityChange(selectedOption)}
-                                                                                />
-                                                                                <label htmlFor="city">City</label>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                id="language"
-                                                                                name="language"
-                                                                                value={languague_name}
-                                                                                onChange={this.handleLanguageChange}
-                                                                                />
-                                                                                <label htmlFor="language">Language</label>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                id="linkedin"
-                                                                                name="linkedin"
-                                                                                value={this.state.linkedInSelected}
-                                                                                onChange={this.handleLinkedinChange}
-                                                                                />
-                                                                                <label htmlFor="linkedin">LinkedIn Profile Url</label>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                id="Profiletitle"
-                                                                                name="Profiletitle"
-                                                                                value={this.state.profile_title}
-                                                                                onChange={this.handleProfileTitleChange}
-                                                                                />
-                                                                                <label htmlFor="Profiletitle">Profile Title</label>
-                                                                            </div>
-                                                                            <div className="form-group" style={{ position: "relative" }}>
-                                                                                <label
-                                                                                htmlFor="profile_summary"
-                                                                                style={{
-                                                                                    position: "absolute",
-                                                                                    top: "-12px",
-                                                                                    left: "10px",
-                                                                                    background: "white",
-                                                                                    padding: "0 4px",
-                                                                                    fontSize: "17px",
-                                                                                    color: "#6c757d",
-                                                                                }}
-                                                                                >
-                                                                                Profile Summary
-                                                                                </label>
-                                                                                <textarea
-                                                                                className="form-control"
-                                                                                id="profile_summary"
-                                                                                name="profile_summary"
-                                                                                value={profile_summary}
-                                                                                onChange={this.handleProfileChange}
-                                                                                ></textarea>
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                            <input
-                                                                                                type="file"
-                                                                                                className="form-control"
-                                                                                                accept=".doc,.docx,.rtf,.pdf"
-                                                                                                id="resume"
-                                                                                                onChange={this.handleFileResumeChange}
-                                                                                            />
-                                                                                            <label htmlFor="resume">Update Resume</label>
-                                                                                            {this.state.resumePreview && (
-                                                                                                <div className="mt-3">
-                                                                                                    {this.state.resumeType === "pdf" ? (
-                                                        // Show PDF in an iframe (works in most browsers)
-                                                        <iframe
-                                                            src={this.state.resumePreview}
-                                                            width="100%"
-                                                            height="200px"
-                                                            style={{ border: "1px solid #ccc", borderRadius: "8px" }}
-                                                        ></iframe>
-                                                    ) : (
-                                                        // Show download link for non-PDF files
-                                                        <div>
-                                                            <p>Preview not available. Download file:</p>
-                                                            <a
-                                                                href={this.state.resumePreview}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="btn btn-primary"
-                                                            >
-                                                                Download Resume
-                                                            </a>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-
-                                            {this.state.uploadResumeStatus && <small className="text-danger">{this.state.uploadResumeStatus}</small>}
-                                        </div>
-                            <div className="col-lg-12">
-                                <div className="form-submit-group">
-                                <button
-                                    type="button"
-                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                    onClick={this.handleTrainerInformation}
-                                >
-                                    <span className="icon-reverse-wrapper">
-                                    <span className="btn-text">Update Information</span>
-                                    <span className="btn-icon">
-                                        <i className="feather-arrow-right" />
-                                    </span>
-                                    </span>
-                                </button>
+                <Header dashBoardData={this.state.dashBoardData} />
+                <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Trainer" />
+                <div className="rbt-become-area bg-color-white rbt-section-gap">
+                    <div className="container">
+                        <div className="container mt-5">
+                            {this.state.responseMessage && (
+                                <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                                    {this.state.responseMessage}
+                                </Alert>
+                            )}
+                        </div>
+                        <div className="row pt--60 g-5">
+                            <div className="col-lg-4">
+                                <div className="thumbnail">
+                                    <img
+                                        className="radius-10 w-100"
+                                        src="assets/images/tab/tabs-10.jpg"
+                                        alt="Corporate Template"
+                                    />
                                 </div>
                             </div>
-                            </div>
-                        )}
-
-                       {/* Trainer Employment Section */}
-                                                                        <h3 className="section-header" onClick={() => this.toggleSection('isEmploymentDetailsExpanded')} style={{ cursor: 'pointer' }}>
-                                                                            Employment Details
-                                                                            <span style={{ marginLeft: '10px' }}>
-                                                                            {isEmploymentDetailsExpanded ? '[-]' : '[+]'}
-                                                                            </span>
-                                                                        </h3>
-                                                                        {isEmploymentDetailsExpanded && (
-                                                                            <div className="section-content">
-                                                                            {
-                                                                                this.state.employments.map((employment, index) => (
-                                                                                    <div key={index} className="employment-entry mb-4 border p-3 rounded">
-                                                                                    <h5>Employment {index + 1}</h5>
-                                                                                 
-                                                                                            <p style={{fontWeight:"bold"}}>Company Name: {employment.company_name}</p>
-                                                                                        
-                                                                                            <p style={{fontWeight:"bold"}}>Job Title: {employment.jobtitle}</p>
-                                                                                       
-                                                                                      
-                                                                                            <p style={{fontWeight:"bold"}}>Worked From: {employment.workedFromYear}</p>
-                                                                                      
-                                                                                   
-                                                                                            <p style={{fontWeight:"bold"}}>Worked To: {employment.workedToYear}</p>
-                                                                                       
-                                                                                 
-                                                                                    <Button
-                                                                                        className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                                        variant="primary"
-                                                                                        style={{ fontSize: '14px' }}
-                                                                                        onClick={() => this.handleShowEmploymentModal(index)}
-                                                                                    >
-                                                                                        Edit
-                                                                                    </Button>
-                                                                                    <Button
-                                                                                        className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                                        variant="danger"
-                                                                                        style={{ fontSize: '14px' }}
-                                                                                        onClick={() => this.removeEmployment(index)}
-                                                                                    >
-                                                                                        Delete
-                                                                                    </Button>
-                                                                                    </div>
-                                                                                ))
-                                                                            }
-                                                                            <Button
-                                                                                variant="success"
-                                                                                style={{ fontSize: '14px' }}
-                                                                                onClick={() => this.handleShowEmploymentModal()}
-                                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                            >
-                                                                                Add Employment
-                                                                            </Button>
-
-                                                                            <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal}>
-                                                                                <Modal.Header closeButton>
-                                                                                <Modal.Title>{this.state.currentEmploymentIndex !== null ? 'Edit Employment' : 'Add Employment'}</Modal.Title>
-                                                                                </Modal.Header>
-                                                                                <Modal.Body>
-                                                                                <div className="form-group">
-                                                                                    <label htmlFor="company_name">Company Name</label>
-                                                                                    <input
-                                                                                    type="text"
-                                                                                    className="form-control"
-                                                                                    id="company_name"
-                                                                                    name="company_name"
-                                                                                    value={employmentForm.company_name}
-                                                                                    onChange={this.handleEmploymentFormChange}
-                                                                                    />
-                                                                                </div>
-                                                                                <div className="form-group">
-                                                                                    <label htmlFor="jobtitle">Job Title</label>
-                                                                                    <input
-                                                                                    type="text"
-                                                                                    className="form-control"
-                                                                                    id="jobtitle"
-                                                                                    name="jobtitle"
-                                                                                    value={employmentForm.jobtitle}
-                                                                                    onChange={this.handleEmploymentFormChange}
-                                                                                    />
-                                                                                </div>
-                                                                                <div className="form-group">
-                                                                                    <label>Worked From:</label>
-                                                                                    <div className="d-flex gap-3">
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        id="workedFromYear"
-                                                                                        name="workedFromYear"
-                                                                                        value={employmentForm.workedFromYear}
-                                                                                        onChange={this.handleEmploymentFormChange}
-                                                                                    >
-                                                                                        <option value="">Select Year</option>
-                                                                                        {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
-                                                                                        <option key={year} value={year}>
-                                                                                            {year}
-                                                                                        </option>
-                                                                                        ))}
-                                                                                    </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div className="form-group">
-                                                                                    <label>Worked To:</label>
-                                                                                    <div className="d-flex gap-3">
-                                                                                    <select
-                                                                                        className="form-control"
-                                                                                        id="workedToYear"
-                                                                                        name="workedToYear"
-                                                                                        value={employmentForm.workedToYear}
-                                                                                        onChange={this.handleEmploymentFormChange}
-                                                                                    >
-                                                                                        <option value="">Select Year</option>
-                                                                                        {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
-                                                                                        <option key={year} value={year}>
-                                                                                            {year}
-                                                                                        </option>
-                                                                                        ))}
-                                                                                    </select>
-                                                                                    </div>
-                                                                                </div>
-                                                                                {employmentForm.workedFromYear && employmentForm.workedToYear && parseInt(employmentForm.workedFromYear) > parseInt(employmentForm.workedToYear) && (
-                                                                                    <span style={{ color: 'red' }}>Worked From year cannot be greater than Worked To year.</span>
-                                                                                )}
-                                                                                </Modal.Body>
-                                                                                <Modal.Footer>
-                                                                                <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEmploymentModal}>Cancel</Button>
-                                                                                <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEmployment}>Save</Button>
-                                                                                </Modal.Footer>
-                                                                            </Modal>
-                                                                            </div>
-                                                                        )}
-                                                                    {/* Candidate Education Section */}
-                                            <h3 className="section-header" onClick={() => this.toggleSection("showEducation")} style={{ cursor: "pointer" }}>
-                                                Education Details <span style={{ marginLeft: '10px' }}>{showEducation ? '[-]' : '[+]'}</span>
-                                            </h3>
-                                            {showEducation && (
-                                                <div className="section-content">
-                                                    {this.state.educationDetails &&
-                                                        this.state.educationDetails.map((education, index) => (
-                                                            <div key={index} className="education-entry mb-4 border p-3 rounded">
-                                                                <h5>Education {index + 1}</h5>
-                                                                <p style={{fontWeight:"bold"}}>Institution Name: {education.institutionName}</p>
-                                                                <p style={{fontWeight:"bold"}}>Degree with Specialisation: {education.degree}</p>
-                                                                <p style={{fontWeight:"bold"}}>Completed Year: {education.fromYear}</p>
-
-                                                                <Button
-                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                    variant="primary"
-                                                                    onClick={() => this.handleShowEducationModal(index)}
-                                                                    style={{ fontSize: '14px' }}
-                                                                >
-                                                                    Edit
-                                                                </Button>
-                                                                <Button
-                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                    variant="danger"
-                                                                    onClick={() => this.removeEducation(index)}
-                                                                    style={{ fontSize: '14px' }}
-                                                                >
-                                                                    Delete
-                                                                </Button>
-                                                            </div>
-                                                        ))}
-                                                    <Button
-                                                        variant="success"
-                                                        onClick={() => this.handleShowEducationModal()}
-                                                        className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                        style={{ fontSize: '14px' }}
+                            <div className="col-lg-8">
+                                <div className="rbt-contact-form contact-form-style-1 max-width-auto">
+                                    <h3 className="title">Update Profile</h3>
+                                    <hr className="mb--30" />
+                                    <form onSubmit={(e) => e.preventDefault()} className="row row--15">
+                                        { /* Candidate Basic Info Section */}
+                                        <h3 className="section-header" onClick={() => this.toggleSection('isBasicInfoExpanded')} style={{ cursor: 'pointer' }}>
+                                            Trainer Basic Information
+                                            <span style={{ marginLeft: '10px' }}>
+                                                {isBasicInfoExpanded ? '[-]' : '[+]'}
+                                            </span>
+                                        </h3>
+                                        {isBasicInfoExpanded && (
+                                            <div className="section-content">
+                                                <div className="form-group">
+                                                    <input
+                                                        type="file"
+                                                        className="form-control"
+                                                        accept="image/*"
+                                                        id="profile_image"
+                                                        onChange={this.handleFileChange}
+                                                    />
+                                                    <label htmlFor="profile_image">Profile Image</label>
+                                                    {logoPreview && (
+                                                        <div className="mt-3">
+                                                            <img
+                                                                src={logoPreview}
+                                                                alt="Logo Preview"
+                                                                style={{
+                                                                    width: '100px',
+                                                                    height: '100px',
+                                                                    objectFit: 'cover',
+                                                                    borderRadius: '8px',
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                    {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
+                                                </div>
+                                                <div className="form-group">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="fullname"
+                                                        name="fullname"
+                                                        value={fullname}
+                                                        onChange={this.handleFullNameChange}
+                                                    />
+                                                    <label htmlFor="fullname">Full Name</label>
+                                                </div>
+                                                <div className="form-group">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="email"
+                                                        name="email"
+                                                        value={email}
+                                                        onChange={this.handleEmailChange}
+                                                    />
+                                                    <label htmlFor="email">Email</label>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label className="mobile-label">Mobile Number *</label>
+                                                    <div className="mobile-input d-flex align-items-center">
+                                                        <Select
+                                                            className="country-code-select"
+                                                            options={countryCodes}
+                                                            value={this.state.countryCode}
+                                                            onChange={this.handleCountryCodeChange}
+                                                            menuPortalTarget={document.body}
+                                                            styles={{
+                                                                menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                                container: (base) => ({
+                                                                    ...base,
+                                                                    flex: '0 0 100px', // Adjust the width as needed
+                                                                }),
+                                                            }}
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            className="mobile-number-input flex-grow-1"
+                                                            id="mobile_no"
+                                                            name="mobile_no"
+                                                            value={mobile_no}
+                                                            onChange={this.handleMobileChange}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="form-group" style={{ position: "relative" }}>
+                                                    <label
+                                                        htmlFor="dob"
+                                                        style={{
+                                                            position: "absolute",
+                                                            top: "-12px",
+                                                            left: "10px",
+                                                            background: "white",
+                                                            padding: "0 4px",
+                                                            fontSize: "12px",
+                                                            color: "#6c757d",
+                                                        }}
                                                     >
-                                                        Add Education
-                                                    </Button>
+                                                        Date of Birth
+                                                    </label>
+                                                    <DatePicker
+                                                        id="dob"
+                                                        placeholder="Select a date..."
+                                                        ariaLabel="Select a date"
+                                                        value={selectedDate}
+                                                        onSelectDate={this.handleDateChange}
+                                                        styles={{
+                                                            root: {
+                                                                width: "100%",
+                                                            },
+                                                            textField: {
+                                                                width: "100%",
+                                                            },
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <Select
+                                                        value={this.state.selectedGender}
+                                                        options={[
+                                                            { value: 'Male', label: 'Male' },
+                                                            { value: 'Female', label: 'Female' },
+                                                            { value: 'Other', label: 'Other' }
+                                                        ]}
+                                                        placeholder="Select Gender"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                        onChange={this.handleGenderChange}
+                                                    />
+                                                    <label htmlFor="gender">Gender</label>
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="country">Country</label>
+                                                    <Select
+                                                        id="country"
+                                                        name="country"
+                                                        value={this.state.selectedCountry}
+                                                        options={this.state.countryOptions}
+                                                        onChange={this.handleCountryChange}
+                                                        placeholder="Type or select country..."
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <Select
+                                                        options={this.state.stateOptions}
+                                                        value={this.state.selectedState}
+                                                        placeholder="Select State"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                        onChange={this.handleStateChange}
+                                                    />
+                                                    <label htmlFor="state">State</label>
+                                                </div>
+                                                <div className="form-group">
+                                                    <Select
+                                                        value={this.state.selectedCity}
+                                                        options={this.state.cityOptions}
+                                                        placeholder="Select City"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                        onChange={(selectedOption) => this.handleCityChange(selectedOption)}
+                                                    />
+                                                    <label htmlFor="city">City</label>
+                                                </div>
+                                                <div className="form-group">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="language"
+                                                        name="language"
+                                                        value={languague_name}
+                                                        onChange={this.handleLanguageChange}
+                                                    />
+                                                    <label htmlFor="language">Language</label>
+                                                </div>
+                                                <div className="form-group">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="linkedin"
+                                                        name="linkedin"
+                                                        value={this.state.linkedInSelected}
+                                                        onChange={this.handleLinkedinChange}
+                                                    />
+                                                    <label htmlFor="linkedin">LinkedIn Profile Url</label>
+                                                </div>
+                                                <div className="form-group">
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="Profiletitle"
+                                                        name="Profiletitle"
+                                                        value={this.state.profile_title}
+                                                        onChange={this.handleProfileTitleChange}
+                                                    />
+                                                    <label htmlFor="Profiletitle">Profile Title</label>
+                                                </div>
+                                                <div className="form-group" style={{ position: "relative" }}>
+                                                    <label
+                                                        htmlFor="profile_summary"
+                                                        style={{
+                                                            position: "absolute",
+                                                            top: "-12px",
+                                                            left: "10px",
+                                                            background: "white",
+                                                            padding: "0 4px",
+                                                            fontSize: "17px",
+                                                            color: "#6c757d",
+                                                        }}
+                                                    >
+                                                        Profile Summary
+                                                    </label>
+                                                    <textarea
+                                                        className="form-control"
+                                                        id="profile_summary"
+                                                        name="profile_summary"
+                                                        value={profile_summary}
+                                                        onChange={this.handleProfileChange}
+                                                    ></textarea>
+                                                </div>
+                                                <div className="form-group">
+                                                    <input
+                                                        type="file"
+                                                        className="form-control"
+                                                        accept=".doc,.docx,.rtf,.pdf"
+                                                        id="resume"
+                                                        onChange={this.handleFileResumeChange}
+                                                    />
+                                                    <label htmlFor="resume">Update Resume</label>
+                                                    {this.state.resumePreview && (
+                                                        <div className="mt-3">
+                                                            {this.state.resumeType === "pdf" ? (
+                                                                // Show PDF in an iframe (works in most browsers)
+                                                                <iframe
+                                                                    src={this.state.resumePreview}
+                                                                    width="100%"
+                                                                    height="200px"
+                                                                    style={{ border: "1px solid #ccc", borderRadius: "8px" }}
+                                                                ></iframe>
+                                                            ) : (
+                                                                // Show download link for non-PDF files
+                                                                <div>
+                                                                    <p>Preview not available. Download file:</p>
+                                                                    <a
+                                                                        href={this.state.resumePreview}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="btn btn-primary"
+                                                                    >
+                                                                        Download Resume
+                                                                    </a>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
 
-                                                    <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal}>
-                                                        <Modal.Header closeButton>
-                                                            <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                            <div className="form-group">
-                                                                <label htmlFor="institutionName">Institution Name</label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control"
-                                                                    id="institutionName"
-                                                                    name="institutionName"
-                                                                    value={this.state.educationForm.institutionName}
-                                                                    onChange={this.handleEducationFormChange}
-                                                                />
-                                                            </div>
-                                                            <div className="form-group">
-                                                                <label htmlFor="degree">Degree with Specialisation</label>
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control"
-                                                                    id="degree"
-                                                                    name="degree"
-                                                                    value={this.state.educationForm.degree}
-                                                                    onChange={this.handleEducationFormChange}
-                                                                />
-                                                            </div>
-                                                            <div className="form-group">
-                                                                <label>Completed Year:</label>
+                                                    {this.state.uploadResumeStatus && <small className="text-danger">{this.state.uploadResumeStatus}</small>}
+                                                </div>
+                                                <div className="col-lg-12">
+                                                    <div className="form-submit-group">
+                                                        <button
+                                                            type="button"
+                                                            className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                            onClick={this.handleTrainerInformation}
+                                                        >
+                                                            <span className="icon-reverse-wrapper">
+                                                                <span className="btn-text">Update Information</span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right" />
+                                                                </span>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Trainer Employment Section */}
+                                        <h3 className="section-header" onClick={() => this.toggleSection('isEmploymentDetailsExpanded')} style={{ cursor: 'pointer' }}>
+                                            Employment Details
+                                            <span style={{ marginLeft: '10px' }}>
+                                                {isEmploymentDetailsExpanded ? '[-]' : '[+]'}
+                                            </span>
+                                        </h3>
+                                        {isEmploymentDetailsExpanded && (
+                                            <div className="section-content">
+                                                {
+                                                    this.state.employments.map((employment, index) => (
+                                                        <div key={index} className="employment-entry mb-4 border p-3 rounded">
+                                                            <h5>Employment {index + 1}</h5>
+
+                                                            <p style={{ fontWeight: "bold" }}>Company Name: {employment.company_name}</p>
+
+                                                            <p style={{ fontWeight: "bold" }}>Job Title: {employment.jobtitle}</p>
+
+
+                                                            <p style={{ fontWeight: "bold" }}>Worked From: {employment.workedFromYear}</p>
+
+
+                                                            <p style={{ fontWeight: "bold" }}>Worked To: {employment.workedToYear}</p>
+
+
+                                                            <Button
+                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                                variant="primary"
+                                                                style={{ fontSize: '14px' }}
+                                                                onClick={() => this.handleShowEmploymentModal(index)}
+                                                            >
+                                                                Edit
+                                                            </Button>
+                                                            <Button
+                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                                variant="danger"
+                                                                style={{ fontSize: '14px' }}
+                                                                onClick={() => this.removeEmployment(index)}
+                                                            >
+                                                                Delete
+                                                            </Button>
+                                                        </div>
+                                                    ))
+                                                }
+                                                <Button
+                                                    variant="success"
+                                                    style={{ fontSize: '14px' }}
+                                                    onClick={() => this.handleShowEmploymentModal()}
+                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                >
+                                                    Add Employment
+                                                </Button>
+
+                                                <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal}>
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title>{this.state.currentEmploymentIndex !== null ? 'Edit Employment' : 'Add Employment'}</Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <div className="form-group">
+                                                            <label htmlFor="company_name">Company Name</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="company_name"
+                                                                name="company_name"
+                                                                value={employmentForm.company_name}
+                                                                onChange={this.handleEmploymentFormChange}
+                                                            />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label htmlFor="jobtitle">Job Title</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="jobtitle"
+                                                                name="jobtitle"
+                                                                value={employmentForm.jobtitle}
+                                                                onChange={this.handleEmploymentFormChange}
+                                                            />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Worked From:</label>
+                                                            <div className="d-flex gap-3">
                                                                 <select
                                                                     className="form-control"
-                                                                    id="fromYear"
-                                                                    name="fromYear"
-                                                                    value={this.state.educationForm.fromYear}
-                                                                    onChange={this.handleEducationFormChange}
+                                                                    id="workedFromYear"
+                                                                    name="workedFromYear"
+                                                                    value={employmentForm.workedFromYear}
+                                                                    onChange={this.handleEmploymentFormChange}
                                                                 >
                                                                     <option value="">Select Year</option>
                                                                     {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
@@ -1409,136 +1296,252 @@ if(employment && employment.length > 0){
                                                                     ))}
                                                                 </select>
                                                             </div>
-                                                        </Modal.Body>
-                                                        <Modal.Footer>
-                                                            <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEducationModal} style={{ fontSize: '14px' }}>Cancel</Button>
-                                                            <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEducation} style={{ fontSize: '14px' }}>Save</Button>
-                                                        </Modal.Footer>
-                                                    </Modal>
-                                                </div>
-                                            )}
-                                            <h3 className="section-header" onClick={() => this.toggleSection("showKeySkills")} style={{ cursor: "pointer" }}>
-                                                Key Skills <span style={{ marginLeft: '10px' }}>{showKeySkills ? '[-]' : '[+]'}</span>
-                                            </h3>
-                                            {showKeySkills && (
-                                                <div className="section-content">
-                                                    <div className="form-group">
-                                                        <Select
-                                                            id="keyskills_id"
-                                                            name="keyskills_id"
-                                                            value={this.state.keyskillsSelected}
-                                                            options={this.state.keyskills}
-                                                            onChange={(selectedOptions) =>
-                                                                this.setState({ keyskillsSelected: selectedOptions })
-                                                            }
-                                                            isMulti
-                                                            placeholder="Type or select skills..."
-                                                            className="basic-multi-select"
-                                                            classNamePrefix="select"
-                                                        />
-                                                        <label htmlFor="keyskills_id">Key Skills</label>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="form-submit-group">
-                                                            <button
-                                                                type="button"
-                                                                className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                                onClick={this.handleKeySkillsUpdate}
-                                                            >
-                                                                <span className="icon-reverse-wrapper">
-                                                                    <span className="btn-text">Update Skills</span>
-                                                                    <span className="btn-icon">
-                                                                        <i className="feather-arrow-right" />
-                                                                    </span>
-                                                                </span>
-                                                            </button>
                                                         </div>
+                                                        <div className="form-group">
+                                                            <label>Worked To:</label>
+                                                            <div className="d-flex gap-3">
+                                                                <select
+                                                                    className="form-control"
+                                                                    id="workedToYear"
+                                                                    name="workedToYear"
+                                                                    value={employmentForm.workedToYear}
+                                                                    onChange={this.handleEmploymentFormChange}
+                                                                >
+                                                                    <option value="">Select Year</option>
+                                                                    {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
+                                                                        <option key={year} value={year}>
+                                                                            {year}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        {employmentForm.workedFromYear && employmentForm.workedToYear && parseInt(employmentForm.workedFromYear) > parseInt(employmentForm.workedToYear) && (
+                                                            <span style={{ color: 'red' }}>Worked From year cannot be greater than Worked To year.</span>
+                                                        )}
+                                                    </Modal.Body>
+                                                    <Modal.Footer>
+                                                        <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEmploymentModal}>Cancel</Button>
+                                                        <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEmployment}>Save</Button>
+                                                    </Modal.Footer>
+                                                </Modal>
+                                            </div>
+                                        )}
+                                        {/* Candidate Education Section */}
+                                        <h3 className="section-header" onClick={() => this.toggleSection("showEducation")} style={{ cursor: "pointer" }}>
+                                            Education Details <span style={{ marginLeft: '10px' }}>{showEducation ? '[-]' : '[+]'}</span>
+                                        </h3>
+                                        {showEducation && (
+                                            <div className="section-content">
+                                                {this.state.educationDetails &&
+                                                    this.state.educationDetails.map((education, index) => (
+                                                        <div key={index} className="education-entry mb-4 border p-3 rounded">
+                                                            <h5>Education {index + 1}</h5>
+                                                            <p style={{ fontWeight: "bold" }}>Institution Name: {education.institutionName}</p>
+                                                            <p style={{ fontWeight: "bold" }}>Degree with Specialisation: {education.degree}</p>
+                                                            <p style={{ fontWeight: "bold" }}>Completed Year: {education.fromYear}</p>
+
+                                                            <Button
+                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                                variant="primary"
+                                                                onClick={() => this.handleShowEducationModal(index)}
+                                                                style={{ fontSize: '14px' }}
+                                                            >
+                                                                Edit
+                                                            </Button>
+                                                            <Button
+                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                                variant="danger"
+                                                                onClick={() => this.removeEducation(index)}
+                                                                style={{ fontSize: '14px' }}
+                                                            >
+                                                                Delete
+                                                            </Button>
+                                                        </div>
+                                                    ))}
+                                                <Button
+                                                    variant="success"
+                                                    onClick={() => this.handleShowEducationModal()}
+                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                    style={{ fontSize: '14px' }}
+                                                >
+                                                    Add Education
+                                                </Button>
+
+                                                <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal}>
+                                                    <Modal.Header closeButton>
+                                                        <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <div className="form-group">
+                                                            <label htmlFor="institutionName">Institution Name</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="institutionName"
+                                                                name="institutionName"
+                                                                value={this.state.educationForm.institutionName}
+                                                                onChange={this.handleEducationFormChange}
+                                                            />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label htmlFor="degree">Degree with Specialisation</label>
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                id="degree"
+                                                                name="degree"
+                                                                value={this.state.educationForm.degree}
+                                                                onChange={this.handleEducationFormChange}
+                                                            />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>Completed Year:</label>
+                                                            <select
+                                                                className="form-control"
+                                                                id="fromYear"
+                                                                name="fromYear"
+                                                                value={this.state.educationForm.fromYear}
+                                                                onChange={this.handleEducationFormChange}
+                                                            >
+                                                                <option value="">Select Year</option>
+                                                                {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
+                                                                    <option key={year} value={year}>
+                                                                        {year}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                    </Modal.Body>
+                                                    <Modal.Footer>
+                                                        <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEducationModal} style={{ fontSize: '14px' }}>Cancel</Button>
+                                                        <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEducation} style={{ fontSize: '14px' }}>Save</Button>
+                                                    </Modal.Footer>
+                                                </Modal>
+                                            </div>
+                                        )}
+                                        <h3 className="section-header" onClick={() => this.toggleSection("showKeySkills")} style={{ cursor: "pointer" }}>
+                                            Key Skills <span style={{ marginLeft: '10px' }}>{showKeySkills ? '[-]' : '[+]'}</span>
+                                        </h3>
+                                        {showKeySkills && (
+                                            <div className="section-content">
+                                                <div className="form-group">
+                                                    <Select
+                                                        id="keyskills_id"
+                                                        name="keyskills_id"
+                                                        value={this.state.keyskillsSelected}
+                                                        options={this.state.keyskills}
+                                                        onChange={(selectedOptions) =>
+                                                            this.setState({ keyskillsSelected: selectedOptions })
+                                                        }
+                                                        isMulti
+                                                        placeholder="Type or select skills..."
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                    />
+                                                    <label htmlFor="keyskills_id">Key Skills</label>
+                                                </div>
+                                                <div className="col-lg-12">
+                                                    <div className="form-submit-group">
+                                                        <button
+                                                            type="button"
+                                                            className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                            onClick={this.handleKeySkillsUpdate}
+                                                        >
+                                                            <span className="icon-reverse-wrapper">
+                                                                <span className="btn-text">Update Skills</span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right" />
+                                                                </span>
+                                                            </span>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                            )}
-                        <h3 className="section-header" onClick={() => this.toggleSection("showCareerProfile")} style={{ cursor: "pointer" }}>
-                            Career Info <span style={{ marginLeft: '10px' }}>{this.state.showCareerProfile ? '[-]' : '[+]'}</span>
-                        </h3>
-                        {this.state.showCareerProfile && (
-                            <div className="section-content">
-                                <div className="form-group">
-                                    <label htmlFor="trainerType">Trainer Type</label>
-                                    <Select
-                                        id="trainerType"
-                                        name="trainerType"
-                                        value={this.state.trainerType}
-                                        options={[
-                                            { value: 'Fulltime', label: 'Fulltime' },
-                                            { value: 'Parttime', label: 'Parttime' }
-                                        ]}
-                                        onChange={(selectedOptions) => this.setState({ trainerType: selectedOptions })}
-                                        isMulti
-                                        placeholder="Select Trainer Type"
-                                        className="basic-multi-select"
-                                        classNamePrefix="select"
-                                        menuPortalTarget={document.body}
-                                        styles={{
-                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                        }}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="totalExperience">Total Experience</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="totalExperience"
-                                        name="totalExperience"
-                                        value={this.state.totalExperience}
-                                        onChange={(e) => this.setState({ totalExperience: e.target.value })}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label htmlFor="modeOfTraining">Mode of Training</label>
-                                    <Select
-                                        id="modeOfTraining"
-                                        name="modeOfTraining"
-                                        value={this.state.modeOfTraining}
-                                        options={[
-                                            { value: 'Online', label: 'Online' },
-                                            { value: 'In-Person', label: 'In-Person' },
-                                            { value: 'Hybrid', label: 'Hybrid' }
-                                        ]}
-                                        onChange={(selectedOptions) => this.setState({ modeOfTraining: selectedOptions })}
-                                        isMulti
-                                        placeholder="Select Mode of Training"
-                                        className="basic-multi-select"
-                                        classNamePrefix="select"
-                                        menuPortalTarget={document.body}
-                                        styles={{
-                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                        }}
-                                    />
-                                </div>
-                                <div className="col-lg-12">
-                                <div className="form-submit-group">
-                                <button
-                                    type="button"
-                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                    onClick={this.handleCareerInformation}
-                                >
-                                    <span className="icon-reverse-wrapper">
-                                    <span className="btn-text">Update Career Info</span>
-                                    <span className="btn-icon">
-                                        <i className="feather-arrow-right" />
-                                    </span>
-                                    </span>
-                                </button>
+                                            </div>
+                                        )}
+                                        <h3 className="section-header" onClick={() => this.toggleSection("showCareerProfile")} style={{ cursor: "pointer" }}>
+                                            Career Info <span style={{ marginLeft: '10px' }}>{this.state.showCareerProfile ? '[-]' : '[+]'}</span>
+                                        </h3>
+                                        {this.state.showCareerProfile && (
+                                            <div className="section-content">
+                                                <div className="form-group">
+                                                    <label htmlFor="trainerType">Trainer Type</label>
+                                                    <Select
+                                                        id="trainerType"
+                                                        name="trainerType"
+                                                        value={this.state.trainerType}
+                                                        options={[
+                                                            { value: 'Fulltime', label: 'Fulltime' },
+                                                            { value: 'Parttime', label: 'Parttime' }
+                                                        ]}
+                                                        onChange={(selectedOptions) => this.setState({ trainerType: selectedOptions })}
+                                                        isMulti
+                                                        placeholder="Select Trainer Type"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="totalExperience">Total Experience</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="totalExperience"
+                                                        name="totalExperience"
+                                                        value={this.state.totalExperience}
+                                                        onChange={(e) => this.setState({ totalExperience: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="modeOfTraining">Mode of Training</label>
+                                                    <Select
+                                                        id="modeOfTraining"
+                                                        name="modeOfTraining"
+                                                        value={this.state.modeOfTraining}
+                                                        options={[
+                                                            { value: 'Online', label: 'Online' },
+                                                            { value: 'In-Person', label: 'In-Person' },
+                                                            { value: 'Hybrid', label: 'Hybrid' }
+                                                        ]}
+                                                        onChange={(selectedOptions) => this.setState({ modeOfTraining: selectedOptions })}
+                                                        isMulti
+                                                        placeholder="Select Mode of Training"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-lg-12">
+                                                    <div className="form-submit-group">
+                                                        <button
+                                                            type="button"
+                                                            className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                            onClick={this.handleCareerInformation}
+                                                        >
+                                                            <span className="icon-reverse-wrapper">
+                                                                <span className="btn-text">Update Career Info</span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right" />
+                                                                </span>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </form>
                                 </div>
                             </div>
-                            </div>
-                        )}
-                        </form>
-                    </div>
+                        </div>
                     </div>
                 </div>
-                </div>
-            </div>
             </>
         );
     }

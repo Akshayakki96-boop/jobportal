@@ -9,7 +9,8 @@ class MyProfile extends React.Component {
         super(props);
         this.state = {
             showModal: false,
-            updatedUserData: { ...this.props.userData },
+            updatedUserData: { ...this.props.userData.basic_info },
+            UpdateUserOtherInfo:{...this.props.userData},
             responseMessage: '',
             alertVariant: '',
             logo: null, // Holds the uploaded file
@@ -30,7 +31,7 @@ class MyProfile extends React.Component {
 
 
     render() {
-        const { showModal, updatedUserData, logoPreview, uploadStatus } = this.state;
+        const { showModal, updatedUserData, logoPreview, uploadStatus,UpdateUserOtherInfo } = this.state;
         const { firstname, lastname, email, CompanyName, designation } = updatedUserData;
         return (
             <div className="col-lg-9">
@@ -89,118 +90,87 @@ class MyProfile extends React.Component {
                                 </div>
                             </div>
                         ))}
-
-                    </div>
-                </div>
-                {/* End Instructor Profile */}
-                {/* Modal for Editing Profile */}
-                {showModal && (
-                    <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                        <div className="modal-dialog">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title">Edit Profile</h5>
-                                    <button type="button" className="close" onClick={this.handleCloseModal}>
-                                        &times;
-                                    </button>
+                        {/* Employment Section */}
+                        <div className="section-title text-start mt-5">
+                            <h4 className="rbt-title-style-3 mb-0 pb-0">Employment</h4>
+                        </div>
+                        {UpdateUserOtherInfo.employment.map((job, index) => (
+                            <div key={index} className="rbt-profile-row row row--15 mt--15">
+                                <div className="col-lg-4 col-md-4">
+                                    <div className="rbt-profile-content b2">{job.Role_Title}</div>
                                 </div>
-                                <div className="modal-body">
-                                    <form>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                accept="image/*"
-                                                id="companyLogo"
-                                                onChange={this.handleFileChange}
-                                            />
-                                            <label htmlFor="companyLogo">Company Logo</label>
-                                            {logoPreview && (
-                                                <div className="mt-3">
-                                                    <img
-                                                        src={logoPreview}
-                                                        alt="Logo Preview"
-                                                        style={{
-                                                            width: '100px',
-                                                            height: '100px',
-                                                            objectFit: 'cover',
-                                                            borderRadius: '8px',
-                                                        }}
-                                                    />
-                                                </div>
-                                            )}
-                                            {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="firstname"
-                                                className="form-control"
-                                                value={firstname}
-                                                onChange={this.handleInputChange}
-                                                id="firstname"
-                                            />
-                                            <label htmlFor="firstname">First Name</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="lastname"
-                                                className="form-control"
-                                                value={lastname}
-                                                onChange={this.handleInputChange}
-                                                id="lastname"
-                                            />
-                                            <label htmlFor="lastname">Last Name</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                className="form-control"
-                                                value={email}
-                                                readOnly
-                                                id="email"
-                                            />
-                                            <label htmlFor="email">Email</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="CompanyName"
-                                                className="form-control"
-                                                value={CompanyName}
-                                                readOnly
-                                                id="CompanyName"
-                                            />
-                                            <label htmlFor="CompanyName">Company Name</label>
-                                        </div>
-                                        <div className="form-group floating-label">
-                                            <input
-                                                type="text"
-                                                name="designation"
-                                                className="form-control"
-                                                value={designation}
-                                                onChange={this.handleInputChange}
-                                                id="designation"
-                                            />
-                                            <label htmlFor="designation">Designation</label>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div className="modal-footer">
-                                    <button className="btn btn-secondary" onClick={this.handleCloseModal}>
-                                        Cancel
-                                    </button>
-                                    <button className="btn btn-primary" onClick={this.handleSaveProfile}>
-                                        Save Changes
-                                    </button>
+                                <div className="col-lg-8 col-md-8">
+                                    <div className="rbt-profile-content b2">
+                                        {job.Institution_Company} ({job.year_from} - {job.year_to})
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        ))}
 
-                )}
+                        {/* Education Section */}
+                        <div className="section-title text-start mt-5">
+                            <h4 className="rbt-title-style-3 mb-0 pb-0">Education</h4>
+                        </div>
+                        {UpdateUserOtherInfo.education.map((edu, index) => (
+                            <div key={index} className="rbt-profile-row row row--15 mt--15">
+                                <div className="col-lg-4 col-md-4">
+                                    <div className="rbt-profile-content b2">{edu.education_title}</div>
+                                </div>
+                                <div className="col-lg-8 col-md-8">
+                                    <div className="rbt-profile-content b2">
+                                        {edu.university_board} ({edu.passing_year})
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* Career Info Section */}
+                        <div className="section-title text-start mt-5">
+                            <h4 className="rbt-title-style-3 mb-0 pb-0">Career Info</h4>
+                        </div>
+                        {UpdateUserOtherInfo.carrierinfo.map((info, index) => (
+                            <div key={index} className="rbt-profile-row row row--15 mt--15">
+                                <div className="col-lg-4 col-md-4">
+                                    <div className="rbt-profile-content b2">Trainer Type</div>
+                                </div>
+                                <div className="col-lg-8 col-md-8">
+                                    <div className="rbt-profile-content b2">{info.trainer_type_id}</div>
+                                </div>
+                                <div className="col-lg-4 col-md-4">
+                                    <div className="rbt-profile-content b2">Experience</div>
+                                </div>
+                                <div className="col-lg-8 col-md-8">
+                                    <div className="rbt-profile-content b2">{info.experience} years</div>
+                                </div>
+                                <div className="col-lg-4 col-md-4">
+                                    <div className="rbt-profile-content b2">Training Mode</div>
+                                </div>
+                                <div className="col-lg-8 col-md-8">
+                                    <div className="rbt-profile-content b2">{info.training_mode}</div>
+                                </div>
+                            </div>
+                        ))}
+                           
+                      
+
+                        {/* Key Skills Section */}
+                        <div className="section-title text-start mt-5">
+                            <h4 className="rbt-title-style-3 mb-0 pb-0">Key Skills</h4>
+                        </div>
+                        {UpdateUserOtherInfo.keyskills.map((skill, index) => (
+                            <div key={index} className="rbt-profile-row row row--15 mt--15">
+                                <div className="col-lg-4 col-md-4">
+                                    <div className="rbt-profile-content b2">Skill</div>
+                                </div>
+                                <div className="col-lg-8 col-md-8">
+                                    <div className="rbt-profile-content b2">{skill.keyskills}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+   
+       
             </div>
 
 

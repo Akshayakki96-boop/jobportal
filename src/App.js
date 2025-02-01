@@ -99,8 +99,8 @@ class App extends React.Component {
           </Routes>
         </div>
         </div>
-        {currentPath !== '/Activate_Profile' && <Footer />}
-        {currentPath!=='/Activate_Profile' && <Copyright />}
+        <Footer />
+        <Copyright />
         <Wrapper />
       </Router>
       </div>
