@@ -47,8 +47,11 @@ class UserDashBoard extends React.Component {
     })
       .then((response) => {
         console.log('joblistingdata', response.data);
-        const totalCount = response.data.data[0].TotalRecords;
-        this.setState({ joblistingdata: response.data.data, totalRecords: totalCount });
+        if (response.data.data && response.data.data.length > 0) {
+          const totalCount = response.data.data[0].TotalRecords;
+          this.setState({ joblistingdata: response.data.data, totalRecords: totalCount });
+        }
+        
 
       })
       .catch((error) => {

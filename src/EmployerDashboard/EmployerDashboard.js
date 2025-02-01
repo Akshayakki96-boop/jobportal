@@ -64,7 +64,12 @@ class EmployerDashboard extends React.Component {
         })
             .then((response) => {
                 console.log('dashboard data', response.data);
-                this.getUserProfile(response.data.data.user_id);
+                if (token) {
+                    this.getUserProfile(response.data.data.user_id,token);
+                } else {
+                    localStorage.removeItem('authToken');
+                    this.props.navigate('/Login');
+                }
                 this.setState({ dashBoardData: response.data.data });
 
             })
@@ -210,7 +215,7 @@ class EmployerDashboard extends React.Component {
                                                 </div>
 
                                                 <div className="tutor-content">
-                                                    <h5 className="title">{this.state?.dashBoardData.username}</h5>
+                                                    <h5 className="title">{this.state?.dashBoardData.username} (Employer)</h5>
                                                 </div>
                                             </div>
                                             <div className="rbt-tutor-information-right">

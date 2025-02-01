@@ -70,18 +70,7 @@ class Login extends React.Component {
         console.log('Login Success:', response.data);
         this.setState({ keepSpinner: false });
         localStorage.setItem('authToken', response.data.token);
-        // this.setState({
-        //     responseMessage: (
-        //         <span>
-        //             Login successful!
-        //         </span>
-        //     ),
-        //     alertVariant: 'success', // Success alert variant
-        // });
         if (response.data.role_id == "2") {
-          this.requestData = {};
-          //this.requestData.showSuccessJobPost="";
-          store.dispatch(setSingleRequest(this.requestData));
           this.props.navigate('/EmployerDashboard'); // Use `navigate`
         }
         else if (response.data.role_id == "3") {
