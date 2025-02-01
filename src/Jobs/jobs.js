@@ -16,6 +16,7 @@ class jobs extends React.Component {
             totalPages: 1,
             totalRecords: 0, // Total number of records
             searchQuery: "", // State to store the search input
+            errorMessage: "",
         };
 
     }
@@ -55,8 +56,13 @@ class jobs extends React.Component {
         })
             .then((response) => {
                 console.log('joblistingdata', response.data);
+                if(response.data.data && response.data.data.length > 0){
                 const totalCount = response.data.data[0].TotalRecords;
-                this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, keepSpinner: false });
+                this.setState({ joblistingdata: response.data.data, totalRecords: totalCount,errorMessage:"", keepSpinner: false });
+                }
+                else{
+                    this.setState({ errorMessage: "No Jobs Found", keepSpinner: false });
+                }
 
             })
             .catch((error) => {
@@ -113,9 +119,9 @@ class jobs extends React.Component {
                                         <div className=" title-wrapper">
                                             <h1 className="title mb--0">All Jobs</h1>
                                         </div>
-                                        <p className="description">
+                                        <h4 className="description">
                                             Jobs that help beginner designers become true unicorns.{" "}
-                                        </p>
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
@@ -127,16 +133,16 @@ class jobs extends React.Component {
                                 <div className="row g-5 align-items-center">
                                     <div className="col-lg-5 col-md-12">
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
-                                            <div className="rbt-short-item">
+                                        {!this.state.errorMessage && <div className="rbt-short-item">
                                                 <span className="course-index">Showing {startIndex} - {endIndex} of {totalRecords} results</span>
-                                            </div>
+                                            </div>}
                                         </div>
                                     </div>
                                     <div className="col-lg-7 col-md-12">
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                             <div className="rbt-short-item mt-5">
                                                 <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="Search by Jobid,location,title.." value={this.state.searchQuery}
+                                                    <input type="text" placeholder="Jobid,location,title.." value={this.state.searchQuery}
                                                         onChange={this.handleSearchChange} />
                                                     <button
                                                         type="button"
@@ -158,22 +164,11 @@ class jobs extends React.Component {
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="container">
                         <div className="row row--30 gy-5">
-                            <div className="col-lg-3 order-2 order-lg-1">
+                        {!this.state.errorMessage &&  <div className="col-lg-3 order-2 order-lg-1">
                                 <aside className="rbt-sidebar-widget-wrapper">
-                                    {/* Start Widget Area  */}
-                                    {/*
-                  <div class="rbt-single-widget rbt-widget-search">
-                      <div class="inner">
-                          <form action="#" class="rbt-search-style-1">
-                              <input type="text" placeholder="Search Courses">
-                              <button class="search-btn"><i class="feather-search"></i></button>
-                          </form>
-                      </div>
-                  </div>
-*/}
-                                    {/* End Widget Area  */}
-                                    {/* Start Widget Area  */}
-                                    <div className="rbt-single-widget rbt-widget-categories has-show-more">
+                                 
+                                 
+                               <div className="rbt-single-widget rbt-widget-categories has-show-more">
                                         <div className="inner">
                                             <h4 className="rbt-widget-title">Categories</h4>
                                             <ul className="rbt-sidebar-list-wrapper categories-list-check has-show-more-inner-content">
@@ -257,11 +252,12 @@ class jobs extends React.Component {
                                         </div>
                                         <div className="rbt-show-more-btn">Show More</div>
                                     </div>
-                                    {/* End Widget Area  */}
+                              
 
                                 </aside>
                             </div>
-                            <div className="col-lg-9 order-1 order-lg-2">
+    }
+                          {!this.state.errorMessage ? <div className="col-lg-9 order-1 order-lg-2">
                                 <div className="rbt-course-grid-column jobs-lst active-list-view">
                                     {/* Start Single Card  */}
                                     {/* Start Single Card  */}
@@ -372,7 +368,7 @@ class jobs extends React.Component {
                                         </nav>
                                     </div>
                                 </div>
-                            </div>
+                            </div>:<h2>{this.state.errorMessage}</h2>}
                         </div>
                     </div>
                 </div>

@@ -130,7 +130,7 @@ class HeaderLogin extends React.Component {
                             <div className="header-left rbt-header-content">
                                 <div className="header-info">
                                     <div className="logo logo-dark">
-                                        <a href="index.html">
+                                        <a href="/">
                                             <img src="assets/images/Zobskill.gif" alt="Logo Images" />
                                         </a>
                                     </div>
