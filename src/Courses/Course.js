@@ -13,7 +13,7 @@ class Course extends React.Component {
 
     }
     componentDidMount() {
-        this.getDashboardUser();
+        //this.getDashboardUser();
 
     }
 

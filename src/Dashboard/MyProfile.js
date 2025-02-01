@@ -10,7 +10,7 @@ class MyProfile extends React.Component {
         this.state = {
             showModal: false,
             updatedUserData: { ...this.props.userData.basic_info },
-            UpdateUserOtherInfo:{...this.props.userData},
+            UpdateUserOtherInfo: { ...this.props.userData },
             responseMessage: '',
             alertVariant: '',
             logo: null, // Holds the uploaded file
@@ -31,7 +31,7 @@ class MyProfile extends React.Component {
 
 
     render() {
-        const { showModal, updatedUserData, logoPreview, uploadStatus,UpdateUserOtherInfo } = this.state;
+        const { showModal, updatedUserData, logoPreview, uploadStatus, UpdateUserOtherInfo } = this.state;
         const { firstname, lastname, email, CompanyName, designation } = updatedUserData;
         return (
             <div className="col-lg-9">
@@ -150,27 +150,33 @@ class MyProfile extends React.Component {
                                 </div>
                             </div>
                         ))}
-                           
-                      
+
+
 
                         {/* Key Skills Section */}
                         <div className="section-title text-start mt-5">
                             <h4 className="rbt-title-style-3 mb-0 pb-0">Key Skills</h4>
                         </div>
-                        {UpdateUserOtherInfo.keyskills.map((skill, index) => (
-                            <div key={index} className="rbt-profile-row row row--15 mt--15">
-                                <div className="col-lg-4 col-md-4">
-                                    <div className="rbt-profile-content b2">Skill</div>
-                                </div>
+                   
+               
                                 <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">{skill.keyskills}</div>
-                                </div>
+                                    <div className="rbt-profile-content b2">
+                                        {UpdateUserOtherInfo.keyskills.map((skillItem, idx) => (
+                                            <span key={idx}>
+                                                {skillItem.keyskills}
+                                                {idx < UpdateUserOtherInfo.keyskills.length - 1 && ", "}
+                                            </span>
+                                        ))}
+                                    </div>
+                                
                             </div>
-                        ))}
+                        
+
+
                     </div>
                 </div>
-   
-       
+
+
             </div>
 
 

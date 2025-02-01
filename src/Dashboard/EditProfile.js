@@ -109,7 +109,6 @@ class EditProfileTrainer extends React.Component {
             });
     }
     getUserProfile = (userId) => {
-        debugger;
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Trainer/GetTrainerProfile`;
         const token = localStorage.getItem('authToken');
