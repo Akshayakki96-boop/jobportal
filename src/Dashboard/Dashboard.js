@@ -157,7 +157,7 @@ class Dashboard extends React.Component {
                                         <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
                                         <div className="tranr-titl">
                                             <div className="content text-center">
-                                                <h6 className="subtitle sal-animate" >Bootcamp Instructor</h6>
+                                                <h6 className="subtitle sal-animate" >Trainer</h6>
                                                 <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.basic_info.fullname}</span></h3>
                                             </div>
                                         </div>
@@ -190,7 +190,7 @@ class Dashboard extends React.Component {
                                                     )}
                                                 </div>
                                                 <div className="tutor-content">
-                                                    <h5 className="title">{this.state?.dashBoardData.username}</h5>
+                                                    <h5 className="title">{this.state?.dashBoardData.username} (Trainer)</h5>
                                                     <div className="rbt-review">
                                                         <div className="rating">
                                                             <i className="fas fa-star"></i>

@@ -307,38 +307,37 @@ class Header extends React.Component {
                             <div className="header-right">
                                 {/* Navbar Icons */}
                                 <ul className="quick-access">
-                                    {/* <li className="access-icon">
-                                        <a className="search-trigger-active rbt-round-btn" href="#">
-                                            <i className="feather-search"></i>
-                                        </a>
-                                    </li> */}
-                                    {!this.props.dashBoardData && <li className="access-icon rbt-mini-cart">
-                                        <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
-                                            Login
-                                        </a>
-                                    </li>}
+                                    /* <li className="access-icon">
+                                                                            <a className="search-trigger-active rbt-round-btn" href="#">
+                                                                                <i className="feather-search"></i>
+                                                                            </a>
+                                                                        </li> 
+                                                                        {!this.props.dashBoardData && <li className="access-icon rbt-mini-cart">
+                                                                            <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
+                                                                                Login
+                                                                            </a>
+                                                                        </li>}
 
-
-                                    {this.props.dashBoardData?.username && <li className="account-access rbt-user-wrapper d-none d-xl-block">
-                                        <a href="#">
-                                            <i className="feather-user"></i>{this.props.dashBoardData?.username}
-                                        </a>
-                                        <div className="rbt-user-menu-list-wrapper">
-                                            <div className="inner">
-                                                <div className="rbt-admin-profile">
-                                                    {this.props.dashBoardData?.role_id == 2 && <div className="admin-thumbnail">
-                                                        {this.state?.userData?.companylogo ? (
-                                                            <img
-                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
-                                                                alt="User Image"
-                                                            />
-                                                        ) : (
-                                                            <div
-                                                                style={{
-                                                                    display: "flex",
-                                                                    alignItems: "center",
-                                                                    justifyContent: "center",
-                                                                    width: "60px", // Adjust as needed
+                                                                        {this.props.dashBoardData?.username && <li className="account-access rbt-user-wrapper d-none d-xl-block">
+                                                                            <a href="#">
+                                                                                <i className="feather-user"></i>{this.props.dashBoardData?.username} ({this.props.dashBoardData?.role_id == 1 ? "Candidate" : this.props.dashBoardData?.role_id == 2 ? "Employer" : "Trainer"})
+                                                                            </a>
+                                                                            <div className="rbt-user-menu-list-wrapper">
+                                                                                <div className="inner">
+                                                                                    <div className="rbt-admin-profile">
+                                                                                        {this.props.dashBoardData?.role_id == 2 && <div className="admin-thumbnail">
+                                                                                            {this.state?.userData?.companylogo ? (
+                                                                                                <img
+                                                                                                    src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                                                                    alt="User Image"
+                                                                                                />
+                                                                                            ) : (
+                                                                                                <div
+                                                                                                    style={{
+                                                                                                        display: "flex",
+                                                                                                        alignItems: "center",
+                                                                                                        justifyContent: "center",
+                                                                                                        width: "60px", // Adjust as needed
                                                                     height: "60px", // Adjust as needed
                                                                     backgroundColor: "#ccc", // Default background color
                                                                     color: "#fff",

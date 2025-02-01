@@ -27,7 +27,7 @@ class ActivateProfile extends React.Component {
         })
             .then((response) => {
                 this.setState({ isActive: true });
-                //this.setState({ status: status });
+                this.setState({ status: response.data.status });
             })
             .catch((error) => {
                 console.error(error);
@@ -37,14 +37,21 @@ class ActivateProfile extends React.Component {
     render() {
         return (
             <div>
-                  <HeaderLoginSignUp />
-                {this.state.isActive ? (
-                    <p className='text-success'>Your profile has been activated successfully! <a href="/Login" style={{ color: 'blue', textDecoration: 'underline' }}>Go to Login</a></p>
+              <HeaderLoginSignUp />
+            {this.state.isActive ? (
+                this.state.status == 1 ? (
+                <h4 className='text-success'>Your profile has been activated successfully! <a href="/Login" style={{ color: 'blue', textDecoration: 'underline' }}>Go to Login</a></h4>
+                ) : this.state.status == 2 ? (
+                <h4 className='text-success'>Your profile is already activated! <a href="/Login" style={{ color: 'blue', textDecoration: 'underline' }}>Go to Login</a></h4>
                 ) : (
-                    <p className='text-danger'>An error occurred while activating your profile. Please try again later.</p>
-                )}
-                <p className='text-success'></p>
-                <p className='text-success'></p>
+                <h4 className='text-danger'>An error occurred while activating your profile. Please try again later.</h4>
+                )
+            ) : (
+                <h4 className='text-success'>Activating your profile...</h4>
+              
+            )}
+            <p className='text-success'></p>
+            <p className='text-success'></p>
             </div>
         );
     }
