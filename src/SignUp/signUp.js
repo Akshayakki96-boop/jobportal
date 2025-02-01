@@ -163,7 +163,7 @@ class SignUp extends React.Component {
                 this.setState({
                     responseMessage: (
                         <span>
-                            Signup successful! <a href="/Login" style={{ color: 'blue', textDecoration: 'underline' }}>Go to Login</a>
+                            Signup successful! Please check your email to activate your account.
                         </span>
                     ),
                     alertVariant: 'success', // Success alert variant

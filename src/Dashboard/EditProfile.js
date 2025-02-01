@@ -124,29 +124,27 @@ class EditProfileTrainer extends React.Component {
             .then((response) => {
                 console.log('user data', response.data);
                 this.setState({ userData: response.data.data })
-                const { profile_image, resumefile } = response.data.data;
+                const { profile_image, resume_file} = response.data.data.basic_info;
+                const employment = response.data.data.employment;
+                const education = response.data.data.education;
+                const keySkills= response.data.data.keyskills;
+                const carrerInfo= response.data.data.carrierinfo;
                 this.setState({
-                    fullname: response.data.data.fullname,
-                    email: response.data.data.email,
-                    mobile_no: response.data.data.mobile_no,
-                    profile_summary: response.data.data.profile_summary,
-                    experience: response.data.data.experience,
-                    currentsalary: response.data.data.CTC,
-                    expectedsalary: response.data.data.ExpectedCTC,
-                    resume_summary: response.data.data.resume_headline,
-                    selectedCity: response.data.data.current_location ? { value: response.data.data.city_id, label: response.data.data.current_location } : null,
-                    selectedDate: (response.data.data.DOB == "1900-01-01T00:00:00" || !response.data.data.DOB) ? new Date() : new Date(response.data.data.DOB),
-                    userId: response.data.data.user_id,
-                    role_id: response.data.data.designation,
-                    noticePeriodSelected: response.data.data.notice_period ? { value: response.data.data.notice_period, label: response.data.data.notice_periods } : null,
-                    profile_title: response.data.data.profile_title,
-                    linkedInSelected: response.data.data.linkedin_profile_url,
-                    selectedGender: { value: response.data.data.gender, label: response.data.data.gender },
-                    selectedCountry: { value: response.data.data.country_id, label: response.data.data.country },
-                    selectedState: { value: response.data.data.state_id, label: response.data.data.state },
-                    selectedCity: { value: response.data.data.city_id, label: response.data.data.city },
-                    languague_name: response.data.data.known_languague,
-                    countryCode: { value: response.data.data.countrycode, label: response.data.data.countrycode }
+                    fullname: response.data.data.basic_info.fullname,
+                    email: response.data.data.basic_info.email,
+                    mobile_no: response.data.data.basic_info.mobile_no,
+                    profile_summary: response.data.data.basic_info.profile_summary,
+                    experience: response.data.data.basic_info.experience,
+                    selectedDate: (response.data.data.basic_info.DOB == "1900-01-01T00:00:00" || !response.data.data.basic_info.DOB) ? new Date() : new Date(response.data.data.basic_info.DOB),
+                    userId: response.data.data.basic_info.user_id,
+                    profile_title: response.data.data.basic_info.profile_title,
+                    linkedInSelected: response.data.data.basic_info.linkedin_profile_url,
+                    selectedGender: { value: response.data.data.basic_info.gender, label: response.data.data.basic_info.gender },
+                    selectedCountry: { value: response.data.data.basic_info.country_id, label: response.data.data.basic_info.country },
+                    selectedState: { value: response.data.data.basic_info.state_id, label: response.data.data.basic_info.state },
+                    selectedCity: { value: response.data.data.basic_info.city_id, label: response.data.data.basic_info.city },
+                    languague_name: response.data.data.basic_info.known_languague,
+                    countryCode: { value: response.data.data.basic_info.countrycode, label: response.data.data.basic_info.countrycode }
                 });
 
 
@@ -156,13 +154,51 @@ class EditProfileTrainer extends React.Component {
                         fileName: profile_image,
                     });
                 }
-                if (resumefile) {
+                if (resume_file) {
                     this.setState({
-                        resumePreview: `${process.env.REACT_APP_BASEURL}/Uploads/${resumefile}`,
-                        resumefileName: resumefile,
+                        resumePreview: `${process.env.REACT_APP_BASEURL}/Uploads/${resume_file}`,
+                        resumefileName: resume_file,
+                    });
+
+if(employment && employment.length > 0){
+                    this.setState({
+                        employments: employment.map((item) => ({
+                            company_name: item.Institution_Company,
+                            jobtitle: item.Role_Title,
+                            workedFromYear: item.year_from,
+                            workedToYear: item.year_to,
+                             trainer_employment_id: item.trainer_employment_id
+                        }))
                     });
 
                 }
+                if(education && education.length > 0){
+                    this.setState({
+                        educationDetails: education.map((item) => ({
+                            institutionName: item.university_board,
+                            degree: item.education_title,
+                            fromYear: item.passing_year,
+                            trainer_education_id: item.trainer_edu_id
+                        }))
+                    });
+                }
+                if(keySkills && keySkills.length > 0){
+                    this.setState({
+                        keyskillsSelected: keySkills.map((item) => ({
+                            value: item.skill_id,
+                            label: item.keyskills
+                        }))
+                    });
+                }
+                if(carrerInfo){
+                    this.setState({
+                        trainerType: carrerInfo.trainer_type_id.split(',').map(type => ({ value: type, label: type })),
+                        totalExperience: carrerInfo.experience,
+                        modeOfTraining: carrerInfo.training_mode.split(',').map(mode => ({ value: mode, label: mode })),
+                        trainer_skill_id:carrerInfo.trainer_carrierinfo_id
+                    });
+                }
+            }
 
             })
             .catch((error) => {
@@ -792,7 +828,7 @@ class EditProfileTrainer extends React.Component {
         const url = `${baseUrl}/api/Trainer/UpdateCarrierInfo`;
         const token = localStorage.getItem('authToken');
         const careerData = {
-            trainer_carrierinfo_id: 0,
+            trainer_carrierinfo_id: this.state.trainer_skill_id?this.state.trainer_skill_id:0,
             user_id: this.state.userId,
             trainer_type_id: this.state.trainerType ? this.state.trainerType.map(type => type.value).join(",") : '',
             experience: parseInt(this.state.totalExperience, 10),
