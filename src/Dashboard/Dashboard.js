@@ -165,9 +165,9 @@ class Dashboard extends React.Component {
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
                                             <div className="thumbnail rbt-avatars size-lg">
-                                                    {this.state?.userData?.profile_image ? (
+                                                    {this.state?.userData?.basic_info.profile_image ? (
                                                         <img
-                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.basic_info.profile_image}`}
                                                             alt="Instructor"
                                                         />
                                                     ) : (
