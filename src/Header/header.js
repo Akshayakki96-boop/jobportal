@@ -307,7 +307,7 @@ class Header extends React.Component {
                             <div className="header-right">
                                 {/* Navbar Icons */}
                                 <ul className="quick-access">
-                                    /* <li className="access-icon">
+                                <li className="access-icon">
                                                                             <a className="search-trigger-active rbt-round-btn" href="#">
                                                                                 <i className="feather-search"></i>
                                                                             </a>
