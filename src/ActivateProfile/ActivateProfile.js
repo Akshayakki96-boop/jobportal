@@ -8,16 +8,20 @@ class ActivateProfile extends React.Component {
             isActive: false
         };
     }
-    componentDidMount() { 
+    componentDidMount() {
         // Get the activation token from the URL
         const urlParams = new URLSearchParams(window.location.search);
+        const queryString = window.location.search;
+        const queryParams = queryString.substring(1);
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const activateUrl = `${baseUrl}/api/ActivateProfile/activate`;
-        const token = localStorage.getItem('authToken');
-        axios.post(activateUrl, {
+        const activateUrl = `${baseUrl}/api/Signup/VerifyEmail`;
+        var text={
+            user_id: queryParams
+        }
+        axios.post(activateUrl, text, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+                //Authorization: `Bearer ${token}`,
             },
         })
             .then((response) => {
@@ -37,7 +41,7 @@ class ActivateProfile extends React.Component {
                     <p className='text-danger'>An error occurred while activating your profile. Please try again later.</p>
                 )}
                 <p className='text-success'></p>
-               <p className='text-success'></p>
+                <p className='text-success'></p>
             </div>
         );
     }

@@ -73,7 +73,7 @@ class Header extends React.Component {
         })
             .then((response) => {
                 console.log('user data', response.data);
-                this.setState({ userData: response.data.data })
+                this.setState({ userData: response.data.data.basic_info })
 
             })
             .catch((error) => {

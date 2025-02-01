@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
             .then((response) => {
                 console.log('dashboard data', response.data);
                 this.setState({dashBoardData:response.data.data});
-                this.getUserProfile(response.data.user_id);
+                this.getUserProfile(response.data.data.user_id);
                 
 
             })
@@ -62,7 +62,7 @@ class Dashboard extends React.Component {
         })
             .then((response) => {
                 console.log('user data', response.data);
-                this.setState({userData:response.data.data})
+                this.setState({userData:response.data.data.basic_info})
 
             })
             .catch((error) => {

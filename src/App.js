@@ -69,47 +69,40 @@ class App extends React.Component {
       (currentPath.includes('/SignUp'));
     return (
       <div className="App">
-        <Router>
-        {/* <Breadcumb /> */}
-          <div className="wrapper">
-            <div id="content">
-              <div className="mb-10">
-                {/* <CommonError /> */}
-              </div>
-
-                <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/Login" element={<Login />} />
-                <Route path="/SignUp" element={<SignUp />} />
-                <Route path="/TrainerDashboard" element={<Dashboard />} />
-                <Route path="/Jobs" element={<Jobs/>} />
-                <Route path="/Job-details" element={<JobDetails/>} />
-                <Route path="/Community" element={<Community/>} />
-                <Route path="/Course" element={<Course/>} />
-                <Route path="/Course-Details" element={<CourseDetail/>} />
-                <Route path="/EmployerDashboard" element={<EmployerDashboard/>} />
-                <Route path="/createnew" element={<CreateJob/>} />
-                <Route path="/CandidateDashboard" element={<CandidateDashboard/>} />
-                <Route path="/edit-profile" element={<EditProfile/>} />
-                <Route path="/job-decription" element={<JobDetailsOutside/>} />
-                <Route path="/edit-profile-candidate" element={<EditProfileCandidate/>} />
-                <Route path="/ActivateProfile" element={<ActivateProfile/>} />
-                <Route path="/edit-profile-trainer" element={<EditProfileTrainer/>} />
-               
-                  {/* Other routes can be added here */}
-                </Routes>
-              {/* {this.state.hasMSSalesAccess === false && (
-                <Routes>
-                  <Route path="*" element={<UnauthorizedPage />} />
-                </Routes>
-              )} */}
-              {/* {this.state.checkingAccess && <LoadingSpinner msg="Checking your MS Sales access..." />} */}
-            </div>
+      <Router>
+      {/* <Breadcumb /> */}
+        <div className="wrapper">
+        <div id="content">
+          <div className="mb-10">
+          {/* <CommonError /> */}
           </div>
-          <Footer />
-          <Copyright />
-          <Wrapper />
-        </Router>
+
+          <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/TrainerDashboard" element={<Dashboard />} />
+          <Route path="/Jobs" element={<Jobs/>} />
+          <Route path="/Job-details" element={<JobDetails/>} />
+          <Route path="/Community" element={<Community/>} />
+          <Route path="/Course" element={<Course/>} />
+          <Route path="/Course-Details" element={<CourseDetail/>} />
+          <Route path="/EmployerDashboard" element={<EmployerDashboard/>} />
+          <Route path="/createnew" element={<CreateJob/>} />
+          <Route path="/CandidateDashboard" element={<CandidateDashboard/>} />
+          <Route path="/edit-profile" element={<EditProfile/>} />
+          <Route path="/job-decription" element={<JobDetailsOutside/>} />
+          <Route path="/edit-profile-candidate" element={<EditProfileCandidate/>} />
+          <Route path="/Activate_Profile" element={<ActivateProfile/>} />
+          <Route path="/edit-profile-trainer" element={<EditProfileTrainer/>} />
+          {/* Other routes can be added here */}
+          </Routes>
+        </div>
+        </div>
+        {currentPath !== '/Activate_Profile' && <Footer />}
+        {currentPath!=='/Activate_Profile' && <Copyright />}
+        <Wrapper />
+      </Router>
       </div>
     );
   }
