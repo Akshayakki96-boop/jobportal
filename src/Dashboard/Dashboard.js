@@ -62,7 +62,7 @@ class Dashboard extends React.Component {
         })
             .then((response) => {
                 console.log('user data', response.data);
-                this.setState({userData:response.data.data.basic_info})
+                this.setState({userData:response.data.data})
 
             })
             .catch((error) => {
@@ -158,7 +158,7 @@ class Dashboard extends React.Component {
                                         <div className="tranr-titl">
                                             <div className="content text-center">
                                                 <h6 className="subtitle sal-animate" >Bootcamp Instructor</h6>
-                                                <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.fullname}</span></h3>
+                                                <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.basic_info.fullname}</span></h3>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}

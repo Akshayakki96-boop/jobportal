@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import HeaderLoginSignUp from '../Header/headerLoginSignUp';
 
 class ActivateProfile extends React.Component {
     constructor(props) {
@@ -26,6 +27,7 @@ class ActivateProfile extends React.Component {
         })
             .then((response) => {
                 this.setState({ isActive: true });
+                //this.setState({ status: status });
             })
             .catch((error) => {
                 console.error(error);
@@ -35,6 +37,7 @@ class ActivateProfile extends React.Component {
     render() {
         return (
             <div>
+                  <HeaderLoginSignUp />
                 {this.state.isActive ? (
                     <p className='text-success'>Your profile has been activated successfully! <a href="/Login" style={{ color: 'blue', textDecoration: 'underline' }}>Go to Login</a></p>
                 ) : (
