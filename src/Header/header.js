@@ -9,21 +9,21 @@ class Header extends React.Component {
         };
         this.headerRef = React.createRef(); // Reference for the header element
         this.placeholderRef = React.createRef();
+        this.popupMobileMenu = this.popupMobileMenu.bind(this);
     }
     componentDidMount() {
-  
+
         this.handleScroll();
 
         window.addEventListener('scroll', this.handleScroll);
     }
     componentDidUpdate(prevProps) {
         if (prevProps.dashBoardData !== this.props.dashBoardData) {
-            if(this.props.dashBoardData!="")
-            {
+            if (this.props.dashBoardData != "") {
                 this.getDashboardUser();
             }
-            
-        }  
+
+        }
     }
 
     getDashboardUser = () => {
@@ -177,9 +177,18 @@ class Header extends React.Component {
             ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
             : parts[0][0].toUpperCase();
     };
+
+    popupMobileMenu = () => {
+      this.setState({ isMobileMenuOpen: true });
+    }
+
+    closeClick = () => {
+        this.setState({ isMobileMenuOpen: false });
+        }
+
     render() {
         return (
-            <header className="rbt-header rbt-header-10">
+            <><header className="rbt-header rbt-header-10">
                 <div ref={this.placeholderRef} className="rbt-sticky-placeholder"></div>
 
                 {/* Start Header Top */}
@@ -262,6 +271,7 @@ class Header extends React.Component {
                                 </div>
                             </div>
 
+
                             <div className="rbt-main-navigation d-none d-xl-block">
                                 <nav className="mainmenu-nav">
                                     <ul className="mainmenu">
@@ -307,56 +317,29 @@ class Header extends React.Component {
                             <div className="header-right">
                                 {/* Navbar Icons */}
                                 <ul className="quick-access">
-                                <li className="access-icon">
-                                                                            <a className="search-trigger-active rbt-round-btn" href="#">
-                                                                                <i className="feather-search"></i>
-                                                                            </a>
-                                                                        </li> 
-                                                                        {!this.props.dashBoardData && <li className="access-icon rbt-mini-cart">
-                                                                            <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
-                                                                                Login
-                                                                            </a>
-                                                                        </li>}
+                                    <li className="access-icon">
+                                        <a className="search-trigger-active rbt-round-btn" href="#">
+                                            <i className="feather-search"></i>
+                                        </a>
+                                    </li>
+                                    {!this.props.dashBoardData && <li className="access-icon rbt-mini-cart">
+                                        <a className="rbt-cart-sidenav-activation rbt-round-btn" href="/Login">
+                                            Login
+                                        </a>
+                                    </li>}
 
-                                                                        {this.props.dashBoardData?.username && <li className="account-access rbt-user-wrapper d-none d-xl-block">
-                                                                            <a href="#">
-                                                                                <i className="feather-user"></i>{this.props.dashBoardData?.username} ({this.props.dashBoardData?.role_id == 1 ? "Candidate" : this.props.dashBoardData?.role_id == 2 ? "Employer" : "Trainer"})
-                                                                            </a>
-                                                                            <div className="rbt-user-menu-list-wrapper">
-                                                                                <div className="inner">
-                                                                                    <div className="rbt-admin-profile">
-                                                                                        {this.props.dashBoardData?.role_id == 2 && <div className="admin-thumbnail">
-                                                                                            {this.state?.userData?.companylogo ? (
-                                                                                                <img
-                                                                                                    src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
-                                                                                                    alt="User Image"
-                                                                                                />
-                                                                                            ) : (
-                                                                                                <div
-                                                                                                    style={{
-                                                                                                        display: "flex",
-                                                                                                        alignItems: "center",
-                                                                                                        justifyContent: "center",
-                                                                                                        width: "60px", // Adjust as needed
-                                                                    height: "60px", // Adjust as needed
-                                                                    backgroundColor: "#ccc", // Default background color
-                                                                    color: "#fff",
-                                                                    borderRadius: "50%",
-                                                                    fontWeight: "bold",
-                                                                    fontSize: "18px", // Adjust font size as needed
-                                                                }}
-                                                            >
-                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    }
-                                                    {this.props.dashBoardData?.role_id == 3 && <div className="admin-thumbnail">
-                                                        {this.state?.userData?.profile_image ? (
+                                    {this.props.dashBoardData?.username && <li className="account-access rbt-user-wrapper d-none d-xl-block">
+                                        <a href="#">
+                                            <i className="feather-user"></i>{this.props.dashBoardData?.username} ({this.props.dashBoardData?.role_id == 1 ? "Candidate" : this.props.dashBoardData?.role_id == 2 ? "Employer" : "Trainer"})
+                                        </a>
+                                        <div className="rbt-user-menu-list-wrapper">
+                                            <div className="inner">
+                                                <div className="rbt-admin-profile">
+                                                    {this.props.dashBoardData?.role_id == 2 && <div className="admin-thumbnail">
+                                                        {this.state?.userData?.companylogo ? (
                                                             <img
-                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
-                                                                alt="User Image"
-                                                            />
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                                alt="User Image" />
                                                         ) : (
                                                             <div
                                                                 style={{
@@ -375,14 +358,37 @@ class Header extends React.Component {
                                                                 {this.getInitials(this.props?.dashBoardData?.username || "User")}
                                                             </div>
                                                         )}
-                                                    </div>
-                                                    }
+                                                    </div>}
+                                                    {this.props.dashBoardData?.role_id == 3 && <div className="admin-thumbnail">
+                                                        {this.state?.userData?.profile_image ? (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                                alt="User Image" />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                            </div>
+                                                        )}
+                                                    </div>}
                                                 </div>
 
 
                                                 <ul className="user-list-wrapper">
                                                     <li>
-                                                        <a onClick={(e) => { e.preventDefault(); this.handleredirection(); }} href="#">
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleredirection(); } } href="#">
                                                             <i className="feather-log-out"></i>
                                                             <span>
                                                                 {this.props.dashBoardData?.role_id == 1
@@ -395,21 +401,13 @@ class Header extends React.Component {
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleLogout(); } } href="#">
                                                             <i className="feather-log-out"></i>
                                                             <span>Logout</span>
                                                         </a>
                                                     </li>
                                                 </ul>
-                                                {/* Start Mobile-Menu-Bar */}
-                                                <div className="mobile-menu-bar d-block d-xl-none">
-                                                    <div className="hamberger">
-                                                        <button className="hamberger-button rbt-round-btn">
-                                                            <i className="feather-menu"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                {/* End Mobile-Menu-Bar */}
+
 
                                             </div>
                                         </div>
@@ -425,8 +423,7 @@ class Header extends React.Component {
                                                     <div className="admin-thumbnail">
                                                         <img
                                                             src="assets/images/team/avatar.jpg"
-                                                            alt="User Images"
-                                                        />
+                                                            alt="User Images" />
                                                     </div>
                                                     <div className="admin-info">
                                                         <span className="name">RainbowIT</span>
@@ -517,7 +514,7 @@ class Header extends React.Component {
                                 {/* Start Mobile-Menu-Bar */}
                                 <div className="mobile-menu-bar d-block d-xl-none">
                                     <div className="hamberger">
-                                        <button className="hamberger-button rbt-round-btn">
+                                        <button type="button" onClick={this.popupMobileMenu} className="hamberger-button rbt-round-btn">
                                             <i className="feather-menu"></i>
                                         </button>
                                     </div>
@@ -623,7 +620,99 @@ class Header extends React.Component {
                     {/*end Search Dropdown */}
                 </div>
 
-            </header>
+            </header><div className={this.state.isMobileMenuOpen?'popup-mobile-menu active':'popup-mobile-menu'}>
+                    <div className="inner-wrapper">
+                        <div className="inner-top">
+                            <div className="content">
+                                <div className="logo">
+                                    <div className="logo logo-dark">
+                                        <a href="index.html">
+                                            <img src="assets/images/Zobskill.gif" alt="Logo Images" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <div className="rbt-btn-close">
+                                    <button onClick={this.closeClick} className="close-button rbt-round-btn">
+                                        <i className="feather-x" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <nav className="mainmenu-nav">
+                        <ul className="mainmenu">
+                                        <li className={window.location.pathname === "/" ? "current active" : ""}>
+                                            <a href="/">Home</a>
+                                        </li>
+                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
+                                            <li className={window.location.pathname === "/Course" ? " current active" : ""}>
+                                                <a href="/Course">Course</a>
+                                            </li>
+                                        )}
+
+                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
+                                            <li className={window.location.pathname === "/Jobs" || window.location.pathname === "/job-decription" || window.location.pathname === "/Job-details" ? "current active" : ""}>
+                                                <a href="/Jobs">Jobs</a>
+                                            </li>
+                                        )}
+                                        {this.props.dashBoardData === "" && (
+                                            <li className={window.location.pathname === "/SignUp" ? "current active" : ""}>
+                                                <a href="/SignUp">Candidate</a>
+                                            </li>
+                                        )}
+                                        {this.props.dashBoardData === "" && (
+                                            <li className={window.location.pathname === "/SignUp" ? "current active" : ""}>
+                                                <a href="/SignUp">Employer</a>
+                                            </li>
+                                        )}
+                                        {this.props.dashBoardData === "" && (
+                                            <li className={window.location.pathname === "/SignUp" ? "current active" : ""}>
+                                                <a href="/SignUp">Trainer</a>
+                                            </li>
+                                        )}
+                                        {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
+                                            <li className={window.location.pathname === "/Community" ? "current active" : ""}>
+                                                <a href="/Community">Community</a>
+                                            </li>
+                                        )}
+                                    </ul>
+                        </nav>
+                        {/* <div className="mobile-menu-bottom">
+                            <div className="rbt-btn-wrapper mb--20">
+                                <a
+                                    className="rbt-btn btn-border-gradient radius-round btn-sm hover-transform-none w-100 justify-content-center text-center"
+                                    href="#"
+                                >
+                                    <span>Enroll Now</span>
+                                </a>
+                            </div>
+                            <div className="social-share-wrapper">
+                                <span className="rbt-short-title d-block">Find With Us</span>
+                                <ul className="social-icon social-default transparent-with-border justify-content-start mt--20">
+                                    <li>
+                                        <a href="https://www.facebook.com/">
+                                            <i className="feather-facebook" />
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.twitter.com">
+                                            <i className="feather-twitter" />
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.instagram.com/">
+                                            <i className="feather-instagram" />
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="https://www.linkdin.com/">
+                                            <i className="feather-linkedin" />
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div> */}
+                    </div>
+                </div></>
 
         );
     }
