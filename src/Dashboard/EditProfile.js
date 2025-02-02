@@ -1205,39 +1205,33 @@ class EditProfileTrainer extends React.Component {
                                             </span>
                                         </h3>
                                         {isEmploymentDetailsExpanded && (
-                                            <div className="section-content">
+                                            <div style={{textAlign:'left'}} className="section-content">
                                                 {
                                                     this.state.employments.map((employment, index) => (
-                                                        <div key={index} className="employment-entry mb-4 border p-3 rounded">
+                                                        <div key={index} className="employment-entry mb-4 border p-3 rounded position-relative">
+                                                            <div className="d-flex justify-content-end position-absolute" style={{ top: '10px', right: '10px' }}>
+                                                                <Button
+                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                                    variant="primary"
+                                                                    style={{ fontSize: '14px' }}
+                                                                    onClick={() => this.handleShowEmploymentModal(index)}
+                                                                >
+                                                                    <i className="feather-edit" />
+                                                                </Button>
+                                                                <Button
+                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm ms-2"
+                                                                    variant="danger"
+                                                                    style={{ fontSize: '14px' }}
+                                                                    onClick={() => this.removeEmployment(index)}
+                                                                >
+                                                                      <i className="feather-trash" />
+                                                                </Button>
+                                                            </div>
                                                             <h5>Employment {index + 1}</h5>
-
                                                             <p style={{ fontWeight: "bold" }}>Company Name: {employment.company_name}</p>
-
                                                             <p style={{ fontWeight: "bold" }}>Job Title: {employment.jobtitle}</p>
-
-
                                                             <p style={{ fontWeight: "bold" }}>Worked From: {employment.workedFromYear}</p>
-
-
                                                             <p style={{ fontWeight: "bold" }}>Worked To: {employment.workedToYear}</p>
-
-
-                                                            <Button
-                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                variant="primary"
-                                                                style={{ fontSize: '14px' }}
-                                                                onClick={() => this.handleShowEmploymentModal(index)}
-                                                            >
-                                                                Edit
-                                                            </Button>
-                                                            <Button
-                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                variant="danger"
-                                                                style={{ fontSize: '14px' }}
-                                                                onClick={() => this.removeEmployment(index)}
-                                                            >
-                                                                Delete
-                                                            </Button>
                                                         </div>
                                                     ))
                                                 }
@@ -1331,31 +1325,32 @@ class EditProfileTrainer extends React.Component {
                                             Education Details <span style={{ marginLeft: '10px' }}>{showEducation ? '[-]' : '[+]'}</span>
                                         </h3>
                                         {showEducation && (
-                                            <div className="section-content">
+                                            <div style={{textAlign:"left"}} className="section-content">
                                                 {this.state.educationDetails &&
                                                     this.state.educationDetails.map((education, index) => (
-                                                        <div key={index} className="education-entry mb-4 border p-3 rounded">
+                                                        <div key={index} className="education-entry mb-4 border p-3 rounded position-relative">
+                                                           <div className="d-flex justify-content-end position-absolute" style={{ top: '10px', right: '10px' }}>
+                                                                <Button
+                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                                    variant="primary"
+                                                                    style={{ fontSize: '14px' }}
+                                                                    onClick={() => this.handleShowEducationModal(index)}
+                                                                >
+                                                                    <i className="feather-edit" />
+                                                                </Button>
+                                                                <Button
+                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm ms-2"
+                                                                    variant="danger"
+                                                                    style={{ fontSize: '14px' }}
+                                                                    onClick={() => this.removeEducation(index)}
+                                                                >
+                                                                      <i className="feather-trash" />
+                                                                </Button>
+                                                            </div>
                                                             <h5>Education {index + 1}</h5>
                                                             <p style={{ fontWeight: "bold" }}>Institution Name: {education.institutionName}</p>
                                                             <p style={{ fontWeight: "bold" }}>Degree with Specialisation: {education.degree}</p>
                                                             <p style={{ fontWeight: "bold" }}>Completed Year: {education.fromYear}</p>
-
-                                                            <Button
-                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                variant="primary"
-                                                                onClick={() => this.handleShowEducationModal(index)}
-                                                                style={{ fontSize: '14px' }}
-                                                            >
-                                                                Edit
-                                                            </Button>
-                                                            <Button
-                                                                className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                variant="danger"
-                                                                onClick={() => this.removeEducation(index)}
-                                                                style={{ fontSize: '14px' }}
-                                                            >
-                                                                Delete
-                                                            </Button>
                                                         </div>
                                                     ))}
                                                 <Button
