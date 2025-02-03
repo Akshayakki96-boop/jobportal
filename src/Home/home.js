@@ -6,12 +6,18 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dashBoardData: {}
+            dashBoardData: {},
+            joblistingdata: [],
+            currentPage: 1, // Tracks the current page
+            pageSize: 4, // Number of records per page
+            totalPages: 1,
+            totalRecords: 0, // Total number of records
         };
 
     }
     componentDidMount() {
         this.getDashboardUser();
+        this.getAllJobs(0, this.state.pageSize);
     }
 
     getDashboardUser = () => {
@@ -35,6 +41,54 @@ class Home extends React.Component {
                 localStorage.removeItem('authToken');
 
             });
+    }
+
+    getAllJobs = (pageIndex, pageSize) => {
+        this.setState({ keepSpinner: true });
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Job/GetJobs`;
+        const token = localStorage.getItem('authToken');
+        var request = {
+            "jobId": 0,
+            "jobtitle": "",
+            "experienceFrom": 0,
+            "experienceTo": 0,
+            "packageId": 0,
+            "roleId": 0,
+            "emptypeId": 0,
+            "deptId": 0,
+            "industryId": 0,
+            "keyskillIds": "",
+            "educationId": "",
+            "active": false,
+            "user_id": 0,
+            "cityIds": "1,2",
+            pageIndex: pageIndex,
+            pagesize: pageSize,
+        }
+        axios.post(url, request, {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('joblistingdata', response.data);
+                if(response.data.data && response.data.data.length > 0){
+                const totalCount = response.data.data[0].TotalRecords;
+                const topTwoJobs = response.data.data.slice(0, 2);
+                this.setState({ joblistingdata: topTwoJobs, totalRecords: totalCount, errorMessage: "", keepSpinner: false });
+                }
+                else{
+                    this.setState({ errorMessage: "No Jobs Found", keepSpinner: false });
+                }
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+
     }
 
 
@@ -593,101 +647,50 @@ class Home extends React.Component {
                         </div>
                         {/* Start Card Area */}
                         <div className="row row--15">
-
-                            {/* Start Single Card */}
-                            <div
-                                className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30"
-                            >
-                                <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                    <div className="rbt-card-img">
-                                        <a href="#">
-                                            <img src="assets/images/job-img.jpg" alt="Card image" />
-                                        </a>
+                            {this.state.joblistingdata && this.state.joblistingdata.length > 0 ? (
+                                this.state.joblistingdata.map((job, index) => (
+                                    <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" key={index}>
+                                        <div className="rbt-card variation-01 rbt-hover card-list-2">
+                                            <div className="rbt-card-img">
+                                                <a href="#">
+                                                    <img src={job.companylogo ? `${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}` : "assets/images/job-zob-img.jpg"} />
+                                                </a>
+                                            </div>
+                                            <div className="rbt-card-body">
+                                                <div className="rbt-card-top">
+                                                    <div className="rbt-category">
+                                                        <a href="#">{job.empType || "Employment Type"}</a>
+                                                    </div>
+                                                </div>
+                                                <h4 className="rbt-card-title">
+                                                    <a href={`/job-decription?jobId=${job.jobid}`}>{job.jobtitle || "Job Title Unavailable"}</a>
+                                                </h4>
+                                                <ul className="rbt-meta">
+                                                    <li><i className="fas fa-building"></i> {job.CompanyName}</li>
+                                                    <li><i className="fas fa-map-marker-alt"></i> {job.locations}</li>
+                                                </ul>
+                                                <p className="rbt-card-text">
+                                                    {job.description}
+                                                </p>
+                                                <div className="rbt-card-bottom">
+                                                    <div className="rbt-price">
+                                                        <span className="current-price"><i className="fas fa-rupee-sign"></i> {job.package_notdisclosed ? "Package not disclosed" : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}</span>
+                                                    </div>
+                                                    <a className="rbt-btn-link" href="#">
+                                                        Learn More<i className="feather-arrow-right"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="rbt-card-body">
-                                        <div className="rbt-card-top">
-                                            <div className="rbt-category">
-                                                <a href="#">Full Time</a>
-                                                <a href="#">Part Time</a>
-                                            </div>
-                                        </div>
-
-                                        <h4 className="rbt-card-title"><a href="$">Registered Nurse</a></h4>
-
-                                        <ul className="rbt-meta">
-                                            <li><i className="fas fa-building"></i> MED001</li>
-                                            <li><i className="fas fa-map-marker-alt"></i> New York, NY</li>
-                                        </ul>
-
-                                        <p className="rbt-card-text">
-                                            Provide comprehensive patient care, administer medications, and assist with diagnostic procedures.
-                                        </p>
-                                        {/* 
-            <div className="rbt-author-meta mb--10">
-              <div className="rbt-avater">
-                <a href="#">
-                  <img src="assets/images/client/avatar-02.png" alt="Sophia Jaymes" />
-                </a>
-              </div>
-              <div className="rbt-author-info">
-                By <a href="profile.html">Angela</a> In <a href="#">Development</a>
-              </div>
-            </div>
-            */}
-                                        <div className="rbt-card-bottom">
-                                            <div className="rbt-price">
-                                                <span className="current-price"><i className="fas fa-rupee-sign"></i> 75000.00 a month</span>
-                                            </div>
-                                            <a className="rbt-btn-link" href="#">
-                                                Learn More<i className="feather-arrow-right"></i>
-                                            </a>
-                                        </div>
+                                ))
+                            ) : (
+                                <div className="col-12 mt--30">
+                                    <div className="alert alert-warning" role="alert">
+                                        No Jobs Found
                                     </div>
                                 </div>
-                            </div>
-                            {/* End Single Card */}
-
-                            {/* Start Single Card */}
-                            <div
-                                className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30"
-                            >
-                                <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                    <div className="rbt-card-img">
-                                        <a href="#">
-                                            <img src="assets/images/job-img.jpg" alt="Card image" />
-                                        </a>
-                                    </div>
-                                    <div className="rbt-card-body">
-                                        <div className="rbt-card-top">
-                                            <div className="rbt-category">
-                                                <a href="#">Full Time</a>
-                                                <a href="#">Part Time</a>
-                                            </div>
-                                        </div>
-
-                                        <h4 className="rbt-card-title"><a href="$">Medical Assistant</a></h4>
-
-                                        <ul className="rbt-meta">
-                                            <li><i className="fas fa-building"></i> MED002</li>
-                                            <li><i className="fas fa-map-marker-alt"></i> Los Angeles, CA</li>
-                                        </ul>
-
-                                        <p className="rbt-card-text">
-                                            Assist physicians with patient examinations, perform administrative tasks, and manage patient records.
-                                        </p>
-                                        <div className="rbt-card-bottom">
-                                            <div className="rbt-price">
-                                                <span className="current-price"><i className="fas fa-rupee-sign"></i> 45000.00 a month</span>
-                                            </div>
-                                            <a className="rbt-btn-link" href="#">
-                                                Learn More<i className="feather-arrow-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* End Single Card */}
-
+                            )}
                         </div>
                         {/* End Card Area */}
                     </div>

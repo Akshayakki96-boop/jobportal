@@ -161,46 +161,46 @@ class EditProfileTrainer extends React.Component {
                     });
                 }
 
-                    if (employment && employment.length > 0) {
-                        this.setState({
-                            employments: employment.map((item) => ({
-                                company_name: item.Institution_Company,
-                                jobtitle: item.Role_Title,
-                                workedFromYear: item.year_from,
-                                workedToYear: item.year_to,
-                                trainer_employment_id: item.trainer_employment_id
-                            }))
-                        });
+                if (employment && employment.length > 0) {
+                    this.setState({
+                        employments: employment.map((item) => ({
+                            company_name: item.Institution_Company,
+                            jobtitle: item.Role_Title,
+                            workedFromYear: item.year_from,
+                            workedToYear: item.year_to,
+                            trainer_employment_id: item.trainer_employment_id
+                        }))
+                    });
 
-                    }
-                    if (education && education.length > 0) {
-                        this.setState({
-                            educationDetails: education.map((item) => ({
-                                institutionName: item.university_board,
-                                degree: item.education_title,
-                                fromYear: item.passing_year,
-                                trainer_education_id: item.trainer_edu_id
-                            }))
-                        });
-                    }
-                    if (keySkills && keySkills.length > 0) {
-                        this.setState({
-                            keyskillsSelected: keySkills.map((item) => ({
-                                value: item.skill_id,
-                                label: item.keyskills
-                            }))
-                        });
-                    }
-                    if (carrerInfo && carrerInfo.length > 0) {
-                        const career = carrerInfo[0]; // Assuming you want the first item in the array
-                        this.setState({
-                            trainerType: career.trainer_type_id.split(',').map(type => ({ value: type, label: type })),
-                            totalExperience: career.experience,
-                            modeOfTraining: career.training_mode.split(',').map(mode => ({ value: mode, label: mode })),
-                            trainer_skill_id: career.trainer_carrierinfo_id
-                        });
-                    }
-                
+                }
+                if (education && education.length > 0) {
+                    this.setState({
+                        educationDetails: education.map((item) => ({
+                            institutionName: item.university_board,
+                            degree: item.education_title,
+                            fromYear: item.passing_year,
+                            trainer_education_id: item.trainer_edu_id
+                        }))
+                    });
+                }
+                if (keySkills && keySkills.length > 0) {
+                    this.setState({
+                        keyskillsSelected: keySkills.map((item) => ({
+                            value: item.skill_id,
+                            label: item.keyskills
+                        }))
+                    });
+                }
+                if (carrerInfo && carrerInfo.length > 0) {
+                    const career = carrerInfo[0]; // Assuming you want the first item in the array
+                    this.setState({
+                        trainerType: career.trainer_type_id.split(',').map(type => ({ value: type, label: type })),
+                        totalExperience: career.experience,
+                        modeOfTraining: career.training_mode.split(',').map(mode => ({ value: mode, label: mode })),
+                        trainer_skill_id: career.trainer_carrierinfo_id
+                    });
+                }
+
 
             })
             .catch((error) => {
@@ -538,6 +538,7 @@ class EditProfileTrainer extends React.Component {
                     ),
                     alertVariant: 'success', // Success alert variant
                 });
+                window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('update failed:', error.response?.data || error.message);
@@ -546,6 +547,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: error.response?.data,
                     alertVariant: 'danger', // Error alert variant
                 });
+                window.scrollTo(0, 0);
             });
 
     }
@@ -637,6 +639,7 @@ class EditProfileTrainer extends React.Component {
                     ),
                     alertVariant: 'success', // Success alert variant
                 });
+                window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('update failed:', error.response?.data || error.message);
@@ -645,6 +648,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: error.response?.data,
                     alertVariant: 'danger', // Error alert variant
                 });
+                window.scrollTo(0, 0);
             });
 
     }
@@ -713,6 +717,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: 'Employment data saved successfully!',
                     alertVariant: 'success'
                 });
+                window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('Error saving employment data:', error.response?.data || error.message);
@@ -720,6 +725,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: 'Error saving employment data!',
                     alertVariant: 'danger'
                 });
+                window.scrollTo(0, 0);
             });
 
         if (currentEmploymentIndex !== null) {
@@ -797,6 +803,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: 'Education details saved successfully!',
                     alertVariant: 'success'
                 });
+                window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('Error saving education data:', error.response?.data || error.message);
@@ -804,6 +811,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: 'Error saving education data!',
                     alertVariant: 'danger'
                 });
+                window.scrollTo(0, 0);
             });
 
         if (currentEducationIndex !== null) {
@@ -849,6 +857,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: 'Career information updated successfully!',
                     alertVariant: 'success'
                 });
+                window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('Error updating career information:', error.response?.data || error.message);
@@ -856,6 +865,7 @@ class EditProfileTrainer extends React.Component {
                     responseMessage: 'Error updating career information!',
                     alertVariant: 'danger'
                 });
+                window.scrollTo(0, 0);
             });
     };
 
@@ -1197,7 +1207,7 @@ class EditProfileTrainer extends React.Component {
                                             </div>
                                         )}
 
-                                        {/* Trainer Employment Section */}
+                                       { /* Trainer Employment Section */}
                                         <h3 className="section-header" onClick={() => this.toggleSection('isEmploymentDetailsExpanded')} style={{ cursor: 'pointer' }}>
                                             Employment Details
                                             <span style={{ marginLeft: '10px' }}>
@@ -1205,10 +1215,10 @@ class EditProfileTrainer extends React.Component {
                                             </span>
                                         </h3>
                                         {isEmploymentDetailsExpanded && (
-                                            <div style={{textAlign:'left'}} className="section-content">
+                                            <div style={{ textAlign: 'left' }} className="section-content">
                                                 {
                                                     this.state.employments.map((employment, index) => (
-                                                        <div key={index} className="employment-entry mb-4 border p-3 rounded position-relative">
+                                                                                                <div key={index} className="employment-entry mb-4 border p-3 rounded position-relative">
                                                             <div className="d-flex justify-content-end position-absolute" style={{ top: '10px', right: '10px' }}>
                                                                 <Button
                                                                     className="rounded-pill fw-bold px-5 py-3 shadow-sm"
@@ -1224,318 +1234,331 @@ class EditProfileTrainer extends React.Component {
                                                                     style={{ fontSize: '14px' }}
                                                                     onClick={() => this.removeEmployment(index)}
                                                                 >
-                                                                      <i className="feather-trash" />
+                                                                    <i className="feather-trash" />
                                                                 </Button>
                                                             </div>
                                                             <h5>Employment {index + 1}</h5>
-                                                            <p style={{ fontWeight: "bold" }}>Company Name: {employment.company_name}</p>
-                                                            <p style={{ fontWeight: "bold" }}>Job Title: {employment.jobtitle}</p>
-                                                            <p style={{ fontWeight: "bold" }}>Worked From: {employment.workedFromYear}</p>
-                                                            <p style={{ fontWeight: "bold" }}>Worked To: {employment.workedToYear}</p>
+                                                            <div className="row">
+                                                                <div className="col-md-6">
+                                                                <p style={{ fontWeight: "bold" }}>Company Name: {employment.company_name}</p>
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <p style={{ fontWeight: "bold" }}>Job Title: {employment.jobtitle}</p>
+                                                            </div>
+                                                          
                                                         </div>
-                                                    ))
-                                                }
-                                                <Button
-                                                    variant="success"
-                                                    style={{ fontSize: '14px' }}
-                                                    onClick={() => this.handleShowEmploymentModal()}
-                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                >
-                                                    Add Employment
-                                                </Button>
+                                                        <div className="row">
+                                                                <div className="col-md-6">
+                                                                    <p style={{ fontWeight: "bold" }}>Worked From: {employment.workedFromYear}</p>
+                                                                </div>
+                                                                <div className="col-md-6">
+                                                                    <p style={{ fontWeight: "bold" }}>Worked To: {employment.workedToYear}</p>
+                                                                </div>
+                                                            </div>
+                                                                                                </div>
+                                        ))
+                                                                                        }
+                                        <Button
+                                            variant="success"
+                                            style={{ fontSize: '14px' }}
+                                            onClick={() => this.handleShowEmploymentModal()}
+                                            className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                        >
+                                            Add Employment
+                                        </Button>
 
-                                                <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal}>
-                                                    <Modal.Header closeButton>
-                                                        <Modal.Title>{this.state.currentEmploymentIndex !== null ? 'Edit Employment' : 'Add Employment'}</Modal.Title>
-                                                    </Modal.Header>
-                                                    <Modal.Body>
-                                                        <div className="form-group">
-                                                            <label htmlFor="company_name">Company Name</label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                id="company_name"
-                                                                name="company_name"
-                                                                value={employmentForm.company_name}
-                                                                onChange={this.handleEmploymentFormChange}
-                                                            />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="jobtitle">Job Title</label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                id="jobtitle"
-                                                                name="jobtitle"
-                                                                value={employmentForm.jobtitle}
-                                                                onChange={this.handleEmploymentFormChange}
-                                                            />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Worked From:</label>
-                                                            <div className="d-flex gap-3">
-                                                                <select
-                                                                    className="form-control"
-                                                                    id="workedFromYear"
-                                                                    name="workedFromYear"
-                                                                    value={employmentForm.workedFromYear}
-                                                                    onChange={this.handleEmploymentFormChange}
-                                                                >
-                                                                    <option value="">Select Year</option>
-                                                                    {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
-                                                                        <option key={year} value={year}>
-                                                                            {year}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Worked To:</label>
-                                                            <div className="d-flex gap-3">
-                                                                <select
-                                                                    className="form-control"
-                                                                    id="workedToYear"
-                                                                    name="workedToYear"
-                                                                    value={employmentForm.workedToYear}
-                                                                    onChange={this.handleEmploymentFormChange}
-                                                                >
-                                                                    <option value="">Select Year</option>
-                                                                    {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
-                                                                        <option key={year} value={year}>
-                                                                            {year}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        {employmentForm.workedFromYear && employmentForm.workedToYear && parseInt(employmentForm.workedFromYear) > parseInt(employmentForm.workedToYear) && (
-                                                            <span style={{ color: 'red' }}>Worked From year cannot be greater than Worked To year.</span>
-                                                        )}
-                                                    </Modal.Body>
-                                                    <Modal.Footer>
-                                                        <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEmploymentModal}>Cancel</Button>
-                                                        <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEmployment}>Save</Button>
-                                                    </Modal.Footer>
-                                                </Modal>
-                                            </div>
-                                        )}
-                                        {/* Candidate Education Section */}
-                                        <h3 className="section-header" onClick={() => this.toggleSection("showEducation")} style={{ cursor: "pointer" }}>
-                                            Education Details <span style={{ marginLeft: '10px' }}>{showEducation ? '[-]' : '[+]'}</span>
-                                        </h3>
-                                        {showEducation && (
-                                            <div style={{textAlign:"left"}} className="section-content">
-                                                {this.state.educationDetails &&
-                                                    this.state.educationDetails.map((education, index) => (
-                                                        <div key={index} className="education-entry mb-4 border p-3 rounded position-relative">
-                                                           <div className="d-flex justify-content-end position-absolute" style={{ top: '10px', right: '10px' }}>
-                                                                <Button
-                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                                    variant="primary"
-                                                                    style={{ fontSize: '14px' }}
-                                                                    onClick={() => this.handleShowEducationModal(index)}
-                                                                >
-                                                                    <i className="feather-edit" />
-                                                                </Button>
-                                                                <Button
-                                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm ms-2"
-                                                                    variant="danger"
-                                                                    style={{ fontSize: '14px' }}
-                                                                    onClick={() => this.removeEducation(index)}
-                                                                >
-                                                                      <i className="feather-trash" />
-                                                                </Button>
-                                                            </div>
-                                                            <h5>Education {index + 1}</h5>
-                                                            <p style={{ fontWeight: "bold" }}>Institution Name: {education.institutionName}</p>
-                                                            <p style={{ fontWeight: "bold" }}>Degree with Specialisation: {education.degree}</p>
-                                                            <p style={{ fontWeight: "bold" }}>Completed Year: {education.fromYear}</p>
-                                                        </div>
-                                                    ))}
-                                                <Button
-                                                    variant="success"
-                                                    onClick={() => this.handleShowEducationModal()}
-                                                    className="rounded-pill fw-bold px-5 py-3 shadow-sm"
-                                                    style={{ fontSize: '14px' }}
-                                                >
-                                                    Add Education
-                                                </Button>
-
-                                                <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal}>
-                                                    <Modal.Header closeButton>
-                                                        <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
-                                                    </Modal.Header>
-                                                    <Modal.Body>
-                                                        <div className="form-group">
-                                                            <label htmlFor="institutionName">Institution Name</label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                id="institutionName"
-                                                                name="institutionName"
-                                                                value={this.state.educationForm.institutionName}
-                                                                onChange={this.handleEducationFormChange}
-                                                            />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="degree">Degree with Specialisation</label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                id="degree"
-                                                                name="degree"
-                                                                value={this.state.educationForm.degree}
-                                                                onChange={this.handleEducationFormChange}
-                                                            />
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label>Completed Year:</label>
-                                                            <select
-                                                                className="form-control"
-                                                                id="fromYear"
-                                                                name="fromYear"
-                                                                value={this.state.educationForm.fromYear}
-                                                                onChange={this.handleEducationFormChange}
-                                                            >
-                                                                <option value="">Select Year</option>
-                                                                {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
-                                                                    <option key={year} value={year}>
-                                                                        {year}
-                                                                    </option>
-                                                                ))}
-                                                            </select>
-                                                        </div>
-                                                    </Modal.Body>
-                                                    <Modal.Footer>
-                                                        <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEducationModal} style={{ fontSize: '14px' }}>Cancel</Button>
-                                                        <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEducation} style={{ fontSize: '14px' }}>Save</Button>
-                                                    </Modal.Footer>
-                                                </Modal>
-                                            </div>
-                                        )}
-                                        <h3 className="section-header" onClick={() => this.toggleSection("showKeySkills")} style={{ cursor: "pointer" }}>
-                                            Key Skills <span style={{ marginLeft: '10px' }}>{showKeySkills ? '[-]' : '[+]'}</span>
-                                        </h3>
-                                        {showKeySkills && (
-                                            <div className="section-content">
+                                        <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal}>
+                                            <Modal.Header closeButton>
+                                                <Modal.Title>{this.state.currentEmploymentIndex !== null ? 'Edit Employment' : 'Add Employment'}</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
                                                 <div className="form-group">
-                                                    <Select
-                                                        id="keyskills_id"
-                                                        name="keyskills_id"
-                                                        value={this.state.keyskillsSelected}
-                                                        options={this.state.keyskills}
-                                                        onChange={(selectedOptions) =>
-                                                            this.setState({ keyskillsSelected: selectedOptions })
-                                                        }
-                                                        isMulti
-                                                        placeholder="Type or select skills..."
-                                                        className="basic-multi-select"
-                                                        classNamePrefix="select"
-                                                    />
-                                                    <label htmlFor="keyskills_id">Key Skills</label>
-                                                </div>
-                                                <div className="col-lg-12">
-                                                    <div className="form-submit-group">
-                                                        <button
-                                                            type="button"
-                                                            className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                            onClick={this.handleKeySkillsUpdate}
-                                                        >
-                                                            <span className="icon-reverse-wrapper">
-                                                                <span className="btn-text">Update Skills</span>
-                                                                <span className="btn-icon">
-                                                                    <i className="feather-arrow-right" />
-                                                                </span>
-                                                            </span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <h3 className="section-header" onClick={() => this.toggleSection("showCareerProfile")} style={{ cursor: "pointer" }}>
-                                            Career Info <span style={{ marginLeft: '10px' }}>{this.state.showCareerProfile ? '[-]' : '[+]'}</span>
-                                        </h3>
-                                        {this.state.showCareerProfile && (
-                                            <div className="section-content">
-                                                <div className="form-group">
-                                                    <label htmlFor="trainerType">Trainer Type</label>
-                                                    <Select
-                                                        id="trainerType"
-                                                        name="trainerType"
-                                                        value={this.state.trainerType}
-                                                        options={[
-                                                            { value: 'Fulltime', label: 'Fulltime' },
-                                                            { value: 'Parttime', label: 'Parttime' }
-                                                        ]}
-                                                        onChange={(selectedOptions) => this.setState({ trainerType: selectedOptions })}
-                                                        isMulti
-                                                        placeholder="Select Trainer Type"
-                                                        className="basic-multi-select"
-                                                        classNamePrefix="select"
-                                                        menuPortalTarget={document.body}
-                                                        styles={{
-                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                        }}
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="totalExperience">Total Experience</label>
+                                                    <label htmlFor="company_name">Company Name</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
-                                                        id="totalExperience"
-                                                        name="totalExperience"
-                                                        value={this.state.totalExperience}
-                                                        onChange={(e) => this.setState({ totalExperience: e.target.value })}
+                                                        id="company_name"
+                                                        name="company_name"
+                                                        value={employmentForm.company_name}
+                                                        onChange={this.handleEmploymentFormChange}
                                                     />
                                                 </div>
                                                 <div className="form-group">
-                                                    <label htmlFor="modeOfTraining">Mode of Training</label>
-                                                    <Select
-                                                        id="modeOfTraining"
-                                                        name="modeOfTraining"
-                                                        value={this.state.modeOfTraining}
-                                                        options={[
-                                                            { value: 'Online', label: 'Online' },
-                                                            { value: 'In-Person', label: 'In-Person' },
-                                                            { value: 'Hybrid', label: 'Hybrid' }
-                                                        ]}
-                                                        onChange={(selectedOptions) => this.setState({ modeOfTraining: selectedOptions })}
-                                                        isMulti
-                                                        placeholder="Select Mode of Training"
-                                                        className="basic-multi-select"
-                                                        classNamePrefix="select"
-                                                        menuPortalTarget={document.body}
-                                                        styles={{
-                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                        }}
+                                                    <label htmlFor="jobtitle">Job Title</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="jobtitle"
+                                                        name="jobtitle"
+                                                        value={employmentForm.jobtitle}
+                                                        onChange={this.handleEmploymentFormChange}
                                                     />
                                                 </div>
-                                                <div className="col-lg-12">
-                                                    <div className="form-submit-group">
-                                                        <button
-                                                            type="button"
-                                                            className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                            onClick={this.handleCareerInformation}
+                                                <div className="form-group">
+                                                    <label>Worked From:</label>
+                                                    <div className="d-flex gap-3">
+                                                        <select
+                                                            className="form-control"
+                                                            id="workedFromYear"
+                                                            name="workedFromYear"
+                                                            value={employmentForm.workedFromYear}
+                                                            onChange={this.handleEmploymentFormChange}
                                                         >
-                                                            <span className="icon-reverse-wrapper">
-                                                                <span className="btn-text">Update Career Info</span>
-                                                                <span className="btn-icon">
-                                                                    <i className="feather-arrow-right" />
-                                                                </span>
-                                                            </span>
-                                                        </button>
+                                                            <option value="">Select Year</option>
+                                                            {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
+                                                                <option key={year} value={year}>
+                                                                    {year}
+                                                                </option>
+                                                            ))}
+                                                        </select>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )}
-                                    </form>
+                                                <div className="form-group">
+                                                    <label>Worked To:</label>
+                                                    <div className="d-flex gap-3">
+                                                        <select
+                                                            className="form-control"
+                                                            id="workedToYear"
+                                                            name="workedToYear"
+                                                            value={employmentForm.workedToYear}
+                                                            onChange={this.handleEmploymentFormChange}
+                                                        >
+                                                            <option value="">Select Year</option>
+                                                            {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
+                                                                <option key={year} value={year}>
+                                                                    {year}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                {employmentForm.workedFromYear && employmentForm.workedToYear && parseInt(employmentForm.workedFromYear) > parseInt(employmentForm.workedToYear) && (
+                                                    <span style={{ color: 'red' }}>Worked From year cannot be greater than Worked To year.</span>
+                                                )}
+                                            </Modal.Body>
+                                            <Modal.Footer>
+                                                <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEmploymentModal}>Cancel</Button>
+                                                <Button style={{ fontSize: '14px' }} type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEmployment}>Save</Button>
+                                            </Modal.Footer>
+                                        </Modal>
                                 </div>
-                            </div>
+                                                                                )}
+                                {/* Candidate Education Section */}
+                                <h3 className="section-header" onClick={() => this.toggleSection("showEducation")} style={{ cursor: "pointer" }}>
+                                    Education Details <span style={{ marginLeft: '10px' }}>{showEducation ? '[-]' : '[+]'}</span>
+                                </h3>
+                                {showEducation && (
+                                    <div style={{ textAlign: "left" }} className="section-content">
+                                        {this.state.educationDetails &&
+                                            this.state.educationDetails.map((education, index) => (
+                                                <div key={index} className="education-entry mb-4 border p-3 rounded position-relative">
+                                                    <div className="d-flex justify-content-end position-absolute" style={{ top: '10px', right: '10px' }}>
+                                                        <Button
+                                                            className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                                            variant="primary"
+                                                            style={{ fontSize: '14px' }}
+                                                            onClick={() => this.handleShowEducationModal(index)}
+                                                        >
+                                                            <i className="feather-edit" />
+                                                        </Button>
+                                                        <Button
+                                                            className="rounded-pill fw-bold px-5 py-3 shadow-sm ms-2"
+                                                            variant="danger"
+                                                            style={{ fontSize: '14px' }}
+                                                            onClick={() => this.removeEducation(index)}
+                                                        >
+                                                            <i className="feather-trash" />
+                                                        </Button>
+                                                    </div>
+                                                    <h5>Education {index + 1}</h5>
+                                                    <p style={{ fontWeight: "bold" }}>Institution Name: {education.institutionName}</p>
+                                                    <p style={{ fontWeight: "bold" }}>Degree with Specialisation: {education.degree}</p>
+                                                    <p style={{ fontWeight: "bold" }}>Completed Year: {education.fromYear}</p>
+                                                </div>
+                                            ))}
+                                        <Button
+                                            variant="success"
+                                            onClick={() => this.handleShowEducationModal()}
+                                            className="rounded-pill fw-bold px-5 py-3 shadow-sm"
+                                            style={{ fontSize: '14px' }}
+                                        >
+                                            Add Education
+                                        </Button>
+
+                                        <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal}>
+                                            <Modal.Header closeButton>
+                                                <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                                <div className="form-group">
+                                                    <label htmlFor="institutionName">Institution Name</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="institutionName"
+                                                        name="institutionName"
+                                                        value={this.state.educationForm.institutionName}
+                                                        onChange={this.handleEducationFormChange}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="degree">Degree with Specialisation</label>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="degree"
+                                                        name="degree"
+                                                        value={this.state.educationForm.degree}
+                                                        onChange={this.handleEducationFormChange}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label>Completed Year:</label>
+                                                    <select
+                                                        className="form-control"
+                                                        id="fromYear"
+                                                        name="fromYear"
+                                                        value={this.state.educationForm.fromYear}
+                                                        onChange={this.handleEducationFormChange}
+                                                    >
+                                                        <option value="">Select Year</option>
+                                                        {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
+                                                            <option key={year} value={year}>
+                                                                {year}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+                                            </Modal.Body>
+                                            <Modal.Footer>
+                                                <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEducationModal} style={{ fontSize: '14px' }}>Cancel</Button>
+                                                <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="primary" onClick={this.handleSaveEducation} style={{ fontSize: '14px' }}>Save</Button>
+                                            </Modal.Footer>
+                                        </Modal>
+                                    </div>
+                                )}
+                                <h3 className="section-header" onClick={() => this.toggleSection("showKeySkills")} style={{ cursor: "pointer" }}>
+                                    Key Skills <span style={{ marginLeft: '10px' }}>{showKeySkills ? '[-]' : '[+]'}</span>
+                                </h3>
+                                {showKeySkills && (
+                                    <div className="section-content">
+                                        <div className="form-group">
+                                            <Select
+                                                id="keyskills_id"
+                                                name="keyskills_id"
+                                                value={this.state.keyskillsSelected}
+                                                options={this.state.keyskills}
+                                                onChange={(selectedOptions) =>
+                                                    this.setState({ keyskillsSelected: selectedOptions })
+                                                }
+                                                isMulti
+                                                placeholder="Type or select skills..."
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                            />
+                                            <label htmlFor="keyskills_id">Key Skills</label>
+                                        </div>
+                                        <div className="col-lg-12">
+                                            <div className="form-submit-group">
+                                                <button
+                                                    type="button"
+                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                    onClick={this.handleKeySkillsUpdate}
+                                                >
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Update Skills</span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                <h3 className="section-header" onClick={() => this.toggleSection("showCareerProfile")} style={{ cursor: "pointer" }}>
+                                    Career Info <span style={{ marginLeft: '10px' }}>{this.state.showCareerProfile ? '[-]' : '[+]'}</span>
+                                </h3>
+                                {this.state.showCareerProfile && (
+                                    <div className="section-content">
+                                        <div className="form-group">
+                                            <label htmlFor="trainerType">Trainer Type</label>
+                                            <Select
+                                                id="trainerType"
+                                                name="trainerType"
+                                                value={this.state.trainerType}
+                                                options={[
+                                                    { value: 'Fulltime', label: 'Fulltime' },
+                                                    { value: 'Parttime', label: 'Parttime' }
+                                                ]}
+                                                onChange={(selectedOptions) => this.setState({ trainerType: selectedOptions })}
+                                                isMulti
+                                                placeholder="Select Trainer Type"
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="totalExperience">Total Experience</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="totalExperience"
+                                                name="totalExperience"
+                                                value={this.state.totalExperience}
+                                                onChange={(e) => this.setState({ totalExperience: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="modeOfTraining">Mode of Training</label>
+                                            <Select
+                                                id="modeOfTraining"
+                                                name="modeOfTraining"
+                                                value={this.state.modeOfTraining}
+                                                options={[
+                                                    { value: 'Online', label: 'Online' },
+                                                    { value: 'In-Person', label: 'In-Person' },
+                                                    { value: 'Hybrid', label: 'Hybrid' }
+                                                ]}
+                                                onChange={(selectedOptions) => this.setState({ modeOfTraining: selectedOptions })}
+                                                isMulti
+                                                placeholder="Select Mode of Training"
+                                                className="basic-multi-select"
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="col-lg-12">
+                                            <div className="form-submit-group">
+                                                <button
+                                                    type="button"
+                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                    onClick={this.handleCareerInformation}
+                                                >
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Update Career Info</span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </form>
                         </div>
                     </div>
                 </div>
+            </div >
+                </div >
             </>
         );
     }
