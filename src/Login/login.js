@@ -88,6 +88,7 @@ class Login extends React.Component {
           responseMessage: 'Login failed. invalid username or password.',
           alertVariant: 'danger', // Error alert variant
         });
+        window.scrollTo(0, 0);
       });
   };
 
