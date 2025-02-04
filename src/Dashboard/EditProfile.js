@@ -889,7 +889,7 @@ class EditProfileTrainer extends React.Component {
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
-                <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Trainer" />
+                <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Trainer" redirectURL="/TrainerDashboard" />
                 <div className="rbt-become-area bg-color-white rbt-section-gap">
                     <div className="container">
                         <div className="container mt-5">

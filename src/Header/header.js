@@ -186,6 +186,12 @@ class Header extends React.Component {
         this.setState({ isMobileMenuOpen: false });
         }
 
+        openSearchPanel = () => {
+            debugger;
+            document.querySelector('.rbt-search-dropdown').classList.toggle('active');
+        }
+
+
     render() {
         return (
             <><header className="rbt-header rbt-header-10">
@@ -318,7 +324,7 @@ class Header extends React.Component {
                                 {/* Navbar Icons */}
                                 <ul className="quick-access">
                                     <li className="access-icon">
-                                        <a className="search-trigger-active rbt-round-btn" href="#">
+                                        <a onClick={this.openSearchPanel} className="search-trigger-active rbt-round-btn" href="#">
                                             <i className="feather-search"></i>
                                         </a>
                                     </li>

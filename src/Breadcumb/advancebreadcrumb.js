@@ -20,7 +20,7 @@ class AdvancedBreadcumb extends React.Component {
             <h2 className="title">{this.props.componentName}</h2>
               <ul className="page-list">
             <li className="rbt-breadcrumb-item">
-              <a href={this.props.ComponentValue === 'Trainer' ? '/TrainerDashboard' : this.props.ComponentValue === 'Candidate' ? '/CandidateDashboard' : '/'}>
+              <a href={this.props.redirectURL}>
             Dashboard
               </a>
             </li>

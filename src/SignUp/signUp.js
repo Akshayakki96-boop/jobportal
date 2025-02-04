@@ -218,31 +218,31 @@ class SignUp extends React.Component {
                     <Breadcumb componentName="SignUp" ComponentValue="SignUp" />
                 </div>
                 <div className="rbt-elements-area bg-color-white" style={{ paddingBottom: '100px', marginBottom: '100px' }}>
-                   {/* Render Bootstrap alert if there's a responseMessage */}
-                                        {this.state.responseMessage && (
-                                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                                                {this.state.responseMessage}
-                                            </Alert>
-                                        )}
-                                        {this.state.keepSpinner && <div className="custom-loader">
-                                            <div className="loader-spinner"></div>
-                                            <p className="loader-text">Please Wait...</p>
-                                        </div>}
-                                        <div className="container-fluid p-0">
-                                            <div className="row">
-                                                <div className="log-regs-page">
-                                                    <div className="log-regs-bg1">
-                                                        <h1>
-                                                            Ready to Transform Your Career or Business?
-                                                            Join Zobskill and experience the future of training and recruitment.
-                                                        </h1>
-                                                    </div>
-                                                    <div className="log-regs-frm">
-                                                        <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                                            <h3 className="title">SignUp</h3>
-                                                            <form
-                                                                className="max-width-auto"
-                                                                onSubmit={(e) => e.preventDefault()} // Prevent form submission// Add margin to prevent overlap with footer
+                {/* Render Bootstrap alert if there's a responseMessage */}
+                                                        {this.state.responseMessage && (
+                                                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                                                                {this.state.responseMessage}
+                                                            </Alert>
+                                                        )}
+                                                        {this.state.keepSpinner && <div className="custom-loader">
+                                                            <div className="loader-spinner"></div>
+                                                            <p className="loader-text">Please Wait...</p>
+                                                        </div>}
+                                                        <div className="container-fluid p-0" style={{ marginBottom: '200px' }}>
+                                                            <div className="row">
+                                                                <div className="log-regs-page">
+                                                                    <div className="log-regs-bg1">
+                                                                        <h1>
+                                                                            Ready to Transform Your Career or Business?
+                                                                            Join Zobskill and experience the future of training and recruitment.
+                                                                        </h1>
+                                                                    </div>
+                                                                    <div className="log-regs-frm">
+                                                                        <div className="rbt-contact-form contact-form-style-1 max-width-auto">
+                                                                            <h3 className="title">SignUp</h3>
+                                                                            <form
+                                                                                className="max-width-auto"
+                                                                                onSubmit={(e) => e.preventDefault()} // Prevent form submission
                                                             >
                                         
                                             {/* Role Type Dropdown */}
@@ -390,7 +390,7 @@ class SignUp extends React.Component {
                                                         </span>
                                                     </span>
                                                 </button>
-                                                <div style={{ marginTop: '10px' }}></div> {/* Add spacing between buttons */}
+                                                 <div style={{ marginTop: '10px' }}></div>
                                                 <button
                                                     type="button"
                                                     className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
@@ -405,8 +405,8 @@ class SignUp extends React.Component {
                                                             <i className="feather-arrow-right"></i>
                                                         </span>
                                                     </span>
-                                                </button>
-                                            </div>
+                                                </button> 
+                                                </div>
                                         </form>
                                     </div>
                                 </div>
