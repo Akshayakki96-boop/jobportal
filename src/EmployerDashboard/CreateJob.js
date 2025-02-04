@@ -7,7 +7,6 @@ import withNavigation from '../withNavigation';
 import { setSingleRequest } from '../actions/SingleRequestAction';
 import { store } from '../index';
 import Header from '../Header/header';
-import JoditEditor from "jodit-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import styles
 
