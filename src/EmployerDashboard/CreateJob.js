@@ -8,6 +8,8 @@ import { setSingleRequest } from '../actions/SingleRequestAction';
 import { store } from '../index';
 import Header from '../Header/header';
 import JoditEditor from "jodit-react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import styles
 
 class CreateJob extends React.Component {
     constructor(props) {
@@ -178,6 +180,7 @@ class CreateJob extends React.Component {
         this.setState({ selectedExperience: selectedOption })
     };
     handleJobDescription = (e) => {
+        debugger;
         this.handleInputChange('description', e);
         this.setState({ description: e })
     };
@@ -258,18 +261,25 @@ class CreateJob extends React.Component {
     }
     render() {
         const { reactSelectOptions } = this.state;
-        const config = {
-            readonly: false, // All editing features are enabled
-            placeholder: "Start typing here...",
-            toolbar:true,
-            "inline": true,
-            "showWordsCounter": true,
-            "showXPathInStatusbar": false,
-            "buttons": "|,bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,outdent,indent,|,font,fontsize,brush,|,image,table,link,|,align,undo,redo,\n,selectall,cut,copy,paste,pastetext,|,hr,symbol,fullsize",
-            "uploader": {
-                "insertImageAsBase64URI": true
-            }
-          };
+        const modules = {
+            toolbar: [
+                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                [{ size: [] }],
+                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                ['link', 'image', 'video'],
+                ['clean']
+            ],
+        };
+
+        const formats = [
+            'header', 'font', 'size',
+            'bold', 'italic', 'underline', 'strike', 'blockquote',
+            'list', 'bullet', 'indent',
+            'link', 'image', 'video'
+        ];
+
+
         return (
             <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
                 <div className="container">
@@ -327,7 +337,7 @@ class CreateJob extends React.Component {
                                             <span className="focus-border" />
                                         </div>
                                     </div>
-                              
+
                                     <div className="col-lg-12">
                                         <div className="form-group">
                                             <Select
@@ -476,10 +486,12 @@ class CreateJob extends React.Component {
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                            <JoditEditor
+                                            <ReactQuill
                                                 value={this.state.description}
-                                                config={config}
-                                                onChange={(e) => this.handleJobDescription(e)}
+                                                onChange={this.handleJobDescription}
+                                                theme="snow"
+                                                modules={modules}
+                                                formats={formats}
                                             />
                                         </div>
                                     </div>
