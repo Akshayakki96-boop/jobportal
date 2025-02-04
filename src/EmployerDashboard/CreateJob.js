@@ -258,25 +258,27 @@ class CreateJob extends React.Component {
         this.handleInputChange('selectedDepartment', selectedOption);
         this.setState({ selectedDepartment: selectedOption })
     }
+
+    modules = {
+        toolbar: [
+            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+            [{ size: [] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+            ['link', 'image', 'video'],
+            ['clean']
+        ],
+    };
+
+    formats = [
+        'header', 'font', 'size',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image', 'video'
+    ];
+
     render() {
         const { reactSelectOptions } = this.state;
-        const modules = {
-            toolbar: [
-                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-                [{ size: [] }],
-                ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                ['link', 'image', 'video'],
-                ['clean']
-            ],
-        };
-
-        const formats = [
-            'header', 'font', 'size',
-            'bold', 'italic', 'underline', 'strike', 'blockquote',
-            'list', 'bullet', 'indent',
-            'link', 'image', 'video'
-        ];
 
 
         return (
@@ -489,10 +491,12 @@ class CreateJob extends React.Component {
                                                 value={this.state.description}
                                                 onChange={this.handleJobDescription}
                                                 theme="snow"
-                                                modules={modules}
-                                                formats={formats}
+                                                modules={this.modules}
+                                                placeholder="Write job description here..."
+                                                formats={this.formats}
                                             />
                                         </div>
+                                        <label>Job Description*</label>
                                     </div>
 
                                     <div className="col-lg-12">

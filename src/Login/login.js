@@ -159,12 +159,12 @@ class Login extends React.Component {
                           <label htmlFor="rememberme">Remember me</label>
                         </div>
                       </div> */}
-                          <div className="col-lg-4">
+                          <div className="col-lg-5">
                             <div className="rbt-lost-password text-end">
                               <a className="rbt-btn-link" href="#">Lost your password?</a>
                             </div>
                           </div>
-                          <div className="col-lg-6">
+                          <div className="col-lg-5">
                             <div className="rbt-lost-password text-end">
                               <a className="rbt-btn-link" href="/SignUp">Register</a>
                             </div>
