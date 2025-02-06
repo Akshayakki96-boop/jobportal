@@ -295,18 +295,18 @@ class Header extends React.Component {
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/candidate-aboutus" ? "active" : ""}>
-                                                <a href="/candidate-aboutus">Candidate</a>
+                                            <li className={window.location.pathname === "/candidate" ? "active" : ""}>
+                                                <a href="/candidate">Candidate</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/employer-aboutus" ? "active" : ""}>
-                                                <a href="/employer-aboutus">Employer</a>
+                                            <li className={window.location.pathname === "/employer" ? "active" : ""}>
+                                                <a href="/employer">Employer</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/trainer-aboutus" ? "active" : ""}>
-                                                <a href="/trainer-aboutus">Trainer</a>
+                                            <li className={window.location.pathname === "/trainer" ? "active" : ""}>
+                                                <a href="/trainer">Trainer</a>
                                             </li>
                                         )}
                                         {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
@@ -660,18 +660,18 @@ class Header extends React.Component {
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/candidate-aboutus" ? "current active" : ""}>
-                                                <a href="/candidate-aboutus">Candidate</a>
+                                            <li className={window.location.pathname === "/candidate" ? "current active" : ""}>
+                                                <a href="/candidate">Candidate</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/employer-aboutus" ? "current active" : ""}>
-                                                <a href="/employer-aboutus">Employer</a>
+                                            <li className={window.location.pathname === "/employer" ? "current active" : ""}>
+                                                <a href="/employer">Employer</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/trainer-aboutus" ? "current active" : ""}>
-                                                <a href="/trainer-aboutus">Trainer</a>
+                                            <li className={window.location.pathname === "/trainer" ? "current active" : ""}>
+                                                <a href="/trainer">Trainer</a>
                                             </li>
                                         )}
                                         {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (

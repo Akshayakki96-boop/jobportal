@@ -28,7 +28,14 @@ import AboutUs from './AboutUs/AboutUs';
 import TrainerAboutUs from './AboutUs/TrainerAboutUs';
 import EmployerAboutUs from './AboutUs/EmployerAboutUs';
 import CandidateAboutUs from './AboutUs/CandidateAboutUs';
-
+const NotFound = () => {
+  return (
+    <div>
+      <h2>404 - Page Not Found</h2>
+      <p>The page you are looking for does not exist.</p>
+    </div>
+  );
+};
 
 
 class App extends React.Component {
@@ -102,9 +109,10 @@ class App extends React.Component {
           <Route path="/edit-profile-trainer" element={<EditProfileTrainer/>} />
           <Route path="/create-new" element={<CreateCourse/>} />
           <Route path="/aboutus" element={<AboutUs/>} />
-          <Route path="/trainer-aboutus" element={<TrainerAboutUs/>} />
-          <Route path="/employer-aboutus" element={<EmployerAboutUs/>} />
-          <Route path="/candidate-aboutus" element={<CandidateAboutUs/>} />
+          <Route path="/trainer" element={<TrainerAboutUs/>} />
+          <Route path="/employer" element={<EmployerAboutUs/>} />
+          <Route path="/candidate" element={<CandidateAboutUs/>} />
+          <Route path="*" element={<NotFound />} />
           {/* Other routes can be added here */}
           </Routes>
         </div>

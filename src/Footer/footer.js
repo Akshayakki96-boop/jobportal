@@ -29,7 +29,6 @@ class Footer  extends React.Component {
                                 <h5 className="ft-title">Our Mission</h5>
         
                                 <p className="description mt--20">
-                                    We’re always in search for talented
                                     Our mission is to empower individuals to reach their full potential through innovative training programs and seamless job placement services. By combining expert-led learning with a comprehensive network of career opportunities, ZobSkill bridges the gap between talent and success, creating pathways for meaningful and rewarding careers. 
                                 </p>
                             </div>

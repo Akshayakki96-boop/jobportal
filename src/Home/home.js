@@ -350,7 +350,7 @@ class Home extends React.Component {
                                     </p>
 
                                     <div className="about-btn mt--40">
-                                        <a className="rbt-btn btn-gradient hover-icon-reverse" href="#">
+                                        <a className="rbt-btn btn-gradient hover-icon-reverse" href="/aboutus">
                                             <span className="icon-reverse-wrapper">
                                                 <span className="btn-text">Know More</span>
                                                 <span className="btn-icon"><i className="feather-arrow-right"></i></span>
@@ -584,7 +584,7 @@ class Home extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="rbt-callto-action-area mt_dec--half rbt-section-gap">
+                {/* <div className="rbt-callto-action-area mt_dec--half rbt-section-gap">
                     <div className="container">
                         <div className="row g-5">
                             <div className="col-lg-6">
@@ -635,7 +635,7 @@ class Home extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="rbt-rbt-card-area rbt-section-gap bg-color-white" style={{ marginTop: '140px' }}>
                     <div className="container">
                         <div className="row mb--60">
