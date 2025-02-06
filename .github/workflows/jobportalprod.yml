@@ -1,4 +1,4 @@
-name: Build and Deploy React App to IIS
+name: Build and Deploy React App to IIS Production
 
 on:
   push:
