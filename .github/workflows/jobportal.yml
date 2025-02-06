@@ -26,7 +26,7 @@ jobs:
 
       # Step 4: Build React app
       - name: Build React app
-        run: CI=false npm run build:dev
+        run: CI=false npm run build
 
       # Step 5: List the build directory contents (for debugging)
       - name: List build directory contents
