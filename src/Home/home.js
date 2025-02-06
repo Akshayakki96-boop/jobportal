@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../Header/header';
 import axios from 'axios'; 
+import parse from 'html-react-parser';
 
 class Home extends React.Component {
     constructor(props) {
@@ -670,7 +671,7 @@ class Home extends React.Component {
                                                     <li><i className="fas fa-map-marker-alt"></i> {job.locations}</li>
                                                 </ul>
                                                 <p className="rbt-card-text">
-                                                    {job.description}
+                                                      {parse(job.description)}
                                                 </p>
                                                 <div className="rbt-card-bottom">
                                                     <div className="rbt-price">

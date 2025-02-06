@@ -24,6 +24,10 @@ import EditProfileCandidate from './CandidateDashboard/EditProfile';
 import ActivateProfile from './ActivateProfile/ActivateProfile';
 import EditProfileTrainer from './Dashboard/EditProfile';
 import CreateCourse from './Dashboard/CreateCourse';
+import AboutUs from './AboutUs/AboutUs';
+import TrainerAboutUs from './AboutUs/TrainerAboutUs';
+import EmployerAboutUs from './AboutUs/EmployerAboutUs';
+import CandidateAboutUs from './AboutUs/CandidateAboutUs';
 
 
 
@@ -97,6 +101,10 @@ class App extends React.Component {
           <Route path="/Activate_Profile" element={<ActivateProfile/>} />
           <Route path="/edit-profile-trainer" element={<EditProfileTrainer/>} />
           <Route path="/create-new" element={<CreateCourse/>} />
+          <Route path="/aboutus" element={<AboutUs/>} />
+          <Route path="/trainer-aboutus" element={<TrainerAboutUs/>} />
+          <Route path="/employer-aboutus" element={<EmployerAboutUs/>} />
+          <Route path="/candidate-aboutus" element={<CandidateAboutUs/>} />
           {/* Other routes can be added here */}
           </Routes>
         </div>

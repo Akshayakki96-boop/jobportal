@@ -179,7 +179,6 @@ class CreateJob extends React.Component {
         this.setState({ selectedExperience: selectedOption })
     };
     handleJobDescription = (e) => {
-        debugger;
         this.handleInputChange('description', e);
         this.setState({ description: e })
     };
