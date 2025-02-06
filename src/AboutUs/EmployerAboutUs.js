@@ -46,7 +46,7 @@ class EmployerAboutUs extends React.Component {
       <div className="row">
         <div className="col-lg-12">
           <div className="breadcrumb-inner text-center">
-            <h2 className="title">About Us</h2>
+            <h2 className="title">Employer</h2>
             <ul className="page-list">
               <li className="rbt-breadcrumb-item">
                 <a href="/">Home</a>
@@ -56,7 +56,7 @@ class EmployerAboutUs extends React.Component {
                   <i className="feather-chevron-right" />
                 </div>
               </li>
-              <li className="rbt-breadcrumb-item active">About Us</li>
+              <li className="rbt-breadcrumb-item active">Employer</li>
             </ul>
           </div>
         </div>

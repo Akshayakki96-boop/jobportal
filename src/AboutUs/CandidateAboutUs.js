@@ -46,7 +46,7 @@ class CandidateAboutUs extends React.Component {
       <div className="row">
         <div className="col-lg-12">
           <div className="breadcrumb-inner text-center">
-            <h2 className="title">About Us</h2>
+            <h2 className="title">Candidate</h2>
             <ul className="page-list">
               <li className="rbt-breadcrumb-item">
                 <a href="/">Home</a>
@@ -56,7 +56,7 @@ class CandidateAboutUs extends React.Component {
                   <i className="feather-chevron-right" />
                 </div>
               </li>
-              <li className="rbt-breadcrumb-item active">About Us</li>
+              <li className="rbt-breadcrumb-item active">Candidate</li>
             </ul>
           </div>
         </div>
@@ -95,7 +95,7 @@ class CandidateAboutUs extends React.Component {
       <div className="col-lg-6">
         <div className="inner pl--50 pl_sm--0 pl_md--0">
           <div className="section-title text-start">
-            <span className="subtitle bg-coral-opacity">About Us</span>
+            <span className="subtitle bg-coral-opacity">Candidate</span>
             <h2 className="title">
               Zobskill is a <br />
               one-stop platform

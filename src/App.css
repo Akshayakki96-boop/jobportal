@@ -518,6 +518,24 @@ select.form-control option {
   }
 }
 
+.rbt-page-banner-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  position: relative;
+  margin: 0 auto;
+  padding: 8px 0px 150px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.page-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: left;
+}
+
 iframe#webpack-dev-server-client-overlay {
   display: none !important
 }
