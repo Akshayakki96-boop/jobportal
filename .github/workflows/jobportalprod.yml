@@ -72,5 +72,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME_PROD }}  # Use the FTP username stored in GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD_PROD }}  # Use the FTP password stored in GitHub Secrets
           local-dir: /home/runner/work/jobportal/jobportal/  # Adjusted path to point directly to the root folder
-          server-dir: /  # Ensure this is a folder path and ends with /
+          server-dir: /httpdocs  # Ensure this is a folder path and ends with /
           dry-run: false  # Set to false to perform actual deployment
