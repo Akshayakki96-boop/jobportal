@@ -187,7 +187,6 @@ class Header extends React.Component {
         }
 
         openSearchPanel = () => {
-            debugger;
             document.querySelector('.rbt-search-dropdown').classList.toggle('active');
         }
 
@@ -207,11 +206,11 @@ class Header extends React.Component {
                                         {/* Start Header Information List */}
                                         <div className="header-info">
                                             <ul className="rbt-information-list">
-                                                <li>
+                                                {/* <li>
                                                     <a href="#">
                                                         <i className="fas fa-phone"></i>+1-202-555-0174
                                                     </a>
-                                                </li>
+                                                </li> */}
                                                 <li>
                                                     <a href="mailto:support@zobskill.com">
                                                         <i className="fas fa-envelope"></i> support@zobskill.com
@@ -296,18 +295,18 @@ class Header extends React.Component {
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/SignUp" ? "active" : ""}>
-                                                <a href="/SignUp">Candidate</a>
+                                            <li className={window.location.pathname === "/candidate-aboutus" ? "active" : ""}>
+                                                <a href="/candidate-aboutus">Candidate</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/SignUp" ? "active" : ""}>
-                                                <a href="/SignUp">Employer</a>
+                                            <li className={window.location.pathname === "/employer-aboutus" ? "active" : ""}>
+                                                <a href="/employer-aboutus">Employer</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/SignUp" ? "active" : ""}>
-                                                <a href="/SignUp">Trainer</a>
+                                            <li className={window.location.pathname === "/trainer-aboutus" ? "active" : ""}>
+                                                <a href="/trainer-aboutus">Trainer</a>
                                             </li>
                                         )}
                                         {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
@@ -661,18 +660,18 @@ class Header extends React.Component {
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/SignUp" ? "current active" : ""}>
-                                                <a href="/SignUp">Candidate</a>
+                                            <li className={window.location.pathname === "/candidate-aboutus" ? "current active" : ""}>
+                                                <a href="/candidate-aboutus">Candidate</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/SignUp" ? "current active" : ""}>
-                                                <a href="/SignUp">Employer</a>
+                                            <li className={window.location.pathname === "/employer-aboutus" ? "current active" : ""}>
+                                                <a href="/employer-aboutus">Employer</a>
                                             </li>
                                         )}
                                         {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/SignUp" ? "current active" : ""}>
-                                                <a href="/SignUp">Trainer</a>
+                                            <li className={window.location.pathname === "/trainer-aboutus" ? "current active" : ""}>
+                                                <a href="/trainer-aboutus">Trainer</a>
                                             </li>
                                         )}
                                         {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (

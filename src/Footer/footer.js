@@ -40,7 +40,13 @@ class Footer  extends React.Component {
                                 <h5 className="ft-title">Contact Us</h5>
                                 <ul className="ft-link">
                                     <li>
-                                        <a href="#">support@zobskill.com</a>
+                                        <a target='_blank' href="mailto:support@zobskill.com">support@zobskill.com</a>
+                                    </li>
+                                    <li>
+                                        <a target='_blank' href="mailto:trainer@zobskill.com">trainer@zobskill.com</a>
+                                    </li>
+                                    <li>
+                                        <a target='_blank' href="mailto:employer@zobskill.com">employer@zobskill.com</a>
                                     </li>
                                 </ul>
                             </div>
@@ -52,19 +58,19 @@ class Footer  extends React.Component {
         
                                 <ul className="ft-link">
                                     <li>
-                                        <a href="#">Courses</a>
+                                        <a href="/Course">Courses</a>
                                     </li>
                                     <li>
-                                        <a href="#">Jobs</a>
+                                        <a href="/Jobs">Jobs</a>
                                     </li>
                                     <li>
-                                        <a href="#">About Us</a>
+                                        <a href="/aboutus">About Us</a>
                                     </li>
                                     <li>
-                                        <a href="#">Candidate Login</a>
+                                        <a href="/Login">Candidate Login</a>
                                     </li>
                                     <li>
-                                        <a href="#">Trainer Login</a>
+                                        <a href="/Login">Trainer Login</a>
                                     </li>
                                 </ul>
                             </div>

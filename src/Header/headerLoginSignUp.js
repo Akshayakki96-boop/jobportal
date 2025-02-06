@@ -67,11 +67,11 @@ class HeaderLogin extends React.Component {
                                         {/* Start Header Information List */}
                                         <div className="header-info">
                                             <ul className="rbt-information-list">
-                                                <li>
+                                                {/* <li>
                                                     <a href="#">
                                                         <i className="fas fa-phone"></i>+1-202-555-0174
                                                     </a>
-                                                </li>
+                                                </li> */}
                                                 <li>
                                                     <a href="mailto:support@zobskill.com">
                                                         <i className="fas fa-envelope"></i> support@zobskill.com
