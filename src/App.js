@@ -28,9 +28,11 @@ import AboutUs from './AboutUs/AboutUs';
 import TrainerAboutUs from './AboutUs/TrainerAboutUs';
 import EmployerAboutUs from './AboutUs/EmployerAboutUs';
 import CandidateAboutUs from './AboutUs/CandidateAboutUs';
+import HeaderLoginSignUp from './Header/headerLoginSignUp';
 const NotFound = () => {
   return (
     <div>
+      <HeaderLoginSignUp/>
       <h2>404 - Page Not Found</h2>
       <p>The page you are looking for does not exist.</p>
     </div>
