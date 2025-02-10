@@ -24,17 +24,17 @@ class Footer  extends React.Component {
             <div className="footer-top">
                 <div className="container">
                     <div className="row row--15 mt_dec--30">
-                        <div className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30">
+                        <div style={{textAlign:"left"}} className="col-lg-4 col-md-6 col-sm-6 col-12 mt--30">
                             <div className="footer-widget">
                                 <h5 className="ft-title">Our Mission</h5>
         
-                                <p className="description mt--20">
+                                <p style={{textAlign:"left"}} className="description mt--20">
                                     Our mission is to empower individuals to reach their full potential through innovative training programs and seamless job placement services. By combining expert-led learning with a comprehensive network of career opportunities, ZobSkill bridges the gap between talent and success, creating pathways for meaningful and rewarding careers. 
                                 </p>
                             </div>
                         </div>
         
-                        <div className="offset-lg-1 col-lg-2 col-md-6 col-sm-6 col-12 mt--30">
+                        <div style={{textAlign:"left"}} className="offset-lg-1 col-lg-2 col-md-6 col-sm-6 col-12 mt--30">
                             <div className="footer-widget">
                                 <h5 className="ft-title">Contact Us</h5>
                                 <ul className="ft-link">
@@ -51,7 +51,7 @@ class Footer  extends React.Component {
                             </div>
                         </div>
         
-                        <div className="col-lg-2 col-md-6 col-sm-6 col-12 mt--30">
+                        <div style={{textAlign:"left"}} className="col-lg-2 col-md-6 col-sm-6 col-12 mt--30">
                             <div className="footer-widget">
                                 <h5 className="ft-title">Quick Links</h5>
         
@@ -75,7 +75,7 @@ class Footer  extends React.Component {
                             </div>
                         </div>
         
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-12 mt--30">
+                        <div style={{textAlign:"left"}} className="col-lg-3 col-md-6 col-sm-6 col-12 mt--30">
                             <div className="footer-widget">
                                 <h5 className="ft-title">Subscribe us</h5>
                                 <form className="newsletter-form mt--20" action="#">

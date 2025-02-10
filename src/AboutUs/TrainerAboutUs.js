@@ -69,6 +69,9 @@ class TrainerAboutUs extends React.Component {
     </div>
   </div>
   {/* End Breadcrumb Area */}
+  <div style={{ textAlign: 'center', fontSize: '1.5em', padding: '20px' }}>
+  "Turn your expertise into earnings! Start training on Zobskill and watch your students (and your income) grow!"
+  </div>
   <div className="rbt-about-area about-style-1 bg-color-white rbt-section-gap">
   <div className="container">
     <div className="row g-5 align-items-center">

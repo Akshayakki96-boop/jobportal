@@ -29,6 +29,8 @@ import TrainerAboutUs from './AboutUs/TrainerAboutUs';
 import EmployerAboutUs from './AboutUs/EmployerAboutUs';
 import CandidateAboutUs from './AboutUs/CandidateAboutUs';
 import HeaderLoginSignUp from './Header/headerLoginSignUp';
+import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
+import TermsCondition from './TermsCondition/TermsCondition';
 const NotFound = () => {
   return (
     <div>
@@ -114,6 +116,8 @@ class App extends React.Component {
           <Route path="/trainer" element={<TrainerAboutUs/>} />
           <Route path="/employer" element={<EmployerAboutUs/>} />
           <Route path="/candidate" element={<CandidateAboutUs/>} />
+          <Route path="/privacypolicy" element={<PrivacyPolicy/>} />
+          <Route path="/termsconditions" element={<TermsCondition/>} />
           <Route path="*" element={<NotFound />} />
           {/* Other routes can be added here */}
           </Routes>

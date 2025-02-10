@@ -69,6 +69,9 @@ class EmployerAboutUs extends React.Component {
     </div>
   </div>
   {/* End Breadcrumb Area */}
+  <div style={{ textAlign: 'center', fontSize: '1.5em', padding: '20px' }}>
+  "Post unlimited job listings and hire certified talent—without the hiring headache! Get started today on Zobskill."
+  </div>
   <div className="rbt-about-area about-style-1 bg-color-white rbt-section-gap">
   <div className="container">
     <div className="row g-5 align-items-center">
