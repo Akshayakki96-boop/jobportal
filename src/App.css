@@ -602,8 +602,20 @@ select.form-control option {
 }
 
 
+.background{
+  background-color: #FEF9E7 !important;
+}
 
+.background1{
+  background-color: #FDECEC !important;
+}
+.background2{
+  background-color: #E8F8F5 !important;
+}
 
+.background3{
+  background-color: #EBF5FB !important;
+}
 
 iframe#webpack-dev-server-client-overlay {
   display: none !important
