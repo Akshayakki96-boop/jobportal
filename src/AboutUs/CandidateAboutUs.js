@@ -64,6 +64,9 @@ class CandidateAboutUs extends React.Component {
     </div>
   </div>
   {/* End Breadcrumb Area */}
+  <div style={{ textAlign: 'center', fontSize: '1.5em', padding: '20px' }}>
+  "Don’t just wait—take the first step towards your dream career. Sign up on Zobskill now and unlock your potential!"
+  </div>
   <div className="rbt-about-area about-style-1 bg-color-white rbt-section-gap">
   <div className="container">
     <div className="row g-5 align-items-center">

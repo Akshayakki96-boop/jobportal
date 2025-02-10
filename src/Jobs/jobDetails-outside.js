@@ -105,7 +105,7 @@ class jobDetailsOutside extends React.Component {
                         <div className=" title-wrapper">
                           <h1 className="title mb--0">   {this.state.jobDescription && this.state.jobDescription.jobtitle}</h1>
                           <a href="#" className="rbt-badge-2">
-                            {this.state.jobDescription && this.state.jobDescription.jobtype}
+                            {this.state.jobDescription && this.state.jobDescription.empType}
                           </a>
                         </div>
                         <div className="d-flex align-items-start flex-wrap mb--15 rbt-course-details-feature">
@@ -167,7 +167,7 @@ class jobDetailsOutside extends React.Component {
                       <div className="col-lg-3  d-flex flex-column justify-content-center">
                         <div className="job-det-pic">
                           <a href="#">
-                            <img src="assets/images/job-zob-img.jpg" alt="Card image" />
+                            <img src={this.state.jobDescription?.companylogo?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.jobDescription.companylogo}`:"assets/images/job-zob-img.jpg"} />
                           </a>
                         </div>
                       </div>
