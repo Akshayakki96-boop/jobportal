@@ -700,7 +700,7 @@ class Home extends React.Component {
                             <div className="col-lg-12">
                                 <div className="section-title text-center">
                                     <span className="subtitle bg-primary-opacity">Zobskill Mentors</span>
-                                    <h2 className="title">Whose Inspirs You</h2>
+                                    <h2 className="title">Whose Inspires You</h2>
                                 </div>
                             </div>
                         </div>
