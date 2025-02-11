@@ -164,7 +164,9 @@ class AboutUs extends React.Component {
             <p className="description">
               Join our team and grow your career by working in healthy
               environment.
+
             </p>
+            <a target='_blank' href="mailto:support@zobskill.com">support@zobskill.com</a>
             {/*
                       <div class="read-more-btn mt--40">
                           <a class="rbt-btn rbt-marquee-btn radius-round btn-gradient" href="#">
