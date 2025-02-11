@@ -10,7 +10,7 @@ import 'swiper/css/effect-cards';
 
 
 // import required modules
-import { EffectCards } from 'swiper/modules';
+import { EffectCards,Pagination} from 'swiper/modules';
 
 class Home extends React.Component {
     constructor(props) {
@@ -153,7 +153,8 @@ class Home extends React.Component {
                                         <Swiper
                                             effect={"cards"}
                                             grabCursor={true}
-                                            modules={[EffectCards]}
+                                            pagination={{ clickable: true }} 
+                                            modules={[EffectCards,Pagination]}
                                             spaceBetween={30}
                                             centeredSlides={true}
                                             slidesPerView={1}
@@ -161,7 +162,7 @@ class Home extends React.Component {
                                         >
                                             {[1, 2, 3].map((_, index) => (
                                                 <SwiperSlide style={{ width: "400px", height: "auto" }} key={index}>
-                                                    <div className="rbt-card variation-01 rbt-hover" style={{ width: "350px", height: "450px" }}>
+                                                    <div className="rbt-card variation-01 rbt-hover">
                                                         {/* Image Section */}
                                                         <div className="rbt-card-img">
                                                             <a href="course-details.html">
