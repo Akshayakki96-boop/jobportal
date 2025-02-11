@@ -179,16 +179,16 @@ class Header extends React.Component {
     };
 
     popupMobileMenu = () => {
-      this.setState({ isMobileMenuOpen: true });
+        this.setState({ isMobileMenuOpen: true });
     }
 
     closeClick = () => {
         this.setState({ isMobileMenuOpen: false });
-        }
+    }
 
-        openSearchPanel = () => {
-            document.querySelector('.rbt-search-dropdown').classList.toggle('active');
-        }
+    openSearchPanel = () => {
+        document.querySelector('.rbt-search-dropdown').classList.toggle('active');
+    }
 
 
     render() {
@@ -219,6 +219,19 @@ class Header extends React.Component {
                                             </ul>
                                         </div>
                                         {/* End Header Information List */}
+                                    </div>
+                                </div>
+                                <div className="rbt-header-sec-col rbt-header-center hmdl">
+                                    <div className="rbt-header-content justify-content-start justify-content-xl-center">
+                                        <div className="header-info">
+                                            <div className="rbt-header-top-news">
+                                                <div className="inner">
+                                                    <div className="content blnk-txt">
+                                                        <span className="news-text">Claim your Refund</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -393,7 +406,7 @@ class Header extends React.Component {
 
                                                 <ul className="user-list-wrapper">
                                                     <li>
-                                                        <a onClick={(e) => { e.preventDefault(); this.handleredirection(); } } href="#">
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleredirection(); }} href="#">
                                                             <i className="feather-log-out"></i>
                                                             <span>
                                                                 {this.props.dashBoardData?.role_id == 1
@@ -406,7 +419,7 @@ class Header extends React.Component {
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a onClick={(e) => { e.preventDefault(); this.handleLogout(); } } href="#">
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                             <i className="feather-log-out"></i>
                                                             <span>Logout</span>
                                                         </a>
@@ -625,7 +638,7 @@ class Header extends React.Component {
                     {/*end Search Dropdown */}
                 </div>
 
-            </header><div className={this.state.isMobileMenuOpen?'popup-mobile-menu active':'popup-mobile-menu'}>
+            </header><div className={this.state.isMobileMenuOpen ? 'popup-mobile-menu active' : 'popup-mobile-menu'}>
                     <div className="inner-wrapper">
                         <div className="inner-top">
                             <div className="content">
@@ -644,42 +657,42 @@ class Header extends React.Component {
                             </div>
                         </div>
                         <nav className="mainmenu-nav">
-                        <ul className="mainmenu">
-                                        <li className={window.location.pathname === "/" ? "current active" : ""}>
-                                            <a href="/">Home</a>
-                                        </li>
-                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
-                                            <li className={window.location.pathname === "/Course" ? " current active" : ""}>
-                                                <a href="/Course">Course</a>
-                                            </li>
-                                        )}
+                            <ul className="mainmenu">
+                                <li className={window.location.pathname === "/" ? "current active" : ""}>
+                                    <a href="/">Home</a>
+                                </li>
+                                {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
+                                    <li className={window.location.pathname === "/Course" ? " current active" : ""}>
+                                        <a href="/Course">Course</a>
+                                    </li>
+                                )}
 
-                                        {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
-                                            <li className={window.location.pathname === "/Jobs" || window.location.pathname === "/job-decription" || window.location.pathname === "/Job-details" ? "current active" : ""}>
-                                                <a href="/Jobs">Jobs</a>
-                                            </li>
-                                        )}
-                                        {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/candidate" ? "current active" : ""}>
-                                                <a href="/candidate">Candidate</a>
-                                            </li>
-                                        )}
-                                        {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/employer" ? "current active" : ""}>
-                                                <a href="/employer">Employer</a>
-                                            </li>
-                                        )}
-                                        {this.props.dashBoardData === "" && (
-                                            <li className={window.location.pathname === "/trainer" ? "current active" : ""}>
-                                                <a href="/trainer">Trainer</a>
-                                            </li>
-                                        )}
-                                        {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
-                                            <li className={window.location.pathname === "/Community" ? "current active" : ""}>
-                                                <a href="/Community">Community</a>
-                                            </li>
-                                        )}
-                                    </ul>
+                                {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
+                                    <li className={window.location.pathname === "/Jobs" || window.location.pathname === "/job-decription" || window.location.pathname === "/Job-details" ? "current active" : ""}>
+                                        <a href="/Jobs">Jobs</a>
+                                    </li>
+                                )}
+                                {this.props.dashBoardData === "" && (
+                                    <li className={window.location.pathname === "/candidate" ? "current active" : ""}>
+                                        <a href="/candidate">Candidate</a>
+                                    </li>
+                                )}
+                                {this.props.dashBoardData === "" && (
+                                    <li className={window.location.pathname === "/employer" ? "current active" : ""}>
+                                        <a href="/employer">Employer</a>
+                                    </li>
+                                )}
+                                {this.props.dashBoardData === "" && (
+                                    <li className={window.location.pathname === "/trainer" ? "current active" : ""}>
+                                        <a href="/trainer">Trainer</a>
+                                    </li>
+                                )}
+                                {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
+                                    <li className={window.location.pathname === "/Community" ? "current active" : ""}>
+                                        <a href="/Community">Community</a>
+                                    </li>
+                                )}
+                            </ul>
                         </nav>
                         {/* <div className="mobile-menu-bottom">
                             <div className="rbt-btn-wrapper mb--20">
