@@ -197,7 +197,7 @@ h3.title {
 
 .mentor .thumbnail{position: relative !important; display: inline-block;}
 .mentor .watermark {position: absolute; bottom: 10px; right: 10px; font-size: 30px; color: rgba(255, 255, 255, 0.5); font-weight: bold; pointer-events: none;}
-.mentor .badgs{position: absolute; top: 10px; right: 10px; text-align: right; pointer-events: none;} 
+.mentor .badgs{position: absolute; bottom: 10px; right: 10px; text-align: right; pointer-events: none;} 
 .mentor .badgs img{width: 64px !important}
 
 .course-dp .title {
@@ -615,6 +615,45 @@ select.form-control option {
 
 .background3{
   background-color: #EBF5FB !important;
+}
+
+.rbt-accordion-style .card .card-header button {
+  font-size: 18px;
+  line-height: 27px;
+  outline: none;
+  text-decoration: none;
+  box-shadow: none;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  background-color: transparent;
+  position: relative;
+  font-weight: normal;
+}
+
+.rbt-header-top-news .inner .content .news-text {
+  display: inline-block;
+  margin-left: 7px;
+  /* color: var(--color-body); */
+  /* font-size: 14px; */
+  font-weight: 500;
+}
+
+.blnk-txt span {
+  animation: animate 1.5s linear infinite;
+  color: #d6c3fd !important;
+  font-size: 20px !important;
+}
+@keyframes animate {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 iframe#webpack-dev-server-client-overlay {
