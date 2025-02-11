@@ -141,6 +141,48 @@ class AboutUs extends React.Component {
     </div>
   </div>
 </div>
+<div className="rbt-about-area about-style-1 bg-color-white rbt-section-gap pt-0">
+  <div className="container">
+    <div className="row g-5 align-items-center">
+      <div className="col-lg-6">
+        <div className="content">
+          <img src="assets/images/about/about-06.png" alt="About Images" />
+        </div>
+      </div>
+      <div
+        className="col-lg-6 sal-animate"
+        data-sal="slide-up"
+        data-sal-duration={700}
+      >
+        <div className="inner pl--50 pl_sm--5">
+          <div className="content text-start">
+            <span className="rbt-badge-6 bg-primary-opacity">Career</span>
+            <h3 className="title">Welcome to Zobskill Team</h3>
+            <p className="description mt--30">
+              <strong>Zobskill educational platform</strong>
+            </p>
+            <p className="description">
+              Join our team and grow your career by working in healthy
+              environment.
+
+            </p>
+            <a target='_blank' href="mailto:support@zobskill.com">support@zobskill.com</a>
+            {/*
+                      <div class="read-more-btn mt--40">
+                          <a class="rbt-btn rbt-marquee-btn radius-round btn-gradient" href="#">
+                              <span data-text="Start Learning For Free">
+                                  Start Learning For Free
+                              </span>
+                          </a>
+                      </div>
+*/}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div className="rbt-course-area bg-color-extra2 rbt-section-gap">
   <div className="container">
     <div className="row g-5 align-items-center">
@@ -151,10 +193,10 @@ class AboutUs extends React.Component {
               Key Benefits of Zobskill
             </span>
           </div>
-          <h5 className="title">Why Choose Us?</h5>
+          <h5 style={{textAlign:"left"}} className="title">Why Choose Us?</h5>
           <div className="rbt-accordion-style rbt-accordion-02 accordion">
             <div className="accordion" id="accordionExampleb2">
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo1">
                   <button
                     className="accordion-button collapsed"
@@ -172,7 +214,7 @@ class AboutUs extends React.Component {
                   aria-labelledby="headingTwo1"
                   data-bs-parent="#accordionExampleb2"
                 >
-                  <div className="accordion-body card-body">
+                  <div style={{textAlign:"left"}} className="accordion-body card-body">
                     <ul>
                       <li>
                         Get 50% refunded when you pass your certification exam.
@@ -185,7 +227,7 @@ class AboutUs extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo2">
                   <button
                     className="accordion-button collapsed"
@@ -204,7 +246,7 @@ class AboutUs extends React.Component {
                   aria-labelledby="headingTwo2"
                   data-bs-parent="#accordionExampleb2"
                 >
-                  <div className="accordion-body card-body">
+                  <div style={{textAlign:"left"}} className="accordion-body card-body">
                     <ul>
                       <li>
                         Stand out with the prestigious badge awarded to
@@ -214,7 +256,7 @@ class AboutUs extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo3">
                   <button
                     className="accordion-button collapsed"
@@ -233,13 +275,13 @@ class AboutUs extends React.Component {
                   aria-labelledby="headingTwo3"
                   data-bs-parent="#accordionExampleb2"
                 >
-                  <div className="accordion-body card-body">
+                  <div style={{textAlign:"left"}} className="accordion-body card-body">
                     Trainers earn incentives for every candidate who passes
                     their exam, ensuring top-quality training.
                   </div>
                 </div>
               </div>
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo4">
                   <button
                     className="accordion-button collapsed"
@@ -258,7 +300,7 @@ class AboutUs extends React.Component {
                   aria-labelledby="headingTwo4"
                   data-bs-parent="#accordionExampleb2"
                 >
-                  <div className="accordion-body card-body">
+                  <div style={{textAlign:'left'}} className="accordion-body card-body">
                     <ul>
                       <li>
                         Engage with Zobskill Mentors to learn from their
@@ -272,7 +314,7 @@ class AboutUs extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo5">
                   <button
                     className="accordion-button collapsed"
@@ -301,7 +343,7 @@ class AboutUs extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo6">
                   <button
                     className="accordion-button collapsed"
@@ -320,7 +362,7 @@ class AboutUs extends React.Component {
                   aria-labelledby="headingTwo6"
                   data-bs-parent="#accordionExampleb2"
                 >
-                  <div className="accordion-body card-body">
+                  <div style={{textAlign:"left"}} className="accordion-body card-body">
                     <ul>
                       <li>
                         Opportunities across sectors like IT, finance,
@@ -332,10 +374,10 @@ class AboutUs extends React.Component {
               </div>
             </div>
           </div>
-          <h5 className="title mt-5">Benefits For Employers and Trainers</h5>
+          <h5 style={{textAlign:"left"}} className="title mt-5">Benefits For Employers and Trainers</h5>
           <div className="rbt-accordion-style rbt-accordion-02 accordion">
             <div className="accordion" id="accordionExampleb2">
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo7">
                   <button
                     className="accordion-button collapsed"
@@ -353,7 +395,7 @@ class AboutUs extends React.Component {
                   aria-labelledby="headingTwo7"
                   data-bs-parent="#accordionExampleb2"
                 >
-                  <div className="accordion-body card-body">
+                  <div style={{textAlign:"left"}} className="accordion-body card-body">
                     <ul>
                       <li>
                         Access pre-screened, certified talent tailored to your
@@ -371,7 +413,7 @@ class AboutUs extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="accordion-item card">
+              <div style={{textAlign:"left"}} className="accordion-item card">
                 <h2 className="accordion-header card-header" id="headingTwo2">
                   <button
                     className="accordion-button collapsed"
@@ -390,7 +432,7 @@ class AboutUs extends React.Component {
                   aria-labelledby="headingTwo8"
                   data-bs-parent="#accordionExampleb8"
                 >
-                  <div className="accordion-body card-body">
+                  <div style={{textAlign:"left"}} className="accordion-body card-body">
                     <ul>
                       <li>Wider reach to a vast audience of candidates.</li>
                       <li>Incentives for successful candidate outcomes.</li>
@@ -437,6 +479,7 @@ class AboutUs extends React.Component {
     </div>
   </div>
 </div>
+
 
 
 </>
