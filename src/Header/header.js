@@ -190,7 +190,9 @@ class Header extends React.Component {
         document.querySelector('.rbt-search-dropdown').classList.toggle('active');
     }
 
-
+    redirectURL = () => {
+        window.location.href = '/claimrefund';
+    }
     render() {
         return (
             <><header className="rbt-header rbt-header-10">
@@ -227,7 +229,7 @@ class Header extends React.Component {
                                             <div className="rbt-header-top-news">
                                                 <div className="inner">
                                                     <div className="content blnk-txt">
-                                                        <span className="news-text">Claim your Refund</span>
+                                                        <span  onClick={this.redirectURL} className="news-text">Claim your Refund</span>
                                                     </div>
                                                 </div>
                                             </div>

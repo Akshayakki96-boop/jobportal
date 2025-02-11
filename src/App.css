@@ -533,10 +533,7 @@ select.form-control option {
   overflow: hidden;
 }
 
-.swiper {
-  width: 240px;
-  height: 320px;
-}
+
 
 .swiper-slide {
   display: flex;
@@ -637,6 +634,7 @@ select.form-control option {
   /* color: var(--color-body); */
   /* font-size: 14px; */
   font-weight: 500;
+  cursor: pointer;
 }
 
 .blnk-txt span {
