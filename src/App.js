@@ -31,6 +31,7 @@ import CandidateAboutUs from './AboutUs/CandidateAboutUs';
 import HeaderLoginSignUp from './Header/headerLoginSignUp';
 import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
 import TermsCondition from './TermsCondition/TermsCondition';
+import ClaimRefund from './ClaimRefund/ClaimRefund';
 const NotFound = () => {
   return (
     <div>
@@ -118,6 +119,7 @@ class App extends React.Component {
           <Route path="/candidate" element={<CandidateAboutUs/>} />
           <Route path="/privacypolicy" element={<PrivacyPolicy/>} />
           <Route path="/termsconditions" element={<TermsCondition/>} />
+          <Route path="/claimrefund" element={<ClaimRefund/>} />
           <Route path="*" element={<NotFound />} />
           {/* Other routes can be added here */}
           </Routes>

@@ -48,6 +48,9 @@ class HeaderLogin extends React.Component {
     }
 
 
+    redirectURL = () => {
+        window.location.href = '/claimrefund';
+    }
 
   
 
@@ -82,7 +85,19 @@ class HeaderLogin extends React.Component {
                                         {/* End Header Information List */}
                                     </div>
                                 </div>
-
+                                <div className="rbt-header-sec-col rbt-header-center hmdl">
+                                    <div className="rbt-header-content justify-content-start justify-content-xl-center">
+                                        <div className="header-info">
+                                            <div className="rbt-header-top-news">
+                                                <div className="inner">
+                                                    <div className="content blnk-txt">
+                                                        <span onClick={this.redirectURL} className="news-text">Claim your Refund</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="rbt-header-sec-col rbt-header-right mt_md--10 mt_sm--10">
                                     <div className="rbt-header-content justify-content-start justify-content-lg-end">
                                         <div className="header-info d-none d-xl-block">
