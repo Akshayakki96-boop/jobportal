@@ -117,6 +117,14 @@ class CourseDetails extends React.Component {
         });
     };
 
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+        const parts = name.split(" ");
+        return parts.length > 1
+            ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+            : parts[0][0].toUpperCase();
+    };
+
     render() {
         const { activeSection } = this.state;
         return (
@@ -191,10 +199,28 @@ class CourseDetails extends React.Component {
                                     <div className="rbt-author-meta mb--20">
                                         <div className="rbt-avater">
                                             <a href="#">
-                                                <img
-                                                    src={this.state.courseListingData?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`:"assets/images/client/avatar-02.png"}
+                                            {this.state.courseListingData?.profile_image ? ( <img
+                                                    src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`}
                                                     alt={this.state.courseListingData?.FullName}
                                                 />
+                                            ): (
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        width: "60px", // Adjust as needed
+                                                        height: "60px", // Adjust as needed
+                                                        backgroundColor: "#ccc", // Default background color
+                                                        color: "#fff",
+                                                        borderRadius: "50%",
+                                                        fontWeight: "bold",
+                                                        fontSize: "18px", // Adjust font size as needed
+                                                    }}
+                                                >
+                                                    {this.getInitials(this.state.courseListingData?.FullName || "User")}
+                                                </div>
+                                            )}
                                             </a>
                                         </div>
                                         <div className="rbt-author-info">
@@ -912,10 +938,27 @@ class CourseDetails extends React.Component {
                                             <div className="media align-items-center">
                                                 <div className="thumbnail">
                                                     <a href="#">
-                                                        <img
-                                                            src={this.state.courseListingData?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`:"assets/images/client/avatar-02.png"}
-                                                            alt="Author Images"
-                                                        />
+                                                    {this.state?.courseListingData?.profile_image ? (    <img
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`}
+                                                            alt="Author Images"/>
+                                                    ): (
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                width: "60px", // Adjust as needed
+                                                                height: "60px", // Adjust as needed
+                                                                backgroundColor: "#ccc", // Default background color
+                                                                color: "#fff",
+                                                                borderRadius: "50%",
+                                                                fontWeight: "bold",
+                                                                fontSize: "18px", // Adjust font size as needed
+                                                            }}
+                                                        >
+                                                            {this.getInitials(this.state.courseListingData?.FullName || "User")}
+                                                        </div>
+                                                    )}
                                                     </a>
                                                 </div>
                                                 <div className="media-body">
