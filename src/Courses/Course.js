@@ -7,13 +7,61 @@ class Course extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showUserDashboard: true,
-            dashBoardData: ""
+            courseListingData: [],
+            currentPage: 1, // Tracks the current page
+            pageSize: 6, // Number of records per page
+            totalPages: 1,
+            totalRecords: 0, // Total number of records
+            searchQuery: "", // State to store the search input
+            dashBoardData: "",
+            searchFilteredQuery:""
         };
 
     }
     componentDidMount() {
         //this.getDashboardUser();
+        this.getAllCourse(0, this.state.pageSize);
+
+    }
+
+    getAllCourse = (pageIndex, pageSize) => {
+        this.setState({ keepSpinner: true });
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Course/GetCourse`;
+        const token = localStorage.getItem('authToken');
+        var request =
+        {
+            "courseId": 0,
+            "coursetitle": "",
+            "isactive": true,
+            "user_id": 0,
+            "pageIndex": pageIndex,
+            "pagesize": pageSize
+        }
+
+
+        axios.post(url, request, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('courseListingData', response.data);
+                if (response.data.data && response.data.data.length > 0) {
+                    const totalCount = response.data.data[0].TotalRecords;
+
+                    this.setState({ courseListingData: response.data.data, totalRecords: totalCount, keepSpinner: false });
+                }
+                else {
+                    this.setState({ errorMessage: "No Course Found", keepSpinner: false });
+                }
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
 
     }
 
@@ -66,71 +114,44 @@ class Course extends React.Component {
             });
     }
 
-    setActiveComponent = (componentName) => {
-        this.setState({
-            showUserDashboard: false,
-            showProfile: false,
-            showEnrollCourse: false,
-            showMyCourses: false,
-            showAssignment: false
+    handlePageChange = (pageIndex) => {
+        this.setState({ currentPage: pageIndex }, () => {
+            this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
         });
-
-        switch (componentName) {
-            case 'dashboard':
-                this.setState({ showUserDashboard: true });
-                break;
-            case 'profile':
-                this.setState({ showProfile: true });
-                break;
-            case 'enrolledCourses':
-                this.setState({ showEnrollCourse: true });
-                break;
-            case 'myCourses':
-                this.setState({ showMyCourses: true });
-                break;
-            case 'announcements':
-                this.setState({ showAnnouncement: true });
-                break;
-            case 'assignments':
-                this.setState({ showAssignment: true });
-                break;
-            // Add more cases for other components as needed
-            default:
-                this.setState({ showUserDashboard: true });
-                break;
-        }
     };
-    handleLogout = () => {
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const logoutUrl = `${baseUrl}/api/Logout/Logout`;
-        const logoutData = {};
-        const token = localStorage.getItem('authToken');
-        axios.post(logoutUrl, logoutData, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                console.log('Logout Success:', response.data);
-                this.setState({ keepSpinner: false });
+    handleSearchChange = () => {
+        this.setState({ searchFilteredQuery: this.state.searchQuery }); // Normalize to lowercase for case-insensitive search
+    };
 
-                this.props.navigate('/Login'); // Use `navigate`
-            })
-            .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
-                this.setState({ keepSpinner: false });
-            });
+    handleSearchQuery=(e)=>{
+        this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
     }
 
-    render() {
 
+    render() {
+        const { courseListingData, currentPage, pageSize, totalRecords, searchFilteredQuery } = this.state;
+        const startIndex = (currentPage - 1) * pageSize + 1;
+        const endIndex = Math.min(currentPage * pageSize, totalRecords);
+        const filteredCourse = courseListingData?.filter((job) => {
+            const course_code = job.course_code?.toString().toLowerCase() || ""; // Ensure it's a string
+            const coursetitle = job.coursetitle?.toLowerCase() || "";
+            const course_level_name = job.course_level_name?.toLowerCase() || "";
+
+            return (
+                course_code.includes(searchFilteredQuery) ||
+                coursetitle.includes(searchFilteredQuery) ||
+                course_level_name.includes(searchFilteredQuery)
+            );
+        });
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
 
                 <>
+                    {this.state.keepSpinner && <div class="custom-loader">
+                        <div class="loader-spinner"></div>
+                        <p class="loader-text">Please Wait while Courses are loading...</p>
+                    </div>}
                     <div className="rbt-page-banner-wrapper">
                         {/* Start Banner BG Image  */}
                         <div className="rbt-banner-image" />
@@ -139,12 +160,12 @@ class Course extends React.Component {
                             {/* Start Banner Content Top  */}
                             <div className="rbt-banner-content-top">
                                 <div className="container">
-                                    <div className="row">
+                                    <div style={{ textAlign: "left" }} className="row">
                                         <div className="col-lg-12">
                                             {/* Start Breadcrumb Area  */}
                                             <ul className="page-list">
                                                 <li className="rbt-breadcrumb-item">
-                                                    <a href="index.html">Home</a>
+                                                    <a href="/">Home</a>
                                                 </li>
                                                 <li>
                                                     <div className="icon-right">
@@ -157,7 +178,7 @@ class Course extends React.Component {
                                             <div className=" title-wrapper">
                                                 <h1 className="title mb--0">All Courses</h1>
                                                 <a href="#" className="rbt-badge-2">
-                                                    <div className="image">🎉</div> 50 Courses
+                                                    <div className="image">🎉</div> {filteredCourse.length} Courses
                                                 </a>
                                             </div>
                                             <p className="description">
@@ -174,7 +195,7 @@ class Course extends React.Component {
                                     <div className="row g-5 align-items-center">
                                         <div className="col-lg-5 col-md-12">
                                             <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
-                                                <div className="rbt-short-item switch-layout-container">
+                                                {/* <div className="rbt-short-item switch-layout-container">
                                                     <ul className="course-switch-layout">
                                                         <li className="course-switch-item">
                                                             <button
@@ -192,9 +213,9 @@ class Course extends React.Component {
                                                             </button>
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> */}
                                                 <div className="rbt-short-item">
-                                                    <span className="course-index">Showing 1-9 of 19 results</span>
+                                                    <span className="course-index">Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {filteredCourse.length} results</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -202,10 +223,12 @@ class Course extends React.Component {
                                             <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                                 <div className="rbt-short-item">
                                                     <form action="#" className="rbt-search-style me-0">
-                                                        <input type="text" placeholder="Search Your Course.." />
+                                                        <input type="text" placeholder="Search your Course" value={this.state.searchQuery}
+                                                            onChange={this.handleSearchQuery} />
                                                         <button
-                                                            type="submit"
+                                                            type="button"
                                                             className="rbt-search-btn rbt-round-btn"
+                                                        // Prevent default form submission
                                                         >
                                                             <i className="feather-search" />
                                                         </button>
@@ -213,7 +236,7 @@ class Course extends React.Component {
                                                 </div>
                                                 <div className="rbt-short-item">
                                                     <div className="view-more-btn text-start text-sm-end">
-                                                        <button className="discover-filter-button discover-filter-activation rbt-btn btn-white btn-md radius-round">
+                                                        <button type="button" onClick={this.handleSearchChange} className="discover-filter-button discover-filter-activation rbt-btn btn-white btn-md radius-round">
                                                             Filter
                                                             <i className="feather-filter" />
                                                         </button>
@@ -222,8 +245,8 @@ class Course extends React.Component {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* Start Filter Toggle  */}
-                                    <div className="default-exp-wrapper default-exp-expand">
+                                    {/* Start Filter Toggle */}
+                                    {/* <div className="default-exp-wrapper default-exp-expand">
                                         <div className="filter-inner">
                                             <div className="filter-select-option">
                                                 <div className="filter-select rbt-modern-select">
@@ -305,7 +328,7 @@ class Course extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     {/* End Filter Toggle  */}
                                 </div>
                             </div>
@@ -317,486 +340,103 @@ class Course extends React.Component {
                             <div className="container">
                                 <div className="rbt-course-grid-column courall">
                                     {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href="/Course-Details">
-                                                    <img
-                                                        src="assets/images/course/course-online-01.jpg"
-                                                        alt="Card image"
-                                                    />
-                                                    <div className="rbt-badge-3 bg-white">
-                                                        <span>-40%</span>
-                                                        <span>Off</span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-review">
-                                                        <div className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                        </div>
-                                                        <span className="rating-count"> (15 Reviews)</span>
-                                                    </div>
-                                                    <div className="rbt-bookmark-btn">
-                                                        <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                            <i className="feather-bookmark" />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="/Course-Details">React Front To Back</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />
-                                                        12 Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        50 Students
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    It is a long established fact that a reader will be distracted.
-                                                </p>
-                                                <div className="rbt-author-meta mb--10">
-                                                    <div className="rbt-avater">
-                                                        <a href="#">
-                                                            <img
-                                                                src="assets/images/client/avatar-02.png"
-                                                                alt="Sophia Jaymes"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                    <div className="rbt-author-info">
-                                                        By <a href="profile.html">Angela</a> In{" "}
-                                                        <a href="#">Development</a>
-                                                    </div>
-                                                </div>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">$60</span>
-                                                        <span className="off-price">$120</span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Course-Details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
+                                    {filteredCourse?.map((course) => (
+                                        <div className="course-grid-3" key={course.courseid}>
+                                            <div className="rbt-card variation-01 rbt-hover">
+                                                <div className="rbt-card-img">
+                                                    <a href={`/Course-Details?courseId=${course.courseid}`}>
+                                                        <img
+                                                            src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
+                                                            alt="Card image"
+                                                        />
+
                                                     </a>
+                                                </div>
+                                                <div className="rbt-card-body">
+                                                    <div className="rbt-card-top">
+
+                                                    </div>
+                                                    <h4 className="rbt-card-title">
+                                                        <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
+                                                    </h4>
+                                                    <ul className="rbt-meta">
+                                                        <li>
+                                                            <i className="feather-book" />
+                                                            {course.no_of_lessons} Lessons
+                                                        </li>
+                                                        <li>
+                                                            <i className="feather-users" />
+                                                            50 Students
+                                                        </li>
+                                                        <li>
+
+                                                            {!course.isactive ? <a href="#" onClick={() => this.ActivateCourse(course)}>Activate Course</a> : "Activated"}
+                                                        </li>
+                                                    </ul>
+                                                    <p className="rbt-card-text">{course.description}</p>
+                                                    <div className="rbt-card-bottom">
+                                                        <div className="rbt-price">
+                                                            <span className="current-price">${course.course_fees}</span>
+                                                            {/* <span className="off-price">$120</span> */}
+                                                        </div>
+                                                        <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
+                                                            Learn More
+                                                            <i className="feather-arrow-right" />
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ))}
                                     {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href="/Course-Details">
-                                                    <img
-                                                        src="assets/images/course/course-online-02.jpg"
-                                                        alt="Card image"
-                                                    />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-review">
-                                                        <div className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                        </div>
-                                                        <span className="rating-count"> (15 Reviews)</span>
-                                                    </div>
-                                                    <div className="rbt-bookmark-btn">
-                                                        <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                            <i className="feather-bookmark" />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="/Course-Details">PHP Beginner Advanced</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />
-                                                        12 Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        50 Students
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    It is a long established fact that a reader will be distracted.
-                                                </p>
-                                                <div className="rbt-author-meta mb--10">
-                                                    <div className="rbt-avater">
-                                                        <a href="#">
-                                                            <img
-                                                                src="assets/images/client/avatar-02.png"
-                                                                alt="Sophia Jaymes"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                    <div className="rbt-author-info">
-                                                        By <a href="profile.html">Angela</a> In{" "}
-                                                        <a href="#">Development</a>
-                                                    </div>
-                                                </div>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">$60</span>
-                                                        <span className="off-price">$120</span>
-                                                    </div>
-                                                    <a
-                                                        className="rbt-btn-link left-icon"
-                                                        href="/Course-Details"
-                                                    >
-                                                        <i className="feather-shopping-cart" /> Add To Cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href="/Course-Details">
-                                                    <img
-                                                        src="assets/images/course/course-online-03.jpg"
-                                                        alt="Card image"
-                                                    />
-                                                    <div className="rbt-badge-3 bg-white">
-                                                        <span>-10%</span>
-                                                        <span>Off</span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-review">
-                                                        <div className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                        </div>
-                                                        <span className="rating-count"> (5 Reviews)</span>
-                                                    </div>
-                                                    <div className="rbt-bookmark-btn">
-                                                        <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                            <i className="feather-bookmark" />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="/Course-Details">Angular Zero to Mastery</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />8 Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        30 Students
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Angular Js long fact that a reader will be distracted by the
-                                                    readable.
-                                                </p>
-                                                <div className="rbt-author-meta mb--20">
-                                                    <div className="rbt-avater">
-                                                        <a href="#">
-                                                            <img
-                                                                src="assets/images/client/avatar-03.png"
-                                                                alt="Sophia Jaymes"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                    <div className="rbt-author-info">
-                                                        By <a href="profile.html">Slaughter</a> In{" "}
-                                                        <a href="#">Languages</a>
-                                                    </div>
-                                                </div>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">$80</span>
-                                                        <span className="off-price">$100</span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Course-Details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href="/Course-Details">
-                                                    <img
-                                                        src="assets/images/course/course-online-04.jpg"
-                                                        alt="Card image"
-                                                    />
-                                                    <div className="rbt-badge-3 bg-white">
-                                                        <span>-40%</span>
-                                                        <span>Off</span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-review">
-                                                        <div className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                        </div>
-                                                        <span className="rating-count"> (15 Reviews)</span>
-                                                    </div>
-                                                    <div className="rbt-bookmark-btn">
-                                                        <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                            <i className="feather-bookmark" />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="/Course-Details">Web Front To Back</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />
-                                                        20 Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        40 Students
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Web Js long fact that a reader will be distracted by the
-                                                    readable.
-                                                </p>
-                                                <div className="rbt-author-meta mb--20">
-                                                    <div className="rbt-avater">
-                                                        <a href="#">
-                                                            <img
-                                                                src="assets/images/client/avater-01.png"
-                                                                alt="Sophia Jaymes"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                    <div className="rbt-author-info">
-                                                        By <a href="profile.html">Patrick</a> In{" "}
-                                                        <a href="#">Languages</a>
-                                                    </div>
-                                                </div>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">$60</span>
-                                                        <span className="off-price">$120</span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Course-Details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href="/Course-Details">
-                                                    <img
-                                                        src="assets/images/course/course-online-05.jpg"
-                                                        alt="Card image"
-                                                    />
-                                                    <div className="rbt-badge-3 bg-white">
-                                                        <span>-20%</span>
-                                                        <span>Off</span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-review">
-                                                        <div className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                        </div>
-                                                        <span className="rating-count"> (15 Reviews)</span>
-                                                    </div>
-                                                    <div className="rbt-bookmark-btn">
-                                                        <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                            <i className="feather-bookmark" />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="/Course-Details">SQL Beginner Advanced</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />
-                                                        12 Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        50 Students
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    It is a long established fact that a reader will be distracted
-                                                    by the readable.
-                                                </p>
-                                                <div className="rbt-author-meta mb--20">
-                                                    <div className="rbt-avater">
-                                                        <a href="#">
-                                                            <img
-                                                                src="assets/images/client/avatar-02.png"
-                                                                alt="Sophia Jaymes"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                    <div className="rbt-author-info">
-                                                        By <a href="profile.html">Angela</a> In{" "}
-                                                        <a href="#">Development</a>
-                                                    </div>
-                                                </div>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">$60</span>
-                                                        <span className="off-price">$120</span>
-                                                    </div>
-                                                    <a
-                                                        className="rbt-btn-link left-icon"
-                                                        href="/Course-Details"
-                                                    >
-                                                        <i className="feather-shopping-cart" /> Add To Cart
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
-                                    {/* Start Single Card  */}
-                                    <div className="course-grid-3">
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href="/Course-Details">
-                                                    <img
-                                                        src="assets/images/course/course-online-06.jpg"
-                                                        alt="Card image"
-                                                    />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-                                                    <div className="rbt-review">
-                                                        <div className="rating">
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                            <i className="fas fa-star" />
-                                                        </div>
-                                                        <span className="rating-count"> (5 Reviews)</span>
-                                                    </div>
-                                                    <div className="rbt-bookmark-btn">
-                                                        <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                            <i className="feather-bookmark" />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href="/Course-Details">JS Zero to Mastery</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />8 Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        30 Students
-                                                    </li>
-                                                </ul>
-                                                <p className="rbt-card-text">
-                                                    Angular Js long fact that a reader will be distracted by the
-                                                    readable.
-                                                </p>
-                                                <div className="rbt-author-meta mb--20">
-                                                    <div className="rbt-avater">
-                                                        <a href="#">
-                                                            <img
-                                                                src="assets/images/client/avatar-03.png"
-                                                                alt="Sophia Jaymes"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                    <div className="rbt-author-info">
-                                                        By <a href="profile.html">Slaughter</a> In{" "}
-                                                        <a href="#">Languages</a>
-                                                    </div>
-                                                </div>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">$80</span>
-                                                        <span className="off-price">$100</span>
-                                                    </div>
-                                                    <a className="rbt-btn-link" href="/Course-Details">
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* End Single Card  */}
+
+
+
+
                                 </div>
                                 <div className="row">
                                     <div className="col-lg-12 mt--60">
                                         <nav>
                                             <ul className="rbt-pagination">
+                                                {/* Previous Button */}
                                                 <li>
-                                                    <a href="#" aria-label="Previous">
+                                                    <a
+                                                        href="#"
+                                                        aria-label="Previous"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            if (currentPage > 1) this.handlePageChange(currentPage - 1);
+                                                        }}
+                                                    >
                                                         <i className="feather-chevron-left" />
                                                     </a>
                                                 </li>
+
+                                                {/* Page Numbers */}
+                                                {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
+                                                    <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                                                        <a
+                                                            href="#"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                this.handlePageChange(index + 1); // 1-based index
+                                                            }}
+                                                        >
+                                                            {index + 1}
+                                                        </a>
+                                                    </li>
+                                                ))}
+
+                                                {/* Next Button */}
                                                 <li>
-                                                    <a href="#">1</a>
-                                                </li>
-                                                <li className="active">
-                                                    <a href="#">2</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">3</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" aria-label="Next">
+                                                    <a
+                                                        href="#"
+                                                        aria-label="Next"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
+                                                        }}
+                                                    >
                                                         <i className="feather-chevron-right" />
                                                     </a>
                                                 </li>

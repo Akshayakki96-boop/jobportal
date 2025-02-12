@@ -8,13 +8,16 @@ class CourseDetails extends React.Component {
         super(props);
         this.state = {
             showUserDashboard: true,
-            dashBoardData: "",
+            dashBoardData: {},
             activeSection: 'overview',
         };
         this.sections = [];
         this.observer = null;
     }
     componentDidMount() {
+        let url = window.location.search;
+        var urlParams = new URLSearchParams(url);
+        var courseId = urlParams.get('courseId');
         this.sections = document.querySelectorAll('div[id]');
         const options = {
             root: null,
@@ -24,6 +27,80 @@ class CourseDetails extends React.Component {
 
         this.observer = new IntersectionObserver(this.handleIntersect, options);
         this.sections.forEach((section) => this.observer.observe(section));
+        const token = localStorage.getItem('authToken');
+        if(token)
+        {
+            this.getDashboardUser();
+        }
+        else
+        {
+            this.setState({dashBoardData:""});
+        }
+
+        this.getAllCourse(courseId);
+
+    }
+
+    getDashboardUser = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/Dashboard`;
+        const token = localStorage.getItem('authToken');
+
+        axios.post(url, "", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('dashboard data', response.data);
+                this.setState({ dashBoardData: response.data.data });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+
+    getAllCourse = (courseId) => {
+        //this.setState({ keepSpinner: true });
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Course/GetCourse`;
+        const token = localStorage.getItem('authToken');
+        var request =
+        {
+            "courseId": courseId,
+            "coursetitle": "",
+            "isactive": false,
+            "user_id": 0,
+            "pageIndex": 0,
+            "pagesize": 1
+        }
+
+
+        axios.post(url, request, {
+            headers: {
+                'Content-Type': 'application/json',
+                //Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('courseListingData', response.data);
+                if (response.data.data && response.data.data.length > 0) {
+                    const totalCount = response.data.data[0].TotalRecords;
+
+                    this.setState({ courseListingData: response.data.data[0], totalRecords: totalCount, keepSpinner: false });
+                }
+                else {
+                    this.setState({ errorMessage: "No Course Found", keepSpinner: false });
+                }
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
 
     }
 
@@ -39,7 +116,7 @@ class CourseDetails extends React.Component {
             }
         });
     };
-  
+
     render() {
         const { activeSection } = this.state;
         return (
@@ -57,24 +134,23 @@ class CourseDetails extends React.Component {
                                 <div className="content text-start course-dp">
                                     <ul className="page-list">
                                         <li className="rbt-breadcrumb-item">
-                                            <a href="index.html">Home</a>
+                                            <a href={this.state.dashBoardData?"/TrainerDashboard":"/"}>{this.state.dashBoardData?"Dashboard":"Home"}</a>
                                         </li>
                                         <li>
                                             <div className="icon-right">
                                                 <i className="feather-chevron-right" />
                                             </div>
                                         </li>
-                                        <li className="rbt-breadcrumb-item active">Web Development</li>
+                                        <li className="rbt-breadcrumb-item active">{this.state.courseListingData?.coursetitle}</li>
                                     </ul>
                                     <h2 className="title">
-                                        The Complete Zobskill 2025: From Zero to Expert!
+                                        {this.state.courseListingData?.coursetitle}
                                     </h2>
                                     <p className="description">
-                                        Master Python by building 100 projects in 100 days. Learn data
-                                        science, automation, build websites, games and apps!
+                                        {this.state.courseListingData?.description}
                                     </p>
                                     <div className="d-flex align-items-center mb--20 flex-wrap rbt-course-details-feature">
-                                        <div className="feature-sin best-seller-badge">
+                                        {/* <div className="feature-sin best-seller-badge">
                                             <span className="rbt-badge-2">
                                                 <span className="image">
                                                     <img
@@ -84,8 +160,8 @@ class CourseDetails extends React.Component {
                                                 </span>{" "}
                                                 Bestseller
                                             </span>
-                                        </div>
-                                        <div className="feature-sin rating">
+                                        </div> */}
+                                        {/* <div className="feature-sin rating">
                                             <a href="#">4.8</a>
                                             <a href="#">
                                                 <i className="fa fa-star" />
@@ -102,12 +178,12 @@ class CourseDetails extends React.Component {
                                             <a href="#">
                                                 <i className="fa fa-star" />
                                             </a>
-                                        </div>
-                                        <div className="feature-sin total-rating">
+                                        </div> */}
+                                        {/* <div className="feature-sin total-rating">
                                             <a className="rbt-badge-4" href="#">
                                                 215,475 rating
                                             </a>
-                                        </div>
+                                        </div> */}
                                         <div className="feature-sin total-student">
                                             <span>616,029 students</span>
                                         </div>
@@ -116,20 +192,23 @@ class CourseDetails extends React.Component {
                                         <div className="rbt-avater">
                                             <a href="#">
                                                 <img
-                                                    src="assets/images/client/avatar-02.png"
-                                                    alt="Sophia Jaymes"
+                                                    src={this.state.courseListingData?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`:"assets/images/client/avatar-02.png"}
+                                                    alt={this.state.courseListingData?.FullName}
                                                 />
                                             </a>
                                         </div>
                                         <div className="rbt-author-info">
-                                            By <a href="profile.html">Angela</a> In{" "}
-                                            <a href="#">Development</a>
+                                            By {this.state.courseListingData?.FullName}
+                                            {/* <a href="#">Development</a> */}
                                         </div>
                                     </div>
                                     <ul className="rbt-meta">
                                         <li>
                                             <i className="feather-calendar" />
-                                            Last updated 12/2024
+                                            Last updated <strong>{this.state.courseListingData && this.state.courseListingData?.updateddate
+                                                ? new Intl.DateTimeFormat('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
+                                                    .format(new Date(this.state.courseListingData?.updateddate))
+                                                : "Date Unavailable"}</strong>
                                         </li>
                                         <li>
                                             <i className="feather-globe" />
@@ -155,7 +234,7 @@ class CourseDetails extends React.Component {
                                     <div className="rbt-course-feature-box rbt-shadow-box thuumbnail">
                                         <img
                                             className="w-100"
-                                            src="assets/images/course/course-01.jpg"
+                                            src={this.state.courseListingData?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.course_image}`:"assets/images/course/course-01.jpg"}
                                             alt="Card image"
                                         />
                                     </div>
@@ -172,7 +251,7 @@ class CourseDetails extends React.Component {
                                                     <a href="#details">Details</a>
                                                 </li>
                                                 <li className={activeSection === 'intructor' ? 'current' : ''}>
-                                                    <a href="#intructor">Intructor</a>
+                                                    <a href="#intructor">Instructor</a>
                                                 </li>
                                                 <li className={activeSection === 'review' ? 'current' : ''}>
                                                     <a href="#review">Review</a>
@@ -190,16 +269,11 @@ class CourseDetails extends React.Component {
                                                 <h4 className="rbt-title-style-3">What you'll learn</h4>
                                             </div>
                                             <p>
-                                                Are you new to PHP or need a refresher? Then this course will
-                                                help you get all the fundamentals of Procedural PHP, Object
-                                                Oriented PHP, MYSQLi and ending the course by building a CMS
-                                                system similar to WordPress, Joomla or Drupal. Knowing PHP has
-                                                allowed me to make enough money to stay home and make courses
-                                                like this one for students all over the world.{" "}
+                                            {this.state.courseListingData?.description}
                                             </p>
-                                            <div className="row g-5 mb--30">
+                                            {/* <div className="row g-5 mb--30"> */}
                                                 {/* Start Feture Box  */}
-                                                <div className="col-lg-6">
+                                                {/* <div className="col-lg-6">
                                                     <ul className="rbt-list-style-1">
                                                         <li>
                                                             <i className="feather-check" />
@@ -219,10 +293,10 @@ class CourseDetails extends React.Component {
                                                             Use the numpy library to create and manipulate arrays.
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> */}
                                                 {/* End Feture Box  */}
                                                 {/* Start Feture Box  */}
-                                                <div className="col-lg-6">
+                                                {/* <div className="col-lg-6">
                                                     <ul className="rbt-list-style-1">
                                                         <li>
                                                             <i className="feather-check" />
@@ -244,24 +318,10 @@ class CourseDetails extends React.Component {
                                                             seaborn.
                                                         </li>
                                                     </ul>
-                                                </div>
+                                                </div> */}
                                                 {/* End Feture Box  */}
-                                            </div>
-                                            <p>
-                                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis,
-                                                aliquam voluptas laudantium incidunt architecto nam excepturi
-                                                provident rem laborum repellendus placeat neque aut doloremque
-                                                ut ullam, veritatis nesciunt iusto officia alias, non est vitae.
-                                                Eius repudiandae optio quam alias aperiam nemo nam tempora,
-                                                dignissimos dicta excepturi ea quo ipsum omnis maiores
-                                                perferendis commodi voluptatum facere vel vero. Praesentium
-                                                quisquam iure veritatis, perferendis adipisci sequi blanditiis
-                                                quidem porro eligendi fugiat facilis inventore amet delectus
-                                                expedita deserunt ut molestiae modi laudantium, quia tenetur
-                                                animi natus ea. Molestiae molestias ducimus pariatur et
-                                                consectetur. Error vero, eum soluta delectus necessitatibus
-                                                eligendi numquam hic at?
-                                            </p>
+                                            {/* </div> */}
+                                          
                                         </div>
                                         <div className="rbt-show-more-btn">Show More</div>
                                     </div>
@@ -828,57 +888,13 @@ class CourseDetails extends React.Component {
                                         id="details"
                                     >
                                         <div className="row g-5">
-                                            {/* Start Feture Box  */}
-                                            <div className="col-lg-6">
-                                                <div className="section-title">
-                                                    <h4 className="rbt-title-style-3 mb--20">Requirements</h4>
-                                                </div>
-                                                <ul className="rbt-list-style-1">
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Become an advanced, confident, and modern JavaScript
-                                                        developer from scratch.
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Have an intermediate skill level of Python programming.
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Have a portfolio of various data analysis projects.
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Use the numpy library to create and manipulate arrays.
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            {/* End Feture Box  */}
+                                           
                                             {/* Start Feture Box  */}
                                             <div className="col-lg-6">
                                                 <div className="section-title">
                                                     <h4 className="rbt-title-style-3 mb--20">Description</h4>
                                                 </div>
-                                                <ul className="rbt-list-style-1">
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Use the Jupyter Notebook Environment. JavaScript developer
-                                                        from scratch.
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Use the pandas module with Python to create and structure
-                                                        data.
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Have a portfolio of various data analysis projects.
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-check" />
-                                                        Create data visualizations using matplotlib and the seaborn.
-                                                    </li>
-                                                </ul>
+                                               <p> {this.state.courseListingData?.description}</p>
                                             </div>
                                             {/* End Feture Box  */}
                                         </div>
@@ -897,7 +913,7 @@ class CourseDetails extends React.Component {
                                                 <div className="thumbnail">
                                                     <a href="#">
                                                         <img
-                                                            src="assets/images/testimonial/testimonial-7.jpg"
+                                                            src={this.state.courseListingData?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`:"assets/images/client/avatar-02.png"}
                                                             alt="Author Images"
                                                         />
                                                     </a>
@@ -906,7 +922,7 @@ class CourseDetails extends React.Component {
                                                     <div className="author-info">
                                                         <h5 className="title">
                                                             <a className="hover-flip-item-wrapper" href="author.html">
-                                                                B.M. Rafekul Islam
+                                                             {this.state.courseListingData?.FullName}
                                                             </a>
                                                         </h5>
                                                         <span className="b3 subtitle">Advanced Educator</span>
