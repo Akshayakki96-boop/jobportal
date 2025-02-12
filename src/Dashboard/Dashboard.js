@@ -205,7 +205,7 @@ class Dashboard extends React.Component {
                                             </div>
                                             <div className="rbt-tutor-information-right">
                                                 <div className="tutor-btn">
-                                                    <a className="rbt-btn btn-md hover-icon-reverse" href="#">
+                                                    <a className="rbt-btn btn-md hover-icon-reverse" href="/create-new">
                                                         <span className="icon-reverse-wrapper">
                                                             <span className="btn-text">Create a New Course</span>
                                                             <span className="btn-icon">

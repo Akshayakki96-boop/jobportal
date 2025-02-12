@@ -24,6 +24,7 @@ class CreateCourse extends React.Component {
         var urlParams = new URLSearchParams(url);
         this.userId = urlParams.get('user_Id');
         this.getDashboardUser();
+        this.getCourseLevel();
     }
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -39,6 +40,37 @@ class CreateCourse extends React.Component {
             .then((response) => {
                 console.log('dashboard data', response.data);
                 this.setState({ dashBoardData: response.data.data });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+
+    getCourseLevel = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Master/GetCourseLevel`;
+        const token = localStorage.getItem('authToken');
+        var data = {
+            "stateId": 0,
+            "countryId": 0,
+            "cityId": 0,
+            "id": 0,
+            "freetext": ""
+        }
+        axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                const courseLevels = response.data?.map(level => ({
+                    value: level.id,
+                    label: level.value
+                }));
+                this.setState({ courseLevels });
 
             })
             .catch((error) => {
@@ -91,7 +123,7 @@ class CreateCourse extends React.Component {
     handleFileResumeChange = async (event) => {
         const file = event.target.files[0]; // Get the selected file
         if (!file) return;
-    
+
         const fileType = file.type;
         const validFileTypes = [
             'application/pdf',
@@ -99,9 +131,9 @@ class CreateCourse extends React.Component {
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/rtf'
         ]; // Allowed MIME types for resumes
-    
+
         const validVideoTypes = ['video/mp4', 'video/avi', 'video/mov']; // Allowed video formats
-    
+
         let resumeType = "other";
         if (validFileTypes.includes(fileType)) {
             resumeType = fileType;
@@ -112,10 +144,10 @@ class CreateCourse extends React.Component {
             event.target.value = ''; // Reset the file input
             return;
         }
-    
+
         // Create preview URL
         const filePreview = URL.createObjectURL(file);
-    
+
         // Set state with file details
         this.setState({
             logo: file,
@@ -123,13 +155,13 @@ class CreateCourse extends React.Component {
             resumePreview: filePreview,
             uploadResumeStatus: null, // Clear any previous error
         }, this.validateForm);
-    
+
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/FileUpload/UploadCandidateResume`;
         const token = localStorage.getItem('authToken');
         const formData = new FormData();
         formData.append('file', file);
-    
+
         try {
             // Upload file to API
             const response = await axios.post(url, formData, {
@@ -138,7 +170,7 @@ class CreateCourse extends React.Component {
                     Authorization: `Bearer ${token}`,
                 },
             });
-    
+
             console.log('File uploaded successfully:', response.data);
             this.setState({ resumefileName: response.data.filePath });
             this.setState({ uploadResumeStatus: 'File uploaded successfully!' });
@@ -147,7 +179,7 @@ class CreateCourse extends React.Component {
             this.setState({ uploadResumeStatus: 'Error uploading file!' });
         }
     };
-    
+
 
     handleCourseNameChange = (event) => {
         this.setState({ courseName: event.target.value }, this.validateForm);
@@ -177,29 +209,25 @@ class CreateCourse extends React.Component {
 
     handleCourseSubmit = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Trainer/UpdateBasicProfile`;
+        const url = `${baseUrl}/api/Course/PostCourse`;
         const token = localStorage.getItem('authToken');
-        var candidateData = {
-
-            "profile_image": this.state.fileName,
-            "country_code": this.state.countryCode.value,
-            "gender": this.state.selectedGender.value,
-            "fullname": this.state.fullname,
-            "mobileno": this.state.mobile_no,
-            "ipaddress": "192.168.1.1",
-            "profile_title": this.state.profile_title,
-            "profilesummary": this.state.profile_summary,
-            "city_id": this.state.selectedCity.value,
-            "state_id": this.state.selectedState.value,
-            "country_id": this.state.selectedCountry.value,
-            "known_languagues": this.state.languague_name,
-            "linkedin_profile_url": this.state.linkedInSelected,
-            "dob": this.state.selectedDate ? `${this.state.selectedDate.getFullYear()}-${String(this.state.selectedDate.getMonth() + 1).padStart(2, '0')}-${String(this.state.selectedDate.getDate()).padStart(2, '0')}` : null,
-            "user_id": this.state.userId,
-            "resume_file_path": this.state.resumefileName
+        var courseData = {
+            "courseId": 0,
+            "coursetitle": this.state.courseName,
+            "description": this.state.description,
+            "notes": "string",
+            "duration": this.state.duration,
+            "course_level": this.state.courseSelected.value,
+            "course_image": this.state.fileName,
+            "course_fees": this.state.courseFee,
+            "is_refundable": this.state.isRefundable,
+            "course_materials": this.state.resumefileName,
+            "no_of_lessons": this.state.nooflessons,
+            "isactive": false,
+            "ipAddress": '192.168.1.1'
         }
 
-        axios.post(url, candidateData, {
+        axios.post(url, courseData, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
@@ -207,9 +235,25 @@ class CreateCourse extends React.Component {
         })
             .then((response) => {
                 this.setState({
+                    courseName: '',
+                    description: '',
+                    duration: '',
+                    courseSelected: null,
+                    fileName: '',
+                    courseFee: '',
+                    isRefundable: false,
+                    resumefileName: '',
+                    nooflessons: '',
+                    logo: null,
+                    logoPreview: null,
+                    uploadStatus: null,
+                    resumePreview: null,
+                    uploadResumeStatus: null,
+                });
+                this.setState({
                     responseMessage: (
                         <span>
-                            Profile Updated Successfully
+                           Course Created Successfully
                         </span>
                     ),
                     alertVariant: 'success', // Success alert variant
@@ -228,7 +272,13 @@ class CreateCourse extends React.Component {
 
     }
 
+    hanldeCheckChange = (e) => {
+        this.setState({ isRefundable: e.target.checked });
+    }
 
+    handleNoOfLessons = (e) => {
+        this.setState({ nooflessons: e.target.value });
+    }
 
     render() {
 
@@ -316,7 +366,7 @@ class CreateCourse extends React.Component {
                                             <div className="form-group">
                                                 <Select
                                                     value={this.state.courseSelected}
-                                                    options={[{ value: 'Beginner', label: 'Beginner' }, { value: 'Intermediate', label: 'Intermediate' }, { value: 'Advanced', label: 'Advanced' }]}
+                                                    options={this.state.courseLevels}
                                                     placeholder="Select Course Level"
                                                     className="basic-multi-select"
                                                     classNamePrefix="select"
@@ -328,29 +378,24 @@ class CreateCourse extends React.Component {
                                                 <label htmlFor="courselevel">Course Level</label>
                                             </div>
                                             <div className="form-group">
-
-                                                <Select
-                                                    placeholder="Select Mode of Delievery"
-                                                    className="basic-multi-select"
-                                                    options={[
-                                                        { value: 'Online', label: 'Online' },
-                                                        { value: 'Offline', label: 'Offline' },
-                                                        { value: 'Hybrid', label: 'Hybrid' }
-                                                    ]}
-                                                    value={this.state.delieveryMode}
-                                                    onChange={this.handleDelieveryModeChange}
-                                                    menuPortalTarget={document.body}
-                                                    styles={{
-                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                        container: (base) => ({
-                                                            ...base,
-                                                            flex: '0 0 100px', // Adjust the width as needed
-                                                        }),
-                                                    }}
+                                                <input
+                                                    type="checkbox"
+                                                    className="fform-control"
+                                                    id="isRefundable"
+                                                    onChange={this.hanldeCheckChange}
                                                 />
-                                                <label>Mode of Delievery *</label>
-
-
+                                                <label htmlFor="isRefundable">Is Refundable</label>
+                                            </div>
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="nooflessons"
+                                                    name="nooflessons"
+                                                    value={this.state.nooflessons}
+                                                    onChange={this.handleNoOfLessons}
+                                                />
+                                                <label htmlFor="nooflessons">Total chapter</label>
                                             </div>
                                             <div className="form-group">
                                                 <input
