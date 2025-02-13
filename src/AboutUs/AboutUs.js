@@ -166,7 +166,7 @@ class AboutUs extends React.Component {
               environment.
 
             </p>
-            <a target='_blank' href="mailto:support@zobskill.com">support@zobskill.com</a>
+            <a target='_blank' href="mailto:career@zobskill.com">career@zobskill.com</a>
             {/*
                       <div class="read-more-btn mt--40">
                           <a class="rbt-btn rbt-marquee-btn radius-round btn-gradient" href="#">

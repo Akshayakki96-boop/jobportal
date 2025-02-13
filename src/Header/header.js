@@ -233,7 +233,7 @@ class Header extends React.Component {
     }
 
     redirectURL = () => {
-        window.location.href = '/claimrefund';
+        window.location.href = '/termsconditions';
     }
     handleSearchChange=(e)=>{
         this.setState({SearchValue:e.target.value});

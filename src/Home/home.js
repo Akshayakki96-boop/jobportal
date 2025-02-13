@@ -151,7 +151,7 @@ class Home extends React.Component {
                 <div className="rbt-banner-area rbt-banner-1">
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-12 pb--120 pt--70">
+                            <div className="col-md-12 pb--120 pt--10">
                                 <div className="content">
                                     <div className="inner">
                                         <h1 className="title">
