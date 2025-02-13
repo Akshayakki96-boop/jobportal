@@ -9,6 +9,17 @@ import '@fluentui/react/dist/css/fabric.css';
 import { Alert } from 'react-bootstrap';
 import { Modal, Button } from 'react-bootstrap';
 import AdvancedBreadcumb from '../Breadcumb/advancebreadcrumb';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import styles
+import { Quill } from "react-quill";
+
+// Register the link module
+const Link = Quill.import('formats/link');
+Link.sanitize = function(url) {
+    // Add your custom URL validation logic here
+    return url;
+};
+Quill.register(Link, true);
 
 
 class CreateCourse extends React.Component {
@@ -208,6 +219,7 @@ class CreateCourse extends React.Component {
     };
 
     handleCourseSubmit = () => {
+        debugger;
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/PostCourse`;
         const token = localStorage.getItem('authToken');
@@ -221,7 +233,7 @@ class CreateCourse extends React.Component {
             "course_image": this.state.fileName,
             "course_fees": this.state.courseFee,
             "is_refundable": this.state.isRefundable,
-            "course_materials": this.state.resumefileName,
+            "course_materials": this.state.courseMaterial,
             "no_of_lessons": this.state.nooflessons,
             "isactive": false,
             "ipAddress": '192.168.1.1'
@@ -249,11 +261,12 @@ class CreateCourse extends React.Component {
                     uploadStatus: null,
                     resumePreview: null,
                     uploadResumeStatus: null,
+                    courseMaterial:null
                 });
                 this.setState({
                     responseMessage: (
                         <span>
-                           Course Created Successfully
+                            Course Created Successfully
                         </span>
                     ),
                     alertVariant: 'success', // Success alert variant
@@ -280,6 +293,27 @@ class CreateCourse extends React.Component {
         this.setState({ nooflessons: e.target.value });
     }
 
+    handleCourseMaterial=(e)=>{
+        this.setState({ courseMaterial: e });
+    }
+    modules = {
+        toolbar: [
+            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+            [{ size: [] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+            ['link', 'image', 'video'],
+            ['clean'],
+            ['pdf', 'doc'] // Custom buttons for PDF and DOC
+        ],
+    };
+
+    formats = [
+        'header', 'font', 'size',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image', 'video','pdf', 'doc'
+    ];
     render() {
 
 
@@ -380,7 +414,8 @@ class CreateCourse extends React.Component {
                                             <div className="form-group">
                                                 <input
                                                     type="checkbox"
-                                                    className="fform-control"
+                                                    checked={this.state.isRefundable}
+                                                    className="form-control"
                                                     id="isRefundable"
                                                     onChange={this.hanldeCheckChange}
                                                 />
@@ -409,6 +444,17 @@ class CreateCourse extends React.Component {
                                                 <label htmlFor="coursefee">Course Fee</label>
                                             </div>
                                             <div className="form-group">
+                                                <ReactQuill
+                                                    value={this.state.courseMaterial}
+                                                    onChange={this.handleCourseMaterial}
+                                                    theme="snow"
+                                                    modules={this.modules}
+                                                    placeholder="Upload a material..."
+                                                    formats={this.formats}
+                                                />
+                                            </div>
+
+                                            {/* <div className="form-group">
                                                 <input
                                                     type="file"
                                                     className="form-control"
@@ -420,7 +466,7 @@ class CreateCourse extends React.Component {
 
                                                 {this.state.resumePreview && (
                                                     <div className="mt-3">
-                                                        {/* PDF Preview */}
+                                                     
                                                         {this.state.resumeType == "application/pdf" ? (
                                                             <iframe
                                                                 src={this.state.resumePreview}
@@ -429,7 +475,7 @@ class CreateCourse extends React.Component {
                                                                 style={{ border: "1px solid #ccc", borderRadius: "8px" }}
                                                             ></iframe>
                                                         ) : this.state.resumeType == "video" ? (
-                                                            // Video Preview
+                                                       
                                                             <video
                                                                 width="100%"
                                                                 height="200px"
@@ -440,7 +486,7 @@ class CreateCourse extends React.Component {
                                                                 Your browser does not support the video tag.
                                                             </video>
                                                         ) : (
-                                                            // Fallback for non-PDF and non-video files (Download Link)
+                       
                                                             <div>
                                                                 <p>Preview not available. Download file:</p>
                                                                 <a
@@ -457,7 +503,7 @@ class CreateCourse extends React.Component {
                                                 )}
 
                                                 {this.state.uploadResumeStatus && <small className="text-danger">{this.state.uploadResumeStatus}</small>}
-                                            </div>
+                                            </div> */}
 
                                             <div className="form-group">
                                                 <textarea
