@@ -3,7 +3,6 @@ import Breadcumb from '../Breadcumb/breadcumb';
 import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
-import parse from 'html-react-parser';
 
 class MyCourses extends React.Component {
   constructor(props) {
@@ -177,7 +176,7 @@ class MyCourses extends React.Component {
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                       <div className="rbt-short-item mt-5">
                         <form action="#" className="rbt-search-style me-0">
-                          <input type="text" placeholder="Search by Code,level,title.." value={this.state.searchQuery}
+                          <input type="text" placeholder="Search your courses.." value={this.state.searchQuery}
                             onChange={this.handleSearchChange} />
                           <button
                             type="button"
