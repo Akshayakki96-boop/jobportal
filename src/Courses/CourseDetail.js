@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
+import parse from 'html-react-parser';
+
 
 class CourseDetails extends React.Component {
     constructor(props) {
@@ -28,13 +30,11 @@ class CourseDetails extends React.Component {
         this.observer = new IntersectionObserver(this.handleIntersect, options);
         this.sections.forEach((section) => this.observer.observe(section));
         const token = localStorage.getItem('authToken');
-        if(token)
-        {
+        if (token) {
             this.getDashboardUser();
         }
-        else
-        {
-            this.setState({dashBoardData:""});
+        else {
+            this.setState({ dashBoardData: "" });
         }
 
         this.getAllCourse(courseId);
@@ -142,7 +142,7 @@ class CourseDetails extends React.Component {
                                 <div className="content text-start course-dp">
                                     <ul className="page-list">
                                         <li className="rbt-breadcrumb-item">
-                                            <a href={this.state.dashBoardData?"/TrainerDashboard":"/"}>{this.state.dashBoardData?"Dashboard":"Home"}</a>
+                                            <a href={this.state.dashBoardData ? "/TrainerDashboard" : "/"}>{this.state.dashBoardData ? "Dashboard" : "Home"}</a>
                                         </li>
                                         <li>
                                             <div className="icon-right">
@@ -199,28 +199,28 @@ class CourseDetails extends React.Component {
                                     <div className="rbt-author-meta mb--20">
                                         <div className="rbt-avater">
                                             <a href="#">
-                                            {this.state.courseListingData?.profile_image ? ( <img
+                                                {this.state.courseListingData?.profile_image ? (<img
                                                     src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`}
                                                     alt={this.state.courseListingData?.FullName}
                                                 />
-                                            ): (
-                                                <div
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "center",
-                                                        width: "60px", // Adjust as needed
-                                                        height: "60px", // Adjust as needed
-                                                        backgroundColor: "#ccc", // Default background color
-                                                        color: "#fff",
-                                                        borderRadius: "50%",
-                                                        fontWeight: "bold",
-                                                        fontSize: "18px", // Adjust font size as needed
-                                                    }}
-                                                >
-                                                    {this.getInitials(this.state.courseListingData?.FullName || "User")}
-                                                </div>
-                                            )}
+                                                ) : (
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "center",
+                                                            width: "60px", // Adjust as needed
+                                                            height: "60px", // Adjust as needed
+                                                            backgroundColor: "#ccc", // Default background color
+                                                            color: "#fff",
+                                                            borderRadius: "50%",
+                                                            fontWeight: "bold",
+                                                            fontSize: "18px", // Adjust font size as needed
+                                                        }}
+                                                    >
+                                                        {this.getInitials(this.state.courseListingData?.FullName || "User")}
+                                                    </div>
+                                                )}
                                             </a>
                                         </div>
                                         <div className="rbt-author-info">
@@ -260,7 +260,7 @@ class CourseDetails extends React.Component {
                                     <div className="rbt-course-feature-box rbt-shadow-box thuumbnail">
                                         <img
                                             className="w-100"
-                                            src={this.state.courseListingData?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.course_image}`:"assets/images/course/course-01.jpg"}
+                                            src={this.state.courseListingData ? `${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.course_image}` : "assets/images/course/course-01.jpg"}
                                             alt="Card image"
                                         />
                                     </div>
@@ -295,11 +295,11 @@ class CourseDetails extends React.Component {
                                                 <h4 className="rbt-title-style-3">What you'll learn</h4>
                                             </div>
                                             <p>
-                                            {this.state.courseListingData?.description}
+                                                {this.state.courseListingData?.description}
                                             </p>
                                             {/* <div className="row g-5 mb--30"> */}
-                                                {/* Start Feture Box  */}
-                                                {/* <div className="col-lg-6">
+                                            {/* Start Feture Box  */}
+                                            {/* <div className="col-lg-6">
                                                     <ul className="rbt-list-style-1">
                                                         <li>
                                                             <i className="feather-check" />
@@ -320,9 +320,9 @@ class CourseDetails extends React.Component {
                                                         </li>
                                                     </ul>
                                                 </div> */}
-                                                {/* End Feture Box  */}
-                                                {/* Start Feture Box  */}
-                                                {/* <div className="col-lg-6">
+                                            {/* End Feture Box  */}
+                                            {/* Start Feture Box  */}
+                                            {/* <div className="col-lg-6">
                                                     <ul className="rbt-list-style-1">
                                                         <li>
                                                             <i className="feather-check" />
@@ -345,9 +345,9 @@ class CourseDetails extends React.Component {
                                                         </li>
                                                     </ul>
                                                 </div> */}
-                                                {/* End Feture Box  */}
+                                            {/* End Feture Box  */}
                                             {/* </div> */}
-                                          
+
                                         </div>
                                         <div className="rbt-show-more-btn">Show More</div>
                                     </div>
@@ -361,7 +361,10 @@ class CourseDetails extends React.Component {
                                             <div className="section-title">
                                                 <h4 className="rbt-title-style-3">Course Content</h4>
                                             </div>
-                                            <div className="rbt-accordion-style rbt-accordion-02 accordion">
+                                          
+                                                {parse(this.state.courseListingData?.course_materials || "")}
+                                          
+                                            {/* <div className="rbt-accordion-style rbt-accordion-02 accordion">
                                                 <div className="accordion" id="accordionExampleb2">
                                                     <div className="accordion-item card">
                                                         <h2
@@ -904,7 +907,7 @@ class CourseDetails extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                     {/* End Course Content  */}
@@ -914,13 +917,13 @@ class CourseDetails extends React.Component {
                                         id="details"
                                     >
                                         <div className="row g-5">
-                                           
+
                                             {/* Start Feture Box  */}
                                             <div className="col-lg-6">
                                                 <div className="section-title">
                                                     <h4 className="rbt-title-style-3 mb--20">Description</h4>
                                                 </div>
-                                               <p> {this.state.courseListingData?.description}</p>
+                                                <p> {this.state.courseListingData?.description}</p>
                                             </div>
                                             {/* End Feture Box  */}
                                         </div>
@@ -938,34 +941,34 @@ class CourseDetails extends React.Component {
                                             <div className="media align-items-center">
                                                 <div className="thumbnail">
                                                     <a href="#">
-                                                    {this.state?.courseListingData?.profile_image ? (    <img
+                                                        {this.state?.courseListingData?.profile_image ? (<img
                                                             src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.profile_image}`}
-                                                            alt="Author Images"/>
-                                                    ): (
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                justifyContent: "center",
-                                                                width: "60px", // Adjust as needed
-                                                                height: "60px", // Adjust as needed
-                                                                backgroundColor: "#ccc", // Default background color
-                                                                color: "#fff",
-                                                                borderRadius: "50%",
-                                                                fontWeight: "bold",
-                                                                fontSize: "18px", // Adjust font size as needed
-                                                            }}
-                                                        >
-                                                            {this.getInitials(this.state.courseListingData?.FullName || "User")}
-                                                        </div>
-                                                    )}
+                                                            alt="Author Images" />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.state.courseListingData?.FullName || "User")}
+                                                            </div>
+                                                        )}
                                                     </a>
                                                 </div>
                                                 <div className="media-body">
                                                     <div className="author-info">
                                                         <h5 className="title">
                                                             <a className="hover-flip-item-wrapper" href="author.html">
-                                                             {this.state.courseListingData?.FullName}
+                                                                {this.state.courseListingData?.FullName}
                                                             </a>
                                                         </h5>
                                                         <span className="b3 subtitle">Advanced Educator</span>
