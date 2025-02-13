@@ -555,7 +555,7 @@ class Community extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="content">
-                                                <h2 className="title">Alice Brown</h2>
+                                                <h2 className="title">R.K. Dhiman</h2>
                                                 <h6 className="subtitle theme-gradient">UX Designer</h6>
                                                 <span className="team-form">
                                                     <span className="location">
