@@ -6,6 +6,7 @@ class Header extends React.Component {
         super(props);
         this.state = {
             isSticky: false,
+            searchQuery:""
         };
         this.headerRef = React.createRef(); // Reference for the header element
         this.placeholderRef = React.createRef();
@@ -16,7 +17,48 @@ class Header extends React.Component {
         this.handleScroll();
 
         window.addEventListener('scroll', this.handleScroll);
+        this.getAllCourse(0,6)
     }
+
+    getAllCourse = (pageIndex, pageSize) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Course/GetCourse`;
+        //const token = localStorage.getItem('authToken');
+        var request =
+        {
+          "courseId": 0,
+          "coursetitle": "",
+          "isactive": true,
+          "user_id": 0,
+          "pageIndex": pageIndex,
+          "pagesize": pageSize
+        }
+    
+    
+        axios.post(url, request, {
+          headers: {
+            'Content-Type': 'application/json',
+            //Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            console.log('courseListingDataheader', response.data);
+            if (response.data.data && response.data.data.length > 0) {
+              const totalCount = response.data.data[0].TotalRecords;
+    
+              this.setState({ courseListingData: response.data.data, totalRecords: totalCount, keepSpinner: false });
+            }
+            else {
+              this.setState({ errorMessage: "No Course Found", keepSpinner: false });
+            }
+    
+          })
+          .catch((error) => {
+            localStorage.removeItem('authToken');
+            this.props.navigate('/Login'); // Use `navigate`
+          });
+    
+      }
     componentDidUpdate(prevProps) {
         if (prevProps.dashBoardData !== this.props.dashBoardData) {
             if (this.props.dashBoardData != "") {
@@ -193,7 +235,28 @@ class Header extends React.Component {
     redirectURL = () => {
         window.location.href = '/claimrefund';
     }
+    handleSearchChange=(e)=>{
+        this.setState({SearchValue:e.target.value});
+    }
+    handleSearch=()=>{
+        this.setState({searchQuery:this.state.SearchValue});
+    }
     render() {
+        const { courseListingData,searchQuery} = this.state;
+        const filteredCourse = courseListingData?.filter((course) => {
+            const search = searchQuery.toLowerCase().trim(); // Ensure searchQuery is lowercase & trimmed
+        
+            const course_code = course.course_code?.toString().toLowerCase().trim() || ""; 
+            const coursetitle = course.coursetitle?.toLowerCase().trim() || "";
+            const course_level_name = course.course_level_name?.toLowerCase().trim() || "";
+        
+            return (
+                course_code.includes(search) ||
+                coursetitle.includes(search) ||
+                course_level_name.includes(search)
+            );
+        });
+        
         return (
             <><header className="rbt-header rbt-header-10">
                 <div ref={this.placeholderRef} className="rbt-sticky-placeholder"></div>
@@ -550,9 +613,9 @@ class Header extends React.Component {
                             <div className="row">
                                 <div className="col-lg-12">
                                     <form action="#">
-                                        <input type="text" placeholder="What are you looking for?" />
+                                        <input type="text" value={this.state.SearchValue} onChange={this.handleSearchChange} placeholder="What are you looking for?" />
                                         <div className="submit-btn">
-                                            <a className="rbt-btn btn-gradient btn-md" href="#">Search</a>
+                                            <a onClick={this.handleSearch} className="rbt-btn btn-gradient btn-md" href="#">Search</a>
                                         </div>
                                     </form>
                                 </div>
@@ -569,67 +632,41 @@ class Header extends React.Component {
                                     </div>
                                 </div>
 
-                                {/* Start Single Card */}
-                                <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="rbt-card variation-01 rbt-hover">
-                                        <div className="rbt-card-img">
-                                            <a href="course-details.html">
-                                                <img src="assets/images/course/course-online-01.jpg" alt="Card image" />
-                                            </a>
-                                        </div>
-                                        <div className="rbt-card-body">
-                                            <h5 className="rbt-card-title"><a href="course-details.html">React Js</a></h5>
-                                            <div className="rbt-review">
-                                                <div className="rating">
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                </div>
-                                                <span className="rating-count"> (15 Reviews)</span>
+                                {filteredCourse && filteredCourse.map((course, index) => (
+                                    <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12">
+                                        <div className="rbt-card variation-01 rbt-hover">
+                                            <div className="rbt-card-img">
+                                                <a href={`/Course-Details?courseId=${course.courseid}`}>
+                                                    <img  src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
+                                                     alt="Card image" />
+                                                </a>
                                             </div>
-                                            <div className="rbt-card-bottom">
-                                                <div className="rbt-price">
-                                                    <span className="current-price">$15</span>
-                                                    <span className="off-price">$25</span>
+                                            <div className="rbt-card-body">
+                                                <h5 className="rbt-card-title"><a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a></h5>
+                                                <div className="rbt-review">
+                                                    <div className="rating">
+                                                        <i className="fas fa-star"></i>
+                                                        <i className="fas fa-star"></i>
+                                                        <i className="fas fa-star"></i>
+                                                        <i className="fas fa-star"></i>
+                                                        <i className="fas fa-star"></i>
+                                                    </div>
+                                                    <span className="rating-count"> ({course?.reviewsCount} Reviews)</span>
+                                                </div>
+                                                <div className="rbt-card-bottom">
+                                                    <div className="rbt-price">
+                                                        <span className="current-price">${course.course_fees}</span>
+                                                        {/* <span className="off-price">${course.offPrice}</span> */}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {/* End Single Card */}
+                                ))}
 
                                 {/* Repeat the structure for other cards */}
 
-                                <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="rbt-card variation-01 rbt-hover">
-                                        <div className="rbt-card-img">
-                                            <a href="course-details.html">
-                                                <img src="assets/images/course/course-online-02.jpg" alt="Card image" />
-                                            </a>
-                                        </div>
-                                        <div className="rbt-card-body">
-                                            <h5 className="rbt-card-title"><a href="course-details.html">Java Program</a></h5>
-                                            <div className="rbt-review">
-                                                <div className="rating">
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                </div>
-                                                <span className="rating-count"> (15 Reviews)</span>
-                                            </div>
-                                            <div className="rbt-card-bottom">
-                                                <div className="rbt-price">
-                                                    <span className="current-price">$10</span>
-                                                    <span className="off-price">$40</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                               
 
                                 {/* Continue for the rest of the cards */}
 
