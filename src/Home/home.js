@@ -175,21 +175,14 @@ class Home extends React.Component {
                             <div className="col-md-12 pb--120 pt--10">
                                 <div className="content">
                                     <div className="inner">
-                                        <h1 className="title">
-                                            Welcome to Zobskill
-                                        </h1>
-                                        <h5>Marketplace for Training & Jobs</h5>
-                                        <p className="description">
-                                            We specialize in offering high-quality courses and connecting you with top employers across industries. Whether you're preparing for career opportunities or exploring diverse training programs, ZobSkill is here to guide your journey.
-                                        </p>
-                                        <div className="slider-btn">
+                                    <div className="slider-btn">
                                             <a className="rbt-btn btn-gradient hover-icon-reverse" href="/course">
                                                 <span className="icon-reverse-wrapper">
                                                     <span className="btn-text">Start Your Training</span>
                                                     <span className="btn-icon"><i className="feather-arrow-right"></i></span>
                                                     <span className="btn-icon"><i className="feather-arrow-right"></i></span>
                                                 </span>
-                                            </a>
+                                            </a>&nbsp;
                                             <a className="rbt-btn btn-gradient hover-icon-reverse" href="/jobs">
                                                 <span className="icon-reverse-wrapper">
                                                     <span className="btn-text">Explore Your Dream Job</span>
@@ -198,6 +191,14 @@ class Home extends React.Component {
                                                 </span>
                                             </a>
                                         </div>
+                                        <h1 className="title">
+                                            Welcome to Zobskill
+                                        </h1>
+                                        <h5>Marketplace for Training & Jobs</h5>
+                                        <p className="description">
+                                            We specialize in offering high-quality courses and connecting you with top employers across industries. Whether you're preparing for career opportunities or exploring diverse training programs, ZobSkill is here to guide your journey.
+                                        </p>
+                                       
                                     </div>
                                     <div className="shape-wrapper" id="scene">
                                         <img src="assets/images/banner/banner-01.png" alt="Hero Image" />
@@ -335,7 +336,7 @@ class Home extends React.Component {
                                             <h6 className="title"><a href="#">Unlock Opportunities – 100+ Jobs Await You!</a></h6>
                                             <p className="description">Explore verified listings across industries and apply with confidence.</p>
                                         </div>
-                                        <span className="number-text">1</span>
+                                        {/* <span className="number-text">1</span> */}
                                     </div>
                                 </div>
                             </div>
@@ -351,7 +352,7 @@ class Home extends React.Component {
                                             <h6 className="title"><a href="#">Free Job Posting – Start Hiring Now!</a></h6>
                                             <p className="description">Post openings at no cost and connect with the best talent effortlessly.</p>
                                         </div>
-                                        <span className="number-text">2</span>
+                                        {/* <span className="number-text">2</span> */}
                                     </div>
                                 </div>
                             </div>
@@ -367,7 +368,7 @@ class Home extends React.Component {
                                             <h6 className="title"><a href="#">100% Refund on Training & Job placement (T&C Apply)</a></h6>
                                             <p className="description">We prioritize your satisfaction with our flexible refund policy.</p>
                                         </div>
-                                        <span className="number-text">3</span>
+                                        {/* <span className="number-text">3</span> */}
                                     </div>
                                 </div>
                             </div>
@@ -383,7 +384,7 @@ class Home extends React.Component {
                                             <h6 className="title"><a href="#">Job Alerts and Notifications at Your Fingertips</a></h6>
                                             <p className="description">Never miss an opportunity with personalized job recommendations.</p>
                                         </div>
-                                        <span className="number-text">4</span>
+                                        {/* <span className="number-text">4</span> */}
                                     </div>
                                 </div>
                             </div>
