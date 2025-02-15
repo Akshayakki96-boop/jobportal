@@ -14,7 +14,7 @@ class Course extends React.Component {
             totalRecords: 0, // Total number of records
             searchQuery: "", // State to store the search input
             dashBoardData: "",
-            searchFilteredQuery:""
+            searchFilteredQuery: ""
         };
 
     }
@@ -123,11 +123,17 @@ class Course extends React.Component {
         this.setState({ searchFilteredQuery: this.state.searchQuery }); // Normalize to lowercase for case-insensitive search
     };
 
-    handleSearchQuery=(e)=>{
+    handleSearchQuery = (e) => {
         this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
     }
 
-
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+        const parts = name.split(" ");
+        return parts.length > 1
+            ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+            : parts[0][0].toUpperCase();
+    };
     render() {
         const { courseListingData, currentPage, pageSize, totalRecords, searchFilteredQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
@@ -374,6 +380,38 @@ class Course extends React.Component {
                                                         </li>
                                                     </ul>
                                                     <p className="rbt-card-text">{course.description}</p>
+                                                    <div className="rbt-author-meta mb--20">
+                                                        <div className="rbt-avater">
+                                                            <a href="#">
+                                                                {course.profile_image ? (<img
+                                                                    src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.profile_image}`}
+                                                                    alt={course.FullName}
+                                                                />
+                                                                ) : (
+                                                                    <div
+                                                                        style={{
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            width: "60px", // Adjust as needed
+                                                                            height: "60px", // Adjust as needed
+                                                                            backgroundColor: "#ccc", // Default background color
+                                                                            color: "#fff",
+                                                                            borderRadius: "50%",
+                                                                            fontWeight: "bold",
+                                                                            fontSize: "18px", // Adjust font size as needed
+                                                                        }}
+                                                                    >
+                                                                        {this.getInitials(course.FullName || "User")}
+                                                                    </div>
+                                                                )}
+                                                            </a>
+                                                        </div>
+                                                        <div className="rbt-author-info">
+                                                            By {course.FullName}
+                                                            {/* <a href="#">Development</a> */}
+                                                        </div>
+                                                    </div>
                                                     <div className="rbt-card-bottom">
                                                         <div className="rbt-price">
                                                             <span className="current-price">${course.course_fees}</span>

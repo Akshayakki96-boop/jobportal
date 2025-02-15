@@ -219,7 +219,6 @@ class CreateCourse extends React.Component {
     };
 
     handleCourseSubmit = () => {
-        debugger;
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/PostCourse`;
         const token = localStorage.getItem('authToken');
