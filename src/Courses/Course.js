@@ -14,7 +14,8 @@ class Course extends React.Component {
             totalRecords: 0, // Total number of records
             searchQuery: "", // State to store the search input
             dashBoardData: "",
-            searchFilteredQuery: ""
+            searchFilteredQuery: "",
+            errorMessage: "",
         };
 
     }
@@ -51,7 +52,7 @@ class Course extends React.Component {
                 if (response.data.data && response.data.data.length > 0) {
                     const totalCount = response.data.data[0].TotalRecords;
 
-                    this.setState({ courseListingData: response.data.data, totalRecords: totalCount, keepSpinner: false });
+                    this.setState({ courseListingData: response.data.data, totalRecords: totalCount, keepSpinner: false, errorMessage: "" });
                 }
                 else {
                     this.setState({ errorMessage: "No Course Found", keepSpinner: false });
@@ -343,146 +344,147 @@ class Course extends React.Component {
                     </div>
                     <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                         <div className="inner">
-                            <div className="container">
-                                <div className="rbt-course-grid-column courall">
-                                    {/* Start Single Card  */}
-                                    {filteredCourse?.map((course) => (
-                                        <div className="course-grid-3" key={course.courseid}>
-                                            <div className="rbt-card variation-01 rbt-hover">
-                                                <div className="rbt-card-img">
-                                                    <a href={`/Course-Details?courseId=${course.courseid}`}>
-                                                        <img
-                                                            src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                                                            alt="Card image"
-                                                        />
-
-                                                    </a>
-                                                </div>
-                                                <div className="rbt-card-body">
-                                                    <div className="rbt-card-top">
-
+                            {!this.state.errorMessage ? (
+                                <div className="container">
+                                    <div className="rbt-course-grid-column courall">
+                                        {/* Start Single Card */}
+                                        {filteredCourse?.map((course) => (
+                                            <div className="course-grid-3" key={course.courseid}>
+                                                <div className="rbt-card variation-01 rbt-hover">
+                                                    <div className="rbt-card-img">
+                                                        <a href={`/Course-Details?courseId=${course.courseid}`}>
+                                                            <img
+                                                                src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}
+                                                                alt="Card image"
+                                                            />
+                                                        </a>
                                                     </div>
-                                                    <h4 className="rbt-card-title">
-                                                        <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
-                                                    </h4>
-                                                    <ul className="rbt-meta">
-                                                        <li>
-                                                            <i className="feather-book" />
-                                                            {course.no_of_lessons} Lessons
-                                                        </li>
-                                                        <li>
-                                                            <i className="feather-users" />
-                                                            50 Students
-                                                        </li>
-                                                        <li>
-
-                                                            {!course.isactive ? <a href="#" onClick={() => this.ActivateCourse(course)}>Activate Course</a> : "Activated"}
-                                                        </li>
-                                                    </ul>
-                                                    <p className="rbt-card-text">{course.description}</p>
-                                                    <div className="rbt-author-meta mb--20">
-                                                        <div className="rbt-avater">
-                                                            <a href="#">
-                                                                {course.profile_image ? (<img
-                                                                    src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.profile_image}`}
-                                                                    alt={course.FullName}
-                                                                />
+                                                    <div className="rbt-card-body">
+                                                        <h4 className="rbt-card-title">
+                                                            <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
+                                                        </h4>
+                                                        <ul className="rbt-meta">
+                                                            <li>
+                                                                <i className="feather-book" />
+                                                                {course.no_of_lessons} Lessons
+                                                            </li>
+                                                            <li>
+                                                                <i className="feather-users" />
+                                                                50 Students
+                                                            </li>
+                                                            <li>
+                                                                {!course.isactive ? (
+                                                                    <a href="#" onClick={() => this.ActivateCourse(course)}>
+                                                                        Activate Course
+                                                                    </a>
                                                                 ) : (
-                                                                    <div
-                                                                        style={{
-                                                                            display: "flex",
-                                                                            alignItems: "center",
-                                                                            justifyContent: "center",
-                                                                            width: "60px", // Adjust as needed
-                                                                            height: "60px", // Adjust as needed
-                                                                            backgroundColor: "#ccc", // Default background color
-                                                                            color: "#fff",
-                                                                            borderRadius: "50%",
-                                                                            fontWeight: "bold",
-                                                                            fontSize: "18px", // Adjust font size as needed
-                                                                        }}
-                                                                    >
-                                                                        {this.getInitials(course.FullName || "User")}
-                                                                    </div>
+                                                                    "Activated"
                                                                 )}
+                                                            </li>
+                                                        </ul>
+                                                        <p className="rbt-card-text">{course.description}</p>
+                                                        <div className="rbt-author-meta mb--20">
+                                                            <div className="rbt-avater">
+                                                                <a href="#">
+                                                                    {course.profile_image ? (
+                                                                        <img
+                                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.profile_image}`}
+                                                                            alt={course.FullName}
+                                                                        />
+                                                                    ) : (
+                                                                        <div
+                                                                            style={{
+                                                                                display: "flex",
+                                                                                alignItems: "center",
+                                                                                justifyContent: "center",
+                                                                                width: "60px",
+                                                                                height: "60px",
+                                                                                backgroundColor: "#ccc",
+                                                                                color: "#fff",
+                                                                                borderRadius: "50%",
+                                                                                fontWeight: "bold",
+                                                                                fontSize: "18px",
+                                                                            }}
+                                                                        >
+                                                                            {this.getInitials(course.FullName || "User")}
+                                                                        </div>
+                                                                    )}
+                                                                </a>
+                                                            </div>
+                                                            <div className="rbt-author-info">
+                                                                By {course.FullName}
+                                                            </div>
+                                                        </div>
+                                                        <div className="rbt-card-bottom">
+                                                            <div className="rbt-price">
+                                                                <span className="current-price">${course.course_fees}</span>
+                                                            </div>
+                                                            <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
+                                                                Learn More
+                                                                <i className="feather-arrow-right" />
                                                             </a>
                                                         </div>
-                                                        <div className="rbt-author-info">
-                                                            By {course.FullName}
-                                                            {/* <a href="#">Development</a> */}
-                                                        </div>
-                                                    </div>
-                                                    <div className="rbt-card-bottom">
-                                                        <div className="rbt-price">
-                                                            <span className="current-price">${course.course_fees}</span>
-                                                            {/* <span className="off-price">$120</span> */}
-                                                        </div>
-                                                        <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
-                                                            Learn More
-                                                            <i className="feather-arrow-right" />
-                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                    {/* End Single Card  */}
-
-
-
-
-                                </div>
-                                <div className="row">
-                                    <div className="col-lg-12 mt--60">
-                                        <nav>
-                                            <ul className="rbt-pagination">
-                                                {/* Previous Button */}
-                                                <li>
-                                                    <a
-                                                        href="#"
-                                                        aria-label="Previous"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            if (currentPage > 1) this.handlePageChange(currentPage - 1);
-                                                        }}
-                                                    >
-                                                        <i className="feather-chevron-left" />
-                                                    </a>
-                                                </li>
-
-                                                {/* Page Numbers */}
-                                                {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
-                                                    <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                                        ))}
+                                        {/* End Single Card */}
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-lg-12 mt--60">
+                                            <nav>
+                                                <ul className="rbt-pagination">
+                                                    {/* Previous Button */}
+                                                    <li>
                                                         <a
                                                             href="#"
+                                                            aria-label="Previous"
                                                             onClick={(e) => {
                                                                 e.preventDefault();
-                                                                this.handlePageChange(index + 1); // 1-based index
+                                                                if (currentPage > 1) this.handlePageChange(currentPage - 1);
                                                             }}
                                                         >
-                                                            {index + 1}
+                                                            <i className="feather-chevron-left" />
                                                         </a>
                                                     </li>
-                                                ))}
 
-                                                {/* Next Button */}
-                                                <li>
-                                                    <a
-                                                        href="#"
-                                                        aria-label="Next"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
-                                                        }}
-                                                    >
-                                                        <i className="feather-chevron-right" />
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                                    {/* Page Numbers */}
+                                                    {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
+                                                        <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                                                            <a
+                                                                href="#"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    this.handlePageChange(index + 1);
+                                                                }}
+                                                            >
+                                                                {index + 1}
+                                                            </a>
+                                                        </li>
+                                                    ))}
+
+                                                    {/* Next Button */}
+                                                    <li>
+                                                        <a
+                                                            href="#"
+                                                            aria-label="Next"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
+                                                            }}
+                                                        >
+                                                            <i className="feather-chevron-right" />
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <h2>{this.state.errorMessage}</h2>
+                            )}
+
                         </div>
                     </div>
 
