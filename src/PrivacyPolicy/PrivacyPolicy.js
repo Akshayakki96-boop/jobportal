@@ -17,7 +17,7 @@ class PrivacyPolicy extends React.Component {
             <div className="container mt-5" style={{ fontSize: '1em', textAlign: 'left' }}>
                 <h4>Privacy Policy for Zobskill.com</h4>
                 <p><strong>Effective Date: 28/11/2024</strong></p>
-                <p>At Zobskill.com (owned & operated by Eduglobal Solutions), your privacy is important to us. This Privacy Policy outlines how we collect, use, disclose, and safeguard your information when you use our platform.</p>
+                <p>At Zobskill.com (owned & operated by Eduglobal Solutions Pvt. Ltd.), your privacy is important to us. This Privacy Policy outlines how we collect, use, disclose, and safeguard your information when you use our platform.</p>
 
                 <h5>1. Information We Collect</h5>
                 <h5>1.1. Information You Provide</h5>

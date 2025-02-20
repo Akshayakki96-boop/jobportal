@@ -5,6 +5,7 @@ import Breadcumb from '../Breadcumb/breadcumb';
 import withNavigation from '../withNavigation';
 import Select from "react-select";
 import HeaderLoginSignUp from '../Header/headerLoginSignUp';
+import { connect } from 'react-redux';
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -35,6 +36,7 @@ class SignUp extends React.Component {
 
     }
     componentDidMount() {
+        debugger;
         window.addEventListener('scroll', function () {
             var header = document.querySelector('.rbt-header-wrapper');
             if (window.scrollY > 50) { // Change 50 to whatever scroll position you want
@@ -47,6 +49,21 @@ class SignUp extends React.Component {
         var urlParams = new URLSearchParams(url);
         var reqType = urlParams.get('role_id');
         this.role_id = reqType;
+        if (this.props?.singleRequestData && this.props?.singleRequestData.SignUpType == "Candidate") {
+            this.setState((prevState) => ({
+                values: { ...prevState.values, role: 1 },
+            }));
+        }
+        else if (this.props?.singleRequestData && this.props?.singleRequestData.SignUpType == "Employer") {
+            this.setState((prevState) => ({
+                values: { ...prevState.values, role: 2 },
+            }));
+        }
+        else {
+            this.setState((prevState) => ({
+                values: { ...prevState.values, role: 3 },
+            }));
+        }
 
     }
 
@@ -167,7 +184,7 @@ class SignUp extends React.Component {
                         </span>
                     ),
                     alertVariant: 'success', // Success alert variant
-                 
+
                 });
                 window.scrollTo(0, 0);
                 //this.props.navigate('/Login'); // Use `navigate`
@@ -218,39 +235,40 @@ class SignUp extends React.Component {
                     <Breadcumb componentName="SignUp" ComponentValue="SignUp" />
                 </div>
                 <div className="rbt-elements-area bg-color-white" style={{ paddingBottom: '100px', marginBottom: '100px' }}>
-                {/* Render Bootstrap alert if there's a responseMessage */}
-                                                        {this.state.responseMessage && (
-                                                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                                                                {this.state.responseMessage}
-                                                            </Alert>
-                                                        )}
-                                                        {this.state.keepSpinner && <div className="custom-loader">
-                                                            <div className="loader-spinner"></div>
-                                                            <p className="loader-text">Please Wait...</p>
-                                                        </div>}
-                                                        <div className="container-fluid p-0" style={{ marginBottom: '200px' }}>
-                                                            <div className="row">
-                                                                <div className="log-regs-page">
-                                                                    <div className="log-regs-bg1">
-                                                                        <h1>
-                                                                            Ready to Transform Your Career or Business?
-                                                                            Join Zobskill and experience the future of training and recruitment.
-                                                                        </h1>
-                                                                    </div>
-                                                                    <div className="log-regs-frm">
-                                                                        <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                                                            <h3 className="title">SignUp</h3>
-                                                                            <form
-                                                                                className="max-width-auto"
-                                                                                onSubmit={(e) => e.preventDefault()} // Prevent form submission
-                                                            >
-                                        
+                    {/* Render Bootstrap alert if there's a responseMessage */}
+                    {this.state.responseMessage && (
+                        <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                            {this.state.responseMessage}
+                        </Alert>
+                    )}
+                    {this.state.keepSpinner && <div className="custom-loader">
+                        <div className="loader-spinner"></div>
+                        <p className="loader-text">Please Wait...</p>
+                    </div>}
+                    <div className="container-fluid p-0" style={{ marginBottom: '200px' }}>
+                        <div className="row">
+                            <div className="log-regs-page">
+                                <div className="log-regs-bg1">
+                                    <h1>
+                                        Ready to Transform Your Career or Business?
+                                        Join Zobskill and experience the future of training and recruitment.
+                                    </h1>
+                                </div>
+                                <div className="log-regs-frm">
+                                    <div className="rbt-contact-form contact-form-style-1 max-width-auto">
+                                        <h3 className="title">SignUp</h3>
+                                        <form
+                                            className="max-width-auto"
+                                            onSubmit={(e) => e.preventDefault()} // Prevent form submission
+                                        >
+
                                             {/* Role Type Dropdown */}
-                                            <div className={`form-group ${focusStates.role ? "focused" : ""}`}>
-                                                <label>Role Type *</label>
+                                            <div className="form-group">
+                                                <label>Role</label>
                                                 <Select
                                                     name="role"
                                                     placeholder="Select Role"
+                                                    isDisabled={true}
                                                     options={roleOptions}
                                                     value={roleOptions.find(option => option.value === values.role)}
                                                     menuPortalTarget={document.body} // Render the dropdown to the body
@@ -367,12 +385,24 @@ class SignUp extends React.Component {
                                                     />
                                                 </div>
                                                 {/* Validation Message */}
-                                                {this.state.mobileNumberMessage && (
-                                                    <span className="form-text text-danger">{this.state.mobileNumberMessage}</span>
-                                                )}
-                                            </div>
-
-                                            {/* Submit Button */}
+                                                                                                {this.state.mobileNumberMessage && (
+                                                                                                    <span className="form-text text-danger">{this.state.mobileNumberMessage}</span>
+                                                                                                )}
+                                                                                            </div>
+                                                                                            <div className="row mb--30">
+                                                                                                <div className="col-lg-6">
+                                                                                                    <div style={{textAlign:'left'}} className="rbt-lost-password">
+                                                                                                        <a onClick={this.handleLogin} className="rbt-btn-link" href="#">Login</a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div className="col-lg-6">
+                                                                                                    <div style={{textAlign:'left',marginLeft:'43px'}} className="rbt-lost-password">
+                                                                                                        <a  className="rbt-btn-link" href="/privacypolicy">Privacy Policy</a>
+                                                                                                        <a className="rbt-btn-link" href={`/termsconditions?type=${this.props?.singleRequestData && this.props?.singleRequestData.SignUpType}`}>Terms and Conditions</a>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            {/* Submit Button */}
                                             <div className="form-submit-group">
                                                 <button
                                                     type="button" // Prevents triggering form submission
@@ -390,23 +420,9 @@ class SignUp extends React.Component {
                                                         </span>
                                                     </span>
                                                 </button>
-                                                 <div style={{ marginTop: '10px' }}></div>
-                                                <button
-                                                    type="button"
-                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                    onClick={this.handleLogin}
-                                                >
-                                                    <span className="icon-reverse-wrapper">
-                                                        <span className="btn-text">Log In</span>
-                                                        <span className="btn-icon">
-                                                            <i className="feather-arrow-right"></i>
-                                                        </span>
-                                                        <span className="btn-icon">
-                                                            <i className="feather-arrow-right"></i>
-                                                        </span>
-                                                    </span>
-                                                </button> 
-                                                </div>
+                                                <div style={{ marginTop: '10px' }}></div>
+                                            </div>
+                                        
                                         </form>
                                     </div>
                                 </div>
@@ -418,5 +434,10 @@ class SignUp extends React.Component {
         );
     }
 }
+const mapStateToProps = (state) => ({
+    singleRequestData: state.SingleRequestReducer.singleRequestData,
+});
 
-export default withNavigation(SignUp);
+
+
+export default connect(mapStateToProps)(withNavigation(SignUp));
