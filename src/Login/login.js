@@ -164,11 +164,11 @@ class Login extends React.Component {
                               <a className="rbt-btn-link" href="#">Lost your password?</a>
                             </div>
                           </div>
-                          <div className="col-lg-5">
+                          {/* <div className="col-lg-5">
                             <div className="rbt-lost-password text-end">
                               <a className="rbt-btn-link" href="/SignUp">Register</a>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
 
                         <div className="form-submit-group">
