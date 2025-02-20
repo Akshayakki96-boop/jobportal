@@ -157,7 +157,7 @@ class SignUp extends React.Component {
     handleSignup = () => {
         this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const signupUrl = `${baseUrl}/api/signup`;
+        const signupUrl = `${baseUrl}/api/Signup/Signup`;
         const signupData = {
             "username": this.state.values.username,
             "password": btoa(this.state.values.password),
