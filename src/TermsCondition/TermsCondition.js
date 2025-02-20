@@ -8,26 +8,33 @@ class TermsCondition extends Component {
             dashBoardData:""
         };
     }
-
+componentDidMount()
+{
+    let url = window.location.search;
+    var urlParams = new URLSearchParams(url);
+    var reqType = urlParams.get('type');
+    this.setState({type:reqType});
+}
     render() {
         return (
             <>
              <Header dashBoardData={this.state.dashBoardData} />
-             <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', margin: '20px', textAlign: 'justify' }}>
+        {this.state?.type=="Candidate" &&     
+        <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', margin: '20px', textAlign: 'justify' }}>
             <h4 style={{ color: '#333' }}>Terms and Conditions for Candidates/Students on Zobskill.com</h4>
 
             <p><strong>Effective Date:</strong> 28/11/2024</p>
 
             <div style={{ marginBottom: '30px' }}>
                 <p>
-                    Welcome to <strong>Zobskill.com</strong>. These Terms and Conditions ("Terms") govern the relationship between <strong>Zobskill.com</strong> (owned and operated by <strong>Eduglobal Solutions</strong>) and you, the <strong>Candidate / Student / Job Seeker / Working Professional</strong>. Zobskill.com is a platform designed to connect candidates / students / working professionals / job seekers with training programs and job opportunities. By registering, enrolling in courses, or availing services on Zobskill.com, you agree to comply with these Terms and Conditions ("Terms"). If you disagree with any part of these Terms, you should refrain from using the platform.
+                    Welcome to <strong>Zobskill.com</strong>. These Terms and Conditions ("Terms") govern the relationship between <strong>Zobskill.com</strong> (owned and operated by <strong>Eduglobal Solutions Pvt. Ltd</strong>) and you, the <strong>Candidate / Student / Job Seeker / Working Professional</strong>. Zobskill.com is a platform designed to connect candidates / students / working professionals / job seekers with training programs and job opportunities. By registering, enrolling in courses, or availing services on Zobskill.com, you agree to comply with these Terms and Conditions ("Terms"). If you disagree with any part of these Terms, you should refrain from using the platform.
                 </p>
             </div>
 
             <div style={{ marginBottom: '30px' }}>
                 <h5 style={{ borderBottom: '2px solid #333', paddingBottom: '5px' }}>1. Definitions</h5>
                 <ul>
-                    <li><strong>Platform:</strong> Zobskill.com, owned and operated by Eduglobal Solutions.</li>
+                    <li><strong>Platform:</strong> Zobskill.com, owned and operated by Eduglobal Solutions Pvt. Ltd.</li>
                     <li><strong>Candidate/Student:</strong> An individual registered on the platform to avail training or job placement services.</li>
                     <li><strong>Training Provider:</strong> Trainers or institutions offering courses through Zobskill.com.</li>
                     <li><strong>Related Exam:</strong> The certification or qualifying exam for which the candidate is undergoing training.</li>
@@ -163,21 +170,23 @@ class TermsCondition extends Component {
                 </p>
             </div>
         </div>
-        <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', margin: '20px',textAlign: 'justify' }}>
+    }
+          {this.state?.type=="Employer" && 
+          <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', margin: '20px',textAlign: 'justify' }}>
             <h4 style={{ color: '#333' }}>Employer Terms and Conditions for Zobskill.com</h4>
 
             <p><strong>Effective Date:</strong> 28/11/2024</p>
 
             <div style={{ marginBottom: '30px' }}>
                 <p>
-                    Welcome to <strong>Zobskill.com</strong>. These Terms and Conditions (“Terms”) govern the relationship between <strong>Zobskill.com</strong> (owned and operated by <strong>Eduglobal Solutions</strong>) and you, the <strong>Employer / Recruiter</strong>. Zobskill.com is an online platform connecting employers and recruiters with skilled candidates across various industries. By posting jobs or using our recruitment services, you agree to these Terms and Conditions (“Terms”). If you do not agree, please refrain from using our services.
+                    Welcome to <strong>Zobskill.com</strong>. These Terms and Conditions (“Terms”) govern the relationship between <strong>Zobskill.com</strong> (owned and operated by <strong>Eduglobal Solutions Pvt. Ltd.</strong>) and you, the <strong>Employer / Recruiter</strong>. Zobskill.com is an online platform connecting employers and recruiters with skilled candidates across various industries. By posting jobs or using our recruitment services, you agree to these Terms and Conditions (“Terms”). If you do not agree, please refrain from using our services.
                 </p>
             </div>
 
             <div style={{ marginBottom: '30px' }}>
                 <h5 style={{ borderBottom: '2px solid #333', paddingBottom: '5px' }}>1. Definitions</h5>
                 <ul>
-                    <li><strong>Platform:</strong> Zobskill.com, owned and operated by Eduglobal Solutions.</li>
+                    <li><strong>Platform:</strong> Zobskill.com, owned and operated by Eduglobal Solutions Pvt. Ltd.</li>
                     <li><strong>Employer/Recruiter:</strong> An individual, business, or agency posting job vacancies or seeking candidates through Zobskill.</li>
                     <li><strong>Candidate:</strong> Any individual applying to job listings or using Zobskill services to seek employment.</li>
                     <li><strong>Content:</strong> Information, job postings, company profiles, or any material submitted to Zobskill.</li>
@@ -288,14 +297,15 @@ class TermsCondition extends Component {
                 </p>
             </div>
         </div>
-        <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', margin: '20px',textAlign: 'justify' }}>
+    }
+            {this.state?.type=="Trainer" &&  <div style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', margin: '20px',textAlign: 'justify' }}>
             <h4 style={{ color: '#333' }}>Trainer Terms and Conditions for Zobskill.com</h4>
 
             <p><strong>Effective Date:</strong> 28/11/2024</p>
 
             <div style={{ marginBottom: '30px' }}>
                 <p>
-                    Welcome to <strong>Zobskill.com</strong>. These Terms and Conditions (“Terms”) govern the relationship between <strong>Zobskill.com</strong> (owned and operated by <strong>Eduglobal Solutions</strong>) and you, the <strong>Trainer</strong>, who lists and offers training courses on the platform. By listing courses on Zobskill.com, you agree to these Terms.
+                    Welcome to <strong>Zobskill.com</strong>. These Terms and Conditions (“Terms”) govern the relationship between <strong>Zobskill.com</strong> (owned and operated by <strong>Eduglobal Solutions Pvt. Ltd</strong>) and you, the <strong>Trainer</strong>, who lists and offers training courses on the platform. By listing courses on Zobskill.com, you agree to these Terms.
                 </p>
             </div>
 
@@ -424,6 +434,7 @@ class TermsCondition extends Component {
                 </p>
             </div>
         </div>
+    }
             </>
         );
     }

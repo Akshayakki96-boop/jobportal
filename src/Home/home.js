@@ -412,14 +412,38 @@ class Home extends React.Component {
                                 <div className="inner pl--50 pl_sm--0 pl_md--0">
                                     <div className="section-title text-start">
                                         <span className="subtitle bg-coral-opacity">About Zobskill</span>
-                                        <h2 className="title">Know About Zobskill <br /> Learning Platform</h2>
+                                        <h3 className="title">Zobskill – Where Learning Meets Opportunity!</h3>
                                     </div>
-                                    <p className="description mt--30">
-                                        Zobskill, a dynamic training and recruitment platform owned by Eduglobal Solutions, is designed to transform the careers of working professionals, graduates, and aspiring candidates across a variety of industries. By offering a holistic pathway from personalized training to certification and job placement, Zobskill empowers individuals to achieve their career goals—all in one place.
+                                    <p style={{textAlign:'left'}} className="description mt--30">
+                                    At Zobskill, we believe that the right skills can change lives. Whether you're looking to upgrade your expertise, earn a certification, or land a job you love, we’re here to make it happen.  
                                     </p>
-                                    <p>
-                                        Unlike other platforms, Zobskill leverages cutting-edge technology, a deep understanding of industry demands, and strategic partnerships to deliver a seamless and tailored experience for both candidates and employers.
+                                    <p style={{textAlign:'left'}}>
+                                    Think of us as your career partner—helping you at every step, from learning in-demand skills to connecting you with real job opportunities. And the best part?<strong> We reward your success! When you pass your certification exam and secure a job through Zobskill, you get 100% of your training fees refunded. (T&C Apply)</strong>
                                     </p>
+                                    <div style={{textAlign:'left'}}>
+                                    <strong>Why Zobskill?</strong>
+                                    </div>
+                                    <p style={{textAlign:'left'}}>
+                                    <ul>
+                                        <li>
+                                        Learn from the best – Industry-leading trainers & real-world skills.  
+                                        </li>
+                                        <li>
+                                        Get certified, get hired – Employers prefer job-ready professionals  
+                                        </li>
+                                        <li>
+                                        Earn as you teach – Trainers get incentives when students succeed.    
+                                        </li>
+                                        <li>
+                                        Join a thriving community – Mentors, trainers & recruiters helping each other grow.      
+                                        </li>
+                                        <li>
+                                        Your career journey starts here. Ready to take the next step?    
+                                        </li>
+                                    </ul>
+                                    </p>
+                                    <div style={{textAlign:'left'}}><a href='/login'>Join Zobskill today!</a></div>
+                                    
                                     <div className="about-btn mt--40">
                                         <a className="rbt-btn btn-gradient hover-icon-reverse" href="/aboutus">
                                             <span className="icon-reverse-wrapper">
@@ -714,12 +738,12 @@ class Home extends React.Component {
                                             <div className="inner">
                                                 <div className="rbt-team-thumbnail">
                                                     <div className="thumb">
-                                                        <img src="assets/images/team/team-01.jpg" alt="Testimonial Images" />
+                                                        <img src="assets/images/team/team-08.jpg" alt="Testimonial Images" />
                                                     </div>
                                                 </div>
                                                 <div className="rbt-team-details">
                                                     <div className="author-info">
-                                                        <h4 className="title">Mames Mary</h4>
+                                                        <h4 className="title">Gaurav</h4>
                                                         <span className="designation theme-gradient">English Teacher</span>
                                                         <span className="team-form">
                                                             <i className="feather-map-pin"></i>
@@ -748,37 +772,10 @@ class Home extends React.Component {
                                     {/* Start Tab Nav */}
                                     <ul className="rbt-team-tab-thumb nav nav-tabs" id="myTab" role="tablist">
                                         <li>
-                                            <a className="active" id="team-tab1-tab" data-bs-toggle="tab" data-bs-target="#team-tab1" role="tab" aria-controls="team-tab1" aria-selected="true">
+                                            <a className='active' id="team-tab4-tab" data-bs-toggle="tab" data-bs-target="#team-tab4" role="tab" aria-controls="team-tab4" aria-selected="false">
                                                 <div className="rbt-team-thumbnail">
                                                     <div className="thumb">
-                                                        <img src="assets/images/team/team-01.jpg" alt="Testimonial Images" />
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="team-tab2-tab" data-bs-toggle="tab" data-bs-target="#team-tab2" role="tab" aria-controls="team-tab2" aria-selected="false">
-                                                <div className="rbt-team-thumbnail">
-                                                    <div className="thumb">
-                                                        <img src="assets/images/team/team-02.jpg" alt="Testimonial Images" />
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="team-tab3-tab" data-bs-toggle="tab" data-bs-target="#team-tab3" role="tab" aria-controls="team-tab3" aria-selected="false">
-                                                <div className="rbt-team-thumbnail">
-                                                    <div className="thumb">
-                                                        <img src="assets/images/team/team-03.jpg" alt="Testimonial Images" />
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a id="team-tab4-tab" data-bs-toggle="tab" data-bs-target="#team-tab4" role="tab" aria-controls="team-tab4" aria-selected="false">
-                                                <div className="rbt-team-thumbnail">
-                                                    <div className="thumb">
-                                                        <img src="assets/images/team/team-04.jpg" alt="Testimonial Images" />
+                                                        <img src="assets/images/team/team-08.jpg" alt="Testimonial Images" />
                                                     </div>
                                                 </div>
                                             </a>

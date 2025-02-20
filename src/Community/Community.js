@@ -162,12 +162,11 @@ class Community extends React.Component {
                                     <div class="loader-spinner"></div>
                                     <p class="loader-text">Please Wait while Blogs  are loading...</p>
                                 </div>}
-                                { /* Start Card Area */}
+                               {/* Start Card Area */}
                                 <div className="row g-5">
-
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-12">
-                                        {this.state.blogsList && this.state.blogsList.map((blog) => (
-                                            <div key={blog.blog_id} className="blglst rbt-card card-list variation-02 rbt-hover mt--30">
+                                        {this.state.blogsList && this.state.blogsList.map((blog, index) => (
+                                            <div key={blog.blog_id} className={`blglst rbt-card card-list variation-02 rbt-hover mt--30 ${index % 2 === 0 ? 'image-left' : 'image-right'}`}>
                                                 <div className="rbt-card-img">
                                                     <a href="#">
                                                         <img src="assets/images/blog/blog-card-02.jpg" alt="Card image" />
@@ -175,13 +174,13 @@ class Community extends React.Component {
                                                 </div>
                                                 <div style={{ textAlign: "left" }} className="rbt-card-body">
                                                     <h5 className="rbt-card-title">
-                                                        <a href="#">{blog.title}</a>
+                                                        <a href={`/community-details?blogId=${blog.blog_id}`}>{blog.title}</a>
                                                     </h5>
                                                     <p style={{ fontSize: '14px' }} className="rbt-card-text">
                                                         {blog.description.length > 50 ? `${blog.description.substring(0, 300)}...` : blog.description}
                                                     </p>
                                                     <div className="rbt-card-bottom">
-                                                        <a className="transparent-button" href="#">
+                                                        <a className="transparent-button" href={`/community-details?blogId=${blog.blog_id}`}>
                                                             Read More
                                                             <i>
                                                                 <svg width={17} height={12} xmlns="http://www.w3.org/2000/svg">
@@ -197,11 +196,10 @@ class Community extends React.Component {
                                             </div>
                                         ))}
                                     </div>
-
                                 </div>
-                            </div>
-                        </div>
-                        {/* End Card Area */}
+                                </div>
+                                </div>
+                                {/* End Card Area */}
                     </>
                 </>
                 {/* End Card Style */}

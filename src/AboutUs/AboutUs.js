@@ -96,19 +96,52 @@ class AboutUs extends React.Component {
         <div className="inner pl--50 pl_sm--0 pl_md--0">
           <div className="section-title text-start">
             <span className="subtitle bg-coral-opacity">About Us</span>
-            <h2 className="title">
+            {/* <h2 className="title">
               Zobskill is a <br />
               one-stop platform
-            </h2>
+            </h2> */}
           </div>
-          <p className="description mt--30">
-            Zobskill is a one-stop platform designed to bridge the gap between
-            professional training and job opportunities. From personalized
-            training and certifications to global job placements, Zobskill is
-            your trusted partner in career success
+          <p style={{textAlign:'left'}} className="description mt--30">
+            <ul>
+              <li>
+              At Zobskill, we believe that the right skills can transform careers and open doors to endless opportunities. Whether you're looking to upgrade your expertise, earn a certification, or land your dream job, we are here to guide you every step of the way.
+              </li>
+              <li>
+              Zobskill, owned by Eduglobal Solutions Pvt. Ltd., is more than just a platform—it’s a dynamic ecosystem that connects aspiring professionals, expert trainers, and top employers to create a seamless pathway from learning to employment.
+              </li>
+            </ul>
+            <h5>What We Do</h5>
+            <ul>
+              <li>
+              Empower Candidates – Get trained in high-demand skills, earn industry-recognized certifications, and connect with verified job opportunities worldwide.
+              </li>
+              <li>
+              Support Employers – Hire from a pre-trained, job-ready talent pool and connect with candidates who are certified and skilled.  
+              </li>
+              <li>
+              Enable Trainers – Reach a wider audience, earn incentives, and help shape the future workforce through quality training programs.  
+              </li>
+              
+            </ul>
+            <h5>Why Choose Zobskill?</h5>
+            <ul>
+              <li>100% Refund on Training Fees – Pass your certification exam & secure a job through Zobskill, and get your training fees refunded. (T&C Apply)</li>
+              <li>Learn from the Best – Industry-leading trainers offering real-world skills & certifications.</li>
+              <li>Smart Job Matching – AI-powered tools to connect candidates with the right employers.</li>
+              <li>Trainer Incentive Program – Trainers earn bonuses when their students succeed.</li>
+              <li>A Thriving Community – Engage with mentors, trainers, and recruiters to accelerate career growth.</li>
+            </ul>
+            <strong>At Zobskill,</strong> we’re not just helping people find jobs—we’re helping them build meaningful careers.
+            
           </p>
+          <div style={{textAlign:'left'}}>
+          <strong>Your journey starts here. Ready to take the next step?</strong>
+          </div>
+          <div style={{textAlign:'left'}}>
+          <a href='/login'>Join Zobskill today!</a>
+          </div>
           {/* Start Feature List  */}
-          <div className="rbt-feature-wrapper mt--40">
+          {/* <div className="rbt-feature-wrapper mt--40">
             <div className="rbt-feature feature-style-1">
               <div className="icon bg-pink-opacity">
                 <i className="feather-settings" />
@@ -134,7 +167,7 @@ class AboutUs extends React.Component {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
           {/* End Feature List  */}
         </div>
       </div>
@@ -157,16 +190,38 @@ class AboutUs extends React.Component {
         <div className="inner pl--50 pl_sm--5">
           <div className="content text-start">
             <span className="rbt-badge-6 bg-primary-opacity">Career</span>
-            <h3 className="title">Welcome to Zobskill Team</h3>
-            <p className="description mt--30">
-              <strong>Zobskill educational platform</strong>
-            </p>
+            <h3 className="title">Careers at Zobskill – Grow With Us!</h3>
+            
             <p className="description">
-              Join our team and grow your career by working in healthy
-              environment.
+            <ul>
+                        <li>At Zobskill, we’re not just building a platform—we’re building a movement. A movement that helps people learn new skills, get certified, and land their dream jobs.</li>
+     
+                      </ul>
 
             </p>
-            <a target='_blank' href="mailto:career@zobskill.com">career@zobskill.com</a>
+
+            <h3 className="title">But we can’t do it alone. That’s where you come in!  </h3>
+            
+            <p className="description">
+            <ul>
+                        <li>We’re looking for passionate, driven, and creative minds who want to make an impact. Whether you’re a trainer helping others grow, a recruiter connecting talent with opportunity, a marketer with big ideas, or a tech enthusiast who loves building cool stuff, we’ve got a place for you.  </li>
+     
+                      </ul>
+
+            </p>
+            <h3 className="title">Why Join Us?</h3>
+            
+            <p className="description">
+            <ul>
+                        <li>Work in a fast-growing startup where your ideas matter.  </li>
+                        <li>Be part of a team that’s changing lives through training & jobs.  </li>
+                        <li>Learn, grow, and make an impact—every single day.  </li>
+     
+                      </ul>
+
+            </p>
+           <strong> Sounds like something you’d love to be a part of?</strong> Send your resume at 
+          <br/>  <a target='_blank' href="mailto:career@zobskill.com">career@zobskill.com</a>
             {/*
                       <div class="read-more-btn mt--40">
                           <a class="rbt-btn rbt-marquee-btn radius-round btn-gradient" href="#">
