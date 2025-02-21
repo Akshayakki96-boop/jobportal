@@ -80,7 +80,7 @@ class Footer  extends React.Component {
                                 <h5 className="ft-title">Subscribe us</h5>
                                 <form className="newsletter-form mt--20" action="#">
                                     <p className="description">
-                                        2000+ users subscribed to our page<br /> 
+                                        2000+ users subscribed to our page.<br /> 
                                         Don’t be shy introduce yourself!
                                     </p>
         
