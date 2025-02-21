@@ -42,8 +42,8 @@ class Copyright  extends React.Component {
                   {/* Right Column (Links) */}
                   <div className="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-12">
                     <ul className="copyright-link rbt-link-hover justify-content-center justify-content-lg-end mt_sm--10 mt_md--10">
-                      <li><a href="/termsconditions">Terms of service</a></li>
-                      <li><a href="/privacypolicy">Privacy policy</a></li>
+                      <li><a target='_blank' href="/termsconditions">Terms of service</a></li>
+                      <li><a target='_blank' href="/privacypolicy">Privacy policy</a></li>
                     </ul>
                   </div>
                 </div>

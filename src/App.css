@@ -448,6 +448,20 @@ select.form-control option {
   flex-direction: row;
 }
 
+.log-regs-bg2 {
+  width: 50%;
+  padding: 40px;
+  height: 100vh;
+  background: linear-gradient(60deg, rgba(158, 189, 19, 0.5), rgba(1, 73, 172, 0.7)), url("/src/assets/forgotpassword.jpg") center no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  align-content: center;
+  flex-direction: row;
+}
+
 .log-regs-bg1 h1 {
   max-width: 420px;
   color: #FFF;
@@ -652,6 +666,29 @@ select.form-control option {
   100% {
     opacity: 1;
   }
+}
+
+.blglst {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Adjust spacing */
+}
+
+.image-left {
+  flex-direction: row; /* Image on the left */
+}
+
+.image-right {
+  flex-direction: row-reverse; /* Image on the right */
+}
+
+.rbt-card-img img {
+  max-width: 200px; /* Adjust image size */
+  height: auto;
+}
+
+.rbt-card-body {
+  flex: 1; /* Take remaining space */
 }
 
 iframe#webpack-dev-server-client-overlay {

@@ -946,7 +946,7 @@ class EditProfileTrainer extends React.Component {
                                                             />
                                                         </div>
                                                     )}
-                                                    {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
+                                                    {uploadStatus && <small className={uploadStatus=="File uploaded successfully!"?"text-success":"text-danger"}>{uploadStatus}</small>}
                                                 </div>
                                                 <div className="form-group">
                                                     <input
