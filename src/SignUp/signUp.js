@@ -385,24 +385,12 @@ class SignUp extends React.Component {
                                                     />
                                                 </div>
                                                 {/* Validation Message */}
-                                                                                                {this.state.mobileNumberMessage && (
-                                                                                                    <span className="form-text text-danger">{this.state.mobileNumberMessage}</span>
-                                                                                                )}
-                                                                                            </div>
-                                                                                            <div className="row mb--30">
-                                                                                                <div className="col-lg-6">
-                                                                                                    <div style={{textAlign:'left'}} className="rbt-lost-password">
-                                                                                                        <a onClick={this.handleLogin} className="rbt-btn-link" href="#">Login</a>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                                <div className="col-lg-6">
-                                                                                                    <div style={{textAlign:'left',marginLeft:'43px'}} className="rbt-lost-password">
-                                                                                                        <a  className="rbt-btn-link" href="/privacypolicy">Privacy Policy</a>
-                                                                                                        <a className="rbt-btn-link" href={`/termsconditions?type=${this.props?.singleRequestData && this.props?.singleRequestData.SignUpType}`}>Terms and Conditions</a>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            {/* Submit Button */}
+                                                {this.state.mobileNumberMessage && (
+                                                    <span className="form-text text-danger">{this.state.mobileNumberMessage}</span>
+                                                )}
+                                            </div>
+
+                                            {/* Submit Button */}
                                             <div className="form-submit-group">
                                                 <button
                                                     type="button" // Prevents triggering form submission
@@ -420,9 +408,23 @@ class SignUp extends React.Component {
                                                         </span>
                                                     </span>
                                                 </button>
-                                                <div style={{ marginTop: '10px' }}></div>
                                             </div>
-                                        
+                                            <div style={{ marginTop: '10px' }}></div>
+                                            <div className="row mb--30">
+                                                <div className="col-lg-6">
+                                                    <div style={{ textAlign: 'left' }} className="rbt-lost-password">
+                                                        <a onClick={this.handleLogin} className="rbt-btn-link" href="#">Login</a>
+                                                    </div>
+                                                </div>
+                                                <div className="col-lg-6">
+                                                    <div style={{ textAlign: 'left', marginLeft: '-18px', whiteSpace: 'nowrap' }} className="rbt-lost-password">
+                                                        <a className="rbt-btn-link" target='_blank' href="/privacypolicy">Privacy Policy</a>
+                                                        <a className="rbt-btn-link" target='_blank' href={`/termsconditions?type=${this.props?.singleRequestData?.SignUpType}`} style={{ marginLeft: '10px' }}>Terms of Service</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
                                         </form>
                                     </div>
                                 </div>

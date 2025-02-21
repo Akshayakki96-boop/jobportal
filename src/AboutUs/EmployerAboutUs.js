@@ -77,7 +77,7 @@ class EmployerAboutUs extends React.Component {
           <div className="rbt-about-area about-style-1 bg-color-white rbt-section-gap">
             <div className="container">
               <div className="row g-5 align-items-center">
-              <div className="col-lg-5">
+              <div style={{marginLeft:'47px'}} className="col-lg-4">
                   <div className="form-submit-group">
                     <button
                       type="button"
