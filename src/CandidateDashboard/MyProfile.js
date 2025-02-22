@@ -166,11 +166,15 @@ class MyProfile extends React.Component {
                         </div>
                         {/* Profile Fields */}
                         {[
-                            { label: 'First Name', key: 'firstname' },
-                            { label: 'Last Name', key: 'lastname' },
+                            { label: 'Full Name', key: 'fullname' },
                             { label: 'Email', key: 'email' },
+                            { label: 'Mobile', key: 'mobile_no' },
                             { label: 'Company Name', key: 'CompanyName' },
-                            { label: 'Designation', key: 'designation' }
+                            { label: 'Designation', key: 'designation' },
+                            {label: 'Total Experience', key: 'experience'},
+                            {label: 'Notice Period', key: 'notice_periods'},
+                            {label: 'Current CTC', key: 'CTC'},
+                            {label: 'Location', key: 'current_location'},
                         ].map((item, index) => (
                             <div key={index} className="rbt-profile-row row row--15 mt--15">
                                 <div className="col-lg-4 col-md-4">

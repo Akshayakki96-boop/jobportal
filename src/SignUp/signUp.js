@@ -36,7 +36,6 @@ class SignUp extends React.Component {
 
     }
     componentDidMount() {
-        debugger;
         window.addEventListener('scroll', function () {
             var header = document.querySelector('.rbt-header-wrapper');
             if (window.scrollY > 50) { // Change 50 to whatever scroll position you want
