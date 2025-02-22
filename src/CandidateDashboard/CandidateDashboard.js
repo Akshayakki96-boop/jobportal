@@ -54,7 +54,7 @@ class CandidateDashboard extends React.Component {
 
     getUserProfile = (userId) => {
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Employer/GetProfile`;
+        const url = `${baseUrl}/api/Candidate/GetBasicProfile`;
         const token = localStorage.getItem('authToken');
         const userData = {
             "Id": userId,
@@ -158,7 +158,7 @@ class CandidateDashboard extends React.Component {
                                         <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
                                         <div className="tranr-titl">
                                             <div className="content text-center">
-                                                <h6 className="subtitle sal-animate" >Bootcamp Instructor</h6>
+                                            <h6 className="subtitle sal-animate" >Candidate</h6>
                                                 <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.fullname}</span></h3>
                                             </div>
                                         </div>
@@ -166,9 +166,9 @@ class CandidateDashboard extends React.Component {
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
                                                 <div className="thumbnail rbt-avatars size-lg">
-                                                    {this.state?.userData?.companylogo ? (
+                                                    {this.state?.userData?.profile_image ? (
                                                         <img
-                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
                                                             alt="Instructor"
                                                         />
                                                     ) : (

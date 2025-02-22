@@ -86,8 +86,12 @@ class Header extends React.Component {
                 if (response.data.data.role_id == 2) {
                     this.getUserProfile(response.data.data.user_id);
                 }
-                if (response.data.data.role_id == 3) {
+               else if (response.data.data.role_id == 3) {
                     this.getTrainerProfile(response.data.data.user_id);
+                }
+                else
+                {
+                    this.getCandidateProfile(response.data.data.user_id);
                 }
 
             })
@@ -98,7 +102,29 @@ class Header extends React.Component {
     }
 
 
+    getCandidateProfile=(userId)=>{
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Candidate/GetBasicProfile`;
+        const token = localStorage.getItem('authToken');
+        const userData = {
+            "Id": userId,
+        };
+        axios.post(url, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('user data HEADER', response.data);
+                this.setState({ userData: response.data.data})
 
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
 
     getTrainerProfile = (userId) => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -443,6 +469,31 @@ class Header extends React.Component {
                                                         )}
                                                     </div>}
                                                     {this.props.dashBoardData?.role_id == 3 && <div className="admin-thumbnail">
+                                                        {this.state?.userData?.profile_image ? (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                                alt="User Image" />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                            </div>
+                                                        )}
+                                                    </div>}
+
+                                                    {this.props.dashBoardData?.role_id == 1 && <div className="admin-thumbnail">
                                                         {this.state?.userData?.profile_image ? (
                                                             <img
                                                                 src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
