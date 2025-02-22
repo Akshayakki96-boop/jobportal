@@ -869,7 +869,7 @@ class EditProfileCandidate extends React.Component {
                                                         />
                                                     </div>
                                                 )}
-                                                {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
+                                                {uploadStatus && <small className={uploadStatus=="File uploaded successfully!"?"text-success":"text-danger"}>{uploadStatus}</small>}
                                             </div>
                                             <div className="form-group">
                                                 <input
@@ -1038,7 +1038,7 @@ class EditProfileCandidate extends React.Component {
                                                     </div>
                                                 )}
 
-                                                {this.state.uploadResumeStatus && <small className="text-danger">{this.state.uploadResumeStatus}</small>}
+                                                {this.state.uploadResumeStatus && <small className={this.state.uploadResumeStatus=="Resume uploaded successfully!"?"text-success":"text-danger"}>{this.state.uploadResumeStatus}</small>}
                                             </div>
 
                                             <div className="form-group">

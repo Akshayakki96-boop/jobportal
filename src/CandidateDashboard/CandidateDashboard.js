@@ -191,7 +191,7 @@ class CandidateDashboard extends React.Component {
                                                     )}
                                                 </div>
                                                 <div className="tutor-content">
-                                                    <h5 className="title">{this.state?.dashBoardData.username}</h5>
+                                                    <h5 className="title">{this.state?.dashBoardData.username} (Candidate)</h5>
                                                     <div className="rbt-review">
                                                         <div className="rating">
                                                             <i className="fas fa-star"></i>
