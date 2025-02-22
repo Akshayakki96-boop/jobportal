@@ -13,12 +13,14 @@ class ForgotPassword extends Component {
       focusStates: {
         usernameOrEmail: false,
         password: false,
-        email: false
+        email: false,
+        confirmPassword:false
       },
       values: {
         usernameOrEmail: "",
         password: "",
-        email: ""
+        email: "",
+        confirmPassword:""
       },
     };
 
@@ -52,10 +54,16 @@ class ForgotPassword extends Component {
     }
     this.setState(
       (prevState) => ({
-        values: { ...prevState.values, [field]: value },
+      values: { ...prevState.values, [field]: value },
       }),
-      field == "email" ? this.validateEmailForm : this.validateForm(isPasswordValid) // Call validateForm after state update
+      () => {
+      setTimeout(() => {
+        field === "email" ? this.validateEmailForm() : this.validateForm(isPasswordValid);
+      }, 1);
+      }
     );
+    this.setState({confirmPasswordMessage,
+      passwordStrengthMessage});
   };
   validateEmailForm = () => {
     const { email, role } = this.state.values;
@@ -74,8 +82,8 @@ class ForgotPassword extends Component {
     const baseUrl = process.env.REACT_APP_BASEURL;
     const validateUrl = `${baseUrl}/api/Login/ResetPassword`;
     const validateUser = {
-      "userid": 4,
-      "password": this.state.values.password
+      "userid": this.state.userId,
+      "password": btoa(this.state.values.password),
     }
 
     axios.post(validateUrl, validateUser, {
@@ -136,6 +144,8 @@ class ForgotPassword extends Component {
     })
       .then((response) => {
         this.setState({ showValidationForm: false });
+        console.log("respopnse",response.data)
+        this.setState({userId:response.data.user_id});
         this.setState({
           responseMessage: (
             <span>
@@ -241,11 +251,14 @@ class ForgotPassword extends Component {
                             onBlur={() => this.handleBlur("password")} onChange={(e) => this.handleChange("password", e)} required />
                           <label> New Password *</label>
                           <span className="focus-border"></span>
+                          {this.state.passwordStrengthMessage && (
+                                                    <span className="form-text text-danger">{this.state.passwordStrengthMessage}</span>
+                                                )}
                         </div>
                         <div className={`form-group ${focusStates.confirmpassword ? "focused" : ""}`}>
-                          <input name="confirmpassword" type="confirmpassword" value={values.confirmpassword}
-                            onFocus={() => this.handleFocus("confirmpassword")}
-                            onBlur={() => this.handleBlur("confirmpassword")} onChange={(e) => this.handleChange("confirmpassword", e)} required />
+                          <input name="confirmPassword" type="password" value={values.confirmpassword}
+                            onFocus={() => this.handleFocus("confirmPassword")}
+                            onBlur={() => this.handleBlur("confirmPassword")} onChange={(e) => this.handleChange("confirmPassword", e)} required />
                           <label> Confirm Password *</label>
                           <span className="focus-border"></span>
                           {this.state.confirmPasswordMessage && (

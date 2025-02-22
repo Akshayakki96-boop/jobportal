@@ -1343,7 +1343,7 @@ class EditProfileTrainer extends React.Component {
                                         </Modal>
                                 </div>
                                                                                 )}
-                                {/* Candidate Education Section */}
+                                {/* Trainer Education Section */}
                                 <h3 className="section-header" onClick={() => this.toggleSection("showEducation")} style={{ cursor: "pointer" }}>
                                     Education Details <span style={{ marginLeft: '10px' }}>{showEducation ? '[-]' : '[+]'}</span>
                                 </h3>
