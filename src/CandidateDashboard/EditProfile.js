@@ -47,19 +47,21 @@ class EditProfileCandidate extends React.Component {
             },
             projectForm: {
                 projectname: "",
-                client: "",
+                teamSize: "",
                 projectDetails: "",
                 workedFromMonth: "",
                 workedFromYear: "",
                 workedToMonth: "",
                 workedToYear: "",
+                keyskillsSelected: null
             },
             educationForm: {
-                institutionName: "",
+                coursename: "",
                 degree: "",
                 specialisation: "",
                 fromYear: "",
-                toYear: ""
+                toYear: "",
+                courseType:null
             },
             projects: [],
             preferredShift: [], // Example: [{ value: "Day", label: "Day" }]
@@ -195,7 +197,7 @@ class EditProfileCandidate extends React.Component {
             });
     }
 
-    getDepartments=()=>{
+    getDepartments = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Master/GetDepartments`;
         const token = localStorage.getItem('authToken');
@@ -328,8 +330,8 @@ class EditProfileCandidate extends React.Component {
         this.setState({ selectedCity: selectedOption });
     }
 
- 
-  
+
+
 
     handleFileChange = async (event) => {
         const file = event.target.files[0]; // Get the selected file
@@ -628,12 +630,13 @@ class EditProfileCandidate extends React.Component {
                 currentProjectIndex: null,
                 projectForm: {
                     projectname: "",
-                    client: "",
+                    teamSize: "",
                     projectDetails: "",
                     workedFromMonth: "",
                     workedFromYear: "",
                     workedToMonth: "",
                     workedToYear: "",
+                    keyskillsSelected: null
                 },
                 showProjectModal: true
             });
@@ -659,21 +662,7 @@ class EditProfileCandidate extends React.Component {
         }));
     };
 
-    handleSaveProject = () => {
-        const { projectForm, projects, currentProjectIndex } = this.state;
 
-        if (currentProjectIndex !== null) {
-            const updatedProjects = projects.map((project, index) =>
-                index === currentProjectIndex ? projectForm : project
-            );
-            this.setState({ projects: updatedProjects });
-        } else {
-            this.setState((prevState) => ({
-                projects: [...prevState.projects, projectForm]
-            }));
-        }
-        this.handleCloseProjectModal();
-    };
 
     handleShowEducationModal = (index = null) => {
         if (index !== null) {
@@ -690,7 +679,8 @@ class EditProfileCandidate extends React.Component {
                     degree: "",
                     specialisation: "",
                     fromYear: "",
-                    toYear: ""
+                    toYear: "",
+                    courseType:null
                 },
                 showEducationModal: true
             });
@@ -714,15 +704,18 @@ class EditProfileCandidate extends React.Component {
     handleSaveEducation = () => {
         const { educationForm, educationDetails, currentEducationIndex } = this.state;
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Trainer/UpdateEducation`;
+        const url = `${baseUrl}/api/Candidate/UpdateCandidateEducation`;
         const token = localStorage.getItem('authToken');
 
         const educationData = {
-            trainer_edu_id: currentEducationIndex !== null ? educationDetails[currentEducationIndex].trainer_education_id : 0,
+            candidate_education_id: currentEducationIndex !== null ? educationDetails[currentEducationIndex].candidate_education_id : 0,
             user_id: this.state.userId,
-            university_board: educationForm.institutionName,
-            education_title: educationForm.degree,
-            passing_year: parseInt(educationForm.fromYear, 10),
+            educationType: 1,
+            coursename: educationForm.coursename,
+            specialization: educationForm.degree,
+            coursetype: educationForm.courseType.value,
+            course_duration_from: parseInt(educationForm.fromYear, 10),
+            course_duration_to: parseInt(educationForm.toYear, 10),
         };
 
         axios.post(url, educationData, {
@@ -807,6 +800,97 @@ class EditProfileCandidate extends React.Component {
 
     }
 
+    handleCareerInformation = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Candidate/UpdateCandidateCarrierProfile`;
+        const token = localStorage.getItem('authToken');
+        const careerData = {
+            "candidate_career_id": this.state.trainer_skill_id ? this.state.trainer_skill_id : 0,
+            "user_id": this.state.userId,
+            "industry_id": this.state.currentindustry.value,
+            "department_id": this.state.department.value,
+            "role_id": this.state.role_id,
+            "job_type": this.state.jobType.map(option => option.value).join(','),
+            "employment_type": this.state.employmentTypes.map(option => option.value).join(','),
+        }
+
+        axios.post(url, careerData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                this.setState({
+                    responseMessage: 'Career information updated successfully!',
+                    alertVariant: 'success'
+                });
+                window.scrollTo(0, 0);
+            })
+            .catch((error) => {
+                console.error('Error updating career information:', error.response?.data || error.message);
+                this.setState({
+                    responseMessage: 'Error updating career information!',
+                    alertVariant: 'danger'
+                });
+                window.scrollTo(0, 0);
+            });
+    }
+
+
+    handleSaveProject = () => {
+        const { projectForm, projects, currentProjectIndex } = this.state;
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Candidate/UpdateCandidateProjects`;
+        const token = localStorage.getItem('authToken');
+        const projectData = {
+            candidate_project_id: currentProjectIndex !== null ? projects[currentProjectIndex].candidate_project_id : 0,
+            user_id: this.state.userId,
+            project_title: projectForm.projectname,
+            project_description: projectForm.projectDetails,
+            skill_ids: projectForm.keyskillsSelected ? projectForm.keyskillsSelected.map(skill => skill.value).join(',') : '',
+            teamsize: projectForm.teamSize
+        };
+
+        axios.post(url, projectData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('Project data saved successfully:', response.data);
+                this.setState({
+                    responseMessage: 'Project data saved successfully!',
+                    alertVariant: 'success'
+                });
+                window.scrollTo(0, 0);
+            })
+            .catch((error) => {
+                console.error('Error saving project data:', error.response?.data || error.message);
+                this.setState({
+                    responseMessage: 'Error saving project data!',
+                    alertVariant: 'danger'
+                });
+                window.scrollTo(0, 0);
+            });
+
+        if (currentProjectIndex !== null) {
+            const updatedProjects = projects.map((project, index) =>
+                index === currentProjectIndex ? projectForm : project
+            );
+            this.setState({ projects: updatedProjects });
+        } else {
+            this.setState((prevState) => ({
+                projects: [...prevState.projects, projectForm]
+            }));
+        }
+        this.handleCloseProjectModal();
+
+
+
+    }
+
 
     render() {
         const { fullname, email, mobile_no, profile_summary, experience, currentsalary, expectedsalary, logoPreview, isBasicInfoExpanded, isEmploymentDetailsExpanded, isProjectDetailsExpanded, showEducation, showKeySkills, preferredWorkLocation, selectedDate, resume_summary, noticePeriods, employments, projects, preferredShift, specializations, department_id, noticePeriodSelected, role_id, uploadStatus, languague_name, resumePreview, employmentForm, showEmploymentModal } = this.state;
@@ -869,7 +953,7 @@ class EditProfileCandidate extends React.Component {
                                                         />
                                                     </div>
                                                 )}
-                                                {uploadStatus && <small className={uploadStatus=="File uploaded successfully!"?"text-success":"text-danger"}>{uploadStatus}</small>}
+                                                {uploadStatus && <small className={uploadStatus == "File uploaded successfully!" ? "text-success" : "text-danger"}>{uploadStatus}</small>}
                                             </div>
                                             <div className="form-group">
                                                 <input
@@ -1038,7 +1122,7 @@ class EditProfileCandidate extends React.Component {
                                                     </div>
                                                 )}
 
-                                                {this.state.uploadResumeStatus && <small className={this.state.uploadResumeStatus=="Resume uploaded successfully!"?"text-success":"text-danger"}>{this.state.uploadResumeStatus}</small>}
+                                                {this.state.uploadResumeStatus && <small className={this.state.uploadResumeStatus == "Resume uploaded successfully!" ? "text-success" : "text-danger"}>{this.state.uploadResumeStatus}</small>}
                                             </div>
 
                                             <div className="form-group">
@@ -1419,17 +1503,10 @@ class EditProfileCandidate extends React.Component {
                                                                 <p style={{ fontWeight: "bold" }}>Project Name: {project.projectname}</p>
                                                             </div>
                                                             <div className="col-md-6">
-                                                                <p style={{ fontWeight: "bold" }}>Client: {project.client}</p>
+                                                                <p style={{ fontWeight: "bold" }}>Team Size: {project.teamSize}</p>
                                                             </div>
                                                         </div>
-                                                        <div className="row">
-                                                            <div className="col-md-6">
-                                                                <p style={{ fontWeight: "bold" }}>Worked From: {project.workedFromMonth} {project.workedFromYear}</p>
-                                                            </div>
-                                                            <div className="col-md-6">
-                                                                <p style={{ fontWeight: "bold" }}>Worked To: {project.workedToMonth} {project.workedToYear}</p>
-                                                            </div>
-                                                        </div>
+
                                                         <div className="row">
                                                             <div className="col-md-12">
                                                                 <p style={{ fontWeight: "bold" }}>Project Details: {project.projectDetails}</p>
@@ -1463,88 +1540,50 @@ class EditProfileCandidate extends React.Component {
                                                             />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label htmlFor="client">Client</label>
+                                                            <label htmlFor="teamSize">Team Size</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"
-                                                                id="client"
-                                                                name="client"
-                                                                value={this.state.projectForm.client}
+                                                                id="teamSize"
+                                                                name="teamSize"
+                                                                value={this.state.projectForm.teamSize}
                                                                 onChange={this.handleProjectFormChange}
                                                             />
                                                         </div>
+
                                                         <div className="form-group">
-                                                            <label>Worked From:</label>
-                                                            <div className="d-flex gap-3">
-                                                                <select
-                                                                    className="form-control"
-                                                                    id="workedFromMonth"
-                                                                    name="workedFromMonth"
-                                                                    value={this.state.projectForm.workedFromMonth}
-                                                                    onChange={this.handleProjectFormChange}
-                                                                >
-                                                                    <option value="">Select Month</option>
-                                                                    {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month, index) => (
-                                                                        <option key={month} value={index + 1}>
-                                                                            {month}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                                <select
-                                                                    className="form-control"
-                                                                    id="workedFromYear"
-                                                                    name="workedFromYear"
-                                                                    value={this.state.projectForm.workedFromYear}
-                                                                    onChange={this.handleProjectFormChange}
-                                                                >
-                                                                    <option value="">Select Year</option>
-                                                                    {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
-                                                                        <option key={year} value={year}>
-                                                                            {year}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
+                                                            <Select
+                                                                id="keyskills_id"
+                                                                name="keyskills_id"
+                                                                value={this.state.projectForm.keyskillsSelected}
+                                                                options={this.state.keyskills}
+                                                                onChange={(selectedOptions) =>
+                                                                    this.setState((prevState) => ({
+                                                                        projectForm: {
+                                                                            ...prevState.projectForm,
+                                                                            keyskillsSelected: selectedOptions
+                                                                        }
+                                                                    }))
+                                                                }
+                                                                isMulti
+                                                                placeholder="Type or select skills..."
+                                                                className="basic-multi-select"
+                                                                classNamePrefix="select"
+                                                                menuPortalTarget={document.body}
+                                                                styles={{
+                                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                                }}
+                                                            />
+                                                            <label htmlFor="keyskills_id">Key Skills</label>
                                                         </div>
+
+
                                                         <div className="form-group">
-                                                            <label>Worked To:</label>
-                                                            <div className="d-flex gap-3">
-                                                                <select
-                                                                    className="form-control"
-                                                                    id="workedToMonth"
-                                                                    name="workedToMonth"
-                                                                    value={this.state.projectForm.workedToMonth}
-                                                                    onChange={this.handleProjectFormChange}
-                                                                >
-                                                                    <option value="">Select Month</option>
-                                                                    {["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"].map((month, index) => (
-                                                                        <option key={month} value={index + 1}>
-                                                                            {month}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                                <select
-                                                                    className="form-control"
-                                                                    id="workedToYear"
-                                                                    name="workedToYear"
-                                                                    value={this.state.projectForm.workedToYear}
-                                                                    onChange={this.handleProjectFormChange}
-                                                                >
-                                                                    <option value="">Select Year</option>
-                                                                    {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
-                                                                        <option key={year} value={year}>
-                                                                            {year}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div className="form-group">
-                                                            <label htmlFor="projectdetails">Project Details</label>
+                                                            <label htmlFor="projectDetails">Project Details</label>
                                                             <textarea
                                                                 className="form-control"
-                                                                id="projectdetails"
-                                                                name="projectdetails"
+                                                                id="projectDetails"
+                                                                name="projectDetails"
                                                                 value={this.state.projectForm.projectDetails}
                                                                 onChange={this.handleProjectFormChange}
                                                             ></textarea>
@@ -1585,9 +1624,10 @@ class EditProfileCandidate extends React.Component {
                                                                 </Button>
                                                             </div>
                                                             <h5>Education {index + 1}</h5>
-                                                            <p style={{ fontWeight: "bold" }}>Institution Name: {education.institutionName}</p>
+                                                            <p style={{ fontWeight: "bold" }}>Course Name: {education.coursename}</p>
                                                             <p style={{ fontWeight: "bold" }}>Degree with Specialisation: {education.degree}</p>
-                                                            <p style={{ fontWeight: "bold" }}>Completed Year: {education.fromYear}</p>
+                                                            <p style={{ fontWeight: "bold" }}>Started : {education.fromYear}</p>
+                                                            <p style={{ fontWeight: "bold" }}>Completed : {education.toYear}</p>
                                                         </div>
                                                     ))}
                                                 <Button
@@ -1605,13 +1645,13 @@ class EditProfileCandidate extends React.Component {
                                                     </Modal.Header>
                                                     <Modal.Body>
                                                         <div className="form-group">
-                                                            <label htmlFor="institutionName">Institution Name</label>
+                                                            <label htmlFor="coursename">Course Name</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"
-                                                                id="institutionName"
-                                                                name="institutionName"
-                                                                value={this.state.educationForm.institutionName}
+                                                                id="coursename"
+                                                                name="coursename"
+                                                                value={this.state.educationForm.coursename}
                                                                 onChange={this.handleEducationFormChange}
                                                             />
                                                         </div>
@@ -1627,7 +1667,36 @@ class EditProfileCandidate extends React.Component {
                                                             />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Completed Year:</label>
+
+                                                            <label htmlFor="courseType">Course Type</label>
+                                                            <Select
+                                                                id="courseType"
+                                                                name="courseType"
+                                                                value={this.state.educationForm.courseType}
+                                                                options={[
+                                                                    { value: "1", label: 'Full time' },
+                                                                    { value: "2", label: 'Part time' },
+                                                                    { value: "3", label: 'Correspondence' },
+                                                                ]}
+                                                                onChange={(selectedOptions) =>
+                                                                    this.setState((prevState) => ({
+                                                                        educationForm: {
+                                                                            ...prevState.educationForm,
+                                                                            courseType: selectedOptions
+                                                                        }
+                                                                    }))
+                                                                }
+                                                                placeholder="Select Course Type"
+                                                                className="basic-multi-select"
+                                                                classNamePrefix="select"
+                                                                menuPortalTarget={document.body}
+                                                                styles={{
+                                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                                }}
+                                                            />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <label>From:</label>
                                                             <select
                                                                 className="form-control"
                                                                 id="fromYear"
@@ -1643,6 +1712,26 @@ class EditProfileCandidate extends React.Component {
                                                                 ))}
                                                             </select>
                                                         </div>
+                                                        <div className="form-group">
+                                                            <label>To:</label>
+                                                            <select
+                                                                className="form-control"
+                                                                id="toYear"
+                                                                name="toYear"
+                                                                value={this.state.educationForm.toYear}
+                                                                onChange={this.handleEducationFormChange}
+                                                            >
+                                                                <option value="">Select Year</option>
+                                                                {Array.from({ length: new Date().getFullYear() - 1970 + 1 }, (_, i) => 1970 + i).map((year) => (
+                                                                    <option key={year} value={year}>
+                                                                        {year}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                        {this.state.educationForm.fromYear && this.state.educationForm.toYear && parseInt(this.state.educationForm.fromYear) > parseInt(this.state.educationForm.toYear) && (
+                                                            <span style={{ color: 'red' }}> From year cannot be greater than To year.</span>
+                                                        )}
                                                     </Modal.Body>
                                                     <Modal.Footer>
                                                         <Button type="button" className="rounded-pill fw-bold px-5 py-3 shadow-sm" variant="secondary" onClick={this.handleCloseEducationModal} style={{ fontSize: '14px' }}>Cancel</Button>
@@ -1691,103 +1780,103 @@ class EditProfileCandidate extends React.Component {
                                             </div>
                                         )}
 
-<h3 className="section-header" onClick={() => this.toggleSection("showCareerProfile")} style={{ cursor: "pointer" }}>
-                                    Career Info <span style={{ marginLeft: '10px' }}>{this.state.showCareerProfile ? '[-]' : '[+]'}</span>
-                                </h3>
-                                {this.state.showCareerProfile && (
-                                    <div className="section-content">
-                                        <div className="form-group">
-                                            <label htmlFor="employmentTypes">Employment Type</label>
-                                            <Select
-                                                id="employmentTypes"
-                                                name="employmentTypes"
-                                                value={this.state.employmentTypes}
-                                                options={this.state.employmentType}
-                                                onChange={(selectedOptions) => this.setState({ employmentTypes: selectedOptions })}
-                                                isMulti
-                                                placeholder="Select Employment Type"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            
-                                            <label htmlFor="jobType">Job Type</label>
-                                            <Select
-                                                id="jobType"
-                                                name="jobType"
-                                                value={this.state.jobType}
-                                                options={[
-                                                    { value: 'Contractual', label: 'Contractual' },
-                                                    { value: 'Permanent', label: 'Permanent' }
-                                                ]}
-                                                onChange={(selectedOptions) => this.setState({ jobType: selectedOptions })}
-                                                isMulti
-                                                placeholder="Select Job Type"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="currentindustry">Current Industry</label>
-                                            <Select
-                                                id="currentindustry"
-                                                name="currentindustry"
-                                                value={this.state.currentindustry}
-                                                options={this.state.industry}
-                                                onChange={(selectedOptions) => this.setState({ currentindustry: selectedOptions })}
-                                                placeholder="Select Industry"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="department">Department</label>
-                                            <Select
-                                                id="department"
-                                                name="department"
-                                                value={this.state.department}
-                                                options={this.state.departments}
-                                                onChange={(selectedOptions) => this.setState({ department: selectedOptions })}
-                                                placeholder="Select Department"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body}
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="col-lg-12">
-                                            <div className="form-submit-group">
-                                                <button
-                                                    type="button"
-                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                    onClick={this.handleCareerInformation}
-                                                >
-                                                    <span className="icon-reverse-wrapper">
-                                                        <span className="btn-text">Update Career Info</span>
-                                                        <span className="btn-icon">
-                                                            <i className="feather-arrow-right" />
-                                                        </span>
-                                                    </span>
-                                                </button>
+                                        <h3 className="section-header" onClick={() => this.toggleSection("showCareerProfile")} style={{ cursor: "pointer" }}>
+                                            Career Info <span style={{ marginLeft: '10px' }}>{this.state.showCareerProfile ? '[-]' : '[+]'}</span>
+                                        </h3>
+                                        {this.state.showCareerProfile && (
+                                            <div className="section-content">
+                                                <div className="form-group">
+                                                    <label htmlFor="employmentTypes">Employment Type</label>
+                                                    <Select
+                                                        id="employmentTypes"
+                                                        name="employmentTypes"
+                                                        value={this.state.employmentTypes}
+                                                        options={this.state.employmentType}
+                                                        onChange={(selectedOptions) => this.setState({ employmentTypes: selectedOptions })}
+                                                        isMulti
+                                                        placeholder="Select Employment Type"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+
+                                                    <label htmlFor="jobType">Job Type</label>
+                                                    <Select
+                                                        id="jobType"
+                                                        name="jobType"
+                                                        value={this.state.jobType}
+                                                        options={[
+                                                            { value: 'Contractual', label: 'Contractual' },
+                                                            { value: 'Permanent', label: 'Permanent' }
+                                                        ]}
+                                                        onChange={(selectedOptions) => this.setState({ jobType: selectedOptions })}
+                                                        isMulti
+                                                        placeholder="Select Job Type"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="currentindustry">Current Industry</label>
+                                                    <Select
+                                                        id="currentindustry"
+                                                        name="currentindustry"
+                                                        value={this.state.currentindustry}
+                                                        options={this.state.industry}
+                                                        onChange={(selectedOptions) => this.setState({ currentindustry: selectedOptions })}
+                                                        placeholder="Select Industry"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="department">Department</label>
+                                                    <Select
+                                                        id="department"
+                                                        name="department"
+                                                        value={this.state.department}
+                                                        options={this.state.departments}
+                                                        onChange={(selectedOptions) => this.setState({ department: selectedOptions })}
+                                                        placeholder="Select Department"
+                                                        className="basic-multi-select"
+                                                        classNamePrefix="select"
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="col-lg-12">
+                                                    <div className="form-submit-group">
+                                                        <button
+                                                            type="button"
+                                                            className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                            onClick={this.handleCareerInformation}
+                                                        >
+                                                            <span className="icon-reverse-wrapper">
+                                                                <span className="btn-text">Update Career Info</span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right" />
+                                                                </span>
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                )}
+                                        )}
 
                                     </form>
                                 </div>
