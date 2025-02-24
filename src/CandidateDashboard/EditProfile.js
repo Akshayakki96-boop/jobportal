@@ -653,7 +653,6 @@ class EditProfileCandidate extends React.Component {
     };
 
     handleProjectFormChange = (e) => {
-        debugger;
         const { name, value } = e.target;
         this.setState((prevState) => ({
             projectForm: {
