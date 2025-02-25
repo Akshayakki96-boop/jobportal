@@ -67,7 +67,8 @@ class CandidateDashboard extends React.Component {
         })
             .then((response) => {
                 console.log('user data', response.data);
-                this.setState({ userData: response.data.data })
+                this.setState({ userData: response.data.data?.basic_info })
+                this.setState({CompanyName:response.data.data?.employment.filter(x=>x.is_current_employment==true)[0].company_name});            
                 this.setState({ keepSpinner: false });
 
             })
@@ -138,7 +139,7 @@ class CandidateDashboard extends React.Component {
     };
 
     render() {
-
+        console.log(this.state.CompanyName)    
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
@@ -283,7 +284,7 @@ class CandidateDashboard extends React.Component {
                                             {/* End Dashboard Sidebar   */}
                                         </div>
                                         {this.state.showUserDashboard && <UserDashBoard message={this.state.responseMessage} />}
-                                        {this.state.showProfile && <MyProfile userData={this.state.userData} />}
+                                        {this.state.showProfile && <MyProfile userData={this.state.userData} CompanyName={this.state.CompanyName} />}
                                         {this.state.showMyJobs && <MyJobs />}
                                     </div>
 

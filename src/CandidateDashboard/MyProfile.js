@@ -83,53 +83,7 @@ class MyProfile extends React.Component {
         }
     };
 
-    // Save profile changes
-    handleSaveProfile = () => {
-        console.log('Updated User Data:', this.state.updatedUserData);
-        // Add logic to save updated data (e.g., API call)
-        this.setState({ showModal: false });
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Employer/UpdateProfile`;
-        const token = localStorage.getItem('authToken');
-        const userData = {
-            "firstName": this.state.updatedUserData.firstname,
-            "lastName": this.state.updatedUserData.lastname,
-            "email": this.state.updatedUserData.email,
-            "companyLogo": this.state.fileName,
-            "companyName": this.state.updatedUserData.CompanyName,
-            "role_id": this.state.updatedUserData.role_id,
-            "Id": this.state.updatedUserData.user_id,
-            "designation": this.state.updatedUserData.designation,
-            "ipAddress": "192.168.1.1"
-        };
-
-        axios.post(url, userData, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                this.setState({ keepSpinner: false });
-                this.setState({
-                    responseMessage: (
-                        <span>
-                            Profile Updated Successfully
-                        </span>
-                    ),
-                    alertVariant: 'success', // Success alert variant
-                });
-                //this.props.navigate('/Login'); // Use `navigate`
-            })
-            .catch((error) => {
-                console.error('Signup Error:', error.response?.data || error.message);
-                this.setState({ keepSpinner: false });
-                this.setState({
-                    responseMessage: 'Updation failed. Please try again.',
-                    alertVariant: 'danger', // Error alert variant
-                });
-            });
-    };
+  
 
     render() {
         const { showModal, updatedUserData, logoPreview, uploadStatus } = this.state;
@@ -169,7 +123,7 @@ class MyProfile extends React.Component {
                             { label: 'Full Name', key: 'fullname' },
                             { label: 'Email', key: 'email' },
                             { label: 'Mobile', key: 'mobile_no' },
-                            { label: 'Company Name', key: 'CompanyName' },
+                            { label: 'Company Name', key: "CompanyName" },
                             { label: 'Designation', key: 'designation' },
                             {label: 'Total Experience', key: 'experience'},
                             {label: 'Notice Period', key: 'notice_periods'},
@@ -181,7 +135,7 @@ class MyProfile extends React.Component {
                                     <div className="rbt-profile-content b2">{item.label}</div>
                                 </div>
                                 <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">{updatedUserData[item.key]}</div>
+                                    <div className="rbt-profile-content b2">{item.key=="CompanyName"?this.props?.CompanyName: updatedUserData[item.key]}</div>
                                 </div>
                             </div>
                         ))}
