@@ -117,7 +117,7 @@ class Header extends React.Component {
         })
             .then((response) => {
                 console.log('user data HEADER', response.data);
-                this.setState({ userData: response.data.data})
+                this.setState({ userData: response.data.data.basic_info})
 
             })
             .catch((error) => {
@@ -547,102 +547,116 @@ class Header extends React.Component {
                                         </div>
                                     </li>}
 
-                                    <li className="access-icon rbt-user-wrapper d-block d-xl-none">
+                                    {this.props.dashBoardData?.username &&  <li className="access-icon rbt-user-wrapper d-block d-xl-none">
                                         <a className="rbt-round-btn" href="#">
                                             <i className="feather-user"></i>
                                         </a>
                                         <div className="rbt-user-menu-list-wrapper">
                                             <div className="inner">
                                                 <div className="rbt-admin-profile">
-                                                    <div className="admin-thumbnail">
-                                                        <img
-                                                            src="assets/images/team/avatar.jpg"
-                                                            alt="User Images" />
-                                                    </div>
-                                                    <div className="admin-info">
-                                                        <span className="name">RainbowIT</span>
-                                                        <a className="rbt-btn-link color-primary" href="#">
-                                                            View Profile
-                                                        </a>
-                                                    </div>
+                                                    {this.props.dashBoardData?.role_id == 2 && <div className="admin-thumbnail">
+                                                        {this.state?.userData?.companylogo ? (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.companylogo}`}
+                                                                alt="User Image" />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                            </div>
+                                                        )}
+                                                    </div>}
+                                                    {this.props.dashBoardData?.role_id == 3 && <div className="admin-thumbnail">
+                                                        {this.state?.userData?.profile_image ? (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                                alt="User Image" />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                            </div>
+                                                        )}
+                                                    </div>}
+
+                                                    {this.props.dashBoardData?.role_id == 1 && <div className="admin-thumbnail">
+                                                        {this.state?.userData?.profile_image ? (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                                alt="User Image" />
+                                                        ) : (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px", // Adjust as needed
+                                                                    height: "60px", // Adjust as needed
+                                                                    backgroundColor: "#ccc", // Default background color
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px", // Adjust font size as needed
+                                                                }}
+                                                            >
+                                                                {this.getInitials(this.props?.dashBoardData?.username || "User")}
+                                                            </div>
+                                                        )}
+                                                    </div>}
                                                 </div>
+
+
                                                 <ul className="user-list-wrapper">
                                                     <li>
-                                                        <a href="#">
-                                                            <i className="feather-home"></i>
-                                                            <span>My Dashboard</span>
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleredirection(); }} href="#">
+                                                            <i className="feather-log-out"></i>
+                                                            <span>
+                                                                {this.props.dashBoardData?.role_id == 1
+                                                                    ? "CandidateDashboard"
+                                                                    : this.props.dashBoardData?.role_id == 2
+                                                                        ? "EmployerDashboard"
+                                                                        : "TrainerDashboard"}
+                                                            </span>
+
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <a href="#">
-                                                            <i className="feather-bookmark"></i>
-                                                            <span>Bookmark</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-shopping-bag"></i>
-                                                            <span>Enrolled Courses</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-heart"></i>
-                                                            <span>Wishlist</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-star"></i>
-                                                            <span>Reviews</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-list"></i>
-                                                            <span>My Quiz Attempts</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-clock"></i>
-                                                            <span>Order History</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-message-square"></i>
-                                                            <span>Question & Answer</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <hr className="mt--10 mb--10" />
-                                                <ul className="user-list-wrapper">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-book-open"></i>
-                                                            <span>Getting Started</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <hr className="mt--10 mb--10" />
-                                                <ul className="user-list-wrapper">
-                                                    <li>
-                                                        <a href="#">
-                                                            <i className="feather-settings"></i>
-                                                            <span>Settings</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="index.html">
+                                                        <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                             <i className="feather-log-out"></i>
                                                             <span>Logout</span>
                                                         </a>
                                                     </li>
                                                 </ul>
+
+
                                             </div>
                                         </div>
                                     </li>
+    }
                                 </ul>
 
                                 {/* Start Mobile-Menu-Bar */}
