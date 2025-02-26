@@ -941,7 +941,7 @@ class EditProfileTrainer extends React.Component {
                                                                     width: '100px',
                                                                     height: '100px',
                                                                     objectFit: 'cover',
-                                                                    borderRadius: '8px',
+                                                                    borderRadius: '50px',
                                                                 }}
                                                             />
                                                         </div>
