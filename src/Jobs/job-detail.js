@@ -54,6 +54,10 @@ class jobDetails extends React.Component {
       .then((response) => {
         console.log('joblistingdata', response.data.data);
         this.setState({ jobDescription: response.data.data[0] });
+        if(response.data.data[0].is_applied)
+        {
+          this.setState({ isApplied: true });
+        }
         if(response.data.data[0].isactive)
         {
           this.setState({ isPublished: true });
@@ -122,6 +126,41 @@ class jobDetails extends React.Component {
   }
 
 
+  handleApply= ()=>{
+    const baseUrl = process.env.REACT_APP_BASEURL;
+    const url = `${baseUrl}/api/Candidate/applyjob`;
+    const token = localStorage.getItem('authToken');
+    const applyData = {
+      "job_id": this.state.jobDescription.jobid,
+      "candidate_user_id":this.state.dashBoardData.user_id,
+       "ip_address":""
+    };
+
+    axios.post(url, applyData, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        this.setState({ isApplied: true });
+        this.setState({
+          responseMessage: (
+            <span>
+              Job Applied Successfully!
+            </span>
+          ),
+          alertVariant: 'success', // Success alert variant
+        });
+        window.scrollTo(0, 0);
+      })
+      .catch((error) => {
+        localStorage.removeItem('authToken');
+        this.props.navigate('/Login'); // Use `navigate`
+      });
+  }
+
+
 
 
   render() {
@@ -150,7 +189,7 @@ console.log("user",this.user)
                     <div className="row">
                       <div className="col-lg-9">
                         {/* Start Breadcrumb Area  */}
-                        <ul className="page-list">
+                        <ul style={{textAlign:'left'}}  className="page-list">
                           <li className="rbt-breadcrumb-item">
                             <a href="/">Home</a>
                           </li>
@@ -167,7 +206,7 @@ console.log("user",this.user)
                         <div className=" title-wrapper">
                           <h1 className="title mb--0">   {this.state.jobDescription && this.state.jobDescription.jobtitle}</h1>
                           <a href="#" className="rbt-badge-2">
-                            {this.state.jobDescription && this.state.jobDescription.jobtype}
+                            {this.state.jobDescription && this.state.jobDescription.empType}
                           </a>
                         </div>
                         <div className="d-flex align-items-start flex-wrap mb--15 rbt-course-details-feature">
@@ -278,15 +317,15 @@ console.log("user",this.user)
                           </span>
                         </a>
                       </div>:<div className="rbt-short-item">
-                        <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
+                      {!this.state.isApplied ? <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
                           e.preventDefault(); // Prevent default link behavior
                           this.handleApply();
                         }}>
-                          <span className="btn-text">{this.state.isApplied ? "Applied" : "Apply"}</span>
+                          <span className="btn-text">Apply</span>
                           <span className="btn-icon">
                             <i className="feather-arrow-right" />
                           </span>
-                        </a>
+                        </a>:<span className="success">Applied</span>}
                       </div>
                       }
                       {/* <div className="rbt-short-item">

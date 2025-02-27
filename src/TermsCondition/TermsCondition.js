@@ -76,16 +76,7 @@ componentDidMount()
                         </ol>
                     </li>
                 </ul>
-                <h5 style={{ marginTop: '20px' }}>4.1. Refund for Exam Qualification</h5>
-                <ul>
-                    <li>Candidates are eligible for a <strong>50% refund</strong> of the course fees (excluding GST and platform fees) upon successfully qualifying for the related exam.</li>
-                    <li><strong>Refund Process:</strong>
-                        <ol>
-                            <li>Candidates must submit proof of exam qualification (e.g., scorecard or certificate) within 30 days of result declaration.</li>
-                            <li>Zobskill will verify the claim and process the refund within 30 working days.</li>
-                        </ol>
-                    </li>
-                </ul>
+            
 
                 <h5 style={{ marginTop: '20px' }}>4.2. Refund for Job Placement</h5>
                 <ul>
@@ -494,17 +485,6 @@ componentDidMount()
                                     </ol>
                                 </li>
                             </ul>
-                            <h5 style={{ marginTop: '20px' }}>4.1. Refund for Exam Qualification</h5>
-                            <ul>
-                                <li>Candidates are eligible for a <strong>50% refund</strong> of the course fees (excluding GST and platform fees) upon successfully qualifying for the related exam.</li>
-                                <li><strong>Refund Process:</strong>
-                                    <ol>
-                                        <li>Candidates must submit proof of exam qualification (e.g., scorecard or certificate) within 30 days of result declaration.</li>
-                                        <li>Zobskill will verify the claim and process the refund within 30 working days.</li>
-                                    </ol>
-                                </li>
-                            </ul>
-
                             <h5 style={{ marginTop: '20px' }}>4.2. Refund for Job Placement</h5>
                             <ul>
                                 <li>Candidates are eligible for the remaining <strong>50% refund</strong> of the course fees upon successfully securing a job placement through Zobskill.com.</li>
