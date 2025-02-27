@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../Header/header';
 import axios from 'axios';
+import parse from 'html-react-parser';
 
 class CommunityDetails extends Component {
     constructor(props) {
@@ -108,29 +109,29 @@ getBlogs = (blogId) => {
     render() {
         return (
              <div>
-                          <>
+                  <>
             <Header dashBoardData={this.state.dashBoardData} />
              {/* Start breadcrumb Area */}
              <div className="rbt-breadcrumb-default ptb--100 ptb_md--50 ptb_sm--30 bg-gradient-1">
                <div className="container">
-                 <div className="row">
-                   <div className="col-lg-12">
-                     <div className="breadcrumb-inner text-center">
-                       <h2 className="title">Details</h2>
-                       <ul className="page-list">
-                         <li className="rbt-breadcrumb-item">
-                           <a href="/community">Community</a>
-                         </li>
-                         <li>
-                           <div className="icon-right">
-                             <i className="feather-chevron-right" />
-                           </div>
-                         </li>
-                         <li className="rbt-breadcrumb-item active">Community Details</li>
-                       </ul>
-                     </div>
+             <div className="row">
+               <div className="col-lg-12">
+                 <div className="breadcrumb-inner text-center">
+                   <h2 className="title">Details</h2>
+                   <ul className="page-list">
+                 <li className="rbt-breadcrumb-item">
+                   <a href="/community">Community</a>
+                 </li>
+                 <li>
+                   <div className="icon-right">
+                     <i className="feather-chevron-right" />
                    </div>
+                 </li>
+                 <li className="rbt-breadcrumb-item active">Community Details</li>
+                   </ul>
                  </div>
+               </div>
+             </div>
                </div>
              </div>
              {/* End Breadcrumb Area */}
@@ -138,15 +139,15 @@ getBlogs = (blogId) => {
              <div className="container">
                <div className="row g-5 align-items-center">
                <div className="col-lg-12">
-                  <div className="inner pl--50 pl_sm--0 pl_md--0">
+              <div className="inner pl--50 pl_sm--0 pl_md--0">
 
-                    <h4 className="text-start mt--30"> {this.state.blogsList?.title}</h4>
-                    <p className="description mt--10" style={{ textAlign: 'left' }}>
-                    {this.state.blogsList?.description}
-                    </p>
+                <h4 className="text-start mt--30"> {this.state.blogsList?.title}</h4>
+                <p className="description mt--10" style={{ textAlign: 'left' }}>
+                {parse(this.state.blogsList?.description || '')}
+                </p>
 
-                  </div>
-                </div>
+              </div>
+            </div>
              
                </div>
              </div>
@@ -156,7 +157,7 @@ getBlogs = (blogId) => {
            
            </>
            
-                       </div>
+                   </div>
         );
     }
 }
