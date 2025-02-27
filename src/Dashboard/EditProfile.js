@@ -1186,7 +1186,7 @@ class EditProfileTrainer extends React.Component {
                                                         </div>
                                                     )}
 
-                                                    {this.state.uploadResumeStatus && <small className="text-danger">{this.state.uploadResumeStatus}</small>}
+                                                    {this.state.uploadResumeStatus && <small className={this.state.uploadResumeStatus=="Resume uploaded successfully!"?"text-success":"text-danger"}>{this.state.uploadResumeStatus}</small>}
                                                 </div>
                                                 <div className="col-lg-12">
                                                     <div className="form-submit-group">

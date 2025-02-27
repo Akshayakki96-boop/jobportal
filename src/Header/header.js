@@ -413,7 +413,7 @@ class Header extends React.Component {
                                                 <a href="/trainer">Trainer</a>
                                             </li>
                                         )}
-                                        {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
+                                        {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
                                             <li className={window.location.pathname === "/Community" ? "active" : ""}>
                                                 <a href="/Community">Community</a>
                                             </li>
@@ -791,7 +791,7 @@ class Header extends React.Component {
                                         <a href="/trainer">Trainer</a>
                                     </li>
                                 )}
-                                {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 || this.props.dashBoardData == "") && (
+                                {(this.props.dashBoardData?.role_id == 2 || this.props.dashBoardData?.role_id == 3 ||this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
                                     <li className={window.location.pathname === "/Community" ? "current active" : ""}>
                                         <a href="/Community">Community</a>
                                     </li>
