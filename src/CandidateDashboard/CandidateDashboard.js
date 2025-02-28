@@ -68,7 +68,7 @@ class CandidateDashboard extends React.Component {
             .then((response) => {
                 console.log('user data', response.data);
                 this.setState({ userData: response.data.data?.basic_info })
-                this.setState({CompanyName:response.data.data?.employment.filter(x=>x.is_current_employment==true)[0].company_name});            
+                this.setState({CompanyName:response.data.data?.employment.length>0? response.data.data?.employment?.filter(x=>x.is_current_employment==true)[0].company_name:""});            
                 this.setState({ keepSpinner: false });
 
             })

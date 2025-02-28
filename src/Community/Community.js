@@ -176,12 +176,12 @@ class Community extends React.Component {
                                                                                 </a>
                                                                             </div>
                                                                             <div style={{ textAlign: "left" }} className="rbt-card-body">
-                                                                                <h5 className="rbt-card-title">
+                                                                                <h6 style={{fontSize:'18px'}} className="rbt-card-title">
                                                                                     <a href={`/community-details?blogId=${blog.blog_id}`}>{blog.title}</a>
-                                                                                </h5>
-                                                                                <p style={{ fontSize: '14px' }} className="rbt-card-text">
+                                                                                </h6>
+                                                                                {/* <p style={{ fontSize: '12px' }} className="rbt-card-text"> */}
                                                                                     {parse(blog.description.length > 50 ? `${blog.description.substring(0, 300)}...` : blog.description)}
-                                                                                </p>
+                                                                                {/* </p> */}
                                                                                 <div className="rbt-card-bottom">
                                                                                     <a className="transparent-button" href={`/community-details?blogId=${blog.blog_id}`}>
                                                                                         Read More
