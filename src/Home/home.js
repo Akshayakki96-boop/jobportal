@@ -828,7 +828,7 @@ class Home extends React.Component {
                                             </div>
                                             <div className="content">
                                                 <h3 className="counter">
-                                                    <span className="odometer" data-count="500">00</span>
+                                                    <span className="odometer" data-count="500">10</span>
                                                 </h3>
                                                 <span className="subtitle">Learners &amp; counting</span>
                                             </div>
@@ -846,7 +846,7 @@ class Home extends React.Component {
                                             </div>
                                             <div className="content">
                                                 <h3 className="counter">
-                                                    <span className="odometer" data-count="800">00</span>
+                                                    <span className="odometer" data-count="800">30</span>
                                                 </h3>
                                                 <span className="subtitle">Courses & Video</span>
                                             </div>
@@ -864,7 +864,7 @@ class Home extends React.Component {
                                             </div>
                                             <div className="content">
                                                 <h3 className="counter">
-                                                    <span className="odometer" data-count="1000">00</span>
+                                                    <span className="odometer" data-count="1000">20</span>
                                                 </h3>
                                                 <span className="subtitle">Certified Students</span>
                                             </div>
@@ -882,7 +882,7 @@ class Home extends React.Component {
                                             </div>
                                             <div className="content">
                                                 <h3 className="counter">
-                                                    <span className="odometer" data-count="100">00</span>
+                                                    <span className="odometer" data-count="100">40</span>
                                                 </h3>
                                                 <span className="subtitle">Registered Enrolls</span>
                                             </div>
