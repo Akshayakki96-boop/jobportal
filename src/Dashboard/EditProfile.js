@@ -293,7 +293,7 @@ class EditProfileTrainer extends React.Component {
         const token = localStorage.getItem('authToken');
         var text = {
             "freetext": "",
-            "cityId": 2,
+            "cityId": 0,
             "stateId": stateId,
         }
         axios.post(url, text, {
@@ -324,7 +324,7 @@ class EditProfileTrainer extends React.Component {
         const url = `${baseUrl}/api/Master/GetState`;
         const token = localStorage.getItem('authToken');
         var text = {
-            "stateId": 1,
+            "stateId": 0,
             "countryId": countryId,
             "freetext": ""
         }
