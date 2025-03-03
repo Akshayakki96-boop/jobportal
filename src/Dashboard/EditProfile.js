@@ -904,7 +904,7 @@ class EditProfileTrainer extends React.Component {
                                 <div className="thumbnail">
                                     <img
                                         className="radius-10 w-100"
-                                        src="assets/images/tab/tabs-10.jpg"
+                                        src="assets/images/tab/trainerprofile.jpeg"
                                         alt="Corporate Template"
                                     />
                                 </div>
@@ -1172,6 +1172,7 @@ class EditProfileTrainer extends React.Component {
                                                             ) : (
                                                                 // Show download link for non-PDF files
                                                                 <div>
+                                                                    <p>{this.state.resumefileName}</p>
                                                                     <p>Preview not available. Download file:</p>
                                                                     <a
                                                                         href={this.state.resumePreview}
