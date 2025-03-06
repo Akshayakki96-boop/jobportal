@@ -284,7 +284,7 @@ class CreateCourse extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage: error.response?.data,
+                    responseMessage:  error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
