@@ -810,9 +810,9 @@ class Home extends React.Component {
                                 <div className="col-lg-12">
                                     <div className="section-title text-center">
                                         <span className="subtitle bg-secondary-opacity">Why Choose Us</span>
-                                        <h2 className="title">Creating A Community Of <br /> Life Long Learners.</h2>
+                                        <h2 className="title">Creating A Community Of <br /> Life Long Learners</h2>
                                         <p className="description has-medium-font-size mt--20 mb--0">
-                                            There are many variations of passages of the Ipsum available, but the majority have suffered alteration in some form, by injected humour.
+                                        At Zobskill, we believe learning never stops! Our platform connects aspiring professionals, expert trainers, and industry leaders to foster continuous growth, upskilling, and career success.
                                         </p>
                                     </div>
                                 </div>
