@@ -369,7 +369,7 @@ select.form-control option {
 }
 
 .country-code-select {
-  width: 120px; /* Adjust width of the Select dropdown */
+  width: 104px; /* Adjust width of the Select dropdown */
   flex-shrink: 0; /* Prevent shrinking */
 }
 
@@ -695,6 +695,29 @@ select.form-control option {
   height: 100% !important;
 }
 
+input[type="checkbox"] {
+  appearance: auto !important; /* Reset any custom styles */
+}
+
+
+.form-group-check {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 30px;
+  display: block;
+}
+.form-group-check label {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 9px;
+  color: var(--color-body);
+  transition: 0.3s;
+  z-index: -1;
+  letter-spacing: 0.5px;
+  font-size: 18px;
+  line-height: 28px;
+}
 iframe#webpack-dev-server-client-overlay {
   display: none !important
 }
