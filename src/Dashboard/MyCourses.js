@@ -230,7 +230,7 @@ class MyCourses extends React.Component {
                           </li>
                           <li>
                          
-                          {!course.isactive ? <a href="#" onClick={() => this.ActivateCourse(course)}>Activate Course</a>:"Activated"}
+                          {!course.isactive ? <a href="#" style={{textDecoration:'underline'}} onClick={() => this.ActivateCourse(course)}>Activate Course</a>:"Activated"}
                           </li>
                         </ul>
                         <p className="rbt-card-text">{course.description}</p>

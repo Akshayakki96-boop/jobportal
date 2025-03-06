@@ -56,8 +56,14 @@ class MyJobs extends React.Component {
     })
       .then((response) => {
         console.log('joblistingdata', response.data);
-        const totalCount = response.data.data[0].TotalRecords;
-        this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, keepSpinner: false });
+        if (response.data.data && response.data.data.length > 0) {
+          const totalCount = response.data.data[0].TotalRecords;
+          this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, keepSpinner: false,error: ""  });
+          }
+          else
+          {
+            this.setState({ keepSpinner: false,error: "No Jobs Found" });
+          }
 
       })
       .catch((error) => {
@@ -125,11 +131,12 @@ class MyJobs extends React.Component {
                 <div className="row g-5 align-items-center">
                   <div className="col-lg-5 col-md-12">
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
-                      <div className="rbt-short-item">
+                    {!this.state.error && <div className="rbt-short-item">
                         <span className="course-index">
                           Showing {startIndex} - {endIndex} of {totalRecords} results
                         </span>
                       </div>
+  }
                     </div>
                   </div>
                   <div className="col-lg-7 col-md-12">
@@ -158,6 +165,7 @@ class MyJobs extends React.Component {
         <div className="rbt-section-overlayping-top rbt-section-gapBottom">
           <div className="container">
             <div className="row row--30 gy-5">
+            {!this.state.error ? 
               <div className="col-lg-12 order-1 order-lg-2">
                 <div className="rbt-course-grid-column jobs-lst active-list-view">
                   {/* Start Single Card  */}
@@ -265,7 +273,7 @@ class MyJobs extends React.Component {
                     </nav>
                   </div>
                 </div>
-              </div>
+              </div>:<h2>{this.state.error}</h2>}
             </div>
           </div>
         </div>
