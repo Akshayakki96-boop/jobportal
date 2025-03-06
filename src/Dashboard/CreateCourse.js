@@ -15,7 +15,7 @@ import { Quill } from "react-quill";
 
 // Register the link module
 const Link = Quill.import('formats/link');
-Link.sanitize = function(url) {
+Link.sanitize = function (url) {
     // Add your custom URL validation logic here
     return url;
 };
@@ -212,7 +212,15 @@ class CreateCourse extends React.Component {
         this.setState({ delieveryMode: selectedOption }, this.validateForm);
     };
     handleCourseFeeChange = (event) => {
-        this.setState({ courseFee: event.target.value }, this.validateForm);
+        const courseFee = event.target.value;
+        if (/^\d*$/.test(courseFee)) {
+            this.setState({ courseFee }, this.validateForm);
+            this.setState({ showValisMessage: '' });
+        }
+        else {
+            this.setState({ showValisMessage: true, courseFee });
+        }
+
     };
     handleDescriptionChange = (event) => {
         this.setState({ description: event.target.value }, this.validateForm);
@@ -260,7 +268,7 @@ class CreateCourse extends React.Component {
                     uploadStatus: null,
                     resumePreview: null,
                     uploadResumeStatus: null,
-                    courseMaterial:null
+                    courseMaterial: null
                 });
                 this.setState({
                     responseMessage: (
@@ -289,10 +297,17 @@ class CreateCourse extends React.Component {
     }
 
     handleNoOfLessons = (e) => {
-        this.setState({ nooflessons: e.target.value });
+        const nooflessons = e.target.value;
+        if (/^\d*$/.test(nooflessons)) {
+            this.setState({ nooflessons }, this.validateForm);
+            this.setState({ showValidMessage: '' });
+        }
+        else {
+            this.setState({ showValidMessage: true, nooflessons });
+        }
     }
 
-    handleCourseMaterial=(e)=>{
+    handleCourseMaterial = (e) => {
         this.setState({ courseMaterial: e });
     }
     modules = {
@@ -311,7 +326,7 @@ class CreateCourse extends React.Component {
         'header', 'font', 'size',
         'bold', 'italic', 'underline', 'strike', 'blockquote',
         'list', 'bullet', 'indent',
-        'link', 'image', 'video','pdf', 'doc'
+        'link', 'image', 'video', 'pdf', 'doc'
     ];
     render() {
 
@@ -346,8 +361,6 @@ class CreateCourse extends React.Component {
                                     <hr className="mb--30" />
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         { /* Candidate Basic Info Section */}
-
-
                                         <div className="section-content">
                                             <div className="form-group">
                                                 <input
@@ -372,7 +385,7 @@ class CreateCourse extends React.Component {
                                                         />
                                                     </div>
                                                 )}
-                                                {this.state.uploadStatus && <small className="text-danger">{this.state.uploadStatus}</small>}
+                                                {this.state.uploadStatus && <small className={this.state.uploadStatus == "File uploaded successfully!" ? "text-success" : "text-danger"}>{this.state.uploadStatus}</small>}
                                             </div>
                                             <div className="form-group">
                                                 <input
@@ -387,14 +400,14 @@ class CreateCourse extends React.Component {
                                             </div>
                                             <div className="form-group">
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     id="duration"
                                                     name="duration"
                                                     value={this.state.duration}
                                                     onChange={this.handleDurationChange}
                                                 />
-                                                <label htmlFor="duration">Duration</label>
+                                                <label htmlFor="duration">Duration (no of days)</label>
                                             </div>
                                             <div className="form-group">
                                                 <Select
@@ -410,16 +423,7 @@ class CreateCourse extends React.Component {
                                                     onChange={(selectedOption) => this.handleCourseLevelChange(selectedOption)} />
                                                 <label htmlFor="courselevel">Course Level</label>
                                             </div>
-                                            <div className="form-group">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={this.state.isRefundable}
-                                                    className="form-control"
-                                                    id="isRefundable"
-                                                    onChange={this.hanldeCheckChange}
-                                                />
-                                                <label htmlFor="isRefundable">Is Refundable</label>
-                                            </div>
+
                                             <div className="form-group">
                                                 <input
                                                     type="text"
@@ -430,6 +434,7 @@ class CreateCourse extends React.Component {
                                                     onChange={this.handleNoOfLessons}
                                                 />
                                                 <label htmlFor="nooflessons">Total chapter</label>
+                                                {this.state.showValidMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group">
                                                 <input
@@ -440,7 +445,8 @@ class CreateCourse extends React.Component {
                                                     value={this.state.courseFee}
                                                     onChange={this.handleCourseFeeChange}
                                                 />
-                                                <label htmlFor="coursefee">Course Fee</label>
+                                                <label htmlFor="coursefee">Course Fee (₹)</label>
+                                                {this.state.showValisMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group">
                                                 <ReactQuill
@@ -448,61 +454,10 @@ class CreateCourse extends React.Component {
                                                     onChange={this.handleCourseMaterial}
                                                     theme="snow"
                                                     modules={this.modules}
-                                                    placeholder="Upload a material..."
+                                                    placeholder="Upload a study material ...(video url link)"
                                                     formats={this.formats}
                                                 />
                                             </div>
-
-                                            {/* <div className="form-group">
-                                                <input
-                                                    type="file"
-                                                    className="form-control"
-                                                    accept=".doc,.docx,.rtf,.pdf,.mp4,.avi,.mov"
-                                                    id="resume"
-                                                    onChange={this.handleFileResumeChange}
-                                                />
-                                                <label htmlFor="resume">Course Material</label>
-
-                                                {this.state.resumePreview && (
-                                                    <div className="mt-3">
-                                                     
-                                                        {this.state.resumeType == "application/pdf" ? (
-                                                            <iframe
-                                                                src={this.state.resumePreview}
-                                                                width="100%"
-                                                                height="200px"
-                                                                style={{ border: "1px solid #ccc", borderRadius: "8px" }}
-                                                            ></iframe>
-                                                        ) : this.state.resumeType == "video" ? (
-                                                       
-                                                            <video
-                                                                width="100%"
-                                                                height="200px"
-                                                                controls
-                                                                style={{ borderRadius: "8px", border: "1px solid #ccc" }}
-                                                            >
-                                                                <source src={this.state.resumePreview} type={this.state.fileMimeType} />
-                                                                Your browser does not support the video tag.
-                                                            </video>
-                                                        ) : (
-                       
-                                                            <div>
-                                                                <p>Preview not available. Download file:</p>
-                                                                <a
-                                                                    href={this.state.resumePreview}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="btn btn-primary"
-                                                                >
-                                                                    Download File
-                                                                </a>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-
-                                                {this.state.uploadResumeStatus && <small className="text-danger">{this.state.uploadResumeStatus}</small>}
-                                            </div> */}
 
                                             <div className="form-group">
                                                 <textarea
@@ -514,6 +469,22 @@ class CreateCourse extends React.Component {
                                                 ></textarea>
                                                 <label htmlFor="description">Description</label>
                                             </div>
+
+                                            <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={this.state.isRefundable}
+                                                    id="isRefundable"
+                                                    name="isRefundable"
+                                                    onChange={this.hanldeCheckChange}
+                                                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                                                />
+                                                <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
+                                                    Refundable Course
+                                                </label>
+                                            </div>
+
+
                                             <div className="col-lg-12">
                                                 <div className="form-submit-group">
                                                     <button
@@ -537,6 +508,9 @@ class CreateCourse extends React.Component {
 
 
                                     </form>
+
+
+
                                 </div>
                             </div>
                         </div>
