@@ -26,7 +26,7 @@ class CreateCourse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            currencyCode: { value: "INR", label: "INR" },
         };
 
     }
@@ -36,6 +36,38 @@ class CreateCourse extends React.Component {
         this.userId = urlParams.get('user_Id');
         this.getDashboardUser();
         this.getCourseLevel();
+        this.getcurrencyCode();
+    }
+    getcurrencyCode = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Master/GetCurrency`;
+        const token = localStorage.getItem('authToken');
+        var req={
+            "stateId": 0,
+            "countryId": 0,
+            "cityId": 0,
+            "id": 0,
+            "freetext": ""
+          }
+        axios.post(url, req, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                const currencyCodes = response.data?.map(currency => ({
+                    value: currency.value,
+                    label: currency.value
+                }));
+                this.setState({ currencyCodes });
+
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
     }
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -223,10 +255,24 @@ class CreateCourse extends React.Component {
 
     };
     handleDescriptionChange = (event) => {
-        this.setState({ description: event.target.value }, this.validateForm);
+        this.setState({ description: event }, this.validateForm);
     };
 
     handleCourseSubmit = () => {
+        if(!this.state.isRefundable)
+        {
+            this.setState({ showRefundablePopup: true });
+        }
+        else
+        {
+            this.createCourse("Yes");
+        }
+
+
+    }
+
+    createCourse = (type) => {
+        
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/PostCourse`;
         const token = localStorage.getItem('authToken');
@@ -239,7 +285,7 @@ class CreateCourse extends React.Component {
             "course_level": this.state.courseSelected.value,
             "course_image": this.state.fileName,
             "course_fees": this.state.courseFee,
-            "is_refundable": this.state.isRefundable,
+            "is_refundable": type=="Yes"?true:false,
             "course_materials": this.state.courseMaterial,
             "no_of_lessons": this.state.nooflessons,
             "isactive": false,
@@ -284,13 +330,12 @@ class CreateCourse extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage:  error.response?.data.message,
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
             });
-
-    }
+        }
 
     hanldeCheckChange = (e) => {
         this.setState({ isRefundable: e.target.checked });
@@ -310,6 +355,9 @@ class CreateCourse extends React.Component {
     handleCourseMaterial = (e) => {
         this.setState({ courseMaterial: e });
     }
+    handleCurrencyCodeChange = (selectedOption) => {
+        this.setState({ currencyCode: selectedOption });
+    };
     modules = {
         toolbar: [
             [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -346,16 +394,8 @@ class CreateCourse extends React.Component {
                             )}
                         </div>
                         <div className="row pt--60 g-5">
-                            <div className="col-lg-4">
-                                <div className="thumbnail">
-                                    <img
-                                        className="radius-10 w-100"
-                                        src="assets/images/tab/tabs-10.jpg"
-                                        alt="Corporate Template"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-lg-8">
+
+                            <div className="col-lg-10">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
                                     <h3 className="title">Create New Course</h3>
                                     <hr className="mb--30" />
@@ -437,15 +477,33 @@ class CreateCourse extends React.Component {
                                                 {this.state.showValidMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group">
+                                            <label htmlFor="coursefee" className="mobile-label">Course Fee*</label>
+                                            <div className="mobile-input d-flex align-items-center">                                  
+                                                <Select
+                                                    className="country-code-select"
+                                                    options={this.state.currencyCodes}
+                                                    value={this.state.currencyCode}
+                                                    onChange={this.handleCurrencyCodeChange}
+                                                    menuPortalTarget={document.body}
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        container: (base) => ({
+                                                            ...base,
+                                                            flex: '0 0 100px', // Adjust the width as needed
+                                                        }),
+                                                    }}
+                                                />
                                                 <input
                                                     type="text"
-                                                    className="form-control"
+                                                    className="mobile-number-input flex-grow-1"
                                                     id="coursefee"
                                                     name="coursefee"
                                                     value={this.state.courseFee}
                                                     onChange={this.handleCourseFeeChange}
                                                 />
-                                                <label htmlFor="coursefee">Course Fee (₹)</label>
+                                              
+                                         
+                                                </div>
                                                 {this.state.showValisMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group">
@@ -460,14 +518,14 @@ class CreateCourse extends React.Component {
                                             </div>
 
                                             <div className="form-group">
-                                                <textarea
-                                                    className="form-control"
-                                                    id="description"
-                                                    name="description"
+                                                <ReactQuill
                                                     value={this.state.description}
                                                     onChange={this.handleDescriptionChange}
-                                                ></textarea>
-                                                <label htmlFor="description">Description</label>
+                                                    theme="snow"
+                                                    modules={this.modules}
+                                                    placeholder="Course Description"
+                                                    formats={this.formats}
+                                                />
                                             </div>
 
                                             <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -480,7 +538,7 @@ class CreateCourse extends React.Component {
                                                     style={{ width: "16px", height: "16px", cursor: "pointer" }}
                                                 />
                                                 <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
-                                                    Refundable Course
+                                                    is Course Refundable
                                                 </label>
                                             </div>
 
@@ -508,6 +566,29 @@ class CreateCourse extends React.Component {
 
 
                                     </form>
+                                    {this.state.showRefundablePopup && (
+                                       <Modal show={true} onHide={() => {this.setState({ showRefundablePopup: false }); this.createCourse("No"); }} className="custom-modal">
+                                       <Modal.Header closeButton>
+                                         <Modal.Title>Refund Confirmation</Modal.Title>
+                                       </Modal.Header>
+                                       <Modal.Body>Is this course qualify for 50% refund?</Modal.Body>
+                                       <Modal.Footer>
+                                         <Button variant="secondary" onClick={() => {
+                                           this.setState({ showRefundablePopup: false });
+                                           this.createCourse("No");
+                                         }}>
+                                           Cancel
+                                         </Button>
+                                         <Button variant="primary" onClick={() => {
+                                           this.setState({ showRefundablePopup: false });
+                                           this.createCourse("Yes");
+                                         }}>
+                                           Confirm
+                                         </Button>
+                                       </Modal.Footer>
+                                     </Modal>
+                                     
+                                    )}
 
 
 

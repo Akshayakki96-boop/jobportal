@@ -63,11 +63,43 @@ class SignUp extends React.Component {
                 values: { ...prevState.values, role: 3 },
             }));
         }
+        this.getPhoneCode();
 
     }
 
 
+    getPhoneCode = () => {
+        debugger;
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Master/GetCountryPhoneCode`;
+        const token = localStorage.getItem('authToken');
+        var req={
+            "stateId": 0,
+            "countryId": 0,
+            "cityId": 0,
+            "id": 0,
+            "freetext": "string"
+          }
+        axios.post(url, req, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                const countryCodes = response.data?.map(phone => ({
+                    value: phone.id,
+                    label: phone.value
+                }));
+                this.setState({ countryCodes });
 
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
     handleFocus = (field) => {
         this.setState((prevState) => ({
             focusStates: { ...prevState.focusStates, [field]: true },
@@ -215,18 +247,18 @@ class SignUp extends React.Component {
 
 
     render() {
-        const { focusStates, values } = this.state;
+        const { focusStates, values,countryCodes } = this.state;
         const roleOptions = [
             { value: 1, label: "Candidate" },
             { value: 2, label: "Employer" },
             { value: 3, label: "Trainer" },
         ];
-        const countryCodes = [
-            { value: "+1", label: "🇺🇸 +1", length: 10 },  // USA: 10 digits
-            { value: "+91", label: "🇮🇳 +91", length: 10 }, // India: 10 digits
-            { value: "+44", label: "🇬🇧 +44", length: 11 }, // UK: 11 digits
-            { value: "+61", label: "🇦🇺 +61", length: 9 }   // Australia: 9 digits
-        ];
+        // const countryCodes = [
+        //     { value: "+1", label: "🇺🇸 +1", length: 10 },  // USA: 10 digits
+        //     { value: "+91", label: "🇮🇳 +91", length: 10 }, // India: 10 digits
+        //     { value: "+44", label: "🇬🇧 +44", length: 11 }, // UK: 11 digits
+        //     { value: "+61", label: "🇦🇺 +61", length: 9 }   // Australia: 9 digits
+        // ];
         return (
             <>
                 <div>
@@ -372,7 +404,7 @@ class SignUp extends React.Component {
                                                     <Select
                                                         className="country-code-select"
                                                         options={countryCodes}
-                                                        value={countryCodes.find(option => option.value === values.countryCode)}
+                                                        value={countryCodes?.find(option => option.value === values.countryCode)}
                                                         onChange={(selectedOption) => this.handleCountryCodeChange("countryCode", selectedOption.value)}
                                                     />
                                                     <input

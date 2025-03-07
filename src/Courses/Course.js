@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
+import parse from 'html-react-parser';
 
 class Course extends React.Component {
     constructor(props) {
@@ -382,7 +383,13 @@ class Course extends React.Component {
                                                                 )}
                                                             </li>
                                                         </ul>
-                                                        <p className="rbt-card-text">{course.description}</p>
+                                                         <p className="rbt-card-text">
+                                                                                  {parse(
+                                                                                    course.description.split(" ").length > 20
+                                                                                      ? course.description.split(" ").slice(0, 20).join(" ") + "..."
+                                                                                      : course.description
+                                                                                  )}
+                                                                                </p>
                                                         <div className="rbt-author-meta mb--20">
                                                             <div className="rbt-avater">
                                                                 <a href="#">

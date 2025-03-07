@@ -155,7 +155,12 @@ class CourseDetails extends React.Component {
                                         {this.state.courseListingData?.coursetitle}
                                     </h2>
                                     <p className="description">
-                                        {this.state.courseListingData?.description}
+                                        {parse(
+                                            this.state.courseListingData?.description.split(" ").length > 20
+                                                ? this.state.courseListingData?.description.split(" ").slice(0, 20).join(" ") + "..."
+                                                : this.state.courseListingData?.description || ""
+                                        )}
+
                                     </p>
                                     <div className="d-flex align-items-center mb--20 flex-wrap rbt-course-details-feature">
                                         {/* <div className="feature-sin best-seller-badge">
@@ -257,9 +262,8 @@ class CourseDetails extends React.Component {
                         <div className="row g-5">
                             <div className="col-lg-8">
                                 <div className="course-details-content">
-                                    <div className="rbt-course-feature-box rbt-shadow-box thuumbnail">
+                                    <div  className="rbt-course-feature-box rbt-shadow-box thuumbnail">
                                         <img
-                                            className="w-100"
                                             src={this.state.courseListingData ? `${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.course_image}` : "assets/images/course/course-01.jpg"}
                                             alt="Card image"
                                         />
@@ -294,8 +298,8 @@ class CourseDetails extends React.Component {
                                             <div className="section-title">
                                                 <h4 className="rbt-title-style-3">What you'll learn</h4>
                                             </div>
-                                            <p>
-                                                {this.state.courseListingData?.description}
+                                            <p style={{textAlign:'left'}}>
+                                                {parse(this.state.courseListingData?.description || "")}
                                             </p>
                                             {/* <div className="row g-5 mb--30"> */}
                                             {/* Start Feture Box  */}
@@ -361,9 +365,9 @@ class CourseDetails extends React.Component {
                                             <div className="section-title">
                                                 <h4 className="rbt-title-style-3">Course Content</h4>
                                             </div>
-                                          
+                                            <div style={{ textAlign: "left" }}>
                                                 {parse(this.state.courseListingData?.course_materials || "")}
-                                          
+                                            </div>
                                             {/* <div className="rbt-accordion-style rbt-accordion-02 accordion">
                                                 <div className="accordion" id="accordionExampleb2">
                                                     <div className="accordion-item card">
@@ -919,11 +923,13 @@ class CourseDetails extends React.Component {
                                         <div className="row g-5">
 
                                             {/* Start Feture Box  */}
-                                            <div className="col-lg-6">
+                                            <div  className="col-lg-12">
                                                 <div className="section-title">
                                                     <h4 className="rbt-title-style-3 mb--20">Description</h4>
                                                 </div>
-                                                <p> {this.state.courseListingData?.description}</p>
+                                                <div style={{ textAlign: "left" }}>
+                                                {parse(this.state.courseListingData?.description || "")}
+                                                </div>
                                             </div>
                                             {/* End Feture Box  */}
                                         </div>
@@ -1916,7 +1922,7 @@ class CourseDetails extends React.Component {
                                             className="video-popup-with-text video-popup-wrapper text-center popup-video sidebar-video-hidden mb--15"
                                             href="https://www.youtube.com/watch?v=nA1Aqp0sPQo"
                                         >
-                                            <div className="video-content">
+                                            {/* <div className="video-content">
                                                 <img
                                                     className="w-100 rbt-radius"
                                                     src="assets/images/others/video-01.jpg"
@@ -1930,14 +1936,14 @@ class CourseDetails extends React.Component {
                                                 <span className="play-view-text d-block color-white">
                                                     <i className="feather-eye" /> Preview this course
                                                 </span>
-                                            </div>
+                                            </div> */}
                                         </a>
                                         {/* End Viedo Wrapper  */}
                                         <div className="content-item-content">
                                             <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
                                                 <div className="rbt-price">
-                                                    <span className="current-price">$60.99</span>
-                                                    <span className="off-price">$84.99</span>
+                                                    <span className="current-price">${this.state.courseListingData?.course_fees}</span>
+                                                    {/* <span className="off-price">$84.99</span> */}
                                                 </div>
                                                 <div className="discount-time">
                                                     <span className="rbt-badge color-danger bg-color-danger-opacity">
@@ -1965,7 +1971,7 @@ class CourseDetails extends React.Component {
                           </div>
 */}
                                             <span className="subtitle">
-                                                <i className="feather-rotate-ccw" /> 30-Day Money-Back Guarantee
+                                                <i className="feather-rotate-ccw" /> Qualifies for 50% refund
                                             </span>
                                             <div className="rbt-widget-details has-show-more">
                                                 <ul className="has-show-more-inner-content rbt-course-details-list-wrapper">
@@ -1981,11 +1987,11 @@ class CourseDetails extends React.Component {
                                                     </li>
                                                     <li>
                                                         <span>Lectures</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">50</span>
+                                                        <span className="rbt-feature-value rbt-badge-5">{this.state.courseListingData?.no_of_lessons}</span>
                                                     </li>
                                                     <li>
                                                         <span>Skill Level</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">Basic</span>
+                                                        <span className="rbt-feature-value rbt-badge-5">{this.state.courseListingData?.course_level_name}</span>
                                                     </li>
                                                     <li>
                                                         <span>Language</span>
@@ -1993,57 +1999,11 @@ class CourseDetails extends React.Component {
                                                             English
                                                         </span>
                                                     </li>
-                                                    <li>
-                                                        <span>Quizzes</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">10</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Certificate</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">Yes</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Pass Percentage</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">95%</span>
-                                                    </li>
+                                               
                                                 </ul>
                                                 <div className="rbt-show-more-btn">Show More</div>
                                             </div>
-                                            <div className="social-share-wrapper mt--30 text-center">
-                                                <div className="rbt-post-share d-flex align-items-center justify-content-center">
-                                                    <ul className="social-icon social-default transparent-with-border justify-content-center">
-                                                        <li>
-                                                            <a href="https://www.facebook.com/">
-                                                                <i className="feather-facebook" />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="https://www.twitter.com">
-                                                                <i className="feather-twitter" />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="https://www.instagram.com/">
-                                                                <i className="feather-instagram" />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="https://www.linkdin.com/">
-                                                                <i className="feather-linkedin" />
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <hr className="mt--20" />
-                                                <div className="contact-with-us text-center">
-                                                    <p>For details about the course</p>
-                                                    <p className="rbt-badge-2 mt--10 justify-content-center w-100">
-                                                        <i className="feather-phone mr--5" /> Call Us:{" "}
-                                                        <a href="#">
-                                                            <strong>+444 555 666 777</strong>
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
