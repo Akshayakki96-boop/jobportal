@@ -85,7 +85,40 @@ class EditProfileTrainer extends React.Component {
         this.bindCountry();
         this.getIndustry();
         this.getKeySkills();
+        this.getPhoneCode();
     }
+
+    getPhoneCode = () => {
+            const baseUrl = process.env.REACT_APP_BASEURL;
+            const url = `${baseUrl}/api/Master/GetCountryPhoneCode`;
+            const token = localStorage.getItem('authToken');
+            var req={
+                "stateId": 0,
+                "countryId": 0,
+                "cityId": 0,
+                "id": 0,
+                "freetext": "string"
+              }
+            axios.post(url, req, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    const phoneCodes = response.data?.map(phone => ({
+                        value: phone.id,
+                        label: phone.value
+                    }));
+                    this.setState({ phoneCodes });
+    
+    
+                })
+                .catch((error) => {
+                    localStorage.removeItem('authToken');
+                    this.props.navigate('/Login'); // Use `navigate`
+                });
+        }
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Employer/Dashboard`;
@@ -975,7 +1008,7 @@ class EditProfileTrainer extends React.Component {
                                                     <div className="mobile-input d-flex align-items-center">
                                                         <Select
                                                             className="country-code-select"
-                                                            options={countryCodes}
+                                                            options={this.state.phoneCodes}
                                                             value={this.state.countryCode}
                                                             onChange={this.handleCountryCodeChange}
                                                             menuPortalTarget={document.body}
