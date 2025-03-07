@@ -244,9 +244,11 @@ class Home extends React.Component {
                                                                     <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
                                                                 </h4>
                                                                 <p className="rbt-card-text">
-                                                                    {course.description.split(" ").length > 20
-                                                                        ? course.description.split(" ").slice(0, 20).join(" ") + "..."
-                                                                        : course.description}
+                                                                    {parse(
+                                                                        course.description.split(" ").length > 20
+                                                                            ? course.description.split(" ").slice(0, 20).join(" ") + "..."
+                                                                            : course.description
+                                                                    )}
                                                                 </p>
                                                                 <div className="rbt-review">
                                                                     <div className="rating">
@@ -509,9 +511,11 @@ class Home extends React.Component {
                                                     <li><i className="feather-users"></i>{course.students} Students</li>
                                                 </ul>
                                                 <p className="rbt-card-text">
-                                                    {course.description.split(" ").length > 20
-                                                        ? course.description.split(" ").slice(0, 20).join(" ") + "..."
-                                                        : course.description}
+                                                    {parse(
+                                                        course.description.split(" ").length > 20
+                                                            ? course.description.split(" ").slice(0, 20).join(" ") + "..."
+                                                            : course.description
+                                                    )}
                                                 </p>
 
                                                 <div className="rbt-author-meta mb--20">
