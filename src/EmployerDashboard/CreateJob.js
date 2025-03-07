@@ -285,15 +285,8 @@ class CreateJob extends React.Component {
                 <div className="container">
 
                     <div className="row pt--60 g-5">
-                        <div className="col-lg-4">
-                            <div className="thumbnail">
-                                <img
-                                    className="radius-10 w-100"
-                                    src="assets/images/tab/tabs-10.jpg"
-                                    alt="Corporate Template" />
-                            </div>
-                        </div>
-                        <div className="col-lg-8">
+                        
+                        <div className="col-lg-12">
                             <div className="rbt-contact-form contact-form-style-1 max-width-auto">
                                 <h3 className="title">Create New Job</h3>
                                 <hr className="mb--30" />
@@ -498,7 +491,7 @@ class CreateJob extends React.Component {
                                         <label>Job Description*</label>
                                     </div>
 
-                                    <div className="col-lg-12">
+                                    <div className="col-lg-8">
                                         <div className="form-submit-group">
                                             <button
                                                 disabled={!this.state.isFormValid}
