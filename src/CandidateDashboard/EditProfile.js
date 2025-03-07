@@ -80,6 +80,7 @@ class EditProfileCandidate extends React.Component {
             responseMessage: '',
             alertVariant: '',
             keyskillsSelected: null,
+            countryCode: { value: "+91", label: "+91" },
         };
 
     }
@@ -94,7 +95,40 @@ class EditProfileCandidate extends React.Component {
         this.getEmploymentType();
         this.getKeySkills();
         this.getDepartments();
+        this.getPhoneCode();
     }
+
+       getPhoneCode = () => {
+                const baseUrl = process.env.REACT_APP_BASEURL;
+                const url = `${baseUrl}/api/Master/GetCountryPhoneCode`;
+                const token = localStorage.getItem('authToken');
+                var req={
+                    "stateId": 0,
+                    "countryId": 0,
+                    "cityId": 0,
+                    "id": 0,
+                    "freetext": ""
+                  }
+                axios.post(url, req, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        //Authorization: `Bearer ${token}`,
+                    },
+                })
+                    .then((response) => {
+                        const phoneCodes = response.data?.map(phone => ({
+                            value: phone.value,
+                            label: phone.value
+                        }));
+                        this.setState({ phoneCodes });
+        
+        
+                    })
+                    .catch((error) => {
+                        localStorage.removeItem('authToken');
+                        this.props.navigate('/Login'); // Use `navigate`
+                    });
+            }
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Employer/Dashboard`;
@@ -676,10 +710,10 @@ class EditProfileCandidate extends React.Component {
             user_id: this.state.userId,
             jobtitle: employmentForm.jobtitle,
             joiningdate_year: parseInt(employmentForm.workedFromYear, 10),
-            leavingdate_year: parseInt(employmentForm.workedToYear, 10)?parseInt(employmentForm.workedToYear, 10):0,
+            leavingdate_year: parseInt(employmentForm.workedToYear, 10) ? parseInt(employmentForm.workedToYear, 10) : 0,
             is_current_employment: employmentForm.isCurrentCompany,
             joiningdate_month: employmentForm.workedFromMonth,
-            leavingdate_month: employmentForm.workedToMonth?employmentForm.workedToMonth:0,
+            leavingdate_month: employmentForm.workedToMonth ? employmentForm.workedToMonth : 0,
             company_name: employmentForm.company_name,
             employmentType: employmentForm.employmentType,
             jobprofile: employmentForm.jobprofile,
@@ -989,6 +1023,10 @@ class EditProfileCandidate extends React.Component {
                 window.scrollTo(0, 0);
             });
     }
+
+    handleCountryCodeChange = (event) => {
+        this.setState({ countryCode: event });
+    }
     render() {
         const { fullname, email, mobile_no, profile_summary, experience, currentsalary, expectedsalary, logoPreview, isBasicInfoExpanded, isEmploymentDetailsExpanded, isProjectDetailsExpanded, showEducation, showKeySkills, preferredWorkLocation, selectedDate, resume_summary, noticePeriods, employments, projects, preferredShift, specializations, department_id, noticePeriodSelected, role_id, uploadStatus, languague_name, resumePreview, employmentForm, showEmploymentModal } = this.state;
         return (
@@ -1075,15 +1113,32 @@ class EditProfileCandidate extends React.Component {
                                                 <label htmlFor="email">Email</label>
                                             </div>
                                             <div className="form-group">
+                                            <label className="mobile-label" htmlFor="mobile_no">Mobile Number</label>
+                                            <div className="mobile-input d-flex align-items-center">
+                                                <Select
+                                                    className="country-code-select"
+                                                    options={this.state.phoneCodes}
+                                                    value={this.state.countryCode}
+                                                    onChange={this.handleCountryCodeChange}
+                                                    menuPortalTarget={document.body}
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                        container: (base) => ({
+                                                            ...base,
+                                                            flex: '0 0 100px', // Adjust the width as needed
+                                                        }),
+                                                    }}
+                                                />
                                                 <input
                                                     type="text"
-                                                    className="form-control"
+                                                     className="mobile-number-input flex-grow-1"
                                                     id="mobile_no"
                                                     name="mobile_no"
                                                     value={mobile_no}
                                                     onChange={this.handleMobileChange}
                                                 />
-                                                <label htmlFor="mobile_no">Mobile Number</label>
+                                                </div>
+                                               
                                             </div>
                                             <div className="form-group" style={{ position: "relative" }}>
                                                 <label
@@ -1233,7 +1288,7 @@ class EditProfileCandidate extends React.Component {
                                             </div>
 
                                             <div className="form-group">
-                                            <label style={{
+                                                <label style={{
                                                     position: "absolute",
                                                     top: "-12px",
                                                     left: "10px",
@@ -1405,7 +1460,7 @@ class EditProfileCandidate extends React.Component {
                                                                 <p style={{ fontWeight: "bold" }}>Worked From: {employment.workedFromYear}</p>
                                                             </div>
                                                             <div className="col-md-6">
-                                                                <p style={{ fontWeight: "bold" }}>Worked To: {employment.workedToYear?employment.workedToYear:"Present"}</p>
+                                                                <p style={{ fontWeight: "bold" }}>Worked To: {employment.workedToYear ? employment.workedToYear : "Present"}</p>
                                                             </div>
 
                                                         </div>
@@ -1496,7 +1551,7 @@ class EditProfileCandidate extends React.Component {
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                     {!employmentForm.isCurrentCompany &&   <div className="form-group">
+                                                        {!employmentForm.isCurrentCompany && <div className="form-group">
                                                             <label>Worked To:</label>
                                                             <div className="d-flex gap-3">
                                                                 <select
@@ -1528,21 +1583,21 @@ class EditProfileCandidate extends React.Component {
                                                                     ))}
                                                                 </select>
                                                             </div>
-                                                            {employmentForm.workedToYear!==0 &&<div> {employmentForm.workedFromYear && employmentForm.workedToYear && parseInt(employmentForm.workedFromYear) > parseInt(employmentForm.workedToYear) && (
-                                                            <span style={{ color: 'red',fontSize:'10px' }}>Worked From year cannot be greater than Worked To year.</span>
-                                                        )}</div>}
+                                                            {employmentForm.workedToYear !== 0 && <div> {employmentForm.workedFromYear && employmentForm.workedToYear && parseInt(employmentForm.workedFromYear) > parseInt(employmentForm.workedToYear) && (
+                                                                <span style={{ color: 'red', fontSize: '10px' }}>Worked From year cannot be greater than Worked To year.</span>
+                                                            )}</div>}
                                                         </div>}
-                                                     
-                                                        
-                                                            <input
-                                                                type="checkbox"
-                                                                name="isCurrentCompany"
-                                                                checked={employmentForm.isCurrentCompany}
-                                                                id="isCurrentCompany"
-                                                                onChange={this.handleEmploymentFormChange} />
-                                                            <label htmlFor="isCurrentCompany">Is Current Company</label>
-                                                       
-                                                       
+
+
+                                                        <input
+                                                            type="checkbox"
+                                                            name="isCurrentCompany"
+                                                            checked={employmentForm.isCurrentCompany}
+                                                            id="isCurrentCompany"
+                                                            onChange={this.handleEmploymentFormChange} />
+                                                        <label htmlFor="isCurrentCompany">Is Current Company</label>
+
+
                                                         <div className="form-group">
                                                             <label htmlFor="keyskillselected">Key Skills</label>
                                                             <Select
@@ -1566,15 +1621,15 @@ class EditProfileCandidate extends React.Component {
                                                             />
                                                         </div>
                                                         <div className="form-group">
-                                                        <label style={{
-                                                    position: "absolute",
-                                                    top: "-12px",
-                                                    left: "-5px",
-                                                    background: "white",
-                                                    padding: "0 4px",
-                                                    fontSize: "17px",
-                                                    color: "#6c757d",
-                                                }}  htmlFor="jobprofile">Job Profile</label>
+                                                            <label style={{
+                                                                position: "absolute",
+                                                                top: "-12px",
+                                                                left: "-5px",
+                                                                background: "white",
+                                                                padding: "0 4px",
+                                                                fontSize: "17px",
+                                                                color: "#6c757d",
+                                                            }} htmlFor="jobprofile">Job Profile</label>
                                                             <textarea
                                                                 className="form-control"
                                                                 id="jobprofile"
@@ -1582,7 +1637,7 @@ class EditProfileCandidate extends React.Component {
                                                                 value={employmentForm.jobprofile}
                                                                 onChange={this.handleEmploymentFormChange}
                                                             ></textarea>
-                                                           
+
                                                         </div>
                                                     </Modal.Body>
                                                     <Modal.Footer>

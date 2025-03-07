@@ -78,17 +78,17 @@ class SignUp extends React.Component {
             "countryId": 0,
             "cityId": 0,
             "id": 0,
-            "freetext": "string"
+            "freetext": ""
           }
         axios.post(url, req, {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
+                //Authorization: `Bearer ${token}`,
             },
         })
             .then((response) => {
                 const countryCodes = response.data?.map(phone => ({
-                    value: phone.id,
+                    value: phone.value,
                     label: phone.value
                 }));
                 this.setState({ countryCodes });
