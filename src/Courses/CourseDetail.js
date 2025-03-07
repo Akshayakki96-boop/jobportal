@@ -298,7 +298,7 @@ class CourseDetails extends React.Component {
                                             <div className="section-title">
                                                 <h4 className="rbt-title-style-3">What you'll learn</h4>
                                             </div>
-                                            <p>
+                                            <p style={{textAlign:'left'}}>
                                                 {parse(this.state.courseListingData?.description || "")}
                                             </p>
                                             {/* <div className="row g-5 mb--30"> */}
@@ -1999,57 +1999,11 @@ class CourseDetails extends React.Component {
                                                             English
                                                         </span>
                                                     </li>
-                                                    <li>
-                                                        <span>Quizzes</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">10</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Certificate</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">Yes</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Pass Percentage</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">95%</span>
-                                                    </li>
+                                               
                                                 </ul>
                                                 <div className="rbt-show-more-btn">Show More</div>
                                             </div>
-                                            <div className="social-share-wrapper mt--30 text-center">
-                                                <div className="rbt-post-share d-flex align-items-center justify-content-center">
-                                                    <ul className="social-icon social-default transparent-with-border justify-content-center">
-                                                        <li>
-                                                            <a href="https://www.facebook.com/">
-                                                                <i className="feather-facebook" />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="https://www.twitter.com">
-                                                                <i className="feather-twitter" />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="https://www.instagram.com/">
-                                                                <i className="feather-instagram" />
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="https://www.linkdin.com/">
-                                                                <i className="feather-linkedin" />
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <hr className="mt--20" />
-                                                <div className="contact-with-us text-center">
-                                                    <p>For details about the course</p>
-                                                    <p className="rbt-badge-2 mt--10 justify-content-center w-100">
-                                                        <i className="feather-phone mr--5" /> Call Us:{" "}
-                                                        <a href="#">
-                                                            <strong>+444 555 666 777</strong>
-                                                        </a>
-                                                    </p>
-                                                </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
