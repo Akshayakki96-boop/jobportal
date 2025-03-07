@@ -3,6 +3,7 @@ import Breadcumb from '../Breadcumb/breadcumb';
 import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
+import parse from 'html-react-parser';
 
 class MyCourses extends React.Component {
   constructor(props) {
@@ -229,11 +230,19 @@ class MyCourses extends React.Component {
                             50 Students
                           </li>
                           <li>
-                         
-                          {!course.isactive ? <a href="#" style={{textDecoration:'underline'}} onClick={() => this.ActivateCourse(course)}>Activate Course</a>:"Activated"}
+
+                            {!course.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course)}>Activate Course</a> : "Activated"}
                           </li>
                         </ul>
-                        <p className="rbt-card-text">{course.description}</p>
+
+                        <p className="rbt-card-text">
+                          {parse(
+                            course.description.split(" ").length > 20
+                              ? course.description.split(" ").slice(0, 20).join(" ") + "..."
+                              : course.description
+                          )}
+                        </p>
+
                         <div className="rbt-card-bottom">
                           <div className="rbt-price">
                             <span className="current-price">${course.course_fees}</span>

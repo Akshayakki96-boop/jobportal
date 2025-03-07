@@ -112,7 +112,7 @@ class Home extends React.Component {
         {
             "courseId": 0,
             "coursetitle": "",
-            "isactive": false,
+            "isactive": true,
             "user_id": 0,
             "pageIndex": pageIndex,
             "pagesize": pageSize
@@ -175,7 +175,7 @@ class Home extends React.Component {
                             <div className="col-md-12 pb--120 pt--10">
                                 <div className="content">
                                     <div className="inner">
-                                    <div className="slider-btn">
+                                        <div className="slider-btn">
                                             <a className="rbt-btn btn-gradient hover-icon-reverse" href="/course">
                                                 <span className="icon-reverse-wrapper">
                                                     <span className="btn-text">Start Your Training</span>
@@ -198,7 +198,7 @@ class Home extends React.Component {
                                         <p className="description">
                                             We specialize in offering high-quality courses and connecting you with top employers across industries. Whether you're preparing for career opportunities or exploring diverse training programs, ZobSkill is here to guide your journey.
                                         </p>
-                                       
+
                                     </div>
                                     <div className="shape-wrapper" id="scene">
                                         <img src="assets/images/banner/banner-01.png" alt="Hero Image" />
@@ -243,7 +243,11 @@ class Home extends React.Component {
                                                                 <h4 className="rbt-card-title">
                                                                     <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
                                                                 </h4>
-                                                                <p className="rbt-card-text">{course.description}</p>
+                                                                <p className="rbt-card-text">
+                                                                    {course.description.split(" ").length > 20
+                                                                        ? course.description.split(" ").slice(0, 20).join(" ") + "..."
+                                                                        : course.description}
+                                                                </p>
                                                                 <div className="rbt-review">
                                                                     <div className="rating">
                                                                         {[...Array(course.rating)].map((_, i) => <i key={i} className="fa fa-star"></i>)}
@@ -414,36 +418,36 @@ class Home extends React.Component {
                                         <span className="subtitle bg-coral-opacity">About Zobskill</span>
                                         <h3 className="title">Zobskill – Where Learning Meets Opportunity!</h3>
                                     </div>
-                                    <p style={{textAlign:'left'}} className="description mt--30">
-                                    At Zobskill, we believe that the right skills can change lives. Whether you're looking to upgrade your expertise, earn a certification, or land a job you love, we’re here to make it happen.  
+                                    <p style={{ textAlign: 'left' }} className="description mt--30">
+                                        At Zobskill, we believe that the right skills can change lives. Whether you're looking to upgrade your expertise, earn a certification, or land a job you love, we’re here to make it happen.
                                     </p>
-                                    <p style={{textAlign:'left'}}>
-                                    Think of us as your career partner—helping you at every step, from learning in-demand skills to connecting you with real job opportunities. And the best part?<strong> We reward your success! When you pass your certification exam and secure a job through Zobskill, you get 100% of your training fees refunded. (T&C Apply)</strong>
+                                    <p style={{ textAlign: 'left' }}>
+                                        Think of us as your career partner—helping you at every step, from learning in-demand skills to connecting you with real job opportunities. And the best part?<strong> We reward your success! When you pass your certification exam and secure a job through Zobskill, you get 100% of your training fees refunded. (T&C Apply)</strong>
                                     </p>
-                                    <div style={{textAlign:'left'}}>
-                                    <strong>Why Zobskill?</strong>
+                                    <div style={{ textAlign: 'left' }}>
+                                        <strong>Why Zobskill?</strong>
                                     </div>
-                                    <p style={{textAlign:'left'}}>
-                                    <ul>
-                                        <li>
-                                        Learn from the best – Industry-leading trainers & real-world skills.  
-                                        </li>
-                                        <li>
-                                        Get certified, get hired – Employers prefer job-ready professionals  
-                                        </li>
-                                        <li>
-                                        Earn as you teach – Trainers get incentives when students succeed.    
-                                        </li>
-                                        <li>
-                                        Join a thriving community – Mentors, trainers & recruiters helping each other grow.      
-                                        </li>
-                                        <li>
-                                        Your career journey starts here. Ready to take the next step?    
-                                        </li>
-                                    </ul>
+                                    <p style={{ textAlign: 'left' }}>
+                                        <ul>
+                                            <li>
+                                                Learn from the best – Industry-leading trainers & real-world skills.
+                                            </li>
+                                            <li>
+                                                Get certified, get hired – Employers prefer job-ready professionals
+                                            </li>
+                                            <li>
+                                                Earn as you teach – Trainers get incentives when students succeed.
+                                            </li>
+                                            <li>
+                                                Join a thriving community – Mentors, trainers & recruiters helping each other grow.
+                                            </li>
+                                            <li>
+                                                Your career journey starts here. Ready to take the next step?
+                                            </li>
+                                        </ul>
                                     </p>
-                                    <div style={{textAlign:'left'}}><a href='/login'>Join Zobskill today!</a></div>
-                                    
+                                    <div style={{ textAlign: 'left' }}><a href='/login'>Join Zobskill today!</a></div>
+
                                     <div className="about-btn mt--40">
                                         <a className="rbt-btn btn-gradient hover-icon-reverse" href="/aboutus">
                                             <span className="icon-reverse-wrapper">
@@ -505,8 +509,11 @@ class Home extends React.Component {
                                                     <li><i className="feather-users"></i>{course.students} Students</li>
                                                 </ul>
                                                 <p className="rbt-card-text">
-                                                    {course.description}
+                                                    {course.description.split(" ").length > 20
+                                                        ? course.description.split(" ").slice(0, 20).join(" ") + "..."
+                                                        : course.description}
                                                 </p>
+
                                                 <div className="rbt-author-meta mb--20">
                                                     <div className="rbt-avater">
                                                         <a href="#">
@@ -812,7 +819,7 @@ class Home extends React.Component {
                                         <span className="subtitle bg-secondary-opacity">Why Choose Us</span>
                                         <h2 className="title">Creating A Community Of <br /> Life Long Learners</h2>
                                         <p className="description has-medium-font-size mt--20 mb--0">
-                                        At Zobskill, we believe learning never stops! Our platform connects aspiring professionals, expert trainers, and industry leaders to foster continuous growth, upskilling, and career success.
+                                            At Zobskill, we believe learning never stops! Our platform connects aspiring professionals, expert trainers, and industry leaders to foster continuous growth, upskilling, and career success.
                                         </p>
                                     </div>
                                 </div>
