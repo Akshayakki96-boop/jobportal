@@ -223,7 +223,7 @@ class CreateCourse extends React.Component {
 
     };
     handleDescriptionChange = (event) => {
-        this.setState({ description: event.target.value }, this.validateForm);
+        this.setState({ description: event}, this.validateForm);
     };
 
     handleCourseSubmit = () => {
@@ -448,7 +448,7 @@ class CreateCourse extends React.Component {
                                                 <label htmlFor="coursefee">Course Fee (₹)</label>
                                                 {this.state.showValisMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
-                                            <div className="form-group">
+                                            <div  className="form-group">
                                                 <ReactQuill
                                                     value={this.state.courseMaterial}
                                                     onChange={this.handleCourseMaterial}
@@ -459,15 +459,15 @@ class CreateCourse extends React.Component {
                                                 />
                                             </div>
 
-                                            <div className="form-group">
-                                                <textarea
-                                                    className="form-control"
-                                                    id="description"
-                                                    name="description"
+                                            <div  className="form-group">
+                                            <ReactQuill
                                                     value={this.state.description}
                                                     onChange={this.handleDescriptionChange}
-                                                ></textarea>
-                                                <label htmlFor="description">Description</label>
+                                                    theme="snow"
+                                                    modules={this.modules}
+                                                    placeholder="Course Description"
+                                                    formats={this.formats}
+                                                />
                                             </div>
 
                                             <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -480,7 +480,7 @@ class CreateCourse extends React.Component {
                                                     style={{ width: "16px", height: "16px", cursor: "pointer" }}
                                                 />
                                                 <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
-                                                    Refundable Course
+                                                    is Course Refundable
                                                 </label>
                                             </div>
 
