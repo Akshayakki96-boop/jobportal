@@ -289,7 +289,8 @@ class CreateCourse extends React.Component {
             "course_materials": this.state.courseMaterial,
             "no_of_lessons": this.state.nooflessons,
             "isactive": false,
-            "ipAddress": '192.168.1.1'
+            "ipAddress": '192.168.1.1',
+            "currency":this.state.currencyCode.value
         }
 
         axios.post(url, courseData, {
