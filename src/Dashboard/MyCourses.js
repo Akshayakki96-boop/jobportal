@@ -245,7 +245,7 @@ class MyCourses extends React.Component {
 
                         <div className="rbt-card-bottom">
                           <div className="rbt-price">
-                            <span className="current-price">${course.course_fees}</span>
+                            <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
                             {/* <span className="off-price">$120</span> */}
                           </div>
                           <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
