@@ -47,7 +47,7 @@ class EditProfileTrainer extends React.Component {
             resumePreview: "",
             responseMessage: '',
             alertVariant: '',
-            countryCode: { value: "+1", label: "+1" },
+            countryCode: { value: "+91", label: "+91" },
             keyskillsSelected: null,
             showEmploymentModal: false,
             currentEmploymentIndex: null,

@@ -1942,7 +1942,7 @@ class CourseDetails extends React.Component {
                                         <div className="content-item-content">
                                             <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
                                                 <div className="rbt-price">
-                                                    <span className="current-price">${this.state.courseListingData?.course_fees}</span>
+                                                    <span className="current-price">{this.state.courseListingData?.currency ? this.state.courseListingData?.currency + '-' + this.state.courseListingData?.course_fees : this.state.courseListingData?.course_fees}</span>
                                                     {/* <span className="off-price">$84.99</span> */}
                                                 </div>
                                                 <div className="discount-time">

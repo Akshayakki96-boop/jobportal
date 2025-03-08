@@ -720,7 +720,7 @@ class Header extends React.Component {
                                                 </div>
                                                 <div className="rbt-card-bottom">
                                                     <div className="rbt-price">
-                                                        <span className="current-price">${course.course_fees}</span>
+                                                        <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
                                                         {/* <span className="off-price">${course.offPrice}</span> */}
                                                     </div>
                                                 </div>
