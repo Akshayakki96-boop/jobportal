@@ -204,10 +204,7 @@ class MyJobs extends React.Component {
                             <p className="rbt-card-text">
                               {parse(job.description)}
                             </p>
-                            <a className="rbt-btn-link" href={`/CandidatesDetails?jobId=${job.jobid}`} style={{ marginRight: "10px" }}>
-                                View Candidates
-                                <i className="feather-arrow-right" />
-                              </a>
+                            
                             <div className="rbt-card-bottom">
                               <div className="rbt-price">
                                 <span className="current-price">
@@ -221,6 +218,10 @@ class MyJobs extends React.Component {
                              
                               <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}`}>
                                 Learn More
+                                <i className="feather-arrow-right" />
+                              </a>
+                              <a className="rbt-btn-link" href={`/CandidatesDetails?jobId=${job.jobid}`} style={{ marginRight: "10px" }}>
+                                View Candidates
                                 <i className="feather-arrow-right" />
                               </a>
 

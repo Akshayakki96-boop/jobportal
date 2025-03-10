@@ -235,23 +235,27 @@ class MyCourses extends React.Component {
                           </li>
                         </ul>
 
-                        <p className="rbt-card-text">
+                        {/* <p className="rbt-card-text">
                           {parse(
                             course.description.split(" ").length > 20
                               ? course.description.split(" ").slice(0, 20).join(" ") + "..."
                               : course.description
                           )}
-                        </p>
+                        </p> */}
 
                         <div className="rbt-card-bottom">
                           <div className="rbt-price">
                             <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
                             {/* <span className="off-price">$120</span> */}
                           </div>
-                          <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
+                          <a style={{marginBottom:"10px"}} className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
                             Learn More
                             <i className="feather-arrow-right" />
                           </a>
+                          <a className="rbt-btn-link" href={`/CandidatesCourseDetails?courseId=${course.courseid}`} style={{ marginRight: "10px" }}>
+                                View Candidates
+                                <i className="feather-arrow-right" />
+                              </a>
                         </div>
                       </div>
                     </div>
