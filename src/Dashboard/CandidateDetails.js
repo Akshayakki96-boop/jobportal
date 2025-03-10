@@ -93,10 +93,10 @@ class CandidatesDetails extends React.Component {
                 console.log('candidatelisting', response.data);
                 if (response.data.data && response.data.data.length > 0) {
                     const totalCount = response.data.data[0].total_records;
-                    this.setState({ candidateListing: response.data.data, totalRecords: totalCount, keepSpinner: false, error: "" });
+                    this.setState({ candidateListing: response.data.data, totalRecords: totalCount, keepSpinner: false, errorMessage: "" });
                 }
                 else {
-                    this.setState({ keepSpinner: false, error: "No Candidate Found" });
+                    this.setState({ keepSpinner: false, errorMessage: "No Candidate Found" });
                 }
 
 
