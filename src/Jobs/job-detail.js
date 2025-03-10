@@ -21,9 +21,10 @@ class jobDetails extends React.Component {
     let url = window.location.search;
     var urlParams = new URLSearchParams(url);
     var jobId = urlParams.get('jobId');
+    this.jobId=jobId;
     this.user= urlParams.get('user');
     console.log('jobId', jobId);
-    this.getAllJobs(jobId);
+
   }
   getAllJobs = (jobId) => {
     const baseUrl = process.env.REACT_APP_BASEURL;
@@ -41,9 +42,10 @@ class jobDetails extends React.Component {
       "industryId": 0,
       "keyskillIds": "",
       "educationId": "",
-      "active": false,
+      "active": true,
       "user_id": 0,
-      "cityIds": "1,2"
+      "cityIds": "1,2",
+      "candidate_user_id": this.state.dashBoardData.role_id==1?this.state.dashBoardData.user_id:0
     }
     axios.post(url, request, {
       headers: {
@@ -85,6 +87,9 @@ class jobDetails extends React.Component {
       .then((response) => {
         console.log('dashboard data', response.data);
         this.setState({ dashBoardData: response.data.data });
+        setTimeout(() => {
+          this.getAllJobs(this.jobId);
+        }, 1000);
 
       })
       .catch((error) => {
@@ -306,7 +311,7 @@ console.log("user",this.user)
                   </div>
                   <div className="col-lg-7 col-md-12">
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
-                     {!this.user ? <div className="rbt-short-item">
+                     {this.state.dashBoardData?.role_id!=1 ? <div className="rbt-short-item">
                         <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
                           e.preventDefault(); // Prevent default link behavior
                           this.handlePublish();

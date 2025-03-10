@@ -20,6 +20,7 @@ class CourseDetails extends React.Component {
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
         var courseId = urlParams.get('courseId');
+        this.courseId=courseId;
         this.sections = document.querySelectorAll('div[id]');
         const options = {
             root: null,
@@ -124,6 +125,36 @@ class CourseDetails extends React.Component {
             ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
             : parts[0][0].toUpperCase();
     };
+
+    applyCourse = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Candidate/ApplyCourse`;
+        const token = localStorage.getItem('authToken');
+        var request =
+        {
+            "applied_course_id": 0,
+            "course_id":this.courseId,
+            "candidate_user_id": this.state.dashBoardData.role_id==1?this.state.dashBoardData.user_id:0,
+            "ip_address": "string",
+            "status": 0
+          }
+
+        axios.post(url, request, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('applyCourse', response.data);
+                this.setState({ applyCourseData: response.data.data });
+                this.props.navigate('/TrainerDashboard');
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
 
     render() {
         const { activeSection } = this.state;
@@ -1951,17 +1982,18 @@ class CourseDetails extends React.Component {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className="add-to-card-button mt--15">
+                                          {/* {this.state.dashBoardData?.role_id==1 &&  <div className="add-to-card-button mt--15">
                                                 <a
                                                     className="rbt-btn btn-gradient icon-hover w-100 d-block text-center"
                                                     href="#"
+                                                    onClick={this.applyCourse}
                                                 >
-                                                    <span className="btn-text">Add to Cart</span>
+                                                    <span className="btn-text">Enroll Now</span>
                                                     <span className="btn-icon">
                                                         <i className="feather-arrow-right" />
                                                     </span>
                                                 </a>
-                                            </div>
+                                            </div>} */}
                                             {/*
                           <div class="buy-now-btn mt--15">
                               <a class="rbt-btn btn-border icon-hover w-100 d-block text-center" href="#">
