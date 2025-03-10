@@ -6,6 +6,9 @@ import MyProfile from './MyProfile';
 import Header from '../Header/header';
 import { connect } from 'react-redux';
 import { Alert, Button } from 'react-bootstrap';
+import ApplyJobs from './ApplyJobs';
+import EnrollCourses from './EnrollCourses';
+import MyCourses from './MyCourses';
 import MyJobs from './MyJobs';
 
 
@@ -86,7 +89,10 @@ class CandidateDashboard extends React.Component {
         this.setState({
             showUserDashboard: false,
             showProfile: false,
-            showMyJobs: false,
+            showApplyJobs: false,
+            showEnrollCourse: false,
+            showMyCourses: false,
+            showMyJobs:false
 
         });
 
@@ -97,9 +103,19 @@ class CandidateDashboard extends React.Component {
             case 'profile':
                 this.setState({ showProfile: true });
                 break;
-            case 'myJobs':
-                this.setState({ showMyJobs: true });
+            case 'applyjobs':
+                this.setState({ showApplyJobs: true });
                 break;
+            case 'enrolledCourses':
+                this.setState({ showEnrollCourse: true });
+                break;
+            case 'mycourses':
+                this.setState({ showMyCourses: true });
+                break;
+                case 'myjobs':
+                this.setState({showMyJobs:true});
+                break;
+
 
 
             // Add more cases for other components as needed
@@ -254,8 +270,18 @@ class CandidateDashboard extends React.Component {
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
-                                                                            <i className="feather-monitor"></i><span>Jobs</span>
+                                                                        <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('mycourses'); }} href="#">
+                                                                            <i className="feather-book-open"></i><span>My Course</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showApplyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('applyjobs'); }} href="#">
+                                                                            <i className="feather-monitor"></i><span>Apply Jobs</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myjobs'); }} href="#">
+                                                                            <i className="feather-monitor"></i><span>My Jobs</span>
                                                                         </a>
                                                                     </li>
                                                                     {/* <li>
@@ -285,7 +311,10 @@ class CandidateDashboard extends React.Component {
                                         </div>
                                         {this.state.showUserDashboard && <UserDashBoard message={this.state.responseMessage} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} CompanyName={this.state.CompanyName} />}
-                                        {this.state.showMyJobs && <MyJobs />}
+                                        {this.state.showApplyJobs && <ApplyJobs />}
+                                        {this.state.showEnrollCourse && <EnrollCourses userData={this.state.userData} />}
+                                        {this.state.showMyCourses && <MyCourses userData={this.state.userData} />}
+                                        {this.state.showMyJobs && <MyJobs userData={this.state.userData} />}
                                     </div>
 
                                 </div>

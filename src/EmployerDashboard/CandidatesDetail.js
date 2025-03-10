@@ -1,38 +1,67 @@
 import React from 'react';
+import Breadcumb from '../Breadcumb/breadcumb';
 import axios from 'axios';
+import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
-import parse from 'html-react-parser';
 
-class jobs extends React.Component {
+class CandidatesDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showUserDashboard: true,
-            dashBoardData: "",
-            joblistingdata: [],
+            candidateListing: [],
             currentPage: 1, // Tracks the current page
             pageSize: 4, // Number of records per page
             totalPages: 1,
             totalRecords: 0, // Total number of records
             searchQuery: "", // State to store the search input
-            errorMessage: "",
+            error: "",
         };
 
     }
     componentDidMount() {
-        this.getAllJobs(0, this.state.pageSize);
-
+        let url = window.location.search;
+        var urlParams = new URLSearchParams(url);
+        var jobId = urlParams.get('jobId');
+        this.jobId = jobId;
+        this.user = urlParams.get('user');
+        this.getDashboardUser();
     }
 
-    getAllJobs = (pageIndex, pageSize) => {
+    getDashboardUser = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Employer/Dashboard`;
+        const token = localStorage.getItem('authToken');
+
+        axios.post(url, "", {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('dashboard data', response.data);
+                this.setState({ dashBoardData: response.data.data }, () => {
+                    setTimeout(() => {
+                        this.getCandidates(0, this.state.pageSize);
+                    }, 1000);
+                });
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
+
+    getCandidates = (pageIndex, pageSize) => {
         this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Job/GetJobs`;
+        const url = `${baseUrl}/api/Employer/AppliedCandidate`;
         const token = localStorage.getItem('authToken');
         var request = {
-            "jobId": 0,
-            "jobtitle": "",
+            "jobId": this.jobId,
+            "jobtitle": "string",
             "experienceFrom": 0,
             "experienceTo": 0,
             "packageId": 0,
@@ -40,29 +69,32 @@ class jobs extends React.Component {
             "emptypeId": 0,
             "deptId": 0,
             "industryId": 0,
-            "keyskillIds": "",
-            "educationId": "",
+            "keyskillIds": "string",
+            "educationId": "string",
             "active": true,
             "user_id": 0,
-            "cityIds": "1,2",
-            pageIndex: pageIndex,
-            pagesize: pageSize,
+            "cityIds": "string",
+            "pageIndex": pageIndex,
+            "pagesize": pageSize,
+            "candidate_user_id": this.state.dashBoardData.user_id
         }
+
         axios.post(url, request, {
             headers: {
                 'Content-Type': 'application/json',
-                // Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
             .then((response) => {
-                console.log('joblistingdata', response.data);
+                console.log('candidatelisting', response.data);
                 if (response.data.data && response.data.data.length > 0) {
                     const totalCount = response.data.data[0].TotalRecords;
-                    this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, errorMessage: "", keepSpinner: false });
+                    this.setState({ candidateListing: response.data.data, totalRecords: totalCount, keepSpinner: false, error: "" });
                 }
                 else {
-                    this.setState({ errorMessage: "No Jobs Found", keepSpinner: false });
+                    this.setState({ keepSpinner: false, error: "No Candidate Found" });
                 }
+
 
             })
             .catch((error) => {
@@ -71,23 +103,16 @@ class jobs extends React.Component {
             });
 
     }
-    // Handle page click
-    handlePageChange = (pageIndex) => {
-        this.setState({ currentPage: pageIndex }, () => {
-            this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
-        });
-    };
-    handleSearchChange = (e) => {
-        this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
-    };
+
+
 
 
     render() {
-        const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
+        const { candidateListing, currentPage, pageSize, totalRecords, searchQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
         const endIndex = Math.min(currentPage * pageSize, totalRecords);
 
-        const filteredJobs = joblistingdata?.filter((job) => {
+        const filteredJobs = candidateListing?.filter((job) => {
             const jobId = job.jobid?.toString().toLowerCase() || ""; // Ensure it's a string
             const jobTitle = job.jobtitle?.toLowerCase() || "";
             const jobLocation = job.locations?.toLowerCase() || "";
@@ -164,99 +189,7 @@ class jobs extends React.Component {
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="container">
                         <div className="row row--30 gy-5">
-                            {!this.state.errorMessage && <div className="col-lg-3 order-2 order-lg-1">
-                                <aside className="rbt-sidebar-widget-wrapper">
 
-
-                                    <div className="rbt-single-widget rbt-widget-categories has-show-more">
-                                        <div className="inner">
-                                            <h4 className="rbt-widget-title">Categories</h4>
-                                            <ul className="rbt-sidebar-list-wrapper categories-list-check has-show-more-inner-content">
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-1" type="checkbox" name="cat-list-1" />
-                                                    <label htmlFor="cat-list-1">
-                                                        Art &amp; Humanities{" "}
-                                                        <span className="rbt-lable count">15</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-2" type="checkbox" name="cat-list-2" />
-                                                    <label htmlFor="cat-list-2">
-                                                        Web Design <span className="rbt-lable count">20</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-3" type="checkbox" name="cat-list-3" />
-                                                    <label htmlFor="cat-list-3">
-                                                        Graphic Design <span className="rbt-lable count">10</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-4" type="checkbox" name="cat-list-4" />
-                                                    <label htmlFor="cat-list-4">
-                                                        Art &amp; Humanities{" "}
-                                                        <span className="rbt-lable count">15</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-5" type="checkbox" name="cat-list-5" />
-                                                    <label htmlFor="cat-list-5">
-                                                        Technology <span className="rbt-lable count">20</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-6" type="checkbox" name="cat-list-6" />
-                                                    <label htmlFor="cat-list-6">
-                                                        Humanities Art <span className="rbt-lable count">25</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-7" type="checkbox" name="cat-list-7" />
-                                                    <label htmlFor="cat-list-7">
-                                                        Management <span className="rbt-lable count">50</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-8" type="checkbox" name="cat-list-8" />
-                                                    <label htmlFor="cat-list-8">
-                                                        Photoshop <span className="rbt-lable count">45</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input id="cat-list-9" type="checkbox" name="cat-list-9" />
-                                                    <label htmlFor="cat-list-9">
-                                                        Online Course <span className="rbt-lable count">45</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="cat-list-10"
-                                                        type="checkbox"
-                                                        name="cat-list-10"
-                                                    />
-                                                    <label htmlFor="cat-list-10">
-                                                        English Clud <span className="rbt-lable count">45</span>
-                                                    </label>
-                                                </li>
-                                                <li className="rbt-check-group">
-                                                    <input
-                                                        id="cat-list-11"
-                                                        type="checkbox"
-                                                        name="cat-list-11"
-                                                    />
-                                                    <label htmlFor="cat-list-11">
-                                                        Graphic Design <span className="rbt-lable count">45</span>
-                                                    </label>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="rbt-show-more-btn">Show More</div>
-                                    </div>
-
-
-                                </aside>
-                            </div>
-                            }
                             {!this.state.errorMessage ? <div className="col-lg-9 order-1 order-lg-2">
                                 <div className="rbt-course-grid-column jobs-lst active-list-view">
                                     {/* Start Single Card  */}
@@ -268,45 +201,46 @@ class jobs extends React.Component {
                                                 <div className="rbt-card-img">
                                                     <a href="#">
                                                         <img
-                                                        src={job.companylogo?`${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}`:"assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                                                        alt="Card image"
+                                                            src={job.profile_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${job.profile_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
+                                                            alt="Card image"
                                                         />
                                                     </a>
                                                 </div>
                                                 <div className="rbt-card-body">
                                                     <div className="rbt-card-top">
                                                         <div className="rbt-category">
-                                                            <a href="#">{job.empType || "Employment Type"}</a>
-                                                            <a href="#">{job.department || "Department"}</a>
+                                                            <div>
+                                                                <h3>Candidate Information</h3>
+                                                                <a href="#">{job.experience || "Experience"}</a>
+                                                                <a href="#">{job.CTC || "Current CTC"}</a>
+                                                                <a href="#">{job.ExpectedCTC || "Expoected CTC"}</a>
+                                                                <a href="#">{job.Email || "Email"}</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <h4 className="rbt-card-title">
-                                                        <a href={localStorage.getItem('authToken') ? `/Job-details?jobId=${job.jobid}` : `/job-decription?jobId=${job.jobid}`}>
-                                                            {job.jobtitle || "Job Title Unavailable"}
+                                                        <a href="#">
+                                                            {job.fullname || "Job Title Unavailable"}
                                                         </a>
                                                     </h4>
                                                     <ul className="rbt-meta">
                                                         <li>
-                                                            <i className="fas fa-building" /> {job.CompanyName || "Company Name"}
+                                                            <i className="fas fa-mobile-screen" /> {job.mobile_no || "Company Name"}
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
+                                                            <i className="fas fa-map-marker-alt" /> {job.prefer_location || "Location Unavailable"}
                                                         </li>
                                                     </ul>
-                                                    <p className="rbt-card-text">
-                                                        {parse(job.description)}
-                                                    </p>
+
                                                     <div className="rbt-card-bottom">
                                                         <div className="rbt-price">
-                                                            <span className="current-price">
-                                                                <i className="fas fa-rupee-sign" />{" "}
-                                                                {job.package_notdisclosed
-                                                                    ? "Package not disclosed"
-                                                                    : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}
+                                                            <span className="current-price">Notice Period -
+
+                                                                {job.notice_periods}
                                                             </span>
                                                         </div>
-                                                        <a className="rbt-btn-link" href={localStorage.getItem('authToken') ? `/Job-details?jobId=${job.jobid}` : `/job-decription?jobId=${job.jobid}`}>
-                                                            Learn More
+                                                        <a className="rbt-btn-link" target='_blank' href={`${process.env.REACT_APP_BASEURL}/Uploads/${job.resumefile}`}>
+                                                            View Profile
                                                             <i className="feather-arrow-right" />
                                                         </a>
                                                     </div>
@@ -377,8 +311,9 @@ class jobs extends React.Component {
                 {/* End Card Style */}
 
             </>
+
         );
     }
 }
 
-export default withNavigation(jobs);
+export default withNavigation(CandidatesDetail);

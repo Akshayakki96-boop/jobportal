@@ -69,7 +69,6 @@ class SignUp extends React.Component {
 
 
     getPhoneCode = () => {
-        debugger;
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Master/GetCountryPhoneCode`;
         const token = localStorage.getItem('authToken');
