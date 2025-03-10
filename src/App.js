@@ -34,6 +34,7 @@ import TermsCondition from './TermsCondition/TermsCondition';
 import ClaimRefund from './ClaimRefund/ClaimRefund';
 import CommunityDetails from './Community/CommunityDetails';
 import ForgotPassword from './ForgotPassword/ForgotPassword';
+import CandidatesDetail from './EmployerDashboard/CandidatesDetail';
 const NotFound = () => {
   return (
     <div>
@@ -124,6 +125,7 @@ class App extends React.Component {
           <Route path="/claimrefund" element={<ClaimRefund/>} />
           <Route path="/community-details" element={<CommunityDetails/>} />
           <Route path="/forgotpassword" element={<ForgotPassword/>} />
+          <Route path="/CandidatesDetails" element={<CandidatesDetail/>} />
           <Route path="*" element={<NotFound />} />
           {/* Other routes can be added here */}
           </Routes>

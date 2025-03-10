@@ -780,3 +780,14 @@ iframe#webpack-dev-server-client-overlay {
   height: 80px !important;
   width: 80px !important;
 }
+
+.rbt-price {
+display: flex;
+align-items: center;
+font-size: 11px;
+}
+
+.rbt-price .current-price {
+  font-size: 14px;
+  font-weight: 700;
+}
