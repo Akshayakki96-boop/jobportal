@@ -35,6 +35,7 @@ import ClaimRefund from './ClaimRefund/ClaimRefund';
 import CommunityDetails from './Community/CommunityDetails';
 import ForgotPassword from './ForgotPassword/ForgotPassword';
 import CandidatesDetail from './EmployerDashboard/CandidatesDetail';
+import CandidateDetails from './Dashboard/CandidateDetails';
 const NotFound = () => {
   return (
     <div>
@@ -126,6 +127,7 @@ class App extends React.Component {
           <Route path="/community-details" element={<CommunityDetails/>} />
           <Route path="/forgotpassword" element={<ForgotPassword/>} />
           <Route path="/CandidatesDetails" element={<CandidatesDetail/>} />
+          <Route path="/CandidatesCourseDetails" element={<CandidateDetails/>} />
           <Route path="*" element={<NotFound />} />
           {/* Other routes can be added here */}
           </Routes>

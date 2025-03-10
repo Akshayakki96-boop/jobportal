@@ -6,7 +6,7 @@ import withNavigation from '../withNavigation';
 import Header from '../Header/header';
 import AdvancedBreadcumb from '../Breadcumb/advancebreadcrumb';
 
-class CandidatesDetail extends React.Component {
+class CandidatesDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -24,8 +24,8 @@ class CandidatesDetail extends React.Component {
     componentDidMount() {
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
-        var jobId = urlParams.get('jobId');
-        this.jobId = jobId;
+        var courseId = urlParams.get('courseId');
+        this.courseId = courseId;
         this.user = urlParams.get('user');
         this.getDashboardUser();
     }
@@ -59,27 +59,29 @@ class CandidatesDetail extends React.Component {
     getCandidates = (pageIndex, pageSize) => {
         this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Employer/AppliedCandidate`;
+        const url = `${baseUrl}/api/Trainer/AppliedCandidate`;
         const token = localStorage.getItem('authToken');
         var request = {
-            "jobId": this.jobId,
-            "jobtitle": "string",
-            "experienceFrom": 0,
-            "experienceTo": 0,
-            "packageId": 0,
-            "roleId": 0,
-            "emptypeId": 0,
-            "deptId": 0,
-            "industryId": 0,
-            "keyskillIds": "string",
-            "educationId": "string",
-            "active": true,
+            "courseId": this.courseId,
+            "coursetitle": "string",
+            "description": "string",
+            "course_code": "string",
+            "duration": 0,
+            "course_level": 0,
+            "course_image": "string",
+            "course_fees": 0,
+            "notes": "string",
+            "is_refundable": true,
+            "course_materials": "string",
+            "no_of_lessons": 0,
+            "isactive": true,
+            "ipAddress": "string",
+            "currency": "string",
             "user_id": 0,
-            "cityIds": "string",
             "pageIndex": pageIndex,
             "pagesize": pageSize,
-            "candidate_user_id": this.state.dashBoardData.user_id
-        }
+            "candidate_user_id": this.state.dashBoardData?.user_id,
+          }
 
         axios.post(url, request, {
             headers: {
@@ -128,7 +130,7 @@ class CandidatesDetail extends React.Component {
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
-                <AdvancedBreadcumb componentName="CandidateDetails" ComponentValue="CandidateDetails" redirectURL="/EmployerDashboard" />
+                <AdvancedBreadcumb componentName="CandidateDetails" ComponentValue="CandidateDetails" redirectURL="/TrainerDashboard" />
                 <div className="rbt-page-banner-wrapper">
                     {/* Start Banner BG Image  */}
                     <div className="rbt-banner-image" />
@@ -320,4 +322,4 @@ class CandidatesDetail extends React.Component {
     }
 }
 
-export default withNavigation(CandidatesDetail);
+export default withNavigation(CandidatesDetails);
