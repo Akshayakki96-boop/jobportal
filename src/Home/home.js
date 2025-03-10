@@ -750,7 +750,11 @@ class Home extends React.Component {
                                                 <div className="rbt-team-thumbnail">
                                                     <div className="thumb">
                                                         <img src="assets/images/team/team-08.jpg" alt="Testimonial Images" />
+                                                        <div className="home-badges">
+                                                <img src="assets/images/zob-bad.png" alt="badges" />
+                                            </div>
                                                     </div>
+                                                  
                                                 </div>
                                                 <div className="rbt-team-details">
                                                     <div className="author-info">
@@ -785,8 +789,15 @@ class Home extends React.Component {
                                         <li>
                                             <a className='active' id="team-tab4-tab" data-bs-toggle="tab" data-bs-target="#team-tab4" role="tab" aria-controls="team-tab4" aria-selected="false">
                                                 <div className="rbt-team-thumbnail">
+                                                    <div className="inner">
+                                                    <div className="thmbnail">
                                                     <div className="thumb">
                                                         <img src="assets/images/team/team-08.jpg" alt="Testimonial Images" />
+                                                        <div className="home-badges-1">
+                                                <img src="assets/images/zob-bad.png" alt="badges" />
+                                            </div>
+                                                    </div>
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </a>
@@ -796,6 +807,9 @@ class Home extends React.Component {
                                                 <div className="rbt-team-thumbnail">
                                                     <div className="thumb">
                                                         <img src="assets/images/team/team-05.jpg" alt="Testimonial Images" />
+                                                        <div className="home-badges-1">
+                                                <img src="assets/images/zob-bad.png" alt="badges" />
+                                            </div>
                                                     </div>
                                                 </div>
                                             </a>
@@ -805,6 +819,9 @@ class Home extends React.Component {
                                                 <div className="rbt-team-thumbnail">
                                                     <div className="thumb">
                                                         <img src="assets/images/team/team-06.jpg" alt="Testimonial Images" />
+                                                        <div className="home-badges-1">
+                                                <img src="assets/images/zob-bad.png" alt="badges" />
+                                            </div>
                                                     </div>
                                                 </div>
                                             </a>

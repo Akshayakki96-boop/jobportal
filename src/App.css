@@ -759,3 +759,24 @@ input[type="checkbox"] {
 iframe#webpack-dev-server-client-overlay {
   display: none !important
 }
+.home-badges{
+  position: absolute;
+  bottom: 50px;
+  left: 170px;
+  text-align: right;
+  pointer-events: none;
+  height: 80px;
+  width: 80px;
+}
+.home-badges-1{
+  position: absolute;
+  bottom: 10px;
+  left: 50px;
+  text-align: right;
+  pointer-events: none;
+  
+}
+.home-badges-1 img{
+  height: 80px !important;
+  width: 80px !important;
+}
