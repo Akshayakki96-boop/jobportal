@@ -9,6 +9,7 @@ import { store } from '../index';
 import Header from '../Header/header';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import styles
+import AdvancedBreadcumb from '../Breadcumb/advancebreadcrumb';
 
 class CreateJob extends React.Component {
     constructor(props) {
@@ -282,6 +283,7 @@ class CreateJob extends React.Component {
 
         return (
             <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
+            <AdvancedBreadcumb componentName="Create new" ComponentValue="Create New" redirectURL="/EmployerDashboard" />
                 <div className="container">
 
                     <div className="row pt--60 g-5">
@@ -488,7 +490,6 @@ class CreateJob extends React.Component {
                                                 formats={this.formats}
                                             />
                                         </div>
-                                        <label>Job Description*</label>
                                     </div>
 
                                     <div className="col-lg-8">

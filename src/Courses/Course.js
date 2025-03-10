@@ -383,13 +383,13 @@ class Course extends React.Component {
                                                                 )}
                                                             </li>
                                                         </ul>
-                                                         <p className="rbt-card-text">
+                                                         {/* <p className="rbt-card-text">
                                                                                   {parse(
                                                                                     course.description.split(" ").length > 20
                                                                                       ? course.description.split(" ").slice(0, 20).join(" ") + "..."
                                                                                       : course.description
                                                                                   )}
-                                                                                </p>
+                                                                                </p> */}
                                                         <div className="rbt-author-meta mb--20">
                                                             <div className="rbt-avater">
                                                                 <a href="#">
