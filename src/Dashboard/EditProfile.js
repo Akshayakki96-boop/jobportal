@@ -577,7 +577,7 @@ class EditProfileTrainer extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage: error.response?.data,
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
@@ -678,7 +678,7 @@ class EditProfileTrainer extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage: error.response?.data,
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
@@ -755,7 +755,7 @@ class EditProfileTrainer extends React.Component {
             .catch((error) => {
                 console.error('Error saving employment data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: 'Error saving employment data!',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
@@ -841,7 +841,7 @@ class EditProfileTrainer extends React.Component {
             .catch((error) => {
                 console.error('Error saving education data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: 'Error saving education data!',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
@@ -895,7 +895,7 @@ class EditProfileTrainer extends React.Component {
             .catch((error) => {
                 console.error('Error updating career information:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: 'Error updating career information!',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
