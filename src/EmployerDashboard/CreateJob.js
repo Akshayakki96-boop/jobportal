@@ -222,8 +222,12 @@ class CreateJob extends React.Component {
 
             })
             .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
+                //console.error('Signup Error:', error.response?.data || error.message);
+                this.setState({ keepSpinner: false });
+                this.setState({
+                    responseMessage: error.response?.data.message,
+                    alertVariant: 'danger', // Error alert variant
+                });
             });
     }
     handlePackage = (selectedOption) => {
