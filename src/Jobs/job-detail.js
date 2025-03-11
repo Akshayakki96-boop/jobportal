@@ -330,7 +330,7 @@ console.log("user",this.user)
                           <span className="btn-icon">
                             <i className="feather-arrow-right" />
                           </span>
-                        </a>:<span className="success">Applied</span>}
+                        </a>:<span className="text-success">Applied</span>}
                       </div>
                       }
                       {/* <div className="rbt-short-item">

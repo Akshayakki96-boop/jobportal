@@ -187,7 +187,7 @@ class EditProfile extends React.Component {
                 console.error('Signup Error:', error.response?.data || error.message);
                 this.setState({ keepSpinner: false });
                 this.setState({
-                    responseMessage: 'Updation failed. Please try again.',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
             });
