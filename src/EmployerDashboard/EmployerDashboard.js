@@ -70,7 +70,7 @@ class EmployerDashboard extends React.Component {
                     localStorage.removeItem('authToken');
                     this.props.navigate('/Login');
                 }
-                this.setState({ dashBoardData: response.data.data });
+                this.setState({ dashBoardData: response.data.data, dashBoardCounterData: response.data});
 
             })
             .catch((error) => {
@@ -282,7 +282,7 @@ class EmployerDashboard extends React.Component {
                                             </div>
                                             {/* End Dashboard Sidebar   */}
                                         </div>
-                                        {this.state.showUserDashboard && <UserDashBoard message={this.state.responseMessage} />}
+                                        {this.state.showUserDashboard && <UserDashBoard dashBoardData={this.state?.dashBoardCounterData} message={this.state.responseMessage} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
                                         {this.state.showMyJobs && <MyJobs />}
 
