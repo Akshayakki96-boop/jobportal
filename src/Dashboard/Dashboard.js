@@ -36,7 +36,7 @@ class Dashboard extends React.Component {
         })
             .then((response) => {
                 console.log('dashboard data', response.data);
-                this.setState({dashBoardData:response.data.data});
+                this.setState({dashBoardData:response.data.data,dashboardCounterData:response.data});
                 this.getUserProfile(response.data.data.user_id);
                 
 
@@ -268,7 +268,7 @@ class Dashboard extends React.Component {
                                             </div>
                                             {/* End Dashboard Sidebar   */}
                                         </div>
-                                        {this.state.showUserDashboard && <UserDashBoard />}
+                                        {this.state.showUserDashboard && <UserDashBoard dashBoardData={this.state?.dashboardCounterData} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
                                         {this.state.showEnrollCourse && <EnrolledCourses />}
                                         {this.state.showMyCourses && <MyCourses />}

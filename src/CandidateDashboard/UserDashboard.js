@@ -8,12 +8,20 @@ class UserDashBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     
+      dashBoardData:""
     };
 
   }
   componentDidMount() {
+    this.setState({ dashBoardData: this.props.dashBoardData });
+  }
 
+  componentDidUpdate(previousProps) {
+    if (this.props.dashBoardData !== previousProps.dashBoardData) {
+     this.setState({ dashBoardData: this.props.dashBoardData });
+     console.log("dashBoardcounterData",this.state.dashBoardData)
+    }
+   
   }
 
 
@@ -47,9 +55,9 @@ class UserDashBoard extends React.Component {
                     </div>
                     <div className="content">
                       <h3 className="counter without-icon color-primary">
-                        <span className="odometer" data-count="30">00</span>
+                        <span className="odometer" data-count="30">{this.state.dashBoardData?.applied_job_count}</span>
                       </h3>
-                      <span className="rbt-title-style-2 d-block">Enrolled Jobs</span>
+                      <span className="rbt-title-style-2 d-block">Applied Jobs</span>
                     </div>
                   </div>
                 </div>
@@ -63,73 +71,9 @@ class UserDashBoard extends React.Component {
                     </div>
                     <div className="content">
                       <h3 className="counter without-icon color-secondary">
-                        <span className="odometer" data-count="10">00</span>
+                        <span className="odometer" data-count="10">{this.state.dashBoardData?.applied_course_count}</span>
                       </h3>
-                      <span className="rbt-title-style-2 d-block">Active Jobs</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Single Card - Completed Courses */}
-              <div className="col-lg-4 col-md-4 col-sm-6 col-12">
-                <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-violet-opacity">
-                  <div className="inner">
-                    <div className="rbt-round-icon bg-violet-opacity">
-                      <i className="feather-award"></i>
-                    </div>
-                    <div className="content">
-                      <h3 className="counter without-icon color-violet">
-                        <span className="odometer" data-count="7">00</span>
-                      </h3>
-                      <span className="rbt-title-style-2 d-block">Completed Jobs</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Single Card - Total Students */}
-              <div className="col-lg-4 col-md-4 col-sm-6 col-12">
-                <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-pink-opacity">
-                  <div className="inner">
-                    <div className="rbt-round-icon bg-pink-opacity">
-                      <i className="feather-users"></i>
-                    </div>
-                    <div className="content">
-                      <h3 className="counter without-icon color-pink">
-                        <span className="odometer" data-count="160">00</span>
-                      </h3>
-                      <span className="rbt-title-style-2 d-block">Total Students</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Single Card - Total Courses */}
-              <div className="col-lg-4 col-md-4 col-sm-6 col-12">
-                <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-coral-opacity">
-                  <div className="inner">
-                    <div className="rbt-round-icon bg-coral-opacity">
-                      <i className="feather-gift"></i>
-                    </div>
-                    <div className="content">
-                      <h3 className="counter without-icon color-coral">
-                        <span className="odometer" data-count="20">00</span>
-                      </h3>
-                      <span className="rbt-title-style-2 d-block">Total Jobs</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* Single Card - Total Earnings */}
-              <div className="col-lg-4 col-md-4 col-sm-6 col-12">
-                <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-warning-opacity">
-                  <div className="inner">
-                    <div className="rbt-round-icon bg-warning-opacity">
-                      <i className="feather-dollar-sign"></i>
-                    </div>
-                    <div className="content">
-                      <h3 className="counter color-warning">
-                        <span className="odometer" data-count="25000">00</span>
-                      </h3>
-                      <span className="rbt-title-style-2 d-block">Total Earnings</span>
+                      <span className="rbt-title-style-2 d-block">Enrolled Courses</span>
                     </div>
                   </div>
                 </div>

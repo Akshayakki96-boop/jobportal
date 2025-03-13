@@ -13,7 +13,16 @@ class UserDashBoard extends React.Component {
 
   }
   componentDidMount() {
+    this.setState({ dashBoardData: this.props.dashBoardData });
     this.getAllJobs(0, 4);
+  }
+
+  componentDidUpdate(previousProps) {
+    if (this.props.dashBoardData !== previousProps.dashBoardData) {
+     this.setState({ dashBoardData: this.props.dashBoardData });
+     console.log("dashBoardcounterData",this.state.dashBoardData)
+    }
+   
   }
 
 
@@ -136,9 +145,9 @@ class UserDashBoard extends React.Component {
                     </div>
                     <div className="content">
                       <h3 className="counter without-icon color-pink">
-                        <span className="odometer" data-count="160">00</span>
+                        <span className="odometer" data-count="160">{this.state.dashBoardData?.applied_candidate_count}</span>
                       </h3>
-                      <span className="rbt-title-style-2 d-block">Total Students</span>
+                      <span className="rbt-title-style-2 d-block">Candidates Applied</span>
                     </div>
                   </div>
                 </div>
@@ -152,29 +161,14 @@ class UserDashBoard extends React.Component {
                     </div>
                     <div className="content">
                       <h3 className="counter without-icon color-coral">
-                        <span className="odometer" data-count="20">{this.state.totalRecords}</span>
+                        <span className="odometer" data-count="20">{this.state.dashBoardData?.job_count}</span>
                       </h3>
                       <span className="rbt-title-style-2 d-block">Total Jobs</span>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* Single Card - Total Earnings */}
-              <div className="col-lg-4 col-md-4 col-sm-6 col-12">
-                <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-warning-opacity">
-                  <div className="inner">
-                    <div className="rbt-round-icon bg-warning-opacity">
-                      <i className="feather-dollar-sign"></i>
-                    </div>
-                    <div className="content">
-                      <h3 className="counter color-warning">
-                        <span className="odometer" data-count="25000">00</span>
-                      </h3>
-                      <span className="rbt-title-style-2 d-block">Total Earnings</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+         
             </div>
           </div>
         </div>
