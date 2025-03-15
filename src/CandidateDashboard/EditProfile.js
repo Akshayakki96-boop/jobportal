@@ -609,7 +609,7 @@ class EditProfileCandidate extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage: error.response?.data,
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
@@ -737,7 +737,7 @@ class EditProfileCandidate extends React.Component {
             .catch((error) => {
                 console.error('Error saving employment data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: 'Error saving employment data!',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
@@ -830,7 +830,7 @@ class EditProfileCandidate extends React.Component {
             .catch((error) => {
                 console.error('Error saving project data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: 'Error saving project data!',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
@@ -922,7 +922,7 @@ class EditProfileCandidate extends React.Component {
             .catch((error) => {
                 console.error('Error saving education data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: 'Error saving education data!',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
@@ -979,7 +979,7 @@ class EditProfileCandidate extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage: error.response?.data,
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
@@ -1017,7 +1017,7 @@ class EditProfileCandidate extends React.Component {
             .catch((error) => {
                 console.error('Error updating career information:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: 'Error updating career information!',
+                    responseMessage: error.response?.data.message,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
@@ -1044,15 +1044,7 @@ class EditProfileCandidate extends React.Component {
                             )}
                         </div>
                         <div className="row pt--60 g-5">
-                            <div className="col-lg-4">
-                                <div className="thumbnail">
-                                    <img
-                                        className="radius-10 w-100"
-                                        src="assets/images/tab/tabs-10.jpg"
-                                        alt="Corporate Template" />
-                                </div>
-                            </div>
-                            <div className="col-lg-8">
+                            <div className="col-lg-12">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
                                     <h3 className="title">Update Profile</h3>
                                     <hr className="mb--30" />
