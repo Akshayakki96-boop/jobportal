@@ -24,7 +24,7 @@ class EnrollCourses extends React.Component {
     }
 
     getAllCourse = (pageIndex, pageSize) => {
-        this.setState({ keepSpinner: true });
+        this.setState({ keepSpinner: true, courseListingData: [] });
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/GetCourse`;
         const token = localStorage.getItem('authToken');
@@ -35,7 +35,9 @@ class EnrollCourses extends React.Component {
             "isactive": true,
             "user_id": 0,
             "pageIndex": pageIndex,
-            "pagesize": pageSize
+            "pagesize": pageSize,
+            "candidate_user_id": this.state.updatedUserData.user_id
+
         }
 
 
@@ -66,7 +68,7 @@ class EnrollCourses extends React.Component {
 
     handlePageChange = (pageIndex) => {
         this.setState({ currentPage: pageIndex }, () => {
-            this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
+            this.getAllCourse(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
         });
     };
     handleSearchChange = (e) => {
@@ -94,10 +96,11 @@ class EnrollCourses extends React.Component {
         })
             .then((response) => {
                 console.log('applyCourse', response.data);
-                this.setState({ applyCourseData: response.data.data });
+                this.setState({ applyCourseData: response.data.data,isEnroll:true });
 
                     this.setState({ responseMessage: "Course Enrolled successfully", alertVariant: 'success' });
                     window.scrollTo(0, 0);
+                    this.getAllCourse(0, this.state.pageSize);
             })
             .catch((error) => {
                 localStorage.removeItem('authToken');
@@ -109,6 +112,7 @@ class EnrollCourses extends React.Component {
         const { courseListingData, currentPage, pageSize, totalRecords, searchQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
         const endIndex = Math.min(currentPage * pageSize, totalRecords);
+
         const filteredCourse = courseListingData?.filter((job) => {
             const course_code = job.course_code?.toString().toLowerCase() || ""; // Ensure it's a string
             const coursetitle = job.coursetitle?.toLowerCase() || "";
@@ -141,14 +145,6 @@ class EnrollCourses extends React.Component {
                         {/* Start Banner Content Top  */}
                         <div className="rbt-banner-content-top">
                             <div className="container">
-                                <div className="container mt-5">
-                                    {/* Render Bootstrap alert if there's a responseMessage */}
-                                    {this.state.responseMessage && (
-                                        <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                                            {this.state.responseMessage}
-                                        </Alert>
-                                    )}
-                                </div>
                                 <div style={{ textAlign: 'left' }} className="row">
                                     <div className="col-lg-12">
 
@@ -171,7 +167,7 @@ class EnrollCourses extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
                                             <div className="rbt-short-item">
                                                 <span className="course-index">
-                                                    Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {filteredCourse.length} results
+                                                    Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {totalRecords} results
                                                 </span>
                                             </div>
                                         </div>
@@ -234,7 +230,7 @@ class EnrollCourses extends React.Component {
                                                     </li>
                                                     <li>
 
-                                                        <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.applyCourse(course)}>Enroll Now</a>
+                                                       {!course.is_applied ? <a href="#" style={{ textDecoration: 'underline',color:'blue' }} onClick={() => this.applyCourse(course)}>Enroll Now</a>:'Enrolled'}
                                                     </li>
                                                 </ul>
 
