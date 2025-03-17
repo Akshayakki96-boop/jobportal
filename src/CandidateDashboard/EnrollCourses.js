@@ -24,7 +24,7 @@ class EnrollCourses extends React.Component {
     }
 
     getAllCourse = (pageIndex, pageSize) => {
-        this.setState({ keepSpinner: true });
+        this.setState({ keepSpinner: true, courseListingData: [] });
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/GetCourse`;
         const token = localStorage.getItem('authToken');
@@ -112,6 +112,7 @@ class EnrollCourses extends React.Component {
         const { courseListingData, currentPage, pageSize, totalRecords, searchQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
         const endIndex = Math.min(currentPage * pageSize, totalRecords);
+
         const filteredCourse = courseListingData?.filter((job) => {
             const course_code = job.course_code?.toString().toLowerCase() || ""; // Ensure it's a string
             const coursetitle = job.coursetitle?.toLowerCase() || "";
@@ -166,7 +167,7 @@ class EnrollCourses extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
                                             <div className="rbt-short-item">
                                                 <span className="course-index">
-                                                    Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {filteredCourse.length} results
+                                                    Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {totalRecords} results
                                                 </span>
                                             </div>
                                         </div>
