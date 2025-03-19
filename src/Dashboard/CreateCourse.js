@@ -474,7 +474,7 @@ class CreateCourse extends React.Component {
                                                     value={this.state.nooflessons}
                                                     onChange={this.handleNoOfLessons}
                                                 />
-                                                <label htmlFor="nooflessons">Total chapter</label>
+                                                <label htmlFor="nooflessons">No. of lessons / classes </label>
                                                 {this.state.showValidMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group">
@@ -539,7 +539,7 @@ class CreateCourse extends React.Component {
                                                     style={{ width: "16px", height: "16px", cursor: "pointer" }}
                                                 />
                                                 <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
-                                                    is Course Refundable
+                                                Course qualifies for 50% refund
                                                 </label>
                                             </div>
 
