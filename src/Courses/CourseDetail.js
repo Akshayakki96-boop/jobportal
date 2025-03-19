@@ -1762,7 +1762,7 @@ class CourseDetails extends React.Component {
                                                 <span className="subtitle bg-pink-opacity">Top Course</span>
                                                 <h4 className="title">
                                                     More Course By{" "}
-                                                    <strong className="color-primary">Angela</strong>
+                                                    <strong className="color-primary">{this.state.courseListingData?.FullName?this.state.courseListingData?.FullName:""}</strong>
                                                 </h4>
                                             </div>
                                         </div>
