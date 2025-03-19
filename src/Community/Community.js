@@ -409,7 +409,7 @@ class Community extends React.Component {
                                             </h6>
                                             <span className="team-form">
                                                 <span className="location">
-                                                    John has 5 years of experience in software development...
+                                                Gautam has 5 years of experience in software development...
                                                 </span>
                                             </span>
                                         </div>
@@ -435,7 +435,7 @@ class Community extends React.Component {
                                             <h6 className="subtitle theme-gradient">Project Manager</h6>
                                             <span className="team-form">
                                                 <span className="location">
-                                                    Jane is an expert in managing complex projects...
+                                                Ayush is an expert in managing complex projects...
                                                 </span>
                                             </span>
                                         </div>
@@ -461,7 +461,7 @@ class Community extends React.Component {
                                             <h6 className="subtitle theme-gradient">UX Designer</h6>
                                             <span className="team-form">
                                                 <span className="location">
-                                                    Alice specializes in creating user friendly designs...{" "}
+                                                R.K. Dhiman specializes in creating user friendly designs...{" "}
                                                 </span>
                                             </span>
                                         </div>

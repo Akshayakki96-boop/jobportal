@@ -933,16 +933,8 @@ class EditProfileTrainer extends React.Component {
                             )}
                         </div>
                         <div className="row pt--60 g-5">
-                            <div className="col-lg-4">
-                                <div className="thumbnail">
-                                    <img
-                                        className="radius-10 w-100"
-                                        src="assets/images/tab/trainerprofile.jpeg"
-                                        alt="Corporate Template"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-lg-8">
+                           
+                            <div className="col-lg-12">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
                                     <h3 className="title">Update Profile</h3>
                                     <hr className="mb--30" />
@@ -1569,7 +1561,7 @@ class EditProfileTrainer extends React.Component {
                                                 }}
                                             />
                                         </div>
-                                        <div className="col-lg-12">
+                                        <div className="col-lg-10">
                                             <div className="form-submit-group">
                                                 <button
                                                     type="button"
