@@ -1461,7 +1461,7 @@ class CourseDetails extends React.Component {
                                         </div>
                                     </div>
                                     {/* End Edu Review List  */}
-                                    <div className="about-author-list rbt-shadow-box featured-wrapper mt--30 has-show-more">
+                                    {/* <div className="about-author-list rbt-shadow-box featured-wrapper mt--30 has-show-more">
                                         <div className="section-title">
                                             <h4 className="rbt-title-style-3">Featured review</h4>
                                         </div>
@@ -1753,7 +1753,7 @@ class CourseDetails extends React.Component {
                                             </div>
                                         </div>
                                         <div className="rbt-show-more-btn">Show More</div>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="related-course mt--60">
                                     <div className="row g-5 align-items-end mb--40">
