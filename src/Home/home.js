@@ -326,7 +326,7 @@ class Home extends React.Component {
                             <div className="col-lg-12">
                                 <div className="section-title text-center">
                                     <span className="subtitle bg-primary-opacity">CATEGORIES</span>
-                                    <h2 className="title">Explore Top Courses Categories <br /> That Change Yourself</h2>
+                                    <h2 className="title">Train, Certify, Get Hired</h2>
                                 </div>
                             </div>
                         </div>
@@ -751,21 +751,21 @@ class Home extends React.Component {
                                                     <div className="thumb">
                                                         <img src="assets/images/team/team-08.jpg" alt="Testimonial Images" />
                                                         <div className="home-badges">
-                                                <img src="assets/images/zob-bad.png" alt="badges" />
-                                            </div>
+                                                            <img src="assets/images/zob-bad.png" alt="badges" />
+                                                        </div>
                                                     </div>
-                                                  
+
                                                 </div>
                                                 <div className="rbt-team-details">
                                                     <div className="author-info">
-                                                        <h4 className="title">Gaurav</h4>
-                                                        <span className="designation theme-gradient">English Teacher</span>
+                                                        <h4 className="title">R.K. Dhiman</h4>
+                                                        <span className="designation theme-gradient">UX Designer</span>
                                                         <span className="team-form">
                                                             <i className="feather-map-pin"></i>
                                                             <span className="location">CO Miego, AD, USA</span>
                                                         </span>
                                                     </div>
-                                                    <p>Zobskill The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.</p>
+                                                    <p> R.K. Dhiman specializes in creating user friendly designs...{" "}</p>
                                                     <ul className="social-icon social-default mt--20 justify-content-start">
                                                         <li><a href="https://www.facebook.com/"><i className="feather-facebook"></i></a></li>
                                                         <li><a href="https://www.twitter.com"><i className="feather-twitter"></i></a></li>
@@ -778,6 +778,125 @@ class Home extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div
+                                            className="tab-pane fade"
+                                            id="team-tab2"
+                                            role="tabpanel"
+                                            aria-labelledby="team-tab2-tab"
+                                        >
+                                            <div className="inner">
+                                                <div className="rbt-team-thumbnail">
+                                                    <div className="thumb">
+                                                        <img src="assets/images/team/team-05.jpg" alt="Testimonial Images" />
+                                                    </div>
+                                                </div>
+                                                <div className="rbt-team-details">
+                                                    <div className="author-info">
+                                                        <h4 className="title">Ayush</h4>
+                                                        <span className="designation theme-gradient">Project Manager</span>
+                                                        <span className="team-form">
+                                                            <i className="feather-map-pin" />
+                                                            <span className="location">CO Miego, AD,USA</span>
+                                                        </span>
+                                                    </div>
+                                                    <p>
+                                                        Ayush is an expert in managing complex projects...
+                                                    </p>
+                                                    <ul className="social-icon social-default mt--20 justify-content-start">
+                                                        <li>
+                                                            <a href="https://www.facebook.com/">
+                                                                <i className="feather-facebook" />
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://www.twitter.com">
+                                                                <i className="feather-twitter" />
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://www.instagram.com/">
+                                                                <i className="feather-instagram" />
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul className="rbt-information-list mt--25">
+                                                        <li>
+                                                            <a href="#">
+                                                                <i className="feather-phone" />
+                                                                +1-202-555-0174
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="mailto:hello@example.com">
+                                                                <i className="feather-mail" />
+                                                                example@gmail.com
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            className="tab-pane fade"
+                                            id="team-tab3"
+                                            role="tabpanel"
+                                            aria-labelledby="team-tab3-tab"
+                                        >
+                                            <div className="inner">
+                                                <div className="rbt-team-thumbnail">
+                                                    <div className="thumb">
+                                                        <img src="assets/images/team/team-06.jpg" alt="Testimonial Images" />
+                                                    </div>
+                                                </div>
+                                                <div className="rbt-team-details">
+                                                    <div className="author-info">
+                                                        <h4 className="title">Gautam Sidarth</h4>
+                                                        <span className="designation theme-gradient"> Senior Software Engineer</span>
+                                                        <span className="team-form">
+                                                            <i className="feather-map-pin" />
+                                                            <span className="location">CO Miego, AD,USA</span>
+                                                        </span>
+                                                    </div>
+                                                    <p>
+                                                    Gautam has 5 years of experience in software development...
+                                                    </p>
+                                                    <ul className="social-icon social-default mt--20 justify-content-start">
+                                                        <li>
+                                                            <a href="https://www.facebook.com/">
+                                                                <i className="feather-facebook" />
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://www.twitter.com">
+                                                                <i className="feather-twitter" />
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="https://www.instagram.com/">
+                                                                <i className="feather-instagram" />
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                    <ul className="rbt-information-list mt--25">
+                                                        <li>
+                                                            <a href="#">
+                                                                <i className="feather-phone" />
+                                                                +1-202-555-0174
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="mailto:hello@example.com">
+                                                                <i className="feather-mail" />
+                                                                example@gmail.com
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                         {/* Repeat similar structure for other tabs */}
                                         {/* team-tab2, team-tab3, etc. */}
                                     </div>
@@ -790,14 +909,14 @@ class Home extends React.Component {
                                             <a className='active' id="team-tab4-tab" data-bs-toggle="tab" data-bs-target="#team-tab4" role="tab" aria-controls="team-tab4" aria-selected="false">
                                                 <div className="rbt-team-thumbnail">
                                                     <div className="inner">
-                                                    <div className="thmbnail">
-                                                    <div className="thumb">
-                                                        <img src="assets/images/team/team-08.jpg" alt="Testimonial Images" />
-                                                        <div className="home-badges-1">
-                                                <img src="assets/images/zob-bad.png" alt="badges" />
-                                            </div>
-                                                    </div>
-                                                    </div>
+                                                        <div className="thmbnail">
+                                                            <div className="thumb">
+                                                                <img src="assets/images/team/team-08.jpg" alt="Testimonial Images" />
+                                                                <div className="home-badges-1">
+                                                                    <img src="assets/images/zob-bad.png" alt="badges" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </a>
@@ -808,8 +927,8 @@ class Home extends React.Component {
                                                     <div className="thumb">
                                                         <img src="assets/images/team/team-05.jpg" alt="Testimonial Images" />
                                                         <div className="home-badges-1">
-                                                <img src="assets/images/zob-bad.png" alt="badges" />
-                                            </div>
+                                                            <img src="assets/images/zob-bad.png" alt="badges" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </a>
@@ -820,8 +939,8 @@ class Home extends React.Component {
                                                     <div className="thumb">
                                                         <img src="assets/images/team/team-06.jpg" alt="Testimonial Images" />
                                                         <div className="home-badges-1">
-                                                <img src="assets/images/zob-bad.png" alt="badges" />
-                                            </div>
+                                                            <img src="assets/images/zob-bad.png" alt="badges" />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </a>
