@@ -65,7 +65,7 @@ class MyCourses extends React.Component {
 
   handlePageChange = (pageIndex) => {
     this.setState({ currentPage: pageIndex }, () => {
-      this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
+      this.getAllCourse(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
     });
   };
   handleSearchChange = (e) => {
@@ -202,7 +202,7 @@ class MyCourses extends React.Component {
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
                       <div className="rbt-short-item">
                         <span className="course-index">
-                          Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {filteredCourse.length} results
+                          Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {totalRecords} results
                         </span>
                       </div>
                     </div>
