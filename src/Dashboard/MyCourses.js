@@ -110,6 +110,40 @@ class MyCourses extends React.Component {
       });
   }
 
+  handleDeleteCourse = (courseId) => {
+    const baseUrl = process.env.REACT_APP_BASEURL;
+    const url = `${baseUrl}/api/Course/DeleteCourse`;
+    const token = localStorage.getItem('authToken');
+    var request =
+    {
+      "courseId": courseId
+    }
+    
+    axios.post(url, request, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        this.getAllCourse(0, this.state.pageSize);
+        this.setState({
+          responseMessage: (
+            <span>
+              Course Deleted Successfully
+            </span>
+          ),
+          alertVariant: 'success', // Success alert variant
+        });
+        window.scrollTo(0, 0);
+
+      })
+      .catch((error) => {
+        localStorage.removeItem('authToken');
+        this.props.navigate('/Login'); // Use `navigate`
+      });
+  }
+
   render() {
     const { courseListingData, currentPage, pageSize, totalRecords, searchQuery } = this.state;
     const startIndex = (currentPage - 1) * pageSize + 1;
@@ -207,42 +241,48 @@ class MyCourses extends React.Component {
                       <div className="rbt-card-img">
                         <a href={`/Course-Details?courseId=${course.courseid}`}>
                           <img
-                            src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                            alt="Card image"
-                          />
+                            // Use a default image if companylogo is missing
+                                          alt="Card image"
+                                          />
 
-                        </a>
-                      </div>
-                      <div className="rbt-card-body">
-                        <div className="rbt-card-top">
+                                        </a>
+                                        </div>
+                                        <div className="rbt-card-body">
+                                        <div className="rbt-card-top">
 
-                        </div>
-                        <h4 className="rbt-card-title">
-                          <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
-                        </h4>
-                        <ul className="rbt-meta">
-                          <li>
-                            <i className="feather-book" />
-                            {course.no_of_lessons} Lessons
-                          </li>
-                          <li>
-                            <i className="feather-users" />
-                            50 Students
-                          </li>
-                          <li>
+                                        </div>
+                                        <h4 className="rbt-card-title">
+                                          <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
+                                        </h4>
+                                        <ul className="rbt-meta">
+                                          <li>
+                                          <i className="feather-book" />
+                                          {course.no_of_lessons} Lessons
+                                          </li>
+                                          <li>
+                                          <i className="feather-users" />
+                                          50 Students
+                                          </li>
+                                          <li>
+                                          <a style={{marginBottom:"10px",color:"blue"}} className="rbt-btn-link" href={`/edit-course?courseId=${course.courseid}`}>
+                                          Edit Course
+                                          <i className="feather-arrow-right" />
+                                          </a>
+                                          </li>
+                                          <li>
+                                          <i 
+                                          className="feather-trash" 
+                                          style={{ color: "red", cursor: "pointer" }} 
+                                          onClick={() => this.handleDeleteCourse(course.courseid)} 
+                                          />
+                                          </li>
+                                          <li>
 
-                            {!course.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course)}>Activate Course</a> : "Activated"}
-                          </li>
-                        </ul>
+                                          {!course.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course)}>Activate Course</a> : "Activated"}
+                                          </li>
+                                        </ul>
 
-                        {/* <p className="rbt-card-text">
-                          {parse(
-                            course.description.split(" ").length > 20
-                              ? course.description.split(" ").slice(0, 20).join(" ") + "..."
-                              : course.description
-                          )}
-                        </p> */}
-
+                          
                         <div className="rbt-card-bottom">
                           <div className="rbt-price">
                             <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
@@ -256,6 +296,7 @@ class MyCourses extends React.Component {
                                 View Candidates
                                 <i className="feather-arrow-right" />
                               </a>
+                            
                         </div>
                       </div>
                     </div>
