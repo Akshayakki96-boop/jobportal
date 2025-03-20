@@ -172,7 +172,9 @@ class Community extends React.Component {
                                                                         <div key={blog.blog_id} className={`blglst rbt-card card-list variation-02 rbt-hover mt--30 ${index % 2 === 0 ? 'image-left' : 'image-right'}`}>
                                                                             <div className="rbt-card-img">
                                                                                 <a href="#">
-                                                                                    <img src="assets/images/blog/blog-card-02.jpg" alt="Card image" />
+                                                                                    <img 
+                                                                                      src={`${process.env.REACT_APP_BASEURL}/Uploads/${blog.blogimage}`}
+                                                                                    alt="Card image" />
                                                                                 </a>
                                                                             </div>
                                                                             <div style={{ textAlign: "left" }} className="rbt-card-body">
