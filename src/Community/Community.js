@@ -171,6 +171,7 @@ class Community extends React.Component {
                                                                     {this.state.blogsList && this.state.blogsList.map((blog, index) => (
                                                                         <div key={blog.blog_id} className={`blglst rbt-card card-list variation-02 rbt-hover mt--30 ${index % 2 === 0 ? 'image-left' : 'image-right'}`}>
                                                                             <div className="rbt-card-img">
+                                                                                {/* Generating dynamic images */}
                                                                                 <a href="#">
                                                                                     <img 
                                                                                       src={`${process.env.REACT_APP_BASEURL}/Uploads/${blog.blogimage}`}
