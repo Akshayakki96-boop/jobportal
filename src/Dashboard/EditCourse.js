@@ -22,7 +22,7 @@ Link.sanitize = function (url) {
 Quill.register(Link, true);
 
 
-class CreateCourse extends React.Component {
+class EditCourse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,11 +33,72 @@ class CreateCourse extends React.Component {
     componentDidMount() {
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
-        this.userId = urlParams.get('user_Id');
+        var courseId = urlParams.get('courseId');
+        this.courseId=courseId;
         this.getDashboardUser();
         this.getCourseLevel();
         this.getcurrencyCode();
+        this.getCourseById();
     }
+    getCourseById = () => {
+         //this.setState({ keepSpinner: true });
+         const baseUrl = process.env.REACT_APP_BASEURL;
+         const url = `${baseUrl}/api/Course/GetCourse`;
+         const token = localStorage.getItem('authToken');
+         var request =
+         {
+             "courseId": this.courseId,
+             "coursetitle": "",
+             "isactive": false,
+             "user_id": 0,
+             "pageIndex": 0,
+             "pagesize": 1
+         }
+ 
+ 
+         axios.post(url, request, {
+             headers: {
+                 'Content-Type': 'application/json',
+                 //Authorization: `Bearer ${token}`,
+             },
+         })
+             .then((response) => {
+                 console.log('courseListingData', response.data);
+                 if (response.data.data && response.data.data.length > 0) {
+                     const totalCount = response.data.data[0].TotalRecords;
+ 
+                     this.setState({ courseListingData: response.data.data[0], totalRecords: totalCount, keepSpinner: false });
+                        this.setState({
+                            courseName: response.data.data[0].coursetitle,
+                            description: response.data.data[0].description,
+                            duration: response.data.data[0].duration,
+                            courseSelected: { value: response.data.data[0].course_level, label: response.data.data[0].course_level_name },
+                            fileName: response.data.data[0].course_image,
+                            courseFee: response.data.data[0].course_fees,
+                            isRefundable: response.data.data[0].is_refundable,
+                            courseMaterial: response.data.data[0].course_materials,
+                            nooflessons: response.data.data[0].no_of_lessons,
+                            currencyCode: { value: response.data.data[0].currency, label: response.data.data[0].currency },
+                            startDate: response.data.data[0].startdate ? new Date(response.data.data[0].startdate) : null
+                        });
+                        if (response.data.data[0].course_image) {
+                            this.setState({
+                                logoPreview: `${process.env.REACT_APP_BASEURL}/Uploads/${response.data.data[0].course_image}`,
+                            });
+                        }
+                 }
+                 else {
+                     this.setState({ errorMessage: "No Course Found", keepSpinner: false });
+                 }
+ 
+             })
+             .catch((error) => {
+                 localStorage.removeItem('authToken');
+                 this.props.navigate('/Login'); // Use `navigate`
+             }); 
+    };
+
+
     getcurrencyCode = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Master/GetCurrency`;
@@ -121,7 +182,16 @@ class CreateCourse extends React.Component {
                 this.props.navigate('/Login'); // Use `navigate`
             });
     }
-
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.courseLevels !== this.state.courseLevels && this.state.courseListingData) {
+            const selectedCourseLevel = this.state.courseLevels.find(
+                (level) => level.value === this.state.courseListingData.course_level
+            );
+            if (selectedCourseLevel) {
+                this.setState({ courseSelected: selectedCourseLevel });
+            }
+        }
+    }
 
     handleFileChange = async (event) => {
         const file = event.target.files[0]; // Get the selected file
@@ -270,12 +340,11 @@ class CreateCourse extends React.Component {
     }
 
     createCourse = (type) => {
-
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/PostCourse`;
         const token = localStorage.getItem('authToken');
         var courseData = {
-            "courseId": 0,
+            "courseId": this.courseId,
             "coursetitle": this.state.courseName,
             "description": this.state.description,
             "notes": "string",
@@ -319,7 +388,7 @@ class CreateCourse extends React.Component {
                 this.setState({
                     responseMessage: (
                         <span>
-                            Course Created Successfully
+                            Course Updated Successfully
                         </span>
                     ),
                     alertVariant: 'success', // Success alert variant
@@ -386,7 +455,7 @@ class CreateCourse extends React.Component {
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
-                <AdvancedBreadcumb componentName="Create New" ComponentValue="Create New" redirectURL="/TrainerDashboard" />
+                <AdvancedBreadcumb componentName="Edit Course" ComponentValue="Edit Course" redirectURL="/TrainerDashboard" />
                 <div className="rbt-become-area bg-color-white rbt-section-gap">
                     <div className="container">
                         <div className="container mt-5">
@@ -400,7 +469,7 @@ class CreateCourse extends React.Component {
 
                             <div className="col-lg-10">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                    <h3 className="title">Create New Course</h3>
+                                    <h3 className="title">Edit Course</h3>
                                     <hr className="mb--30" />
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         { /* Candidate Basic Info Section */}
@@ -443,7 +512,7 @@ class CreateCourse extends React.Component {
                                             </div>
                                             <div className="form-group" style={{ position: "relative" }}>
                                                 <label
-                                                    htmlFor="dob"
+                                                    htmlFor="startDate"
                                                     style={{
                                                         position: "absolute",
                                                         top: "-12px",
@@ -490,6 +559,7 @@ class CreateCourse extends React.Component {
                                                     placeholder="Select Course Level"
                                                     className="basic-multi-select"
                                                     classNamePrefix="select"
+                                                    isClearable={true}
                                                     menuPortalTarget={document.body} // Render the dropdown to the body
                                                     styles={{
                                                         menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
@@ -636,4 +706,4 @@ class CreateCourse extends React.Component {
     }
 }
 
-export default withNavigation(CreateCourse);
+export default withNavigation(EditCourse);
