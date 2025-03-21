@@ -483,9 +483,9 @@ class Home extends React.Component {
                                             <div className="rbt-card-img">
                                                 <a href={`/Course-Details?courseId=${course.courseid}`}>
                                                     <img src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/course/course-01.jpg"} alt="Card image" />
-                                                    <div className="rbt-badge-3 bg-white">
-                                                        <span>-50%</span>
-                                                        <span>Off</span>
+                                                    <div style={{width:"76px"}} className="rbt-badge-3 bg-white">
+                                                        <span>Applicable</span>
+                                                        <span>for refund</span>
                                                     </div>
                                                 </a>
                                             </div>
@@ -495,7 +495,7 @@ class Home extends React.Component {
                                                         <div className="rating">
                                                             {[...Array(course.rating)].map((_, i) => <i key={i} className="fas fa-star"></i>)}
                                                         </div>
-                                                        <span className="rating-count"> ({course.reviews} Reviews)</span>
+                                                        <span className="rating-count">{course.reviews} Reviews</span>
                                                     </div>
                                                     <div className="rbt-bookmark-btn">
                                                         <a className="rbt-round-btn" title="Bookmark" href="#">

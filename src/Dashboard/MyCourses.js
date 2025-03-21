@@ -260,33 +260,33 @@ class MyCourses extends React.Component {
                       <div className="rbt-card-body">
                         <div className="rbt-card-top">
 
-                        </div>
-                        <h4 className="rbt-card-title">
-                          <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
-                        </h4>
-                        <ul className="rbt-meta">
-                          <li>
-                            <i className="feather-book" />
-                            {course.no_of_lessons} Lessons
-                          </li>
-                          <li>
-                            <i className="feather-users" />
-                            50 Students
-                          </li>
-                          <li>
-                            <a style={{ marginBottom: "10px", color: "blue" }} className="rbt-btn-link" href={`/edit-course?courseId=${course.courseid}`}>
-                              Edit Course
-                              <i className="feather-arrow-right" />
-                            </a>
-                          </li>
-                          <li>
-                            <i
-                              className="feather-trash"
-                              style={{ color: "red", cursor: "pointer" }}
-                              onClick={() => this.handleDeleteCourse(course.courseid)}
-                            />
-                          </li>
-                          <li>
+                                        </div>
+                                        <h4 className="rbt-card-title">
+                                          <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
+                                        </h4>
+                                        <ul className="rbt-meta">
+                                          <li>
+                                          <i className="feather-book" />
+                                          {course.no_of_lessons} Lessons
+                                          </li>
+                                          <li>
+                                          <i className="feather-users" />
+                                          50 Students
+                                          </li>
+                                          {!course.isactive &&  <li>
+                                          <a style={{marginBottom:"10px",color:"blue"}} className="rbt-btn-link" href={`/edit-course?courseId=${course.courseid}`}>
+                                          Edit Course
+                                          <i className="feather-arrow-right" />
+                                          </a>
+                                          </li>}
+                                          {!course.isactive &&  <li>
+                                          <i 
+                                          className="feather-trash" 
+                                          style={{ color: "red", cursor: "pointer" }} 
+                                          onClick={() => this.handleDeleteCourse(course.courseid)} 
+                                          />
+                                          </li>}
+                                          <li>
 
                             {!course.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course)}>Activate Course</a> : "Activated"}
                           </li>

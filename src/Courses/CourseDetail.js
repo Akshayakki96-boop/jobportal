@@ -1982,26 +1982,26 @@ class CourseDetails extends React.Component {
                                             <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
                                                 <div className="rbt-price">
                                                     <span className="current-price">{this.state.courseListingData?.currency ? this.state.courseListingData?.currency + '-' + this.state.courseListingData?.course_fees : this.state.courseListingData?.course_fees}</span>
-                                                    {/* <span className="off-price">$84.99</span> */}
-                                                </div>
-                                                <div className="discount-time">
-                                                    <span className="rbt-badge color-danger bg-color-danger-opacity">
-                                                        <i className="feather-clock" /> 3 days left!
-                                                    </span>
-                                                </div>
-                                            </div>
-                                          {/* {this.state.dashBoardData?.role_id==1 &&  <div className="add-to-card-button mt--15">
-                                                <a
-                                                    className="rbt-btn btn-gradient icon-hover w-100 d-block text-center"
-                                                    href="#"
-                                                    onClick={this.applyCourse}
-                                                >
-                                                    <span className="btn-text">Enroll Now</span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right" />
-                                                    </span>
-                                                </a>
-                                            </div>} */}
+                                                   { /* <span className="off-price">$84.99</span> */}
+                                                                                                    </div>
+                                                                                                    <div className="discount-time">
+                                                                                                        <span className="rbt-badge color-danger bg-color-danger-opacity">
+                                                                                                            <i className="feather-clock" /> {Math.max(0, Math.ceil((new Date(this.state.courseListingData?.startdate) - new Date()) / (1000 * 60 * 60 * 24)))} days left!
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                              {/* {this.state.dashBoardData?.role_id==1 &&  <div className="add-to-card-button mt--15">
+                                                                                                    <a
+                                                                                                        className="rbt-btn btn-gradient icon-hover w-100 d-block text-center"
+                                                                                                        href="#"
+                                                                                                        onClick={this.applyCourse}
+                                                                                                    >
+                                                                                                        <span className="btn-text">Enroll Now</span>
+                                                                                                        <span className="btn-icon">
+                                                                                                            <i className="feather-arrow-right" />
+                                                                                                        </span>
+                                                                                                    </a>
+                                                                                                </div>} */}
                                             {/*
                           <div class="buy-now-btn mt--15">
                               <a class="rbt-btn btn-border icon-hover w-100 d-block text-center" href="#">
