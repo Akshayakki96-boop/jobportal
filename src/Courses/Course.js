@@ -118,7 +118,7 @@ class Course extends React.Component {
 
     handlePageChange = (pageIndex) => {
         this.setState({ currentPage: pageIndex }, () => {
-            this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
+            this.getAllCourse(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
         });
     };
     handleSearchChange = () => {
@@ -186,7 +186,7 @@ class Course extends React.Component {
                                             <div className=" title-wrapper">
                                                 <h1 className="title mb--0">All Courses</h1>
                                                 <a href="#" className="rbt-badge-2">
-                                                    <div className="image">🎉</div> {filteredCourse.length} Courses
+                                                    <div className="image">🎉</div> {totalRecords} Courses
                                                 </a>
                                             </div>
                                             <p className="description">
@@ -223,7 +223,7 @@ class Course extends React.Component {
                                                     </ul>
                                                 </div> */}
                                                 <div className="rbt-short-item">
-                                                    <span className="course-index">Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {filteredCourse.length} results</span>
+                                                    <span className="course-index">Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {totalRecords} results</span>
                                                 </div>
                                             </div>
                                         </div>
