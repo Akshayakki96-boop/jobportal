@@ -44,7 +44,7 @@ class MyJobs extends React.Component {
       "keyskillIds": "",
       "educationId": "",
       "active": false,
-      "user_id": 0,
+      "user_id": this.props.userData.user_id,
       "cityIds": "1,2",
       pageIndex: pageIndex,
       pagesize: pageSize,
@@ -68,8 +68,11 @@ class MyJobs extends React.Component {
 
       })
       .catch((error) => {
-        localStorage.removeItem('authToken');
-        this.props.navigate('/Login'); // Use `navigate`
+        this.setState({
+          responseMessage: "Something went wrong !",
+          alertVariant: 'danger', // Error alert variant
+      });
+      window.scrollTo(0, 0);
       });
 
   }
