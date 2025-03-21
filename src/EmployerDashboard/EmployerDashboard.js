@@ -3,15 +3,9 @@ import axios from 'axios';
 import withNavigation from '../withNavigation';
 import UserDashBoard from './UserDashBoard';
 import MyProfile from './MyProfile';
-import EnrolledJobs from './EnrolledJobs';
 import MyJobs from './MyJobs';
-import Announcement from './Announcement';
-import Assignment from './Assignment';
 import Header from '../Header/header';
 import { connect } from 'react-redux';
-import { Alert, Button } from 'react-bootstrap';
-import { setSingleRequest } from '../actions/SingleRequestAction';
-import { store } from '../index';
 
 class EmployerDashboard extends React.Component {
     constructor(props) {
@@ -284,7 +278,7 @@ class EmployerDashboard extends React.Component {
                                         </div>
                                         {this.state.showUserDashboard && <UserDashBoard dashBoardData={this.state?.dashBoardCounterData} message={this.state.responseMessage} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
-                                        {this.state.showMyJobs && <MyJobs />}
+                                        {this.state.showMyJobs && <MyJobs userData={this.state.userData} />}
 
                                     </div>
 

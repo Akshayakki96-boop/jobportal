@@ -32,7 +32,7 @@ class MyCourses extends React.Component {
       "courseId": 0,
       "coursetitle": "",
       "isactive": false,
-      "user_id": 0,
+      "user_id": this.props.userData.basic_info.user_id,
       "pageIndex": pageIndex,
       "pagesize": pageSize
     }
@@ -57,8 +57,11 @@ class MyCourses extends React.Component {
 
       })
       .catch((error) => {
-        localStorage.removeItem('authToken');
-        this.props.navigate('/Login'); // Use `navigate`
+        this.setState({
+          responseMessage: "Something went wrong !",
+          alertVariant: 'danger', // Error alert variant
+      });
+      window.scrollTo(0, 0);
       });
 
   }
@@ -105,8 +108,11 @@ class MyCourses extends React.Component {
 
       })
       .catch((error) => {
-        localStorage.removeItem('authToken');
-        this.props.navigate('/Login'); // Use `navigate`
+        this.setState({
+          responseMessage: "Something went wrong !",
+          alertVariant: 'danger', // Error alert variant
+      });
+      window.scrollTo(0, 0);
       });
   }
 
@@ -139,8 +145,11 @@ class MyCourses extends React.Component {
 
       })
       .catch((error) => {
-        localStorage.removeItem('authToken');
-        this.props.navigate('/Login'); // Use `navigate`
+        this.setState({
+          responseMessage: "Something went wrong !",
+          alertVariant: 'danger', // Error alert variant
+      });
+      window.scrollTo(0, 0);
       });
   }
 
