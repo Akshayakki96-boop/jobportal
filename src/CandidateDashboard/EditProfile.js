@@ -579,8 +579,8 @@ class EditProfileCandidate extends React.Component {
             "resumeheadline": this.state.resume_summary,
             "profilesummary": this.state.profile_summary,
             "expereince": this.state.experience,
-            "ctc": this.state.currentsalary,
-            "ex_ctc": this.state.expectedsalary,
+            "ctc": this.state.currentsalary?this.state.currentsalary:0,
+            "ex_ctc": this.state.expectedsalary?this.state.expectedsalary:0,
             "current_cities": this.state.selectedCity.value,
             "preferred_location": this.state.preferredWorkLocation.map((item) => item.value).join(','),
             "notice_period_id": this.state.noticePeriodSelected.value,
@@ -1342,25 +1342,25 @@ class EditProfileCandidate extends React.Component {
 
                                             <div className="form-group">
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     id="currentsalary"
                                                     name="currentsalary"
                                                     value={currentsalary}
                                                     onChange={this.handleCurrentSalaryChange}
                                                 />
-                                                <label htmlFor="currentsalary">Current Salary</label>
+                                                <label htmlFor="currentsalary">Current CTC</label>
                                             </div>
                                             <div className="form-group">
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     id="expectedsalary"
                                                     name="expectedsalary"
                                                     value={expectedsalary}
                                                     onChange={this.handleExpectedSalaryChange}
                                                 />
-                                                <label htmlFor="expectedsalary">Expected Salary</label>
+                                                <label htmlFor="expectedsalary">Expected CTC</label>
                                             </div>
                                             <div className="form-group">
                                                 <input

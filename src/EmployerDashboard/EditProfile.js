@@ -213,17 +213,8 @@ class EditProfile extends React.Component {
         return (
             <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
                 <div className="container">
-
-                    <div className="row pt--60 g-5">
-                        <div className="col-lg-4">
-                            <div className="thumbnail">
-                                <img
-                                    className="radius-10 w-100"
-                                    src="assets/images/tab/tabs-10.jpg"
-                                    alt="Corporate Template" />
-                            </div>
-                        </div>
-                        <div className="col-lg-8">
+                    <div className="row pt--60 g-5">              
+                        <div className="col-lg-12">
                             <div className="rbt-contact-form contact-form-style-1 max-width-auto">
                                 <h3 className="title">Update Profile</h3>
                                 <hr className="mb--30" />
@@ -247,12 +238,12 @@ class EditProfile extends React.Component {
                                                             width: '100px',
                                                             height: '100px',
                                                             objectFit: 'cover',
-                                                            borderRadius: '8px',
+                                                            borderRadius: '50px',
                                                         }}
                                                     />
                                                 </div>
                                             )}
-                                            {uploadStatus && <small className="text-danger">{uploadStatus}</small>}
+                                            {uploadStatus && <small className={uploadStatus=="File uploaded successfully!"?"text-success":"text-danger"}>{uploadStatus}</small>}
                                         </div>
                                     </div>
                                     <div className="col-lg-12">
