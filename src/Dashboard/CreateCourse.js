@@ -299,6 +299,7 @@ class CreateCourse extends React.Component {
             },
         })
             .then((response) => {
+                
                 this.setState({
                     courseName: '',
                     description: '',
@@ -316,15 +317,16 @@ class CreateCourse extends React.Component {
                     uploadResumeStatus: null,
                     courseMaterial: null
                 });
-                this.setState({
-                    responseMessage: (
-                        <span>
-                            Course Created Successfully
-                        </span>
-                    ),
-                    alertVariant: 'success', // Success alert variant
-                });
-                window.scrollTo(0, 0);
+                this.ActivateCourse(response.data.data);
+                // this.setState({
+                //     responseMessage: (
+                //         <span>
+                //             Course Created Successfully
+                //         </span>
+                //     ),
+                //     alertVariant: 'success', // Success alert variant
+                // });
+                // window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('update failed:', error.response?.data || error.message);
@@ -336,6 +338,47 @@ class CreateCourse extends React.Component {
                 window.scrollTo(0, 0);
             });
     }
+
+      ActivateCourse = (course) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Course/ToggleCourse`;
+        const token = localStorage.getItem('authToken');
+        var request =
+        {
+          "courseId": course,
+          "isactive": true,
+    
+        }
+    
+    
+        axios.post(url, request, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+           // this.getAllCourse(0, this.state.pageSize);
+            this.setState({
+              responseMessage: (
+                <span>
+                  Course saved and activated successfully
+                </span>
+              ),
+              alertVariant: 'success', // Success alert variant
+            });
+            window.scrollTo(0, 0);
+    
+    
+          })
+          .catch((error) => {
+            this.setState({
+              responseMessage: "Something went wrong !",
+              alertVariant: 'danger', // Error alert variant
+          });
+          window.scrollTo(0, 0);
+          });
+      }
 
     hanldeCheckChange = (e) => {
         this.setState({ isRefundable: e.target.checked });
