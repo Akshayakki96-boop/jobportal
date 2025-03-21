@@ -61,9 +61,12 @@ class MyCourses extends React.Component {
 
             })
             .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
-            });
+                this.setState({
+                    responseMessage: "Something went wrong !",
+                    alertVariant: 'danger', // Error alert variant
+                });
+                window.scrollTo(0, 0);
+                });
 
     }
 

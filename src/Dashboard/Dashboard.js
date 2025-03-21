@@ -3,7 +3,6 @@ import axios from 'axios';
 import withNavigation from '../withNavigation';
 import UserDashBoard from './TrainerDashboard';
 import MyProfile from './MyProfile';
-import EnrolledCourses from './EnrolledCourses';
 import MyCourses from './MyCourses';
 import Announcement from './Announcement';
 import Assignment from './Assignment';
@@ -270,8 +269,7 @@ class Dashboard extends React.Component {
                                         </div>
                                         {this.state.showUserDashboard && <UserDashBoard dashBoardData={this.state?.dashboardCounterData} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
-                                        {this.state.showEnrollCourse && <EnrolledCourses />}
-                                        {this.state.showMyCourses && <MyCourses />}
+                                        {this.state.showMyCourses && <MyCourses userData={this.state.userData} />}
                                         {this.state.showAnnouncement && <Announcement />}
                                         {this.state.showAssignment && <Assignment />}
                                     </div>

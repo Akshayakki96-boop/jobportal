@@ -157,6 +157,14 @@ class CourseDetails extends React.Component {
     }
 
     render() {
+        const formatDate = (dateString) => {
+            if (!dateString) return ""; // Handle null/undefined values
+            const date = new Date(dateString);
+            const mm = String(date.getMonth() + 1).padStart(2, "0");
+            const dd = String(date.getDate()).padStart(2, "0");
+            const yyyy = date.getFullYear();
+            return `${mm}/${dd}/${yyyy}`;
+          };
         const { activeSection } = this.state;
         return (
             <>
@@ -2010,7 +2018,7 @@ class CourseDetails extends React.Component {
                                                     <li>
                                                         <span>Start Date</span>
                                                         <span className="rbt-feature-value rbt-badge-5">
-                                                            5 Hrs 20 Min
+                                                        <span>{formatDate(this.state.courseListingData?.startdate)}</span>
                                                         </span>
                                                     </li>
                                                     <li>
