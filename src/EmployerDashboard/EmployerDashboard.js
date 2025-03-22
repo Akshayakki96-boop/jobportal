@@ -60,12 +60,12 @@ class EmployerDashboard extends React.Component {
             .then((response) => {
                 console.log('dashboard data', response.data);
                 if (token) {
-                    this.getUserProfile(response.data.data.user_id,token);
+                    this.getUserProfile(response.data.data.user_id, token);
                 } else {
                     localStorage.removeItem('authToken');
                     this.props.navigate('/Login');
                 }
-                this.setState({ dashBoardData: response.data.data, dashBoardCounterData: response.data});
+                this.setState({ dashBoardData: response.data.data, dashBoardCounterData: response.data });
 
             })
             .catch((error) => {
@@ -155,9 +155,9 @@ class EmployerDashboard extends React.Component {
         if (!name) return "U"; // Default to "U" if name is not provided
         const parts = name.split(" ");
         return parts.length > 1
-          ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
-          : parts[0][0].toUpperCase();
-      };
+            ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+            : parts[0][0].toUpperCase();
+    };
 
     render() {
 
@@ -181,7 +181,7 @@ class EmployerDashboard extends React.Component {
                                         <div className="tranr-titl">
                                             <div className="content text-center">
                                                 <h6 className="subtitle sal-animate" >Employer</h6>
-                                                <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.firstname}</span></h3>
+                                                <h3 style={{ textAlign: "center" }} className="title sal-animate">Learn with <span>{this.state?.userData?.firstname}</span></h3>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}
@@ -205,7 +205,7 @@ class EmployerDashboard extends React.Component {
                                                                 color: "#fff",
                                                                 borderRadius: "50%",
                                                                 fontWeight: "bold",
-                                                                fontSize: "18px", // Adjust font size as needed
+                                                                // Adjust font size as needed
                                                             }}
                                                         >
                                                             {this.getInitials(this.state?.dashBoardData?.username || "User")}
@@ -219,18 +219,39 @@ class EmployerDashboard extends React.Component {
                                             </div>
                                             <div className="rbt-tutor-information-right">
                                                 <div className="tutor-btn">
-                                                    <a className="rbt-btn btn-md hover-icon-reverse" href="/createnew">
-                                                        <span className="icon-reverse-wrapper">
-                                                            <span className="btn-text">Create a New Job</span>
-                                                            <span className="btn-icon">
-                                                                <i className="feather-arrow-right"></i>
+                                                    <div style={{ display: "flex", gap: "10px" }}> {/* Adds space between buttons */}
+                                                        <a
+                                                            className="rbt-btn btn-md hover-icon-reverse"
+                                                            href="#"
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                this.setActiveComponent('showCandidate');
+                                                            }}
+                                                        >
+                                                            <span className="icon-reverse-wrapper">
+                                                                <span className="btn-text">Find Candidate</span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right"></i>
+                                                                </span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right"></i>
+                                                                </span>
                                                             </span>
-                                                            <span className="btn-icon">
-                                                                <i className="feather-arrow-right"></i>
+                                                        </a>
+                                                        <a className="rbt-btn btn-md hover-icon-reverse" href="/createnew">
+                                                            <span className="icon-reverse-wrapper">
+                                                                <span className="btn-text">Create a New Job</span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right"></i>
+                                                                </span>
+                                                                <span className="btn-icon">
+                                                                    <i className="feather-arrow-right"></i>
+                                                                </span>
                                                             </span>
-                                                        </span>
-                                                    </a>
+                                                        </a>
+                                                    </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                         {/* End Tutor Information */}
