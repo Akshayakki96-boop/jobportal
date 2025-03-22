@@ -74,33 +74,42 @@ class CandidateList extends React.Component {
         if (!name) return "U"; // Default to "U" if name is not provided
         const parts = name.split(" ");
         return parts.length > 1
-          ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
-          : parts[0][0].toUpperCase();
-      };
+            ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
+            : parts[0][0].toUpperCase();
+    };
 
-      handlePageChange = (pageIndex) => {
+    handlePageChange = (pageIndex) => {
         this.setState({ currentPage: pageIndex }, () => {
-          this.getCandidates(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
+            this.getCandidates(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
         });
-      };
-      handleSearchChange = (e) => {
+    };
+    handleSearchChange = (e) => {
         this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
-      };
+    };
 
     render() {
+        const maskMobileNumber = (number) => {
+            return number.slice(-4).padStart(number.length, 'X');
+        };
+        const maskEmail = (email) => {
+            const [name, domain] = email.split("@");
+            const maskedName = name.charAt(0) + "*****";
+            return `${maskedName}@${domain}`;
+        };
+        
         const { candidateListing, currentPage, pageSize, totalRecords, searchQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
         const endIndex = Math.min(currentPage * pageSize, totalRecords);
 
         const filteredCandidates = candidateListing?.filter((job) => {
-            const email = job.Email?.toString().toLowerCase() || ""; // Ensure it's a string
-            const fullname = job.fullname?.toLowerCase() || "";
-            const mobile_no = job.mobile_no?.toLowerCase() || "";
+            const prefer_location = job.prefer_location?.toString().toLowerCase() || ""; // Ensure it's a string
+            // const fullname = job.fullname?.toLowerCase() || "";
+            // const mobile_no = job.mobile_no?.toLowerCase() || "";
 
             return (
-                email.includes(searchQuery) ||
-                fullname.includes(searchQuery) ||
-                mobile_no.includes(searchQuery)
+                prefer_location.includes(searchQuery) 
+                // fullname.includes(searchQuery) ||
+                // mobile_no.includes(searchQuery)
             );
         });
         return (
@@ -153,7 +162,7 @@ class CandidateList extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                             <div className="rbt-short-item mt-5">
                                                 <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="Search your Candidate.." value={this.state.searchQuery}
+                                                    <input type="text" placeholder="Search by location.." value={this.state.searchQuery}
                                                         onChange={this.handleSearchChange} />
                                                     <button
                                                         type="button"
@@ -182,24 +191,24 @@ class CandidateList extends React.Component {
                                         <div className="rbt-card variation-01 rbt-hover">
                                             <div className="rbt-card-img">
                                                 <a href="#">
-                                                    {course.profile_image? <img src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.profile_image}`} alt="Card image" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} /> : 
-                                                    <div
-                                                    style={{
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        justifyContent: "center",
-                                                        width: "60px", // Adjust as needed
-                                                        height: "60px", // Adjust as needed
-                                                        backgroundColor: "#ccc", // Default background color
-                                                        color: "#fff",
-                                                        borderRadius: "50%",
-                                                        fontWeight: "bold",
-                                                        fontSize: "12px", // Adjust font size as needed
-                                                    }}
-                                                >
-                                                    {this.getInitials(course.fullname || "User")}
-                                                </div>}
-                                                  
+                                                    {course.profile_image ? <img src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.profile_image}`} alt="Card image" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} /> :
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                justifyContent: "center",
+                                                                width: "60px", // Adjust as needed
+                                                                height: "60px", // Adjust as needed
+                                                                backgroundColor: "#ccc", // Default background color
+                                                                color: "#fff",
+                                                                borderRadius: "50%",
+                                                                fontWeight: "bold",
+                                                                fontSize: "12px", // Adjust font size as needed
+                                                            }}
+                                                        >
+                                                            {this.getInitials(course.fullname || "User")}
+                                                        </div>}
+
 
                                                 </a>
                                             </div>
@@ -213,11 +222,11 @@ class CandidateList extends React.Component {
                                                 <ul className="rbt-meta">
                                                     <li>
                                                         <i className="fas fa-phone" />
-                                                        {course.mobile_no}
+                                                        {course.mobile_no ? maskMobileNumber(course.mobile_no) : "N/A"}
                                                     </li>
                                                     <li>
                                                         <i className="fas fa-envelope" />
-                                                        {course.Email}
+                                                        {course.Email ? maskEmail(course.Email) : "N/A"}
                                                     </li>
                                                     <li>
 
@@ -231,23 +240,26 @@ class CandidateList extends React.Component {
                                                         {course.designation}
                                                     </li>
                                                     <li>
-                                                        <i className="fas fa-money-bill-wave" /> {course.CTC || "Location Unavailable"}
+                                                        <i className="fas fa-money-bill-wave" /> {course.CTC || "NA"}
                                                     </li>
 
                                                     <li>
-                                                        <i className="fas fa-chart-line" /> {course.ExpectedCTC || "Location Unavailable"}
+                                                        <i className="fas fa-chart-line" /> {course.ExpectedCTC || "NA"}
+                                                    </li>
+                                                    <li>
+                                                        <i className="fas fa-map-marker-alt" /> {course.prefer_location || "NA"}
                                                     </li>
                                                 </ul>
                                                 <div className="rbt-card-bottom">
                                                     <div className="rbt-price">
                                                         <span className="current-price">
-                                                            {course.notice_period} Months notice period
+                                                            {course.notice_periods}  notice period
                                                         </span>
                                                     </div>
-                                                    <a className="rbt-btn-link" target='_blank' href={`${process.env.REACT_APP_BASEURL}/Uploads/${course.resumefile}`}>
+                                                    {/* <a className="rbt-btn-link" target='_blank' href={`${process.env.REACT_APP_BASEURL}/Uploads/${course.resumefile}`}>
                                                             View Profile
                                                             <i className="feather-arrow-right" />
-                                                        </a>
+                                                        </a> */}
 
                                                 </div>
 
