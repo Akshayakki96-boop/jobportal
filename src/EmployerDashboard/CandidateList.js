@@ -244,6 +244,10 @@ class CandidateList extends React.Component {
                                                             {course.notice_period} Months notice period
                                                         </span>
                                                     </div>
+                                                    <a className="rbt-btn-link" target='_blank' href={`${process.env.REACT_APP_BASEURL}/Uploads/${course.resumefile}`}>
+                                                            View Profile
+                                                            <i className="feather-arrow-right" />
+                                                        </a>
 
                                                 </div>
 
