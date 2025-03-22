@@ -240,9 +240,8 @@ class CandidateList extends React.Component {
                                                 </ul>
                                                 <div className="rbt-card-bottom">
                                                     <div className="rbt-price">
-                                                        <span className="current-price">Notice Period -
-
-                                                            {course.notice_period} months
+                                                        <span className="current-price">
+                                                            {course.notice_period} Months notice period
                                                         </span>
                                                     </div>
 
