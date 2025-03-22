@@ -105,7 +105,9 @@ class CandidatesDetail extends React.Component {
             });
 
     }
-
+    handleSearchChange = (e) => {
+        this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
+      };
 
 
 
