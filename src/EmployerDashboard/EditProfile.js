@@ -4,8 +4,17 @@ import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import styles
+import { Quill } from "react-quill";
+import AdvancedBreadcumb from '../Breadcumb/advancebreadcrumb';
 
-
+const Link = Quill.import('formats/link');
+Link.sanitize = function (url) {
+    // Add your custom URL validation logic here
+    return url;
+};
+Quill.register(Link, true);
 class EditProfile extends React.Component {
     constructor(props) {
         super(props);
@@ -16,20 +25,20 @@ class EditProfile extends React.Component {
             email: "",
             CompanyName: "",
             designation: "",
-            companylogo:"",
+            companylogo: "",
             logoPreview: "",
             isFormValid: false, // New state variable
-            userData:{},
+            userData: {},
             dashBoardData: {},
         };
 
     }
     componentDidMount() {
-        let url=window.location.search;
-        var urlParams= new URLSearchParams(url);
-        this.userId= urlParams.get('user_Id');
+        let url = window.location.search;
+        var urlParams = new URLSearchParams(url);
+        this.userId = urlParams.get('user_Id');
         this.getDashboardUser();
-     
+
     }
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -72,16 +81,17 @@ class EditProfile extends React.Component {
                 this.setState({ userData: response.data.data })
                 const { companylogo } = response.data.data;
                 if (companylogo) {
-                  this.setState({
-                    logoPreview: `${process.env.REACT_APP_BASEURL}/Uploads/${companylogo}`,
-                  });
+                    this.setState({
+                        logoPreview: `${process.env.REACT_APP_BASEURL}/Uploads/${companylogo}`,
+                        fileName: companylogo,
+                    });
                 }
                 this.setState({ keepSpinner: false });
 
             })
             .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
+                //localStorage.removeItem('authToken');
+                //this.props.navigate('/Login'); // Use `navigate`
             });
     }
     validateForm = () => {
@@ -98,16 +108,26 @@ class EditProfile extends React.Component {
 
         this.setState({ isFormValid });
     };
-    
+
     handleInputChange = (event) => {
-        const { name, value } = event.target;
-        this.setState((prevState) => ({
+        if (event.target) {
+            const { name, value } = event.target;
+            this.setState((prevState) => ({
             userData: {
                 ...prevState.userData,
                 [name]: value,
             },
-            
-        }));
+            }));
+        } else {
+            // Handle Quill editor value
+            this.setState((prevState) => ({
+            userData: {
+                ...prevState.userData,
+                company_description: event, // `event` contains the Quill editor value
+            },
+            }));
+        }
+
     };
 
     handleFileChange = async (event) => {
@@ -126,8 +146,8 @@ class EditProfile extends React.Component {
                 logo: file,
                 logoPreview: URL.createObjectURL(file), // Preview the uploaded file
                 uploadStatus: null,
-                 // Clear any previous error
-            },this.validateForm);
+                // Clear any previous error
+            }, this.validateForm);
 
             // Create FormData and append the file
             const formData = new FormData();
@@ -169,6 +189,7 @@ class EditProfile extends React.Component {
             "role_id": this.state.userData.role_id,
             "Id": this.state.userData.user_id,
             "designation": this.state.userData.designation,
+            "description": this.state.userData.company_description,
             "ipAddress": "192.168.1.1"
         };
 
@@ -192,28 +213,41 @@ class EditProfile extends React.Component {
                 });
             });
     };
-  
 
 
- 
-  
- 
- 
+    handleDescriptionChange = (description) => {
+        this.setState({ description });
+    };
 
- 
-  
- 
+    modules = {
+        toolbar: [
+            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+            [{ size: [] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+            ['link', 'image', 'video'],
+            ['clean'],
+            ['pdf', 'doc'] // Custom buttons for PDF and DOC
+        ],
+    };
 
-  
- 
-    
+    formats = [
+        'header', 'font', 'size',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image', 'video', 'pdf', 'doc'
+    ];
+
+
     render() {
-        const { userData, logoPreview, uploadStatus,isFormValid} = this.state;
-        const { firstname, lastname, email, CompanyName, designation } = userData;
+       
+        const { userData, logoPreview, uploadStatus, isFormValid } = this.state;
+        const { firstname, lastname, email, CompanyName, designation,company_description } = userData;
         return (
-            <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
+            <><Header dashBoardData={this.state.dashBoardData} />
+            <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Employer" redirectURL="/EmployerDashboard" /><div className="rbt-become-area bg-color-white rbt-section-gap">
                 <div className="container">
-                    <div className="row pt--60 g-5">              
+                    <div className="row pt--60 g-5">
                         <div className="col-lg-12">
                             <div className="rbt-contact-form contact-form-style-1 max-width-auto">
                                 <h3 className="title">Update Profile</h3>
@@ -221,7 +255,7 @@ class EditProfile extends React.Component {
                                 <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <input
+                                            <input
                                                 type="file"
                                                 className="form-control"
                                                 accept="image/*"
@@ -243,12 +277,12 @@ class EditProfile extends React.Component {
                                                     />
                                                 </div>
                                             )}
-                                            {uploadStatus && <small className={uploadStatus=="File uploaded successfully!"?"text-success":"text-danger"}>{uploadStatus}</small>}
+                                            {uploadStatus && <small className={uploadStatus == "File uploaded successfully!" ? "text-success" : "text-danger"}>{uploadStatus}</small>}
                                         </div>
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <input
+                                            <input
                                                 type="text"
                                                 name="firstname"
                                                 className="form-control"
@@ -262,23 +296,23 @@ class EditProfile extends React.Component {
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <input
+                                            <input
                                                 type="text"
                                                 name="lastname"
                                                 className="form-control"
                                                 value={lastname}
                                                 onChange={this.handleInputChange}
                                                 id="lastname"
-            
+
                                             />
-                                              <label htmlFor="lastname">Last Name</label>
+                                            <label htmlFor="lastname">Last Name</label>
                                             <span className="focus-border" />
                                         </div>
                                     </div>
-                              
+
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <input
+                                            <input
                                                 type="email"
                                                 name="email"
                                                 className="form-control"
@@ -293,14 +327,14 @@ class EditProfile extends React.Component {
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <input
+                                            <input
                                                 type="text"
                                                 name="CompanyName"
                                                 className="form-control"
                                                 value={CompanyName}
                                                 readOnly
                                                 id="CompanyName"
-                                                
+
                                             />
                                             <label htmlFor="CompanyName">Company Name</label>
 
@@ -309,7 +343,7 @@ class EditProfile extends React.Component {
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
-                                        <input
+                                            <input
                                                 type="text"
                                                 name="designation"
                                                 className="form-control"
@@ -321,7 +355,18 @@ class EditProfile extends React.Component {
                                             <span className="focus-border" />
                                         </div>
                                     </div>
-                                   
+                                    <div className='col-lg-12'>
+                                        <div className="form-group">
+                                            <ReactQuill
+                                                value={company_description}
+                                                onChange={this.handleInputChange}
+                                                theme="snow"
+                                                modules={this.modules}
+                                                placeholder="Description"
+                                                formats={this.formats}
+                                            />
+                                        </div>
+                                    </div>
 
                                     <div className="col-lg-12">
                                         <div className="form-submit-group">
