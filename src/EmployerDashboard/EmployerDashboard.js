@@ -6,6 +6,7 @@ import MyProfile from './MyProfile';
 import MyJobs from './MyJobs';
 import Header from '../Header/header';
 import { connect } from 'react-redux';
+import CandidateList from './CandidateList';
 
 class EmployerDashboard extends React.Component {
     constructor(props) {
@@ -102,6 +103,7 @@ class EmployerDashboard extends React.Component {
             showUserDashboard: false,
             showProfile: false,
             showMyJobs: false,
+            showCandidate: false,
         });
 
         switch (componentName) {
@@ -114,6 +116,9 @@ class EmployerDashboard extends React.Component {
 
             case 'myJobs':
                 this.setState({ showMyJobs: true });
+                break;
+            case 'showCandidate':
+                this.setState({ showCandidate: true });
                 break;
 
             // Add more cases for other components as needed
@@ -254,6 +259,11 @@ class EmployerDashboard extends React.Component {
                                                                             <i className="feather-user"></i><span>My Profile</span>
                                                                         </a>
                                                                     </li>
+                                                                    <li>
+                                                                        <a className={this.state.showCandidate ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('showCandidate'); }} href="#">
+                                                                            <i className="feather-users"></i><span>Candidate List</span>
+                                                                        </a>
+                                                                    </li>
 
                                                                     <li>
                                                                         <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
@@ -279,6 +289,7 @@ class EmployerDashboard extends React.Component {
                                         {this.state.showUserDashboard && <UserDashBoard dashBoardData={this.state?.dashBoardCounterData} message={this.state.responseMessage} />}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
                                         {this.state.showMyJobs && <MyJobs userData={this.state.userData} />}
+                                        {this.state.showCandidate && <CandidateList userData={this.state.userData} />}
 
                                     </div>
 
