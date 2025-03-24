@@ -171,48 +171,60 @@ class CourseDetails extends React.Component {
                 <Header dashBoardData={this.state.dashBoardData} />
 
                 {/* Start breadcrumb Area */}
-                <div className="rbt-breadcrumb-default rbt-breadcrumb-style-3">
-                    <div className="breadcrumb-inner breadcrumb-dark">
-                        <img src="assets/images/bg/bg-image-10.jpg" alt="Education Images" />
-                    </div>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-8">
-                                <div className="content text-start course-dp">
-                                    <ul className="page-list">
-                                        <li className="rbt-breadcrumb-item">
-                                            <a href={this.state.dashBoardData ? "/TrainerDashboard" : "/"}>{this.state.dashBoardData ? "Dashboard" : "Home"}</a>
-                                        </li>
-                                        <li>
-                                            <div className="icon-right">
-                                                <i className="feather-chevron-right" />
-                                            </div>
-                                        </li>
-                                        <li className="rbt-breadcrumb-item active">{this.state.courseListingData?.coursetitle}</li>
-                                    </ul>
-                                    <h2 className="title">
-                                        {this.state.courseListingData?.coursetitle}
-                                    </h2>
-                                    <p className="description">
-                                        {parse(
-                                            this.state.courseListingData?.description.split(" ").length > 20
-                                                ? this.state.courseListingData?.description.split(" ").slice(0, 20).join(" ") + "..."
-                                                : this.state.courseListingData?.description || ""
-                                        )}
-
-                                    </p>
-                                    <div className="d-flex align-items-center mb--20 flex-wrap rbt-course-details-feature">
-                                        {/* <div className="feature-sin best-seller-badge">
-                                            <span className="rbt-badge-2">
-                                                <span className="image">
-                                                    <img
-                                                        src="assets/images/icons/card-icon-1.png"
-                                                        alt="Best Seller Icon"
-                                                    />
-                                                </span>{" "}
-                                                Bestseller
-                                            </span>
-                                        </div> */}
+                                                <div className="rbt-breadcrumb-default rbt-breadcrumb-style-3">
+                                                    <div className="breadcrumb-inner breadcrumb-dark">
+                                                        <img src="assets/images/bg/bg-image-10.jpg" alt="Education Images" />
+                                                    </div>
+                                                    <div className="container">
+                                                        <div className="row">
+                                                            <div className="col-lg-8">
+                                                                <div className="content text-start course-dp">
+                                                                    <ul className="page-list">
+                                                                        <li className="rbt-breadcrumb-item">
+                                                                            <a href={this.state.dashBoardData ? "/TrainerDashboard" : "/"}>{this.state.dashBoardData ? "Dashboard" : "Home"}</a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <div className="icon-right">
+                                                                                <i className="feather-chevron-right" />
+                                                                            </div>
+                                                                        </li>
+                                                                        <li className="rbt-breadcrumb-item active">{this.state.courseListingData?.coursetitle}</li>
+                                                                    </ul>
+                                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}> {/* Aligns title and buttons inline */}
+                                                                        <h2 className="title">
+                                                                            {this.state.courseListingData?.coursetitle}
+                                                                        </h2>
+                                                                       {this.state.dashBoardData && this.state.dashBoardData.role_id==3 && <a className="rbt-btn btn-md hover-icon-reverse" href={`/edit-course?courseId=${this.courseId}`}>
+                                                                            <span className="icon-reverse-wrapper">
+                                                                                <span className="btn-text">Edit Course</span>
+                                                                                <span className="btn-icon">
+                                                                                    <i className="feather-arrow-right"></i>
+                                                                                </span>
+                                                                                <span className="btn-icon">
+                                                                                    <i className="feather-arrow-right"></i>
+                                                                                </span>
+                                                                            </span>
+                                                                        </a>}
+                                                                    </div>
+                                                                    <p className="description">
+                                                                        {parse(
+                                                                            this.state.courseListingData?.description.split(" ").length > 20
+                                                                                ? this.state.courseListingData?.description.split(" ").slice(0, 20).join(" ") + "..."
+                                                                                : this.state.courseListingData?.description || ""
+                                                                        )}
+                                                                    </p>
+                                                                    <div className="d-flex align-items-center mb--20 flex-wrap rbt-course-details-feature">
+                                                                        {/* <div className="feature-sin best-seller-badge">
+                                                                            <span className="rbt-badge-2">
+                                                                                <span className="image">
+                                                                                    <img
+                                                                                        src="assets/images/icons/card-icon-1.png"
+                                                                                        alt="Best Seller Icon"
+                                                                                    />
+                                                                                </span>{" "}
+                                                                                Bestseller
+                                                                            </span>
+                                                                        </div> */}
                                         {/* <div className="feature-sin rating">
                                             <a href="#">4.8</a>
                                             <a href="#">
@@ -1950,17 +1962,82 @@ class CourseDetails extends React.Component {
                                             </div>
                                         </div>
                                         {/* End Single Card  */}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-4">
-                                <div className="course-sidebar sticky-top rbt-shadow-box course-sidebar-top rbt-gradient-border">
-                                    <div className="inner">
-                                        {/* Start Viedo Wrapper  */}
-                                        <a
-                                            className="video-popup-with-text video-popup-wrapper text-center popup-video sidebar-video-hidden mb--15"
-                                            href="https://www.youtube.com/watch?v=nA1Aqp0sPQo"
-                                        >
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-lg-4">
+                                                                        <div className="course-sidebar sticky-top rbt-shadow-box course-sidebar-top rbt-gradient-border" style={{ zIndex: 1 }}>
+                                                                            <div className="inner">
+                                                                                {/* Start Viedo Wrapper  */}
+                                                                                <a
+                                                                                    className="video-popup-with-text video-popup-wrapper text-center popup-video sidebar-video-hidden mb--15"
+                                                                                    href="https://www.youtube.com/watch?v=nA1Aqp0sPQo"
+                                                                                >
+                                                                                    {/* <div className="video-content">
+                                                                                        <img
+                                                                                            className="w-100 rbt-radius"
+                                                                                            src="assets/images/others/video-01.jpg"
+                                                                                            alt="Video Images"
+                                                                                        />
+                                                                                        <div className="position-to-top">
+                                                                                            <span className="rbt-btn rounded-player-2 with-animation">
+                                                                                                <span className="play-icon" />
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <span className="play-view-text d-block color-white">
+                                                                                            <i className="feather-eye" /> Preview this course
+                                                                                        </span>
+                                                                                    </div> */}
+                                                                                </a>
+                                                                                {/* End Viedo Wrapper  */}
+                                                                                <div className="content-item-content">
+                                                                                    <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
+                                                                                        <div className="rbt-price">
+                                                                                            <span className="current-price">{this.state.courseListingData?.currency ? this.state.courseListingData?.currency + '-' + this.state.courseListingData?.course_fees : this.state.courseListingData?.course_fees}</span>
+                                                                                            { /* <span className="off-price">$84.99</span> */}
+                                                                                        </div>
+                                                                                        <div className="discount-time">
+                                                                                            <span className="rbt-badge color-danger bg-color-danger-opacity">
+                                                                                                <i className="feather-clock" /> {Math.max(0, Math.ceil((new Date(this.state.courseListingData?.startdate) - new Date()) / (1000 * 60 * 60 * 24)))} days left!
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <span className="subtitle">
+                                                                                        <i className="feather-rotate-ccw" /> Qualifies for 50% refund
+                                                                                    </span>
+                                                                                    <div className="rbt-widget-details has-show-more">
+                                                                                        <ul className="has-show-more-inner-content rbt-course-details-list-wrapper">
+                                                                                            <li>
+                                                                                                <span>Start Date</span>
+                                                                                                <span className="rbt-feature-value rbt-badge-5">
+                                                                                                    <span>{formatDate(this.state.courseListingData?.startdate)}</span>
+                                                                                                </span>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <span>Enrolled</span>
+                                                                                                <span className="rbt-feature-value rbt-badge-5">100</span>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <span>Lectures</span>
+                                                                                                <span className="rbt-feature-value rbt-badge-5">{this.state.courseListingData?.no_of_lessons}</span>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <span>Skill Level</span>
+                                                                                                <span className="rbt-feature-value rbt-badge-5">{this.state.courseListingData?.course_level_name}</span>
+                                                                                            </li>
+                                                                                            <li>
+                                                                                                <span>Language</span>
+                                                                                                <span className="rbt-feature-value rbt-badge-5">
+                                                                                                    English
+                                                                                                </span>
+                                                                                            </li>
+                                                                                        </ul>
+                                                                                        <div className="rbt-show-more-btn">Show More</div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                       
                                             {/* <div className="video-content">
                                                 <img
                                                     className="w-100 rbt-radius"
@@ -1976,7 +2053,7 @@ class CourseDetails extends React.Component {
                                                     <i className="feather-eye" /> Preview this course
                                                 </span>
                                             </div> */}
-                                        </a>
+                                    
                                         {/* End Viedo Wrapper  */}
                                         <div className="content-item-content">
                                             <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
@@ -1989,68 +2066,14 @@ class CourseDetails extends React.Component {
                                                         <i className="feather-clock" /> {Math.max(0, Math.ceil((new Date(this.state.courseListingData?.startdate) - new Date()) / (1000 * 60 * 60 * 24)))} days left!
                                                     </span>
                                                 </div>
-                                            </div>
-                                            {/* {this.state.dashBoardData?.role_id==1 &&  <div className="add-to-card-button mt--15">
-                                                                                                    <a
-                                                                                                        className="rbt-btn btn-gradient icon-hover w-100 d-block text-center"
-                                                                                                        href="#"
-                                                                                                        onClick={this.applyCourse}
-                                                                                                    >
-                                                                                                        <span className="btn-text">Enroll Now</span>
-                                                                                                        <span className="btn-icon">
-                                                                                                            <i className="feather-arrow-right" />
-                                                                                                        </span>
-                                                                                                    </a>
-                                                                                                </div>} */}
-                                            {/*
-                          <div class="buy-now-btn mt--15">
-                              <a class="rbt-btn btn-border icon-hover w-100 d-block text-center" href="#">
-                                  <span class="btn-text">Buy Now</span>
-                                  <span class="btn-icon"><i class="feather-arrow-right"></i></span>
-                              </a>
-                          </div>
-*/}
-                                            <span className="subtitle">
-                                                <i className="feather-rotate-ccw" /> Qualifies for 50% refund
-                                            </span>
-                                            <div className="rbt-widget-details has-show-more">
-                                                <ul className="has-show-more-inner-content rbt-course-details-list-wrapper">
-                                                    <li>
-                                                        <span>Start Date</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">
-                                                            <span>{formatDate(this.state.courseListingData?.startdate)}</span>
-                                                        </span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Enrolled</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">100</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Lectures</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">{this.state.courseListingData?.no_of_lessons}</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Skill Level</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">{this.state.courseListingData?.course_level_name}</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Language</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">
-                                                            English
-                                                        </span>
-                                                    </li>
-
-                                                </ul>
-                                                <div className="rbt-show-more-btn">Show More</div>
-                                            </div>
-
+                                            </div>                                     
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+               
+
 
 
 

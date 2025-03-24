@@ -274,12 +274,6 @@ class MyCourses extends React.Component {
                                           50 Students
                                           </li>
                                           {!course.isactive &&  <li>
-                                          <a style={{marginBottom:"10px",color:"blue"}} className="rbt-btn-link" href={`/edit-course?courseId=${course.courseid}`}>
-                                          Edit Course
-                                          <i className="feather-arrow-right" />
-                                          </a>
-                                          </li>}
-                                          {!course.isactive &&  <li>
                                           <i 
                                           className="feather-trash" 
                                           style={{ color: "red", cursor: "pointer" }} 
