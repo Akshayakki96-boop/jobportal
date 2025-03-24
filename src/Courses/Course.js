@@ -22,11 +22,16 @@ class Course extends React.Component {
     }
     componentDidMount() {
         //this.getDashboardUser();
+        let url = window.location.search;
+        var urlParams = new URLSearchParams(url);
+        var userId = urlParams.get('user_id'); // Remove extra space
+        this.userId = userId;    
         this.getAllCourse(0, this.state.pageSize);
 
     }
 
     getAllCourse = (pageIndex, pageSize) => {
+       debugger;
         this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/GetCourse`;
@@ -36,7 +41,7 @@ class Course extends React.Component {
             "courseId": 0,
             "coursetitle": "",
             "isactive": true,
-            "user_id": 0,
+            "user_id": this.userId ? this.userId : 0,
             "pageIndex": pageIndex,
             "pagesize": pageSize
         }

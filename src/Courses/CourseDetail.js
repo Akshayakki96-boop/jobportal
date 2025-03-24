@@ -20,7 +20,7 @@ class CourseDetails extends React.Component {
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
         var courseId = urlParams.get('courseId');
-        this.courseId=courseId;
+        this.courseId = courseId;
         this.sections = document.querySelectorAll('div[id]');
         const options = {
             root: null,
@@ -133,11 +133,11 @@ class CourseDetails extends React.Component {
         var request =
         {
             "applied_course_id": 0,
-            "course_id":this.courseId,
-            "candidate_user_id": this.state.dashBoardData.role_id==1?this.state.dashBoardData.user_id:0,
+            "course_id": this.courseId,
+            "candidate_user_id": this.state.dashBoardData.role_id == 1 ? this.state.dashBoardData.user_id : 0,
             "ip_address": "string",
             "status": 0
-          }
+        }
 
         axios.post(url, request, {
             headers: {
@@ -164,7 +164,7 @@ class CourseDetails extends React.Component {
             const dd = String(date.getDate()).padStart(2, "0");
             const yyyy = date.getFullYear();
             return `${mm}/${dd}/${yyyy}`;
-          };
+        };
         const { activeSection } = this.state;
         return (
             <>
@@ -301,7 +301,7 @@ class CourseDetails extends React.Component {
                         <div className="row g-5">
                             <div className="col-lg-8">
                                 <div className="course-details-content">
-                                    <div  className="rbt-course-feature-box rbt-shadow-box thuumbnail">
+                                    <div className="rbt-course-feature-box rbt-shadow-box thuumbnail">
                                         <img
                                             src={this.state.courseListingData ? `${process.env.REACT_APP_BASEURL}/Uploads/${this.state.courseListingData?.course_image}` : "assets/images/course/course-01.jpg"}
                                             alt="Card image"
@@ -337,7 +337,7 @@ class CourseDetails extends React.Component {
                                             <div className="section-title">
                                                 <h4 className="rbt-title-style-3">What you'll learn</h4>
                                             </div>
-                                            <p style={{textAlign:'left'}}>
+                                            <p style={{ textAlign: 'left' }}>
                                                 {parse(this.state.courseListingData?.description || "")}
                                             </p>
                                             {/* <div className="row g-5 mb--30"> */}
@@ -962,12 +962,12 @@ class CourseDetails extends React.Component {
                                         <div className="row g-5">
 
                                             {/* Start Feture Box  */}
-                                            <div  className="col-lg-12">
+                                            <div className="col-lg-12">
                                                 <div className="section-title">
                                                     <h4 className="rbt-title-style-3 mb--20">Description</h4>
                                                 </div>
                                                 <div style={{ textAlign: "left" }}>
-                                                {parse(this.state.courseListingData?.description || "")}
+                                                    {parse(this.state.courseListingData?.description || "")}
                                                 </div>
                                             </div>
                                             {/* End Feture Box  */}
@@ -1036,9 +1036,8 @@ class CourseDetails extends React.Component {
                                                         </ul>
                                                     </div>
                                                     <div className="content">
-                                                        <p className="description">
-                                                            John is a brilliant educator, whose life was spent for
-                                                            computer science and love of nature.
+                                                        <p className="description" >
+                                                            {this.state.courseListingData?.FullName} is a brilliant educator
                                                         </p>
                                                         <ul className="social-icon social-default icon-naked justify-content-start">
                                                             <li>
@@ -1770,7 +1769,7 @@ class CourseDetails extends React.Component {
                                                 <span className="subtitle bg-pink-opacity">Top Course</span>
                                                 <h4 className="title">
                                                     More Course By{" "}
-                                                    <strong className="color-primary">{this.state.courseListingData?.FullName?this.state.courseListingData?.FullName:""}</strong>
+                                                    <strong className="color-primary">{this.state.courseListingData?.FullName ? this.state.courseListingData?.FullName : ""}</strong>
                                                 </h4>
                                             </div>
                                         </div>
@@ -1778,10 +1777,11 @@ class CourseDetails extends React.Component {
                                             <div className="read-more-btn text-start text-md-end">
                                                 <a
                                                     className="rbt-btn rbt-switch-btn btn-border btn-sm"
-                                                    href="#"
+                                                    href={`/Course?user_id=${this.state.courseListingData?.posted_by}`}
                                                 >
                                                     <span data-text="View All Course">View All Course</span>
                                                 </a>
+
                                             </div>
                                         </div>
                                     </div>
@@ -1982,15 +1982,15 @@ class CourseDetails extends React.Component {
                                             <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
                                                 <div className="rbt-price">
                                                     <span className="current-price">{this.state.courseListingData?.currency ? this.state.courseListingData?.currency + '-' + this.state.courseListingData?.course_fees : this.state.courseListingData?.course_fees}</span>
-                                                   { /* <span className="off-price">$84.99</span> */}
-                                                                                                    </div>
-                                                                                                    <div className="discount-time">
-                                                                                                        <span className="rbt-badge color-danger bg-color-danger-opacity">
-                                                                                                            <i className="feather-clock" /> {Math.max(0, Math.ceil((new Date(this.state.courseListingData?.startdate) - new Date()) / (1000 * 60 * 60 * 24)))} days left!
-                                                                                                        </span>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                              {/* {this.state.dashBoardData?.role_id==1 &&  <div className="add-to-card-button mt--15">
+                                                    { /* <span className="off-price">$84.99</span> */}
+                                                </div>
+                                                <div className="discount-time">
+                                                    <span className="rbt-badge color-danger bg-color-danger-opacity">
+                                                        <i className="feather-clock" /> {Math.max(0, Math.ceil((new Date(this.state.courseListingData?.startdate) - new Date()) / (1000 * 60 * 60 * 24)))} days left!
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {/* {this.state.dashBoardData?.role_id==1 &&  <div className="add-to-card-button mt--15">
                                                                                                     <a
                                                                                                         className="rbt-btn btn-gradient icon-hover w-100 d-block text-center"
                                                                                                         href="#"
@@ -2018,7 +2018,7 @@ class CourseDetails extends React.Component {
                                                     <li>
                                                         <span>Start Date</span>
                                                         <span className="rbt-feature-value rbt-badge-5">
-                                                        <span>{formatDate(this.state.courseListingData?.startdate)}</span>
+                                                            <span>{formatDate(this.state.courseListingData?.startdate)}</span>
                                                         </span>
                                                     </li>
                                                     <li>
@@ -2039,7 +2039,7 @@ class CourseDetails extends React.Component {
                                                             English
                                                         </span>
                                                     </li>
-                                               
+
                                                 </ul>
                                                 <div className="rbt-show-more-btn">Show More</div>
                                             </div>
