@@ -1036,9 +1036,8 @@ class CourseDetails extends React.Component {
                                                         </ul>
                                                     </div>
                                                     <div className="content">
-                                                        <p className="description">
-                                                            John is a brilliant educator, whose life was spent for
-                                                            computer science and love of nature.
+                                                        <p className="description" >
+                                                        {this.state.courseListingData?.FullName} is a brilliant educator
                                                         </p>
                                                         <ul className="social-icon social-default icon-naked justify-content-start">
                                                             <li>
