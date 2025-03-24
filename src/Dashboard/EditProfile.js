@@ -168,7 +168,7 @@ class EditProfileTrainer extends React.Component {
                     mobile_no: response.data.data.basic_info.mobile_no,
                     profile_summary: response.data.data.basic_info.profile_summary,
                     experience: response.data.data.basic_info.experience,
-                    selectedDate: (response.data.data.basic_info.DOB == "1900-01-01T00:00:00" || !response.data.data.basic_info.DOB) ? new Date() : new Date(response.data.data.basic_info.DOB),
+                    selectedDate: (response.data.data.basic_info.dob == "1900-01-01T00:00:00" || !response.data.data.basic_info.dob) ? new Date() : new Date(response.data.data.basic_info.dob),
                     userId: response.data.data.basic_info.user_id,
                     profile_title: response.data.data.basic_info.profile_title,
                     linkedInSelected: response.data.data.basic_info.linkedin_profile_url,
