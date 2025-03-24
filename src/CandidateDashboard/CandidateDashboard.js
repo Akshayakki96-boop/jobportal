@@ -176,7 +176,6 @@ class CandidateDashboard extends React.Component {
                                         <div className="tranr-titl">
                                             <div className="content text-center">
                                             <h6 className="subtitle sal-animate" >Candidate</h6>
-                                                <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.fullname}</span></h3>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}
@@ -209,16 +208,7 @@ class CandidateDashboard extends React.Component {
                                                 </div>
                                                 <div className="tutor-content">
                                                     <h5 className="title">{this.state?.dashBoardData.username} (Candidate)</h5>
-                                                    <div className="rbt-review">
-                                                        <div className="rating">
-                                                            <i className="fas fa-star"></i>
-                                                            <i className="fas fa-star"></i>
-                                                            <i className="fas fa-star"></i>
-                                                            <i className="fas fa-star"></i>
-                                                            <i className="fas fa-star"></i>
-                                                        </div>
-                                                        <span className="rating-count"> (15 Reviews)</span>
-                                                    </div>
+                                                  
                                                 </div>
                                             </div>
                                             {/* <div className="rbt-tutor-information-right">

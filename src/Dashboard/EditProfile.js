@@ -1293,7 +1293,7 @@ class EditProfileTrainer extends React.Component {
                                             Add Employment
                                         </Button>
 
-                                        <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal}>
+                                        <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal} size='lg'>
                                             <Modal.Header closeButton>
                                                 <Modal.Title>{this.state.currentEmploymentIndex !== null ? 'Edit Employment' : 'Add Employment'}</Modal.Title>
                                             </Modal.Header>
@@ -1411,7 +1411,7 @@ class EditProfileTrainer extends React.Component {
                                             Add Education
                                         </Button>
 
-                                        <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal}>
+                                        <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal} size='lg'>
                                             <Modal.Header closeButton>
                                                 <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
                                             </Modal.Header>

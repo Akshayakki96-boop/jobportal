@@ -328,6 +328,70 @@ class EditCourse extends React.Component {
         this.setState({ description: event }, this.validateForm);
     };
 
+    handleCourseSave = () => {
+
+        if (!this.state.isRefundable) {
+            this.setState({ showRefundablePopup: true });
+        }
+        else {
+            this.createSaveCourse("Yes");
+        }
+    }
+
+       createSaveCourse = (type) => {
+            
+            const baseUrl = process.env.REACT_APP_BASEURL;
+            const url = `${baseUrl}/api/Course/PostCourse`;
+            const token = localStorage.getItem('authToken');
+            const selectedDate = this.state.startDate; // Assuming this is a Date object
+            const date = selectedDate ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000) : null;
+            const isoString = date ? date.toISOString() : null;
+            var courseData = {
+                "courseId": this.courseId,
+                "coursetitle": this.state.courseName,
+                "description": this.state.description,
+                "notes": "string",
+                "duration": this.state.duration,
+                "course_level": this.state.courseSelected?this.state.courseSelected.value:0,
+                "course_image": this.state.fileName,
+                "course_fees": this.state.courseFee,
+                "is_refundable": type == "Yes" ? true : false,
+                "course_materials": this.state.courseMaterial,
+                "no_of_lessons": this.state.nooflessons,
+                "isactive": false,
+                "ipAddress": '192.168.1.1',
+                "currency": this.state.currencyCode.value,
+                "startdate": isoString
+            }
+    
+            axios.post(url, courseData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {                
+                    this.setState({
+                        responseMessage: (
+                            <span>
+                                Course Updated Successfully
+                            </span>
+                        ),
+                        alertVariant: 'success', // Success alert variant
+                    });
+                    window.scrollTo(0, 0);
+                })
+                .catch((error) => {
+                    console.error('update failed:', error.response?.data || error.message);
+    
+                    this.setState({
+                        responseMessage: error.response?.data.message,
+                        alertVariant: 'danger', // Error alert variant
+                    });
+                    window.scrollTo(0, 0);
+                });
+        }
+
     handleCourseSubmit = () => {
         if (!this.state.isRefundable) {
             this.setState({ showRefundablePopup: true });
@@ -340,16 +404,21 @@ class EditCourse extends React.Component {
     }
 
     createCourse = (type) => {
+
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/PostCourse`;
         const token = localStorage.getItem('authToken');
+        const selectedDate = this.state.startDate; // Assuming this is a Date object
+        const date = selectedDate ? new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000) : null;
+        const isoString = date ? date.toISOString() : null;
+
         var courseData = {
             "courseId": this.courseId,
             "coursetitle": this.state.courseName,
             "description": this.state.description,
             "notes": "string",
             "duration": this.state.duration,
-            "course_level": this.state.courseSelected?this.state.courseSelected.value:0,
+            "course_level": this.state.courseSelected ? this.state.courseSelected.value : 0,
             "course_image": this.state.fileName,
             "course_fees": this.state.courseFee,
             "is_refundable": type == "Yes" ? true : false,
@@ -358,7 +427,7 @@ class EditCourse extends React.Component {
             "isactive": false,
             "ipAddress": '192.168.1.1',
             "currency": this.state.currencyCode.value,
-            "startdate": this.state.startDate ? this.state.startDate.toISOString() : null
+            "startdate": isoString
         }
 
         axios.post(url, courseData, {
@@ -368,32 +437,18 @@ class EditCourse extends React.Component {
             },
         })
             .then((response) => {
-                this.setState({
-                    courseName: '',
-                    description: '',
-                    duration: '',
-                    courseSelected: null,
-                    fileName: '',
-                    courseFee: '',
-                    isRefundable: false,
-                    resumefileName: '',
-                    nooflessons: '',
-                    logo: null,
-                    logoPreview: null,
-                    uploadStatus: null,
-                    resumePreview: null,
-                    uploadResumeStatus: null,
-                    courseMaterial: null
-                });
-                this.setState({
-                    responseMessage: (
-                        <span>
-                            Course Updated Successfully
-                        </span>
-                    ),
-                    alertVariant: 'success', // Success alert variant
-                });
-                window.scrollTo(0, 0);
+                
+
+                this.ActivateCourse(this.courseId);
+                // this.setState({
+                //     responseMessage: (
+                //         <span>
+                //             Course Created Successfully
+                //         </span>
+                //     ),
+                //     alertVariant: 'success', // Success alert variant
+                // });
+                // window.scrollTo(0, 0);
             })
             .catch((error) => {
                 console.error('update failed:', error.response?.data || error.message);
@@ -405,6 +460,47 @@ class EditCourse extends React.Component {
                 window.scrollTo(0, 0);
             });
     }
+
+     ActivateCourse = (course) => {
+            const baseUrl = process.env.REACT_APP_BASEURL;
+            const url = `${baseUrl}/api/Course/ToggleCourse`;
+            const token = localStorage.getItem('authToken');
+            var request =
+            {
+              "courseId": course,
+              "isactive": true,
+        
+            }
+        
+        
+            axios.post(url, request, {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            })
+              .then((response) => {
+               // this.getAllCourse(0, this.state.pageSize);
+                this.setState({
+                  responseMessage: (
+                    <span>
+                      Course saved and activated successfully
+                    </span>
+                  ),
+                  alertVariant: 'success', // Success alert variant
+                });
+                window.scrollTo(0, 0);
+        
+        
+              })
+              .catch((error) => {
+                this.setState({
+                  responseMessage: "Something went wrong !",
+                  alertVariant: 'danger', // Error alert variant
+              });
+              window.scrollTo(0, 0);
+              });
+          }
 
     hanldeCheckChange = (e) => {
         this.setState({ isRefundable: e.target.checked });
@@ -428,6 +524,7 @@ class EditCourse extends React.Component {
         this.setState({ currencyCode: selectedOption });
     };
     handleDateChange = (date) => {
+        debugger;
         this.setState({ startDate: date });
     };
     modules = {
@@ -648,19 +745,32 @@ class EditCourse extends React.Component {
 
 
                                             <div className="col-lg-12">
-                                                <div className="form-submit-group">
+                                                <div className="form-submit-group d-flex gap-3">
+                                                <button
+                                                        type="button"
+                                                        className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                        onClick={this.handleCourseSave}
+                                                    >
+                                                        <span className="icon-reverse-wrapper">
+                                                            <span className="btn-text">Save</span>
+                                                            <span className="btn-icon">
+                                                                <i className="feather-arrow-right" />
+                                                            </span>
+                                                        </span>
+                                                    </button>
                                                     <button
                                                         type="button"
                                                         className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
                                                         onClick={this.handleCourseSubmit}
                                                     >
                                                         <span className="icon-reverse-wrapper">
-                                                            <span className="btn-text">Save Information</span>
+                                                            <span className="btn-text">Save and Activate</span>
                                                             <span className="btn-icon">
                                                                 <i className="feather-arrow-right" />
                                                             </span>
                                                         </span>
                                                     </button>
+
                                                 </div>
                                             </div>
 
