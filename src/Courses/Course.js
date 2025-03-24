@@ -14,7 +14,7 @@ class Course extends React.Component {
             totalPages: 1,
             totalRecords: 0, // Total number of records
             searchQuery: "", // State to store the search input
-            dashBoardData: "",
+            dashBoardData: {},
             searchFilteredQuery: "",
             errorMessage: "",
         };
@@ -25,13 +25,20 @@ class Course extends React.Component {
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
         var userId = urlParams.get('user_id'); // Remove extra space
-        this.userId = userId;    
+        this.userId = userId;   
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            this.getDashboardUser();
+        }
+        else {
+            this.setState({ dashBoardData: "" });
+        }
+
         this.getAllCourse(0, this.state.pageSize);
 
     }
 
     getAllCourse = (pageIndex, pageSize) => {
-       debugger;
         this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/GetCourse`;
