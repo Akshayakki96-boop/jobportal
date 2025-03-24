@@ -21,9 +21,64 @@ class jobs extends React.Component {
 
     }
     componentDidMount() {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            this.getDashboardUser();
+        }
+        else {
+            this.setState({ dashBoardData: "" });
+        }
         this.getAllJobs(0, this.state.pageSize);
 
     }
+     getDashboardUser = () => {
+            const baseUrl = process.env.REACT_APP_BASEURL;
+            const url = `${baseUrl}/api/Employer/Dashboard`;
+            const token = localStorage.getItem('authToken');
+    
+            axios.post(url, "", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    console.log('dashboard data', response.data);
+                    this.getUserProfile(response.data.user_id);
+                    this.setState({ dashBoardData: response.data.data });
+                    this.setState({ keepSpinner: false });
+    
+                })
+                .catch((error) => {
+                    localStorage.removeItem('authToken');
+                    this.props.navigate('/Login'); // Use `navigate`
+                });
+        }
+
+        getUserProfile = (userId) => {
+            const baseUrl = process.env.REACT_APP_BASEURL;
+            const url = `${baseUrl}/api/Employer/GetProfile`;
+            const token = localStorage.getItem('authToken');
+            const userData = {
+                "Id": userId,
+            };
+            axios.post(url, userData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then((response) => {
+                    console.log('user data', response.data);
+                    this.setState({ userData: response.data.data })
+                    this.setState({ keepSpinner: false });
+    
+                })
+                .catch((error) => {
+                    localStorage.removeItem('authToken');
+                    this.props.navigate('/Login'); // Use `navigate`
+                });
+        }
 
     getAllJobs = (pageIndex, pageSize) => {
         this.setState({ keepSpinner: true });
