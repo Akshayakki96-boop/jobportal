@@ -1330,14 +1330,14 @@ class EditProfileCandidate extends React.Component {
                                             </div>
                                             <div className="form-group">
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     id="experience"
                                                     name="experience"
                                                     value={experience}
                                                     onChange={this.handleExperienceChange}
                                                 />
-                                                <label htmlFor="experience">Total Experience</label>
+                                                <label htmlFor="experience">Total Experience(in years)</label>
                                             </div>
 
                                             <div className="form-group">
@@ -1467,7 +1467,7 @@ class EditProfileCandidate extends React.Component {
                                                     Add Employment
                                                 </Button>
 
-                                                <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal}>
+                                                <Modal show={showEmploymentModal} onHide={this.handleCloseEmploymentModal} size="lg">
                                                     <Modal.Header closeButton>
                                                         <Modal.Title>{this.state.currentEmploymentIndex !== null ? 'Edit Employment' : 'Add Employment'}</Modal.Title>
                                                     </Modal.Header>
@@ -1695,7 +1695,7 @@ class EditProfileCandidate extends React.Component {
                                                     Add Project
                                                 </Button>
 
-                                                <Modal show={this.state.showProjectModal} onHide={this.handleCloseProjectModal}>
+                                                <Modal show={this.state.showProjectModal} onHide={this.handleCloseProjectModal} size='lg'>
                                                     <Modal.Header closeButton>
                                                         <Modal.Title>{this.state.currentProjectIndex !== null ? 'Edit Project' : 'Add Project'}</Modal.Title>
                                                     </Modal.Header>
@@ -1810,7 +1810,7 @@ class EditProfileCandidate extends React.Component {
                                                     Add Education
                                                 </Button>
 
-                                                <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal}>
+                                                <Modal show={this.state.showEducationModal} onHide={this.handleCloseEducationModal} size='lg'>
                                                     <Modal.Header closeButton>
                                                         <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
                                                     </Modal.Header>

@@ -59,7 +59,7 @@ class MyProfile extends React.Component {
                                         href={`/edit-profile-trainer?user_Id=${this.state.updatedUserData.user_id}`}
                                         className="rbt-btn btn-sm"
                                     >
-                                        <i className="feather-edit pl--0"></i> Edit Profile
+                                        <i className="feather-edit pl--0"></i> View and Edit Profile
                                     </a>
 
 

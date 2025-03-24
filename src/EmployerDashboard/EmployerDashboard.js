@@ -181,7 +181,6 @@ class EmployerDashboard extends React.Component {
                                         <div className="tranr-titl">
                                             <div className="content text-center">
                                                 <h6 className="subtitle sal-animate" >Employer</h6>
-                                                <h3 style={{ textAlign: "center" }} className="title sal-animate">Learn with <span>{this.state?.userData?.firstname}</span></h3>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}
