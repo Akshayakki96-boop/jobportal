@@ -667,7 +667,7 @@ class Home extends React.Component {
                             <div className="row row--15">
                                 {this.state.joblistingdata && this.state.joblistingdata.length > 0 ? (
                                     this.state.joblistingdata.map((job, index) => (
-                                        <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" key={index}>
+                                        <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" style={{width:"56%"}} key={index}>
                                             <div className="rbt-card variation-01 rbt-hover card-list-2">
                                                 <div className="rbt-card-img">
                                                     <a href="#">
@@ -687,14 +687,14 @@ class Home extends React.Component {
                                                         <li><i className="fas fa-building"></i> {job.CompanyName}</li>
                                                         <li><i className="fas fa-map-marker-alt"></i> {job.locations}</li>
                                                     </ul>
-                                                    <p className="rbt-card-text">
+                                                    {/* <p className="rbt-card-text">
                                                         {parse(job.description)}
-                                                    </p>
+                                                    </p> */}
                                                     <div className="rbt-card-bottom">
                                                         <div className="rbt-price">
                                                             <span className="current-price"><i className="fas fa-rupee-sign"></i> {job.package_notdisclosed ? "Package not disclosed" : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}</span>
                                                         </div>
-                                                        <a className="rbt-btn-link" href="#">
+                                                        <a className="rbt-btn-link" href={localStorage.getItem('authToken') ? `/Job-details?jobId=${job.jobid}` : `/job-decription?jobId=${job.jobid}`}>
                                                             Learn More<i className="feather-arrow-right"></i>
                                                         </a>
                                                     </div>
