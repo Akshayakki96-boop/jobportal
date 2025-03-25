@@ -524,7 +524,6 @@ class EditCourse extends React.Component {
         this.setState({ currencyCode: selectedOption });
     };
     handleDateChange = (date) => {
-        debugger;
         this.setState({ startDate: date });
     };
     modules = {
