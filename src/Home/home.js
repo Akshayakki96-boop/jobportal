@@ -72,7 +72,7 @@ class Home extends React.Component {
             "industryId": 0,
             "keyskillIds": "",
             "educationId": "",
-            "active": false,
+            "active": true,
             "user_id": 0,
             "cityIds": "1,2",
             pageIndex: pageIndex,
@@ -144,12 +144,12 @@ class Home extends React.Component {
 
     }
 
-   
+
     getInitials = (name) => {
         if (!name) return "U"; // Default to "U" if name is not provided
-    
+
         const parts = name.trim().split(" "); // Trim to remove extra spaces
-    
+
         return parts.length > 1
             ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
             : parts[0][0].toUpperCase(); // Single initial
@@ -228,10 +228,14 @@ class Home extends React.Component {
                                                 this.state.courseListingData.map((course, index) => (
                                                     <SwiperSlide style={{ width: "400px", height: "auto" }} key={index}>
                                                         <div className="rbt-card variation-01 rbt-hover">
-                                                            <div className="rbt-card-img">
+                                                            <div className="rbt-card-img min-height">
                                                                 <a href={`/Course-Details?courseId=${course.courseid}`}>
                                                                     <img src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing 
                                                                         alt="Card" />
+                                                                         <div style={{ width: "76px" }} className="rbt-badge-3 bg-white">
+                                                                        <span>Applicable</span>
+                                                                        <span>for refund</span>
+                                                                    </div>
                                                                     {/* <div className="rbt-badge-3 bg-white">
                                         <span>-40%</span>
                                         <span>Off</span>
@@ -253,12 +257,12 @@ class Home extends React.Component {
                                                                             : course.description
                                                                     )}
                                                                 </p> */}
-                                                                <div className="rbt-review">
+                                                                {/* <div className="rbt-review">
                                                                     <div className="rating">
                                                                         {[...Array(course.rating)].map((_, i) => <i key={i} className="fa fa-star"></i>)}
                                                                     </div>
                                                                     <span className="rating-count"> ({course.reviews} Reviews)</span>
-                                                                </div>
+                                                                </div> */}
                                                                 <div className="rbt-card-bottom">
                                                                     <div className="rbt-price">
                                                                         <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
@@ -276,12 +280,12 @@ class Home extends React.Component {
                                                 [1, 2, 3].map((_, index) => (
                                                     <SwiperSlide style={{ width: "400px", height: "auto" }} key={index}>
                                                         <div className="rbt-card variation-01 rbt-hover">
-                                                            <div className="rbt-card-img">
+                                                            <div className="rbt-card-img min-height">
                                                                 <a href="course-details.html">
                                                                     <img src={`assets/images/course/course-0${index + 1}.jpg`} alt="Card" />
-                                                                    <div className="rbt-badge-3 bg-white">
-                                                                        <span>-40%</span>
-                                                                        <span>Off</span>
+                                                                    <div style={{ width: "76px" }} className="rbt-badge-3 bg-white">
+                                                                        <span>Applicable</span>
+                                                                        <span>for refund</span>
                                                                     </div>
                                                                 </a>
                                                             </div>
@@ -294,12 +298,12 @@ class Home extends React.Component {
                                                                     <a href="course-details.html">React</a>
                                                                 </h4>
                                                                 <p className="rbt-card-text">It is a long established fact that a reader will be distracted.</p>
-                                                                <div className="rbt-review">
+                                                                {/* <div className="rbt-review">
                                                                     <div className="rating">
                                                                         {[...Array(5)].map((_, i) => <i key={i} className="fa fa-star"></i>)}
                                                                     </div>
                                                                     <span className="rating-count"> (15 Reviews)</span>
-                                                                </div>
+                                                                </div> */}
                                                                 <div className="rbt-card-bottom">
                                                                     <div className="rbt-price">
                                                                         <span className="current-price">$70</span>
@@ -486,7 +490,7 @@ class Home extends React.Component {
                                             <div className="rbt-card-img  min-height">
                                                 <a href={`/Course-Details?courseId=${course.courseid}`}>
                                                     <img src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/course/course-01.jpg"} alt="Card image" />
-                                                    <div style={{width:"76px"}} className="rbt-badge-3 bg-white">
+                                                    <div style={{ width: "76px" }} className="rbt-badge-3 bg-white">
                                                         <span>Applicable</span>
                                                         <span>for refund</span>
                                                     </div>
@@ -667,7 +671,7 @@ class Home extends React.Component {
                             <div className="row row--15">
                                 {this.state.joblistingdata && this.state.joblistingdata.length > 0 ? (
                                     this.state.joblistingdata.map((job, index) => (
-                                        <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" style={{width:"56%"}} key={index}>
+                                        <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" style={{ width: "56%" }} key={index}>
                                             <div className="rbt-card variation-01 rbt-hover card-list-2">
                                                 <div className="rbt-card-img">
                                                     <a href="#">
@@ -862,7 +866,7 @@ class Home extends React.Component {
                                                         </span>
                                                     </div>
                                                     <p>
-                                                    Gautam has 5 years of experience in software development...
+                                                        Gautam has 5 years of experience in software development...
                                                     </p>
                                                     <ul className="social-icon social-default mt--20 justify-content-start">
                                                         <li>
