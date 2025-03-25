@@ -165,7 +165,15 @@ class jobDetails extends React.Component {
       });
   }
 
+  getInitials = (name) => {
+    if (!name) return "U"; // Default to "U" if name is not provided
 
+    const parts = name.trim().split(" "); // Trim to remove extra spaces
+
+    return parts.length > 1
+        ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+        : parts[0][0].toUpperCase(); // Single initial
+};
 
 
   render() {
@@ -271,11 +279,21 @@ console.log("user",this.user)
                         </div>
                       </div>
                       <div className="col-lg-3  d-flex flex-column justify-content-center">
+                      {this.state.jobDescription?.companylogo?(
                         <div className="job-det-pic">
                           <a href="#">
                             <img src={this.state.jobDescription?.companylogo?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.jobDescription.companylogo}`:"assets/images/job-zob-img.jpg"} alt="Card image" />
                           </a>
                         </div>
+                      ):
+                      (
+                        <div className="job-det-pic company-logo-name">
+                       
+                        <h2>{this.getInitials(this.state.jobDescription?.CompanyName)}</h2>  
+                      </div>
+                      )
+
+                    }
                       </div>
                     </div>
                   </div>
