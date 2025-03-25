@@ -71,8 +71,8 @@ class MyJobs extends React.Component {
         this.setState({
           responseMessage: "Something went wrong !",
           alertVariant: 'danger', // Error alert variant
-      });
-      window.scrollTo(0, 0);
+        });
+        window.scrollTo(0, 0);
       });
 
   }
@@ -85,6 +85,41 @@ class MyJobs extends React.Component {
   handleSearchChange = (e) => {
     this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
   };
+
+    handlePublish = (job,isactive) => {
+          const baseUrl = process.env.REACT_APP_BASEURL;
+          const url = `${baseUrl}/api/Job/ToggleJob`;
+          const token = localStorage.getItem('authToken');
+          const toggleData = {
+              "jobId": job.jobid,
+              "isactive": isactive,
+          }
+          axios.post(url, toggleData, {
+              headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+              },
+          })
+              .then((response) => {
+                  // this.setState({ isPublished: !this.state.isPublished });
+                  this.setState({
+                    responseMessage: isactive
+                      ? "Job Published Successfully!"
+                      : "Job Unpublished Successfully!",
+                    alertVariant: 'success', // Success alert variant
+                  });
+                    window.scrollTo(0, 0);
+                    const { currentPage, pageSize } = this.state;
+                    this.setState({ currentPage }, () => {
+                      this.getAllJobs(this.state.currentPage - 1, pageSize); // Maintain the current page after refresh
+                    });
+  
+              })
+              .catch((error) => {
+                  localStorage.removeItem('authToken');
+                  this.props.navigate('/Login'); // Use `navigate`
+              });
+      }
   render() {
     const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
     const startIndex = (currentPage - 1) * pageSize + 1;
@@ -115,6 +150,13 @@ class MyJobs extends React.Component {
             {/* Start Banner Content Top  */}
             <div className="rbt-banner-content-top">
               <div className="container">
+                  <div className="container mt-5">
+                          {this.state.responseMessage && (
+                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                              {this.state.responseMessage}
+                            </Alert>
+                          )}
+                        </div>
                 <div className="row">
                   <div className="col-lg-12">
 
@@ -122,7 +164,7 @@ class MyJobs extends React.Component {
                       <h1 className="title mb--0">Jobs</h1>
                     </div>
                     <h4 className="description">
-                    FFind Your Dream Job – Apply for top opportunities and get hired faster with Zobskill!:
+                      Find Your Dream Job – Apply for top opportunities and get hired faster with Zobskill!:
                     </h4>
                   </div>
                 </div>
@@ -203,11 +245,15 @@ class MyJobs extends React.Component {
                               <li>
                                 <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
                               </li>
+                              <li>
+
+                                {!job.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.handlePublish(job,true)}>Publish </a> : <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.handlePublish(job,false)}>UnPublish </a>}
+                              </li>
                             </ul>
                             {/* <p className="rbt-card-text">
                               {parse(job.description)}
                             </p> */}
-                            
+
                             <div className="rbt-card-bottom">
                               <div className="rbt-price">
                                 <span className="current-price">
@@ -218,7 +264,7 @@ class MyJobs extends React.Component {
                                 </span>
                               </div>
                               <br />
-                             
+
                               <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}`}>
                                 Learn More
                                 <i className="feather-arrow-right" />
