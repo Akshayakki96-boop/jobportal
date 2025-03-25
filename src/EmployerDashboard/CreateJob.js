@@ -183,7 +183,7 @@ class CreateJob extends React.Component {
         this.handleInputChange('description', e);
         this.setState({ description: e })
     };
-    handlePostJob = () => {
+    handlePostSaveJob = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Job/PostJob`;
         const token = localStorage.getItem('authToken');
@@ -214,10 +214,15 @@ class CreateJob extends React.Component {
         })
             .then((response) => {
                 console.log('jobpostingdata', response.data);
-                this.requestData = {};
-                this.requestData.showSuccessJobPost = true;
-                store.dispatch(setSingleRequest(this.requestData));
-                this.props.navigate('/EmployerDashboard?message=success'); // Use `navigate`
+                this.setState({
+                    responseMessage: (
+                        <span>
+                            Job Saved Successfully!
+                        </span>
+                    ),
+                    alertVariant: 'success', // Success alert variant
+                });
+                window.scrollTo(0, 0);
                 this.setState({ keepSpinner: false });
 
             })
@@ -228,6 +233,86 @@ class CreateJob extends React.Component {
                     responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
+                window.scrollTo(0, 0);
+            });
+    }
+
+
+    handlePostJob = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Job/PostJob`;
+        const token = localStorage.getItem('authToken');
+        var request = {
+
+            "title": this.state.title,
+            "description": this.state.description,
+            "experienceFrom": this.state.selectedExperience.value,
+            "experienceTo": this.state.selectedExperience.value,
+            "packageId": this.state.selectedPackage.value,
+            "packageNotdisclosed": false,
+            "roleId": this.state.selectedRole.value,
+            "emptypeId": this.state.selectedEmpType.value,
+            "deptId": this.state.selectedDepartment.value,
+            "industryId": this.state.selectedIndustry.value,
+            "keyskillIds": this.state.selectedKeySkills.map((item) => item.value).join(','),
+            "educationId": this.state.selectedEducation.map((item) => item.value).join(','),
+            "noOfOpening": this.state.openings,
+            "isactive": false,
+            "ipAddress": "192.168.1.1",
+            "cityIds": this.state.selectedCity.map((item) => item.value).join(',')
+        }
+        axios.post(url, request, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('jobpostingdatasubmit', response.data);
+                this.handlePublish(response.data.data);
+                this.setState({ keepSpinner: false });
+
+            })
+            .catch((error) => {
+                //console.error('Signup Error:', error.response?.data || error.message);
+                this.setState({ keepSpinner: false });
+                this.setState({
+                    responseMessage: error.response?.data.message,
+                    alertVariant: 'danger', // Error alert variant
+                });
+            });
+    }
+
+    handlePublish = (jobid) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Job/ToggleJob`;
+        const token = localStorage.getItem('authToken');
+        const toggleData = {
+            "jobId": jobid,
+            "isactive": true,
+        }
+        axios.post(url, toggleData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                // this.setState({ isPublished: !this.state.isPublished });
+                this.setState({
+                    responseMessage: (
+                        <span>
+                            Job Saved and Published Successfully!
+                        </span>
+                    ),
+                    alertVariant: 'success', // Success alert variant
+                });
+                window.scrollTo(0, 0);
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
             });
     }
     handlePackage = (selectedOption) => {
@@ -287,246 +372,263 @@ class CreateJob extends React.Component {
 
         return (
             <><Header dashBoardData={this.state.dashBoardData} /><div className="rbt-become-area bg-color-white rbt-section-gap">
-            <AdvancedBreadcumb componentName="Create new" ComponentValue="Create New" redirectURL="/EmployerDashboard" />
+                <AdvancedBreadcumb componentName="Create new" ComponentValue="Create New" redirectURL="/EmployerDashboard" />
                 <div className="container">
+                    <div className="container mt-5">
+                        {this.state.responseMessage && (
+                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                                {this.state.responseMessage}
+                            </Alert>
+                        )}
+                         </div>
+                        <div className="row pt--60 g-5">
 
-                    <div className="row pt--60 g-5">
-                        
-                        <div className="col-lg-12">
-                            <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                <h3 className="title">Create New Job</h3>
-                                <hr className="mb--30" />
-                                <form onSubmit={(e) => e.preventDefault()} className="row row--15">
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input name="title" type="text" value={this.state.title} onChange={(e) => this.handleTitle(e)} />
-                                            <label>Title*</label>
-                                            <span className="focus-border" />
+                            <div className="col-lg-12">
+                                <div className="rbt-contact-form contact-form-style-1 max-width-auto">
+                                    <h3 className="title">Create New Job</h3>
+                                    <hr className="mb--30" />
+                                    <form onSubmit={(e) => e.preventDefault()} className="row row--15">
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input name="title" type="text" value={this.state.title} onChange={(e) => this.handleTitle(e)} />
+                                                <label>Title*</label>
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <Select
-                                                options={reactSelectOptions?.roles}
-                                                value={this.state.selectedRole}
-                                                placeholder="Select Role"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleRoles(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <Select
+                                                    options={reactSelectOptions?.roles}
+                                                    value={this.state.selectedRole}
+                                                    placeholder="Select Role"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleRoles(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <Select
-                                                options={reactSelectOptions?.experience}
-                                                value={this.state.selectedExperience}
-                                                placeholder="Select Experience"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleExperience(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <Select
+                                                    options={reactSelectOptions?.experience}
+                                                    value={this.state.selectedExperience}
+                                                    placeholder="Select Experience"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleExperience(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <Select
-                                                options={reactSelectOptions?.package}
-                                                value={this.state.selectedPackage}
-                                                placeholder="Select Salary"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handlePackage(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <Select
+                                                    options={reactSelectOptions?.package}
+                                                    value={this.state.selectedPackage}
+                                                    placeholder="Select Salary"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handlePackage(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input name="openings" type="text" value={this.state.openings} onChange={(e) => this.handleOpenings(e)} />
-                                            <label>Openings*</label>
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input name="openings" type="text" value={this.state.openings} onChange={(e) => this.handleOpenings(e)} />
+                                                <label>Openings*</label>
 
-                                            <span className="focus-border" />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>City*</label>
-                                            <Select
-                                                isMulti
-                                                value={this.state.selectedCity}
-                                                options={this.state.cityOptions}
-                                                placeholder="Select City"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleCityChange(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <label>City*</label>
+                                                <Select
+                                                    isMulti
+                                                    value={this.state.selectedCity}
+                                                    options={this.state.cityOptions}
+                                                    placeholder="Select City"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleCityChange(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>JobType*</label>
-                                            <Select
-                                                options={reactSelectOptions?.empType}
-                                                value={this.state.selectedEmpType}
-                                                placeholder="Select Type"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleJobType(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <label>JobType*</label>
+                                                <Select
+                                                    options={reactSelectOptions?.empType}
+                                                    value={this.state.selectedEmpType}
+                                                    placeholder="Select Type"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleJobType(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Mode*</label>
-                                            <Select
-                                                options={reactSelectOptions?.jobMode}
-                                                value={this.state.selectedMode}
-                                                placeholder="Select Mode"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleJobMode(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <label>Mode*</label>
+                                                <Select
+                                                    options={reactSelectOptions?.jobMode}
+                                                    value={this.state.selectedMode}
+                                                    placeholder="Select Mode"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleJobMode(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Key Skills*</label>
-                                            <Select
-                                                isMulti
-                                                options={reactSelectOptions?.keyskill}
-                                                value={this.state.selectedKeySkills}
-                                                placeholder="Select Skills"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleKeySkills(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <label>Key Skills*</label>
+                                                <Select
+                                                    isMulti
+                                                    options={reactSelectOptions?.keyskill}
+                                                    value={this.state.selectedKeySkills}
+                                                    placeholder="Select Skills"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleKeySkills(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Education*</label>
-                                            <Select
-                                                isMulti
-                                                options={reactSelectOptions?.education}
-                                                value={this.state.selectedEducation}
-                                                placeholder="Select Education"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleEducation(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <label>Education*</label>
+                                                <Select
+                                                    isMulti
+                                                    options={reactSelectOptions?.education}
+                                                    value={this.state.selectedEducation}
+                                                    placeholder="Select Education"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleEducation(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Industry Type*</label>
-                                            <Select
-                                                options={reactSelectOptions?.industries}
-                                                value={this.state.selectedIndustry}
-                                                placeholder="Select Industry Type"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleIndustry(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <label>Industry Type*</label>
+                                                <Select
+                                                    options={reactSelectOptions?.industries}
+                                                    value={this.state.selectedIndustry}
+                                                    placeholder="Select Industry Type"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleIndustry(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <label>Department*</label>
-                                            <Select
-                                                options={reactSelectOptions?.departments}
-                                                value={this.state.selectedDepartment}
-                                                placeholder="Select Department"
-                                                className="basic-multi-select"
-                                                classNamePrefix="select"
-                                                menuPortalTarget={document.body} // Render the dropdown to the body
-                                                styles={{
-                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                }}
-                                                onChange={(selectedOption) => this.handleDepartment(selectedOption)} />
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <label>Department*</label>
+                                                <Select
+                                                    options={reactSelectOptions?.departments}
+                                                    value={this.state.selectedDepartment}
+                                                    placeholder="Select Department"
+                                                    className="basic-multi-select"
+                                                    classNamePrefix="select"
+                                                    menuPortalTarget={document.body} // Render the dropdown to the body
+                                                    styles={{
+                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
+                                                    }}
+                                                    onChange={(selectedOption) => this.handleDepartment(selectedOption)} />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <ReactQuill
-                                                value={this.state.description}
-                                                onChange={this.handleJobDescription}
-                                                theme="snow"
-                                                modules={this.modules}
-                                                placeholder="Write job description here..."
-                                                formats={this.formats}
-                                            />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <ReactQuill
+                                                    value={this.state.description}
+                                                    onChange={this.handleJobDescription}
+                                                    theme="snow"
+                                                    modules={this.modules}
+                                                    placeholder="Write job description here..."
+                                                    formats={this.formats}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="col-lg-8">
-                                        <div className="form-submit-group">
-                                            <button
-                                                disabled={!this.state.isFormValid}
-                                                type="button"
-                                                className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                onClick={this.handlePostJob}
-                                            >
-                                                <span className="icon-reverse-wrapper">
-                                                    <span className="btn-text">Post a Job</span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right" />
+                                        <div className="col-lg-12">
+                                            <div className="form-submit-group d-flex gap-3">
+                                                <button
+                                                    type="button"
+                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                    onClick={this.handlePostSaveJob}
+                                                >
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Save</span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
                                                     </span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right" />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                    onClick={this.handlePostJob}
+                                                >
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Save and Publish</span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
                                                     </span>
-                                                </span>
-                                            </button>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div></>
+                </div></>
 
 
-        );
+                );
     }
 }
 
-export default withNavigation(CreateJob);
+                export default withNavigation(CreateJob);

@@ -146,7 +146,7 @@ class Community extends React.Component {
 */}
                                         </div>
                                         <p style={{ textAlign: "left" }} className="description">
-                                            Blog that help beginner designers become true unicorns.{" "}
+                                        Connect, Learn, and Grow – Engage with mentors, trainers, and recruiters in the Zobskill Community!
                                         </p>
                                     </div>
                                 </div>
