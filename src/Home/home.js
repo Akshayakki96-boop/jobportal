@@ -483,7 +483,7 @@ class Home extends React.Component {
                                 this.state.courseListingData.map((course, index) => (
                                     <div className="col-lg-4 col-md-6 col-12" key={index}>
                                         <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
+                                            <div className="rbt-card-img  min-height">
                                                 <a href={`/Course-Details?courseId=${course.courseid}`}>
                                                     <img src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/course/course-01.jpg"} alt="Card image" />
                                                     <div style={{width:"76px"}} className="rbt-badge-3 bg-white">
