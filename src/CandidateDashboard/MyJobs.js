@@ -204,9 +204,9 @@ class MyJobs extends React.Component {
                                                                 <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
                                                             </li>
                                                         </ul>
-                                                        <p className="rbt-card-text">
+                                                        {/* <p className="rbt-card-text">
                                                             {parse(job.description)}
-                                                        </p>
+                                                        </p> */}
                                                         <div className="rbt-card-bottom">
                                                             <div className="rbt-price">
                                                                 <span className="current-price">
