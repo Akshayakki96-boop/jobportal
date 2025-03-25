@@ -122,7 +122,7 @@ class MyJobs extends React.Component {
                       <h1 className="title mb--0">Jobs</h1>
                     </div>
                     <h4 className="description">
-                      Jobs that help beginner designers become true unicorns.{" "}
+                    Find Your Dream Job
                     </h4>
                   </div>
                 </div>

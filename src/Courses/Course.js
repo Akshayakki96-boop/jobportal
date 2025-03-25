@@ -205,7 +205,7 @@ class Course extends React.Component {
                                                 </a>
                                             </div>
                                             <p className="description">
-                                                Courses that help beginner designers become true unicorns.{" "}
+                                            Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
                                             </p>
                                         </div>
                                     </div>
