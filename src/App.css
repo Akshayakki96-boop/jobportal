@@ -804,3 +804,21 @@ font-size: 11px;
   font-size: 18px;
   line-height: 28px;
 }
+.company-logo-name{
+
+    color: #0048ac;
+    border-radius: 50%;
+    background-color: #fbfbfb;
+    width: 100px;
+    height: 100px;
+    vertical-align: middle;
+    padding-top: 20px;
+
+}
+.company-logo-name h2{
+
+  color: #0048ac;
+  
+  vertical-align: middle;
+
+}
