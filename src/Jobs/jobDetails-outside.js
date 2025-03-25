@@ -88,7 +88,7 @@ class jobDetailsOutside extends React.Component {
                     <div className="row">
                       <div className="col-lg-9">
                         {/* Start Breadcrumb Area  */}
-                        <ul className="page-list">
+                        <ul style={{textAlign:'left'}} className="page-list">
                           <li className="rbt-breadcrumb-item">
                             <a href="/">Home</a>
                           </li>
@@ -246,62 +246,7 @@ class jobDetailsOutside extends React.Component {
                   </div>
                   {/* End Course Feature Box  */}
                   {/* Start Course Feature Box  */}
-                  <div className="rbt-feature-box rbt-shadow-box mt--60">
-                    <div className="row g-5">
-                      {/* Start Feture Box  */}
-                      <div className="col-lg-12">
-                        <div className="section-title">
-                          <h4 className="title mb--10">Key Responsibilities</h4>
-                        </div>
-                        <h5 className="title">Social Media Marketing:</h5>
-                        <ul className="rbt-list-style-1">
-                          <li>
-                            <i className="feather-check" />
-                            Manage and execute social media campaigns across major
-                            platforms (Facebook, Instagram, Twitter, LinkedIn, etc.){" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Create engaging and high-quality content (text, images,
-                            videos) for social media platforms{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Monitor and analyze social media performance, track key
-                            metrics, and generate reports{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Engage with followers, respond to comments and messages, and
-                            build online communities{" "}
-                          </li>
-                        </ul>
-                        <h5 className="title">Search Engine Optimization (SEO):</h5>
-                        <ul className="rbt-list-style-1">
-                          <li>
-                            <i className="feather-check" />
-                            Conduct keyword research and on-page/off-page SEO activities{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Optimize website content, meta descriptions, and titles for
-                            search engines{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Track and analyze website traffic, keyword rankings, and
-                            conversion rates{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Identify and implement SEO best practices to improve search
-                            engine visibility{" "}
-                          </li>
-                        </ul>
-                      </div>
-                      {/* End Feture Box  */}
-                    </div>
-                  </div>
+            
                   {/* End Course Feature Box  */}
                   {/* Start Course Feature Box  */}
                   <div className="rbt-feature-box rbt-shadow-box mt--60">
@@ -313,46 +258,7 @@ class jobDetailsOutside extends React.Component {
                             Required Skills &amp; Experience:
                           </h4>
                         </div>
-                        <ul className="rbt-list-style-1">
-                          <li>
-                            <i className="feather-check" />
-                            Proven experience in digital marketing, with a strong
-                            understanding of SEO, SEM, social media marketing, and
-                            content marketing{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Excellent written and verbal communication skills{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Strong analytical and problem-solving skills{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Proficiency in using social media management tools, Google
-                            Analytics, and other digital marketing tools{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Bachelor's degree in, or experience in a related field{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Strong work ethic, attention to detail, and ability to work
-                            independently and as part of a team.{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Track and analyze website traffic, keyword rankings, and
-                            conversion rates{" "}
-                          </li>
-                          <li>
-                            <i className="feather-check" />
-                            Identify and implement SEO best practices to improve search
-                            engine visibility{" "}
-                          </li>
-                        </ul>
+                    
                         <p>
                           <span className="d-block mb--5">
                             <strong>Role:</strong> {this.state.jobDescription && this.state.jobDescription.posted_by_designation}
@@ -426,7 +332,7 @@ class jobDetailsOutside extends React.Component {
                   </div>
                   {/* End Course Content  */}
                 </div>
-                <div className="related-course mt--60">
+                {/* <div className="related-course mt--60">
                   <div className="row">
                     <div className="col-lg-12 mb--40">
                       <div className="section-title text-start">
@@ -489,20 +395,10 @@ class jobDetailsOutside extends React.Component {
                       </div>
                     </div>
                   </div>
-                  {/*
-                  <div class="row">
-                      <div class="col-lg-12">
-                          <div class="load-more mt--60 text-center">
-                              <a class="rbt-btn rbt-switch-btn btn-border" href="#">
-                                  <span data-text="View More Events">View More Events</span>
-                              </a>
-                          </div>
-                      </div>
-                  </div>
-*/}
-                </div>
+           
+                </div> */}
               </div>
-              <div className="col-lg-4 mt_md--60 mt_sm--60">
+              {/* <div className="col-lg-4 mt_md--60 mt_sm--60">
                 <div className="course-sidebar sticky-top rbt-shadow-box rbt-gradient-border">
                   <div className="inner">
                     <div className="rbt-single-widget rbt-widget-recent">
@@ -646,7 +542,7 @@ class jobDetailsOutside extends React.Component {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
