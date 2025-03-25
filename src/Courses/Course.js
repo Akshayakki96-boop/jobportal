@@ -205,7 +205,7 @@ class Course extends React.Component {
                                                 </a>
                                             </div>
                                             <p className="description">
-                                                Courses that help beginner designers become true unicorns.{" "}
+                                            Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
                                             </p>
                                         </div>
                                     </div>
@@ -367,12 +367,16 @@ class Course extends React.Component {
                                         {filteredCourse?.map((course) => (
                                             <div className="course-grid-3" key={course.courseid}>
                                                 <div className="rbt-card variation-01 rbt-hover">
-                                                    <div className="rbt-card-img">
+                                                    <div className="rbt-card-img min-height">
                                                         <a href={`/Course-Details?courseId=${course.courseid}`}>
                                                             <img
                                                                 src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}
                                                                 alt="Card image"
                                                             />
+                                                             <div style={{ width: "76px" }} className="rbt-badge-3 bg-white">
+                                                                        <span>Applicable</span>
+                                                                        <span>for refund</span>
+                                                                    </div>
                                                         </a>
                                                     </div>
                                                     <div className="rbt-card-body">
