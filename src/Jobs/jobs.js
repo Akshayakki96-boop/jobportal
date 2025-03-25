@@ -136,7 +136,15 @@ class jobs extends React.Component {
         this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
     };
 
-
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+    
+        const parts = name.trim().split(" "); // Trim to remove extra spaces
+    
+        return parts.length > 1
+            ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+            : parts[0][0].toUpperCase(); // Single initial
+    };
     render() {
         const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
@@ -219,7 +227,7 @@ class jobs extends React.Component {
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="container">
                         <div className="row row--30 gy-5">
-                            {!this.state.errorMessage ? <div className="col-lg-9 order-1 order-lg-2">
+                            {!this.state.errorMessage ? <div className="col-lg-12 order-1 order-lg-2">
                                 <div className="rbt-course-grid-column jobs-lst active-list-view">
                                     {/* Start Single Card  */}
                                     {/* Start Single Card  */}
@@ -227,6 +235,7 @@ class jobs extends React.Component {
                                         <div key={job.jobid} className="course-grid-3">
 
                                             <div className="rbt-card variation-01 rbt-hover card-list-2">
+                                                {job.companylogo?(
                                                 <div className="rbt-card-img">
                                                     <a href="#">
                                                         <img
@@ -235,6 +244,12 @@ class jobs extends React.Component {
                                                         />
                                                     </a>
                                                 </div>
+                                                ):(
+                                                    <div className="rbt-card-img">
+                                          <div className="company-logo-name">     <h2>   {this.getInitials(job.CompanyName)}</h2>
+                                          </div>    </div>
+                                                )
+                                            }
                                                 <div className="rbt-card-body">
                                                     <div className="rbt-card-top">
                                                         <div className="rbt-category">

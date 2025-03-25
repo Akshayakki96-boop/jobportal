@@ -671,13 +671,18 @@ class Home extends React.Component {
                             <div className="row row--15">
                                 {this.state.joblistingdata && this.state.joblistingdata.length > 0 ? (
                                     this.state.joblistingdata.map((job, index) => (
-                                        <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" style={{ width: "56%" }} key={index}>
+                                        <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" style={{ width: "50%" }} key={index}>
                                             <div className="rbt-card variation-01 rbt-hover card-list-2">
+                                            {job.companylogo?(
                                                 <div className="rbt-card-img">
                                                     <a href="#">
                                                         <img src={job.companylogo ? `${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}` : "assets/images/job-zob-img.jpg"} />
                                                     </a>
-                                                </div>
+                                                </div>):(
+  <div className="rbt-card-img company-logo-name">
+    <h2>{this.getInitials(job.CompanyName)}</h2></div>
+                                                )
+                                            }
                                                 <div className="rbt-card-body">
                                                     <div className="rbt-card-top">
                                                         <div className="rbt-category">
