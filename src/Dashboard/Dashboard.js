@@ -130,11 +130,14 @@ class Dashboard extends React.Component {
 
     getInitials = (name) => {
         if (!name) return "U"; // Default to "U" if name is not provided
-        const parts = name.split(" ");
+    
+        const parts = name.trim().split(" "); // Trim to remove extra spaces
+    
         return parts.length > 1
-          ? parts[0][0].toUpperCase() + parts[1][0].toUpperCase()
-          : parts[0][0].toUpperCase();
-      };
+            ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+            : parts[0][0].toUpperCase(); // Single initial
+    };
+    
 
     render() {
 
