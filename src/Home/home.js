@@ -257,12 +257,12 @@ class Home extends React.Component {
                                                                             : course.description
                                                                     )}
                                                                 </p> */}
-                                                                {/* <div className="rbt-review">
+                                                                <div className="rbt-review">
                                                                     <div className="rating">
                                                                         {[...Array(course.rating)].map((_, i) => <i key={i} className="fa fa-star"></i>)}
                                                                     </div>
-                                                                    <span className="rating-count"> ({course.reviews} Reviews)</span>
-                                                                </div> */}
+                                                                    <span className="rating-count"> Reviews</span>
+                                                                </div>
                                                                 <div className="rbt-card-bottom">
                                                                     <div className="rbt-price">
                                                                         <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
@@ -298,12 +298,12 @@ class Home extends React.Component {
                                                                     <a href="course-details.html">React</a>
                                                                 </h4>
                                                                 <p className="rbt-card-text">It is a long established fact that a reader will be distracted.</p>
-                                                                {/* <div className="rbt-review">
+                                                                <div className="rbt-review">
                                                                     <div className="rating">
                                                                         {[...Array(5)].map((_, i) => <i key={i} className="fa fa-star"></i>)}
                                                                     </div>
-                                                                    <span className="rating-count"> (15 Reviews)</span>
-                                                                </div> */}
+                                                                    <span className="rating-count"> Reviews</span>
+                                                                </div>
                                                                 <div className="rbt-card-bottom">
                                                                     <div className="rbt-price">
                                                                         <span className="current-price">$70</span>
