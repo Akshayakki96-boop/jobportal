@@ -21,11 +21,22 @@ class CreateJob extends React.Component {
 
     }
     componentDidMount() {
+        this.fetchIP();
         this.getDashboardUser();
         this.getJobPostingData()
         this.bindCity();
 
     }
+
+    fetchIP = async () => {
+        try {
+          const response = await fetch("https://api64.ipify.org?format=json");
+          const data = await response.json();
+          this.setState({ ip: data.ip });
+        } catch (error) {
+          this.setState({ ip: "Error fetching IP" });
+        }
+      };
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Employer/Dashboard`;
@@ -206,7 +217,7 @@ class CreateJob extends React.Component {
             "educationId": this.state.selectedEducation ? this.state.selectedEducation.map((item) => item.value).join(',') : "",
             "noOfOpening": this.state.openings,
             "isactive": false,
-            "ipAddress": window.location.hostname,
+            "ipAddress": this.state.ip,
             "cityIds": this.state.selectedCity ? this.state.selectedCity.map((item) => item.value).join(',') : ""
         }
         axios.post(url, request, {
@@ -261,7 +272,7 @@ class CreateJob extends React.Component {
             "educationId": this.state.selectedEducation.map((item) => item.value).join(','),
             "noOfOpening": this.state.openings,
             "isactive": false,
-            "ipAddress": "192.168.1.1",
+            "ipAddress": this.state.ip,
             "cityIds": this.state.selectedCity.map((item) => item.value).join(',')
         }
         axios.post(url, request, {
