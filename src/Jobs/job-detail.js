@@ -12,17 +12,17 @@ class jobDetails extends React.Component {
       showUserDashboard: true,
       dashBoardData: {},
       isPublished: false, // Initial state
-      isApplied:false
+      isApplied: false
     };
-    this.user="";
+    this.user = "";
   }
   componentDidMount() {
     this.getDashboardUser();
     let url = window.location.search;
     var urlParams = new URLSearchParams(url);
     var jobId = urlParams.get('jobId');
-    this.jobId=jobId;
-    this.user= urlParams.get('user');
+    this.jobId = jobId;
+    this.user = urlParams.get('user');
     console.log('jobId', jobId);
 
   }
@@ -45,7 +45,7 @@ class jobDetails extends React.Component {
       "active": true,
       "user_id": 0,
       "cityIds": "1,2",
-      "candidate_user_id": this.state.dashBoardData.role_id==1?this.state.dashBoardData.user_id:0
+      "candidate_user_id": this.state.dashBoardData.role_id == 1 ? this.state.dashBoardData.user_id : 0
     }
     axios.post(url, request, {
       headers: {
@@ -56,12 +56,10 @@ class jobDetails extends React.Component {
       .then((response) => {
         console.log('joblistingdata', response.data.data);
         this.setState({ jobDescription: response.data.data[0] });
-        if(response.data.data[0].is_applied)
-        {
+        if (response.data.data[0]?.is_applied) {
           this.setState({ isApplied: true });
         }
-        if(response.data.data[0].isactive)
-        {
+        if (response.data.data[0]?.isactive) {
           this.setState({ isPublished: true });
         }
 
@@ -87,15 +85,75 @@ class jobDetails extends React.Component {
       .then((response) => {
         console.log('dashboard data', response.data);
         this.setState({ dashBoardData: response.data.data });
+        if(response.data.data.role_id != 2){
         setTimeout(() => {
           this.getAllJobs(this.jobId);
         }, 1000);
+      }
+      else
+      {
+        setTimeout(() => {
+        this.getAllEmployerJobs(0,1);
+      }, 1000);
+      }
 
       })
+      
       .catch((error) => {
         localStorage.removeItem('authToken');
         this.props.navigate('/Login'); // Use `navigate`
       });
+  }
+
+  getAllEmployerJobs = (pageIndex, pageSize) => {
+    this.setState({ keepSpinner: true });
+    const baseUrl = process.env.REACT_APP_BASEURL;
+    const url = `${baseUrl}/api/Job/GetJobs`;
+    const token = localStorage.getItem('authToken');
+    var request = {
+      "jobId": this.jobId,
+      "jobtitle": "",
+      "experienceFrom": 0,
+      "experienceTo": 0,
+      "packageId": 0,
+      "roleId": 0,
+      "emptypeId": 0,
+      "deptId": 0,
+      "industryId": 0,
+      "keyskillIds": "",
+      "educationId": "",
+      "active": false,
+      "user_id": this.state.dashBoardData.user_id,
+      "cityIds": "1,2",
+      pageIndex: pageIndex,
+      pagesize: pageSize,
+    }
+    axios.post(url, request, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        console.log('joblistingdatadetails-employer', response.data);
+        if (response.data.data && response.data.data.length > 0) {
+          const totalCount = response.data.data[0].TotalRecords;
+          this.setState({ jobDescription: response.data.data[0] });
+        }
+        else {
+          this.setState({ keepSpinner: false, error: "No Jobs Found" });
+        }
+
+
+      })
+      .catch((error) => {
+        this.setState({
+          responseMessage: "Something went wrong !",
+          alertVariant: 'danger', // Error alert variant
+        });
+        window.scrollTo(0, 0);
+      });
+
   }
 
   handlePublish = () => {
@@ -115,9 +173,13 @@ class jobDetails extends React.Component {
       .then((response) => {
         this.setState({ isPublished: !this.state.isPublished });
         this.setState({
-          responseMessage: (
+          responseMessage: this.state.isPublished? (
             <span>
-              Job Published Successfully!
+              Job Unpublished !
+            </span>
+          ) : (
+            <span>
+              Job Published !
             </span>
           ),
           alertVariant: 'success', // Success alert variant
@@ -131,14 +193,14 @@ class jobDetails extends React.Component {
   }
 
 
-  handleApply= ()=>{
+  handleApply = () => {
     const baseUrl = process.env.REACT_APP_BASEURL;
     const url = `${baseUrl}/api/Candidate/applyjob`;
     const token = localStorage.getItem('authToken');
     const applyData = {
       "job_id": this.state.jobDescription.jobid,
-      "candidate_user_id":this.state.dashBoardData.user_id,
-       "ip_address":""
+      "candidate_user_id": this.state.dashBoardData.user_id,
+      "ip_address": ""
     };
 
     axios.post(url, applyData, {
@@ -171,13 +233,13 @@ class jobDetails extends React.Component {
     const parts = name.trim().split(" "); // Trim to remove extra spaces
 
     return parts.length > 1
-        ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
-        : parts[0][0].toUpperCase(); // Single initial
-};
+      ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+      : parts[0][0].toUpperCase(); // Single initial
+  };
 
 
   render() {
-console.log("user",this.user)
+    console.log("user", this.user)
     return (
       <>
         <Header dashBoardData={this.state.dashBoardData} />
@@ -202,7 +264,7 @@ console.log("user",this.user)
                     <div className="row">
                       <div className="col-lg-9">
                         {/* Start Breadcrumb Area  */}
-                        <ul style={{textAlign:'left'}}  className="page-list">
+                        <ul style={{ textAlign: 'left' }} className="page-list">
                           <li className="rbt-breadcrumb-item">
                             <a href="/">Home</a>
                           </li>
@@ -218,9 +280,20 @@ console.log("user",this.user)
                         {/* End Breadcrumb Area  */}
                         <div className=" title-wrapper">
                           <h1 className="title mb--0">   {this.state.jobDescription && this.state.jobDescription.jobtitle}</h1>
-                          <a href="#" className="rbt-badge-2">
+                          <a href="#" className="rbt-badge-2" style={{ marginRight: "10px" }}>
                             {this.state.jobDescription && this.state.jobDescription.empType}
                           </a>
+                          {this.state.dashBoardData && this.state.dashBoardData?.role_id == 2 && <a className="rbt-btn btn-md hover-icon-reverse" href={`/edit-job`}>
+                            <span className="icon-reverse-wrapper">
+                              <span className="btn-text">Edit Job</span>
+                              <span className="btn-icon">
+                                <i className="feather-arrow-right"></i>
+                              </span>
+                              <span className="btn-icon">
+                                <i className="feather-arrow-right"></i>
+                              </span>
+                            </span>
+                          </a>}
                         </div>
                         <div className="d-flex align-items-start flex-wrap mb--15 rbt-course-details-feature">
                           <div className="description">
@@ -279,21 +352,21 @@ console.log("user",this.user)
                         </div>
                       </div>
                       <div className="col-lg-3  d-flex flex-column justify-content-center">
-                      {this.state.jobDescription?.companylogo?(
-                        <div className="job-det-pic">
-                          <a href="#">
-                            <img src={this.state.jobDescription?.companylogo?`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.jobDescription.companylogo}`:"assets/images/job-zob-img.jpg"} alt="Card image" />
-                          </a>
-                        </div>
-                      ):
-                      (
-                        <div className="job-det-pic company-logo-name">
-                       
-                        <h2>{this.getInitials(this.state.jobDescription?.CompanyName)}</h2>  
-                      </div>
-                      )
+                        {this.state.jobDescription?.companylogo ? (
+                          <div className="job-det-pic">
+                            <a href="#">
+                              <img src={this.state.jobDescription?.companylogo ? `${process.env.REACT_APP_BASEURL}/Uploads/${this.state.jobDescription.companylogo}` : "assets/images/job-zob-img.jpg"} alt="Card image" />
+                            </a>
+                          </div>
+                        ) :
+                          (
+                            <div className="job-det-pic company-logo-name">
 
-                    }
+                              <h2>{this.getInitials(this.state.jobDescription?.CompanyName)}</h2>
+                            </div>
+                          )
+
+                        }
                       </div>
                     </div>
                   </div>
@@ -329,7 +402,7 @@ console.log("user",this.user)
                   </div>
                   <div className="col-lg-7 col-md-12">
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
-                     {this.state.dashBoardData?.role_id!=1 ? <div className="rbt-short-item">
+                      {this.state.dashBoardData?.role_id != 1 ? <div className="rbt-short-item">
                         <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
                           e.preventDefault(); // Prevent default link behavior
                           this.handlePublish();
@@ -339,8 +412,8 @@ console.log("user",this.user)
                             <i className="feather-arrow-right" />
                           </span>
                         </a>
-                      </div>:<div className="rbt-short-item">
-                      {!this.state.isApplied ? <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
+                      </div> : <div className="rbt-short-item">
+                        {!this.state.isApplied ? <a className="rbt-btn btn-md btn-white icon-hover" href="#" onClick={(e) => {
                           e.preventDefault(); // Prevent default link behavior
                           this.handleApply();
                         }}>
@@ -348,7 +421,7 @@ console.log("user",this.user)
                           <span className="btn-icon">
                             <i className="feather-arrow-right" />
                           </span>
-                        </a>:<span className="text-success">Applied</span>}
+                        </a> : <span className="text-success">Applied</span>}
                       </div>
                       }
                       {/* <div className="rbt-short-item">
@@ -377,9 +450,9 @@ console.log("user",this.user)
                           <h4 className="title mb--10">Job description</h4>
                         </div>
                         <h5 className="title">About :</h5>
-                       
+
                         {parse(this.state.jobDescription?.description || "")}
-                      
+
                       </div>
                     </div>
                   </div>

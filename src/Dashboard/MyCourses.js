@@ -274,15 +274,15 @@ class MyCourses extends React.Component {
                             <i className="feather-users" />
                             50 Students
                           </li>
-                          {!course.isactive &&  <li>
-                                           <a style={{marginBottom:"10px",color:"blue"}} className="rbt-btn-link" href={`/edit-course?courseId=${course.courseid}`}>
-                                           Edit Course
-                                           <i className="feather-arrow-right" />
-                                           </a>
-                                           </li>}
+                          {!course.isactive && <li>
+                            <a style={{ marginBottom: "10px", color: "blue" }} className="rbt-btn-link" href={`/edit-course?courseId=${course.courseid}`}>
+                              Edit Course
+                              <i className="feather-arrow-right" />
+                            </a>
+                          </li>}
                           {!course.isactive && <li>
                             <i
-                              className="feather-trash"
+                              className="fas fa-trash-alt"
                               style={{ color: "red", cursor: "pointer" }}
                               onClick={() => this.handleDeleteCourse(course.courseid)}
                             />

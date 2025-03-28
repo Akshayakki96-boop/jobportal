@@ -92,12 +92,14 @@ class CandidateList extends React.Component {
 
     render() {
         const maskMobileNumber = (number) => {
-            return number.slice(-4).padStart(number.length, 'X');
+            return number.replace(/\d(?=\d{4})/g, 'X');
         };
         const maskEmail = (email) => {
-            const [name, domain] = email.split("@");
-            const maskedName = name.charAt(0) + "*****";
-            return `${maskedName}@${domain}`;
+            return email.replace(/.(?=.*@)/g, "*");
+            
+        };
+        const maskName= (name) => {
+            return name.replace(/.(?=.*\s)/g, "*");
         };
         
         const { candidateListing, currentPage, pageSize, totalRecords, searchQuery } = this.state;
@@ -220,7 +222,7 @@ class CandidateList extends React.Component {
 
                                                 </div>
                                                 <h4 className="rbt-card-title">
-                                                    {course.fullname}
+                                                    {course.fullname? maskName(course.fullname) : "N/A"}
                                                 </h4>
                                                 <ul className="rbt-meta">
                                                     <li>

@@ -48,7 +48,7 @@ class MyJobs extends React.Component {
             "cityIds": "1,2",
             pageIndex: pageIndex,
             pagesize: pageSize,
-            "candidate_user_id": this.state.updatedUserData.user_id
+            "candidate_user_id": this.state.updatedUserData.basic_info.user_id
         }
         axios.post(url, request, {
             headers: {
@@ -62,7 +62,7 @@ class MyJobs extends React.Component {
                     let totalCount = response.data.data[0].TotalRecords;
                     let filteredCount = response.data.data.filter(x => x.is_applied).length;
                     totalCount = filteredCount;
-                    this.setState({ joblistingdata: response.data.data.filter(x=>x.is_applied), totalRecords: totalCount, keepSpinner: false, error: "" });
+                    this.setState({ joblistingdata: response.data.data.filter(x => x.is_applied), totalRecords: totalCount, keepSpinner: false, error: "" });
                 }
                 else {
                     this.setState({ keepSpinner: false, error: "No Jobs Found" });
@@ -75,7 +75,7 @@ class MyJobs extends React.Component {
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
-                });
+            });
     }
     // Handle page click
     handlePageChange = (pageIndex) => {
@@ -86,6 +86,17 @@ class MyJobs extends React.Component {
     handleSearchChange = (e) => {
         this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
     };
+
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+    
+        const parts = name.trim().split(" "); // Trim to remove extra spaces
+    
+        return parts.length > 1
+            ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+            : parts[0][0].toUpperCase(); // Single initial
+    };
+
     render() {
         const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
@@ -120,10 +131,10 @@ class MyJobs extends React.Component {
                                     <div className="col-lg-12">
 
                                         <div className=" title-wrapper">
-                                            <h1 className="title mb--0">Apply Jobs</h1>
+                                            <h1 className="title mb--0">My Jobs</h1>
                                         </div>
                                         <p className="description">
-                                            Jobs that help beginner designers become true unicorns.{" "}
+                                            Find Your Dream Job – Apply for top opportunities and get hired faster with Zobskill!
                                         </p>
                                     </div>
                                 </div>
@@ -174,58 +185,82 @@ class MyJobs extends React.Component {
                                 <div className="col-lg-12 order-1 order-lg-2">
                                     <div className="rbt-course-grid-column jobs-lst active-list-view">
                                         {/* Start Single Card  */}
-                                        {filteredJobs?.map((job) => (
-                                            <div key={job.jobid} className="course-grid-3">
+                                        {filteredJobs.length > 0 ? (
+                                            filteredJobs.map((job) => (
+                                                <div key={job.jobid} className="course-grid-3">
+                                                    <div className="rbt-card variation-01 rbt-hover card-list-2">
+                                                        <div className="rbt-card-img">
+                                                            <a href="#">
+                                                                {!job.companylogo ? (
 
-                                                <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                                    <div className="rbt-card-img">
-                                                        <a href="jobs-detail.html">
-                                                            <img
-                                                                src={job.companylogo ? `${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                                                                alt="Card image"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                    <div className="rbt-card-body">
-                                                        <div className="rbt-card-top">
-                                                            <div className="rbt-category">
-                                                                <a href="#">{job.empType || "Employment Type"}</a>
-                                                                <a href="#">{job.department || "Department"}</a>
-                                                            </div>
-                                                        </div>
-                                                        <h4 className="rbt-card-title">
-                                                            <a href={`/Job-details?jobId=${job.jobid}&user=candidate`}>{job.jobtitle || "Job Title Unavailable"}</a>
-                                                        </h4>
-                                                        <ul className="rbt-meta">
-                                                            <li>
-                                                                <i className="fas fa-building" /> {job.CompanyName || "Company Name"}
-                                                            </li>
-                                                            <li>
-                                                                <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
-                                                            </li>
-                                                        </ul>
-                                                        {/* <p className="rbt-card-text">
-                                                            {parse(job.description)}
-                                                        </p> */}
-                                                        <div className="rbt-card-bottom">
-                                                            <div className="rbt-price">
-                                                                <span className="current-price">
-                                                                    <i className="fas fa-rupee-sign" />{" "}
-                                                                    {job.package_notdisclosed
-                                                                        ? "Package not disclosed"
-                                                                        : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}
-                                                                </span>
-                                                            </div>
-                                                            <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}&user=candidate`}>
-                                                                Learn More
-                                                                <i className="feather-arrow-right" />
+                                                                    <div
+                                                                        style={{
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            width: "60px", // Adjust as needed
+                                                                            height: "60px", // Adjust as needed
+                                                                            backgroundColor: "#ccc", // Default background color
+                                                                            color: "#fff",
+                                                                            //borderRadius: "50%",
+                                                                            fontWeight: "bold",
+                                                                            fontSize: "18px", // Adjust font size as needed
+                                                                        }}
+                                                                    >
+                                                                        {this.getInitials(job.jobtitle || "User")}
+                                                                    </div>
+                                                                )
+                                                                     : (
+                                                                        <img
+                                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}`}
+                                                                            alt="Card image"
+                                                                        />
+                                                                    )}
+
                                                             </a>
+                                                        </div>
+                                                        <div className="rbt-card-body">
+                                                            <div className="rbt-card-top">
+                                                                <div className="rbt-category">
+                                                                    <a href="#">{job.empType || "Employment Type"}</a>
+                                                                    <a href="#">{job.department || "Department"}</a>
+                                                                </div>
+                                                            </div>
+                                                            <h4 className="rbt-card-title">
+                                                                <a href={`/Job-details?jobId=${job.jobid}&user=candidate`}>{job.jobtitle || "Job Title Unavailable"}</a>
+                                                            </h4>
+                                                            <ul className="rbt-meta">
+                                                                <li>
+                                                                    <i className="fas fa-building" /> {job.CompanyName || "Company Name"}
+                                                                </li>
+                                                                <li>
+                                                                    <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
+                                                                </li>
+                                                            </ul>
+                                                            <div className="rbt-card-bottom">
+                                                                <div className="rbt-price">
+                                                                    <span className="current-price">
+                                                                        <i className="fas fa-rupee-sign" />{" "}
+                                                                        {job.package_notdisclosed
+                                                                            ? "Package not disclosed"
+                                                                            : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}
+                                                                    </span>
+                                                                </div>
+                                                                <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}&user=candidate`}>
+                                                                    Learn More
+                                                                    <i className="feather-arrow-right" />
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                            ))
+                                        ) : (
+                                            <div style={{textAlign:'center'}} className="no-jobs-found">
+                                                <h3>No Jobs Found</h3>
                                             </div>
-                                        ))}
+                                        )}
+
                                         {/* End Single Card  */}
                                     </div>
                                     <div className="row">

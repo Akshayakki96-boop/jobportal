@@ -822,3 +822,37 @@ font-size: 11px;
   vertical-align: middle;
 
 }
+
+
+.modal-backdrop.show {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+  z-index: 1040; /* Ensure it's behind the modal */
+}
+
+.modal.show {
+  z-index: 1050; /* Ensure it's above the backdrop */
+}
+
+.no-jobs-found {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 8px;
+}
+.no-courses-found {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+

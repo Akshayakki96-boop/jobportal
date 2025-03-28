@@ -51,7 +51,8 @@ class CreateJob extends React.Component {
         const {
             title,
             selectedRole,
-            selectedExperience,
+            fromExperience,
+            toExperience,
             description,
             selectedPackage,
             openings,
@@ -68,7 +69,8 @@ class CreateJob extends React.Component {
         const isFormValid =
             title &&
             selectedRole &&
-            selectedExperience &&
+            fromExperience &&
+            toExperience &&
             description &&
             selectedPackage &&
             openings &&
@@ -188,23 +190,24 @@ class CreateJob extends React.Component {
         const url = `${baseUrl}/api/Job/PostJob`;
         const token = localStorage.getItem('authToken');
         var request = {
-
+            "jobId": 0,
             "title": this.state.title,
             "description": this.state.description,
-            "experienceFrom": this.state.selectedExperience.value,
-            "experienceTo": this.state.selectedExperience.value,
-            "packageId": this.state.selectedPackage.value,
+            "experienceFrom": this.state.fromExperience,
+            "experienceTo": this.state.toExperience,
+            "job_mode": this.state.selectedMode ? this.state.selectedMode.value : 0,
+            "packageId":this.state.selectedPackage? this.state.selectedPackage.value:0,
             "packageNotdisclosed": false,
-            "roleId": this.state.selectedRole.value,
-            "emptypeId": this.state.selectedEmpType.value,
-            "deptId": this.state.selectedDepartment.value,
-            "industryId": this.state.selectedIndustry.value,
-            "keyskillIds": this.state.selectedKeySkills.map((item) => item.value).join(','),
-            "educationId": this.state.selectedEducation.map((item) => item.value).join(','),
+            "roleId":this.state.selectedRole? this.state.selectedRole.value:0,
+            "emptypeId": this.state.selectedEmpType ? this.state.selectedEmpType.value : 0,
+            "deptId": this.state.selectedDepartment ? this.state.selectedDepartment.value : 0,
+            "industryId": this.state.selectedIndustry ? this.state.selectedIndustry.value : 0,
+            "keyskillIds": this.state.selectedKeySkills ? this.state.selectedKeySkills.map((item) => item.value).join(',') : "",
+            "educationId": this.state.selectedEducation ? this.state.selectedEducation.map((item) => item.value).join(',') : "",
             "noOfOpening": this.state.openings,
             "isactive": false,
-            "ipAddress": "192.168.1.1",
-            "cityIds": this.state.selectedCity.map((item) => item.value).join(',')
+            "ipAddress": window.location.hostname,
+            "cityIds": this.state.selectedCity ? this.state.selectedCity.map((item) => item.value).join(',') : ""
         }
         axios.post(url, request, {
             headers: {
@@ -348,6 +351,16 @@ class CreateJob extends React.Component {
         this.setState({ selectedDepartment: selectedOption })
     }
 
+    handleFromExperienceChange = (e) => {
+        this.handleInputChange('fromExperience', e.target.value);
+        this.setState({ fromExperience: e.target.value })
+    };
+
+    handleToExperienceChange = (e) => {
+        this.handleInputChange('toExperience', e.target.value);
+        this.setState({ toExperience: e.target.value })
+    };
+
     modules = {
         toolbar: [
             [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -412,21 +425,34 @@ class CreateJob extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-lg-12">
-                                            <div className="form-group">
-                                                <Select
-                                                    options={reactSelectOptions?.experience}
-                                                    value={this.state.selectedExperience}
-                                                    placeholder="Select Experience"
-                                                    className="basic-multi-select"
-                                                    classNamePrefix="select"
-                                                    menuPortalTarget={document.body} // Render the dropdown to the body
-                                                    styles={{
-                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }), // Ensure it has a high z-index
-                                                    }}
-                                                    onChange={(selectedOption) => this.handleExperience(selectedOption)} />
-                                                <span className="focus-border" />
-                                            </div>
+                                        <div className="form-group">
+                                            <input
+                                                type="number"
+                                                className="form-control"
+                                                id="experience"
+                                                name="experience"
+                                                value={this.state.fromExperience}
+                                                onChange={this.handleFromExperienceChange}
+                                            />
+                                            <label htmlFor="experience">From Experience(in years)</label>
                                         </div>
+
+                                    </div>
+
+                                    <div className="col-lg-12">
+                                        <div className="form-group">
+                                            <input
+                                                type="number"
+                                                className="form-control"
+                                                id="toexperience"
+                                                name="toexperience"
+                                                value={this.state.toExperience}
+                                                onChange={this.handleToExperienceChange}
+                                            />
+                                            <label htmlFor="toexperience">To Experience(in years)</label>
+                                        </div>
+
+                                    </div>
 
                                         <div className="col-lg-12">
                                             <div className="form-group">
@@ -575,16 +601,22 @@ class CreateJob extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-lg-12">
-                                            <div className="form-group">
+                                            <div className="form-group" style={{paddingBottom:"50px"}}>
                                                 <ReactQuill
                                                     value={this.state.description}
                                                     onChange={this.handleJobDescription}
                                                     theme="snow"
                                                     modules={this.modules}
-                                                    placeholder="Write job description here..."
+                                                    placeholder="Write job description here upto 2000 characters..."
                                                     formats={this.formats}
+                                                    style={{ height: "200px"}}
                                                 />
                                             </div>
+                                            {this.state.description && this.state.description.length > 2000 && (
+                                                <span style={{ color: "red" }}>
+                                                    Description cannot exceed 2000 characters.
+                                                </span>
+                                            )}
                                         </div>
 
                                         <div className="col-lg-12">

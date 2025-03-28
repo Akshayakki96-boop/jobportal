@@ -203,6 +203,11 @@ class EditProfile extends React.Component {
                 this.setState({ keepSpinner: false });
                 this.props.navigate('/EmployerDashboard?message=profilesuccess');
                 //this.props.navigate('/Login'); // Use `navigate`
+                this.setState({
+                    responseMessage: "Profile updated successfully!",
+                    alertVariant: 'success', // Success alert variant
+                 
+                });
             })
             .catch((error) => {
                 console.error('Signup Error:', error.response?.data || error.message);
