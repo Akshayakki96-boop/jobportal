@@ -58,12 +58,11 @@ class ApplyJobs extends React.Component {
         console.log('joblistingdata', response.data);
         if (response.data.data && response.data.data.length > 0) {
           const totalCount = response.data.data[0].TotalRecords;
-          this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, keepSpinner: false,error: ""  });
-          }
-          else
-          {
-            this.setState({ keepSpinner: false,error: "No Jobs Found" });
-          }
+          this.setState({ joblistingdata: response.data.data, totalRecords: totalCount, keepSpinner: false, error: "" });
+        }
+        else {
+          this.setState({ keepSpinner: false, error: "No Jobs Found" });
+        }
 
       })
       .catch((error) => {
@@ -80,6 +79,16 @@ class ApplyJobs extends React.Component {
   };
   handleSearchChange = (e) => {
     this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
+  };
+
+  getInitials = (name) => {
+    if (!name) return "U"; // Default to "U" if name is not provided
+
+    const parts = name.trim().split(" "); // Trim to remove extra spaces
+
+    return parts.length > 1
+      ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+      : parts[0][0].toUpperCase(); // Single initial
   };
   render() {
     const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
@@ -118,7 +127,7 @@ class ApplyJobs extends React.Component {
                       <h1 className="title mb--0">Apply Jobs</h1>
                     </div>
                     <p className="description">
-                      Jobs that help beginner designers become true unicorns.{" "}
+                      Find Your Dream Job – Apply for top opportunities and get hired faster with Zobskill!
                     </p>
                   </div>
                 </div>
@@ -131,12 +140,12 @@ class ApplyJobs extends React.Component {
                 <div className="row g-5 align-items-center">
                   <div className="col-lg-5 col-md-12">
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
-                    {!this.state.error && <div className="rbt-short-item">
+                      {!this.state.error && <div className="rbt-short-item">
                         <span className="course-index">
                           Showing {startIndex} - {endIndex} of {totalRecords} results
                         </span>
                       </div>
-  }
+                      }
                     </div>
                   </div>
                   <div className="col-lg-7 col-md-12">
@@ -165,115 +174,138 @@ class ApplyJobs extends React.Component {
         <div className="rbt-section-overlayping-top rbt-section-gapBottom">
           <div className="container">
             <div className="row row--30 gy-5">
-            {!this.state.error ? 
-              <div className="col-lg-12 order-1 order-lg-2">
-                <div className="rbt-course-grid-column jobs-lst active-list-view">
-                  {/* Start Single Card  */}
-                  {filteredJobs?.map((job) => (
-                    <div key={job.jobid} className="course-grid-3">
+              {!this.state.error ?
+                <div className="col-lg-12 order-1 order-lg-2">
+                  <div className="rbt-course-grid-column jobs-lst active-list-view">
+                    {/* Start Single Card  */}
+                    {filteredJobs.length > 0 ? (
+                      filteredJobs.map((job) => (
+                        <div key={job.jobid} className="course-grid-3">
+                          <div className="rbt-card variation-01 rbt-hover card-list-2">
+                            <div className="rbt-card-img">
+                              <a href="#">
+                                {!job.companylogo ? (
 
-                      <div className="rbt-card variation-01 rbt-hover card-list-2">
-                        <div className="rbt-card-img">
-                          <a href="jobs-detail.html">
-                            <img
-                              src={job.companylogo?`${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}`:"assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                              alt="Card image"
-                            />
-                          </a>
-                        </div>
-                        <div className="rbt-card-body">
-                          <div className="rbt-card-top">
-                            <div className="rbt-category">
-                              <a href="#">{job.empType || "Employment Type"}</a>
-                              <a href="#">{job.department || "Department"}</a>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      width: "60px", // Adjust as needed
+                                      height: "60px", // Adjust as needed
+                                      backgroundColor: "#ccc", // Default background color
+                                      color: "#fff",
+                                      //borderRadius: "50%",
+                                      fontWeight: "bold",
+                                      fontSize: "18px", // Adjust font size as needed
+                                    }}
+                                  >
+                                    {this.getInitials(job.jobtitle || "User")}
+                                  </div>
+                                )
+                                  : (
+                                    <img
+                                      src={`${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}`}
+                                      alt="Card image"
+                                    />
+                                  )}
+
+                              </a>
+                            </div>
+                            <div className="rbt-card-body">
+                              <div className="rbt-card-top">
+                                <div className="rbt-category">
+                                  <a href="#">{job.empType || "Employment Type"}</a>
+                                  <a href="#">{job.department || "Department"}</a>
+                                </div>
+                              </div>
+                              <h4 className="rbt-card-title">
+                                <a href={`/Job-details?jobId=${job.jobid}&user=candidate`}>{job.jobtitle || "Job Title Unavailable"}</a>
+                              </h4>
+                              <ul className="rbt-meta">
+                                <li>
+                                  <i className="fas fa-building" /> {job.CompanyName || "Company Name"}
+                                </li>
+                                <li>
+                                  <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
+                                </li>
+                              </ul>
+                              <div className="rbt-card-bottom">
+                                <div className="rbt-price">
+                                  <span className="current-price">
+                                    <i className="fas fa-rupee-sign" />{" "}
+                                    {job.package_notdisclosed
+                                      ? "Package not disclosed"
+                                      : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}
+                                  </span>
+                                </div>
+                                <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}&user=candidate`}>
+                                  Learn More
+                                  <i className="feather-arrow-right" />
+                                </a>
+                              </div>
                             </div>
                           </div>
-                          <h4 className="rbt-card-title">
-                            <a href={`/Job-details?jobId=${job.jobid}&user=candidate`}>{job.jobtitle || "Job Title Unavailable"}</a>
-                          </h4>
-                          <ul className="rbt-meta">
-                            <li>
-                              <i className="fas fa-building" /> {job.CompanyName || "Company Name"}
-                            </li>
-                            <li>
-                              <i className="fas fa-map-marker-alt" /> {job.locations || "Location Unavailable"}
-                            </li>
-                          </ul>
-                          <p className="rbt-card-text">
-                            {parse(job.description)}
-                          </p>
-                          <div className="rbt-card-bottom">
-                            <div className="rbt-price">
-                              <span className="current-price">
-                                <i className="fas fa-rupee-sign" />{" "}
-                                {job.package_notdisclosed
-                                  ? "Package not disclosed"
-                                  : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}
-                              </span>
-                            </div>
-                            <a className="rbt-btn-link" href={`/Job-details?jobId=${job.jobid}&user=candidate`}>
-                              Learn More
-                              <i className="feather-arrow-right" />
-                            </a>
-                          </div>
                         </div>
+                      ))
+                    ) : (
+                      <div  className="no-jobs-found">
+                        <h3>No Jobs Found</h3>
                       </div>
-
-                    </div>
-                  ))}
-                  {/* End Single Card  */}
-                </div>
-                <div className="row">
-                  <div className="col-lg-12 mt--60">
-                    <nav>
-                      <ul className="rbt-pagination">
-                        {/* Previous Button */}
-                        <li>
-                          <a
-                            href="#"
-                            aria-label="Previous"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (currentPage > 1) this.handlePageChange(currentPage - 1);
-                            }}
-                          >
-                            <i className="feather-chevron-left" />
-                          </a>
-                        </li>
-
-                        {/* Page Numbers */}
-                        {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
-                          <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                    )}
+                    {/* End Single Card  */}
+                  </div>
+                  <div className="row">
+                    <div className="col-lg-12 mt--60">
+                      <nav>
+                        <ul className="rbt-pagination">
+                          {/* Previous Button */}
+                          <li>
                             <a
                               href="#"
+                              aria-label="Previous"
                               onClick={(e) => {
                                 e.preventDefault();
-                                this.handlePageChange(index + 1); // 1-based index
+                                if (currentPage > 1) this.handlePageChange(currentPage - 1);
                               }}
                             >
-                              {index + 1}
+                              <i className="feather-chevron-left" />
                             </a>
                           </li>
-                        ))}
 
-                        {/* Next Button */}
-                        <li>
-                          <a
-                            href="#"
-                            aria-label="Next"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
-                            }}
-                          >
-                            <i className="feather-chevron-right" />
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
+                          {/* Page Numbers */}
+                          {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
+                            <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                              <a
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  this.handlePageChange(index + 1); // 1-based index
+                                }}
+                              >
+                                {index + 1}
+                              </a>
+                            </li>
+                          ))}
+
+                          {/* Next Button */}
+                          <li>
+                            <a
+                              href="#"
+                              aria-label="Next"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
+                              }}
+                            >
+                              <i className="feather-chevron-right" />
+                            </a>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
                   </div>
-                </div>
-              </div>:<h2>{this.state.error}</h2>}
+                </div> : <h2>{this.state.error}</h2>}
             </div>
           </div>
         </div>

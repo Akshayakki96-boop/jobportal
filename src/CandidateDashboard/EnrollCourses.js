@@ -36,7 +36,7 @@ class EnrollCourses extends React.Component {
             "user_id": 0,
             "pageIndex": pageIndex,
             "pagesize": pageSize,
-            "candidate_user_id": this.state.updatedUserData.user_id
+            "candidate_user_id": this.state.updatedUserData.basic_info.user_id
 
         }
 
@@ -77,17 +77,18 @@ class EnrollCourses extends React.Component {
         this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
     };
 
-    applyCourse = (course) => {
+    applyCourse = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Candidate/ApplyCourse`;
         const token = localStorage.getItem('authToken');
         var request =
         {
             "applied_course_id": 0,
-            "course_id": course.courseid,
-            "candidate_user_id": this.state.updatedUserData.user_id,
+            "course_id": this.courseId,
+            "candidate_user_id": this.state.updatedUserData.basic_info.user_id,
             "ip_address": "string",
-            "status": 0
+            "status": 0,
+            "is_active": true,
         }
 
         axios.post(url, request, {
@@ -102,7 +103,11 @@ class EnrollCourses extends React.Component {
 
                     this.setState({ responseMessage: "Course Enrolled successfully", alertVariant: 'success' });
                     window.scrollTo(0, 0);
-                    this.getAllCourse(0, this.state.pageSize);
+                    const { currentPage, pageSize } = this.state;
+                    this.setState({ currentPage }, () => {
+                        this.getAllCourse(this.state.currentPage - 1, pageSize); // Maintain the current page after refresh
+                      });
+                    
             })
             .catch((error) => {
                 this.setState({
@@ -111,7 +116,69 @@ class EnrollCourses extends React.Component {
                 });
                 window.scrollTo(0, 0);
                 });
+            }
+
+      enrollCourse = (course) => {
+        this.courseId=course.courseid;
+        this.setState({ showConfirmPopup: true });
+
     }
+    cancelEnrollment = (course) => {
+        this.courseId=course.courseid;
+        this.setState({ showCancelConfirmPopup: true });
+    }
+
+    cancelCourse = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Candidate/ApplyCourse`;
+        const token = localStorage.getItem('authToken');
+        var request =
+        {
+            "applied_course_id": 0,
+            "course_id": this.courseId,
+            "candidate_user_id": this.state.updatedUserData.basic_info.user_id,
+            "ip_address": "string",
+            "status": 0,
+            "is_active": false,
+        }
+
+        axios.post(url, request, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('applyCourse', response.data);
+                this.setState({ applyCourseData: response.data.data,isEnroll:true });
+
+                    this.setState({ responseMessage: "Enrollment cancel successfully", alertVariant: 'success' });
+                    window.scrollTo(0, 0);
+                    const { currentPage, pageSize } = this.state;
+                    this.setState({ currentPage }, () => {
+                        this.getAllCourse(this.state.currentPage - 1, pageSize); // Maintain the current page after refresh
+                      });
+                    
+            })
+            .catch((error) => {
+                this.setState({
+                    responseMessage: "Something went wrong !",
+                    alertVariant: 'danger', // Error alert variant
+                });
+                window.scrollTo(0, 0);
+                });
+            }
+
+
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
+    
+        const parts = name.trim().split(" "); // Trim to remove extra spaces
+    
+        return parts.length > 1
+            ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+            : parts[0][0].toUpperCase(); // Single initial
+    };
 
     render() {
         const { courseListingData, currentPage, pageSize, totalRecords, searchQuery } = this.state;
@@ -131,192 +198,337 @@ class EnrollCourses extends React.Component {
         });
         return (
             <div className="col-lg-9">
-                {this.state.keepSpinner && <div class="custom-loader">
-                    <div class="loader-spinner"></div>
-                    <p class="loader-text">Please Wait while Courses are loading...</p>
-                </div>}
-                <div className="container mt-5">
-                    {this.state.responseMessage && (
-                        <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                            {this.state.responseMessage}
-                        </Alert>
+            {this.state.keepSpinner && <div class="custom-loader">
+                <div class="loader-spinner"></div>
+                <p class="loader-text">Please Wait while Courses are loading...</p>
+            </div>}
+            <div className="container mt-5">
+                {this.state.responseMessage && (
+                <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                    {this.state.responseMessage}
+                </Alert>
+                )}
+            </div>
+              
+            <div className="rbt-page-banner-wrapper">
+                {/* Start Banner BG Image  */}
+                <div className="rbt-banner-image" />
+                {/* End Banner BG Image  */}
+                <div className="rbt-banner-content">
+                {/* Start Banner Content Top  */}
+                <div className="rbt-banner-content-top">
+                    <div className="container">
+                 
+       
+                    <div style={{ textAlign: 'left' }} className="row">
+                        <div className="col-lg-12">
+
+                        <div className=" title-wrapper">
+                            <h1 className="title mb--0">Courses</h1>
+                        </div>
+                        <p className="description">
+                            Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
+                        </p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {/* End Banner Content Top  */}
+                { /* Start Course Top  */}
+                <div className="rbt-course-top-wrapper mt--40">
+                    <div className="container">
+                    <div className="row g-5 align-items-center">
+                        <div className="col-lg-5 col-md-12">
+                        <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
+                            <div className="rbt-short-item">
+                            <span className="course-index">
+                                Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {totalRecords} results
+                            </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div className="col-lg-7 col-md-12">
+                        <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
+                            <div className="rbt-short-item mt-5">
+                            <form action="#" className="rbt-search-style me-0">
+                                <input type="text" placeholder="Search your courses.." value={this.state.searchQuery}
+                                onChange={this.handleSearchChange} />
+                                <button
+                                type="button"
+                                className="rbt-search-btn rbt-round-btn"
+                                onClick={(e) => e.preventDefault()} // Prevent default form submission
+                                >
+                                <i className="feather-search" />
+                                </button>
+                            </form>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {/* End Course Top  */}
+
+                </div>
+            </div>
+            <div className="rbt-section-overlayping-top rbt-section-gapBottom">
+                <div className="inner">
+                <div className="container">
+                    <div className="rbt-course-grid-column courall">
+                    {filteredCourse?.length > 0 ? (
+        filteredCourse.map((course) => (
+        <div className="course-grid-3" key={course.courseid}>
+            <div className="rbt-card variation-01 rbt-hover">
+            <div className="rbt-card-img">
+                <a href={`/Course-Details?courseId=${course.courseid}`}>
+                {!course.course_image ? (
+                    <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "60px",
+                        height: "60px",
+                        backgroundColor: "#ccc",
+                        color: "#fff",
+                        borderRadius: "50%",
+                        fontWeight: "bold",
+                        fontSize: "18px",
+                    }}
+                    >
+                    {this.getInitials(course.coursetitle || "User")}
+                    </div>
+                ) : (
+                    <img
+                    src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}`}
+                    alt="Card image"
+                    />
+                )}
+                </a>
+            </div>
+            <div className="rbt-card-body">
+                <h4 className="rbt-card-title">
+                <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
+                </h4>
+                <ul className="rbt-meta">
+                <li>
+                    <i className="feather-book" />
+                    {course.no_of_lessons} Lessons
+                </li>
+                <li>
+                    <i className="feather-users" />
+                    50 Students
+                </li>
+                <li>
+                    {!course.is_applied ? (
+                    <a
+                        href="#"
+                        style={{ textDecoration: "underline", color: "blue" }}
+                        onClick={() => this.enrollCourse(course)}
+                    >
+                        Enroll Now
+                    </a>
+                    ) : (
+                    <a
+                        href="#"
+                        style={{ textDecoration: "underline", color: "blue" }}
+                        onClick={() => this.cancelEnrollment(course)}
+                    >
+                        Cancel Enrollment
+                    </a>
                     )}
-                </div>
-                <div className="rbt-page-banner-wrapper">
-                    {/* Start Banner BG Image  */}
-                    <div className="rbt-banner-image" />
-                    {/* End Banner BG Image  */}
-                    <div className="rbt-banner-content">
-                        {/* Start Banner Content Top  */}
-                        <div className="rbt-banner-content-top">
-                            <div className="container">
-                                <div style={{ textAlign: 'left' }} className="row">
-                                    <div className="col-lg-12">
+                </li>
+                </ul>
 
-                                        <div className=" title-wrapper">
-                                            <h1 className="title mb--0">Courses</h1>
-                                        </div>
-                                        <p className="description">
-                                            Courses that help beginner designers become true unicorns.{" "}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* End Banner Content Top  */}
-                        { /* Start Course Top  */}
-                        <div className="rbt-course-top-wrapper mt--40">
-                            <div className="container">
-                                <div className="row g-5 align-items-center">
-                                    <div className="col-lg-5 col-md-12">
-                                        <div className="rbt-sorting-list d-flex flex-wrap align-items-center">
-                                            <div className="rbt-short-item">
-                                                <span className="course-index">
-                                                    Showing {filteredCourse.length > 0 ? startIndex : 0} - {filteredCourse.length > 0 ? endIndex : 0} of {totalRecords} results
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-7 col-md-12">
-                                        <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
-                                            <div className="rbt-short-item mt-5">
-                                                <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="Search your courses.." value={this.state.searchQuery}
-                                                        onChange={this.handleSearchChange} />
-                                                    <button
-                                                        type="button"
-                                                        className="rbt-search-btn rbt-round-btn"
-                                                        onClick={(e) => e.preventDefault()} // Prevent default form submission
-                                                    >
-                                                        <i className="feather-search" />
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* End Course Top  */}
+                <div className="rbt-card-bottom">
+                <div className="rbt-price">
+                    <span className="current-price">
+                    {course.currency
+                        ? course.currency + "-" + course.course_fees
+                        : course.course_fees}
+                    </span>
+                </div>
+                <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
+                    Learn More
+                    <i className="feather-arrow-right" />
+                </a>
+                </div>
+            </div>
+            </div>
+        </div>
+        ))
+    ) : (
+        <div className="no-courses-found">
+        <p>No Courses Found</p>
+        </div>
+    )}
+
 
                     </div>
-                </div>
-                <div className="rbt-section-overlayping-top rbt-section-gapBottom">
-                    <div className="inner">
-                        <div className="container">
-                            <div className="rbt-course-grid-column courall">
-                                {filteredCourse?.map((course) => (
-                                    <div className="course-grid-3" key={course.courseid}>
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href={`/Course-Details?courseId=${course.courseid}`}>
-                                                    <img
-                                                        src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                                                        alt="Card image"
-                                                    />
+                    <div className="row">
+                    <div className="col-lg-12 mt--60">
+                        <nav>
+                        <ul className="rbt-pagination">
+                            {/* Previous Button */}
+                            <li>
+                            <a
+                                href="#"
+                                aria-label="Previous"
+                                onClick={(e) => {
+                                e.preventDefault();
+                                if (currentPage > 1) this.handlePageChange(currentPage - 1);
+                                }}
+                            >
+                                <i className="feather-chevron-left" />
+                            </a>
+                            </li>
 
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
+                            {/* Page Numbers */}
+                            {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
+                            <li key={index} className={currentPage === index + 1 ? "active" : ""}>
+                                <a
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.handlePageChange(index + 1); // 1-based index
+                                }}
+                                >
+                                {index + 1}
+                                </a>
+                            </li>
+                            ))}
 
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />
-                                                        {course.no_of_lessons} Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        50 Students
-                                                    </li>
-                                                    <li>
-
-                                                       {!course.is_applied ? <a href="#" style={{ textDecoration: 'underline',color:'blue' }} onClick={() => this.applyCourse(course)}>Enroll Now</a>:'Enrolled'}
-                                                    </li>
-                                                </ul>
-
-                                                {/* <p className="rbt-card-text">
-                          {parse(
-                            course.description.split(" ").length > 20
-                              ? course.description.split(" ").slice(0, 20).join(" ") + "..."
-                              : course.description
-                          )}
-                        </p> */}
-
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
-                                                        {/* <span className="off-price">$120</span> */}
-                                                    </div>
-                                                    <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-
-                            </div>
-                            <div className="row">
-                                <div className="col-lg-12 mt--60">
-                                    <nav>
-                                        <ul className="rbt-pagination">
-                                            {/* Previous Button */}
-                                            <li>
-                                                <a
-                                                    href="#"
-                                                    aria-label="Previous"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        if (currentPage > 1) this.handlePageChange(currentPage - 1);
-                                                    }}
-                                                >
-                                                    <i className="feather-chevron-left" />
-                                                </a>
-                                            </li>
-
-                                            {/* Page Numbers */}
-                                            {Array.from({ length: Math.ceil(totalRecords / pageSize) }, (_, index) => (
-                                                <li key={index} className={currentPage === index + 1 ? "active" : ""}>
-                                                    <a
-                                                        href="#"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            this.handlePageChange(index + 1); // 1-based index
-                                                        }}
-                                                    >
-                                                        {index + 1}
-                                                    </a>
-                                                </li>
-                                            ))}
-
-                                            {/* Next Button */}
-                                            <li>
-                                                <a
-                                                    href="#"
-                                                    aria-label="Next"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
-                                                    }}
-                                                >
-                                                    <i className="feather-chevron-right" />
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
+                            {/* Next Button */}
+                            <li>
+                            <a
+                                href="#"
+                                aria-label="Next"
+                                onClick={(e) => {
+                                e.preventDefault();
+                                if (currentPage < Math.ceil(totalRecords / pageSize)) this.handlePageChange(currentPage + 1);
+                                }}
+                            >
+                                <i className="feather-chevron-right" />
+                            </a>
+                            </li>
+                        </ul>
+                        </nav>
+                    </div>
                     </div>
                 </div>
-                {/* End Card Style */}
+                </div>
+            </div>
+            {/* End Card Style */}
+            {this.state.showCancelConfirmPopup && (
+  <>
+    {/* Background overlay */}
+    <div className="modal-backdrop show"></div>
+
+    {/* Modal */}
+    <div
+      className="modal show d-block"
+      tabIndex="-1"
+      role="dialog"
+      style={{
+        position: "fixed",
+        top: "100%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 1050, // Ensures modal is above the backdrop
+      }}
+    >
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Cancel Enrollment</h5>
+            <button
+              type="button"
+              className="btn-close"
+              aria-label="Close"
+              onClick={() => this.setState({ showCancelConfirmPopup: false })}
+            ></button>
+          </div>
+          <div className="modal-body">
+            <p>Are you sure you want to cancel the enrollment?</p>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-primary btn-lg"
+              onClick={() => {
+                this.setState({ showCancelConfirmPopup: false });
+                this.cancelCourse();
+              }}
+            >
+              OK
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary btn-lg"
+              onClick={() => this.setState({ showCancelConfirmPopup: false })}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>
+)}
+
+
+{this.state.showConfirmPopup && (
+                <>
+                {/* Background overlay */}
+                <div className="modal-backdrop show"></div>
+
+                {/* Modal */}
+                <div className="modal show d-block" tabIndex="-1" role="dialog"  style={{
+        position: "fixed",
+        top: "100%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 1050, // Ensures modal is above the backdrop
+      }}>
+                    <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                        <h5 className="modal-title">Confirm Enrollment</h5>
+                        <button
+                            type="button"
+                            className="btn-close"
+                            aria-label="Close"
+                            onClick={() => this.setState({ showConfirmPopup: false })}
+                        ></button>
+                        </div>
+                        <div className="modal-body">
+                        <p>Are you sure you want to enroll for the course?</p>
+                        </div>
+                        <div className="modal-footer">
+                        <button
+                            type="button"
+                            className="btn btn-primary btn-lg" // Increased size
+                            onClick={() => {
+                            this.setState({ showConfirmPopup: false });
+                            this.applyCourse();
+                            }}
+                        >
+                            OK
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-secondary btn-lg" // Increased size
+                            onClick={() => this.setState({ showConfirmPopup: false })}
+                        >
+                            Cancel
+                        </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </>
+            )}
+
             </div>
 
 

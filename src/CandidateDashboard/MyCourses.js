@@ -36,7 +36,7 @@ class MyCourses extends React.Component {
             "user_id": 0,
             "pageIndex": pageIndex,
             "pagesize": pageSize,
-            "candidate_user_id": this.state.updatedUserData.user_id
+            "candidate_user_id": this.state.updatedUserData.basic_info.user_id
         }
 
 
@@ -47,13 +47,13 @@ class MyCourses extends React.Component {
             },
         })
             .then((response) => {
-                console.log('courseListingData', response.data);
+                console.log('MycourseListingData', response.data);
                 if (response.data.data && response.data.data.length > 0) {
                     let totalCount = response.data.data[0].TotalRecords;
                     let filteredCount = response.data.data.filter(x => x.is_applied).length;
                     totalCount = filteredCount;
 
-                    this.setState({ courseListingData: response.data.data.filter(x=>x.is_applied), totalRecords: totalCount, keepSpinner: false });
+                    this.setState({ courseListingData: response.data.data.filter(x => x.is_applied), totalRecords: totalCount, keepSpinner: false });
                 }
                 else {
                     this.setState({ errorMessage: "No Course Found", keepSpinner: false });
@@ -66,20 +66,28 @@ class MyCourses extends React.Component {
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
-                });
+            });
 
     }
 
     handlePageChange = (pageIndex) => {
         this.setState({ currentPage: pageIndex }, () => {
-            this.getAllJobs(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
+            this.getAllCourse(pageIndex - 1, this.state.pageSize); // pageIndex - 1 for 0-based index
         });
     };
     handleSearchChange = (e) => {
         this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
     };
 
+    getInitials = (name) => {
+        if (!name) return "U"; // Default to "U" if name is not provided
 
+        const parts = name.trim().split(" "); // Trim to remove extra spaces
+
+        return parts.length > 1
+            ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+            : parts[0][0].toUpperCase(); // Single initial
+    };
 
     render() {
         const { courseListingData, currentPage, pageSize, totalRecords, searchQuery } = this.state;
@@ -132,7 +140,7 @@ class MyCourses extends React.Component {
                                             <h1 className="title mb--0">Courses</h1>
                                         </div>
                                         <p className="description">
-                                            Courses that help beginner designers become true unicorns.{" "}
+                                            Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
                                         </p>
                                     </div>
                                 </div>
@@ -180,59 +188,72 @@ class MyCourses extends React.Component {
                     <div className="inner">
                         <div className="container">
                             <div className="rbt-course-grid-column courall">
-                                {filteredCourse?.map((course) => (
-                                    <div className="course-grid-3" key={course.courseid}>
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href={`/Course-Details?courseId=${course.courseid}`}>
-                                                    <img
-                                                        src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                                                        alt="Card image"
-                                                    />
-
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <div className="rbt-card-top">
-
-                                                </div>
-                                                <h4 className="rbt-card-title">
-                                                    <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
-                                                </h4>
-                                                <ul className="rbt-meta">
-                                                    <li>
-                                                        <i className="feather-book" />
-                                                        {course.no_of_lessons} Lessons
-                                                    </li>
-                                                    <li>
-                                                        <i className="feather-users" />
-                                                        50 Students
-                                                    </li>
-     
-                                                </ul>
-
-                                                {/* <p className="rbt-card-text">
-                          {parse(
-                            course.description.split(" ").length > 20
-                              ? course.description.split(" ").slice(0, 20).join(" ") + "..."
-                              : course.description
-                          )}
-                        </p> */}
-
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
-                                                        {/* <span className="off-price">$120</span> */}
-                                                    </div>
-                                                    <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
-                                                        Learn More
-                                                        <i className="feather-arrow-right" />
+                                {filteredCourse.length > 0 ? (
+                                    filteredCourse.map((course) => (
+                                        <div className="course-grid-3" key={course.courseid}>
+                                            <div className="rbt-card variation-01 rbt-hover">
+                                                <div className="rbt-card-img">
+                                                    <a href={`/Course-Details?courseId=${course.courseid}`}>
+                                                        {!course.course_image ? (
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    justifyContent: "center",
+                                                                    width: "60px",
+                                                                    height: "60px",
+                                                                    backgroundColor: "#ccc",
+                                                                    color: "#fff",
+                                                                    borderRadius: "50%",
+                                                                    fontWeight: "bold",
+                                                                    fontSize: "18px",
+                                                                }}
+                                                            >
+                                                                {this.getInitials(course.coursetitle || "User")}
+                                                            </div>
+                                                        ) : (
+                                                            <img
+                                                                src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}`}
+                                                                alt="Card image"
+                                                            />
+                                                        )}
                                                     </a>
+                                                </div>
+                                                <div className="rbt-card-body">
+                                                    <h4 className="rbt-card-title">
+                                                        <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
+                                                    </h4>
+                                                    <ul className="rbt-meta">
+                                                        <li>
+                                                            <i className="feather-book" />
+                                                            {course.no_of_lessons} Lessons
+                                                        </li>
+                                                        <li>
+                                                            <i className="feather-users" />
+                                                            50 Students
+                                                        </li>
+                                                    </ul>
+                                                    <div className="rbt-card-bottom">
+                                                        <div className="rbt-price">
+                                                            <span className="current-price">
+                                                                {course.currency ? course.currency + '-' + course.course_fees : course.course_fees}
+                                                            </span>
+                                                        </div>
+                                                        <a className="rbt-btn-link" href={`/Course-Details?courseId=${course.courseid}`}>
+                                                            Learn More
+                                                            <i className="feather-arrow-right" />
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div className="no-courses-found">
+                                        <p>No Courses Found</p>
                                     </div>
-                                ))}
+                                )}
+
 
                             </div>
                             <div className="row">

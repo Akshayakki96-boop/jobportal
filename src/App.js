@@ -38,6 +38,7 @@ import CandidatesDetail from './EmployerDashboard/CandidatesDetail';
 import CandidateDetails from './Dashboard/CandidateDetails';
 import SignUpAccounts from './SignUpAccounts/SignUpAccounts';
 import EditCourse from './Dashboard/EditCourse';
+import EditJob from './EmployerDashboard/EditJob';
 const NotFound = () => {
   return (
     <div>
@@ -132,6 +133,7 @@ class App extends React.Component {
           <Route path="/CandidatesCourseDetails" element={<CandidateDetails/>} />
           <Route path="/SignUpAccounts" element={<SignUpAccounts/>} />
           <Route path="/edit-course" element={<EditCourse/>} />
+          <Route path="/edit-job" element={<EditJob/>} />
           <Route path="*" element={<NotFound />} />
           {/* Other routes can be added here */}
           </Routes>

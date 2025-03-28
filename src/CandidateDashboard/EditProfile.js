@@ -59,7 +59,8 @@ class EditProfileCandidate extends React.Component {
                 degree: "",
                 specialisation: "",
                 fromYear: "",
-                toYear: ""
+                toYear: "",
+                coursename: ""
             },
             projects: [],
             preferredShift: [], // Example: [{ value: "Day", label: "Day" }]
@@ -98,37 +99,37 @@ class EditProfileCandidate extends React.Component {
         this.getPhoneCode();
     }
 
-       getPhoneCode = () => {
-                const baseUrl = process.env.REACT_APP_BASEURL;
-                const url = `${baseUrl}/api/Master/GetCountryPhoneCode`;
-                const token = localStorage.getItem('authToken');
-                var req={
-                    "stateId": 0,
-                    "countryId": 0,
-                    "cityId": 0,
-                    "id": 0,
-                    "freetext": ""
-                  }
-                axios.post(url, req, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        //Authorization: `Bearer ${token}`,
-                    },
-                })
-                    .then((response) => {
-                        const phoneCodes = response.data?.map(phone => ({
-                            value: phone.value,
-                            label: phone.value
-                        }));
-                        this.setState({ phoneCodes });
-        
-        
-                    })
-                    .catch((error) => {
-                        localStorage.removeItem('authToken');
-                        this.props.navigate('/Login'); // Use `navigate`
-                    });
-            }
+    getPhoneCode = () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Master/GetCountryPhoneCode`;
+        const token = localStorage.getItem('authToken');
+        var req = {
+            "stateId": 0,
+            "countryId": 0,
+            "cityId": 0,
+            "id": 0,
+            "freetext": ""
+        }
+        axios.post(url, req, {
+            headers: {
+                'Content-Type': 'application/json',
+                //Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                const phoneCodes = response.data?.map(phone => ({
+                    value: phone.value,
+                    label: phone.value
+                }));
+                this.setState({ phoneCodes });
+
+
+            })
+            .catch((error) => {
+                localStorage.removeItem('authToken');
+                this.props.navigate('/Login'); // Use `navigate`
+            });
+    }
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Employer/Dashboard`;
@@ -578,12 +579,12 @@ class EditProfileCandidate extends React.Component {
             "ipaddress": "192.168.1.1",
             "resumeheadline": this.state.resume_summary,
             "profilesummary": this.state.profile_summary,
-            "expereince": this.state.experience?this.state.experience:0,
-            "ctc": this.state.currentsalary?this.state.currentsalary:0,
-            "ex_ctc": this.state.expectedsalary?this.state.expectedsalary:0,
-            "current_cities": this.state.selectedCity.value?this.state.selectedCity.value:0,
-            "preferred_location": this.state.preferredWorkLocation.map((item) => item.value).join(','),
-            "notice_period_id": this.state.noticePeriodSelected.value,
+            "expereince": this.state.experience ? this.state.experience : 0,
+            "ctc": this.state.currentsalary ? this.state.currentsalary : 0,
+            "ex_ctc": this.state.expectedsalary ? this.state.expectedsalary : 0,
+            "current_cities": this.state.selectedCity ? this.state.selectedCity.value : "",
+            "preferred_location":this.state.preferredWorkLocation? this.state.preferredWorkLocation.map((item) => item.value).join(','):"",
+            "notice_period_id": this.state.noticePeriodSelected? this.state.noticePeriodSelected.value : 0,
             "languague_name": this.state.languague_name,
             "dob": this.state.selectedDate ? `${this.state.selectedDate.getFullYear()}-${String(this.state.selectedDate.getMonth() + 1).padStart(2, '0')}-${String(this.state.selectedDate.getDate()).padStart(2, '0')}` : null
         }
@@ -609,7 +610,7 @@ class EditProfileCandidate extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage: error.response?.data.message,
+                    responseMessage: error.response?.data,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
@@ -709,13 +710,13 @@ class EditProfileCandidate extends React.Component {
             candidate_employment_id: currentEmploymentIndex !== null ? employments[currentEmploymentIndex].candidate_employment_id : 0,
             user_id: this.state.userId,
             jobtitle: employmentForm.jobtitle,
-            joiningdate_year: parseInt(employmentForm.workedFromYear, 10),
+            joiningdate_year: parseInt(employmentForm.workedFromYear, 10) ? parseInt(employmentForm.workedFromYear, 10) : 0,
             leavingdate_year: parseInt(employmentForm.workedToYear, 10) ? parseInt(employmentForm.workedToYear, 10) : 0,
             is_current_employment: employmentForm.isCurrentCompany,
-            joiningdate_month: employmentForm.workedFromMonth,
+            joiningdate_month: employmentForm.workedFromMonth ? employmentForm.workedFromMonth : 0,
             leavingdate_month: employmentForm.workedToMonth ? employmentForm.workedToMonth : 0,
             company_name: employmentForm.company_name,
-            employmentType: employmentForm.employmentType,
+            employmentType: employmentForm.employmentType? employmentForm.employmentType : 0,
             jobprofile: employmentForm.jobprofile,
             keyskill_ids: employmentForm.keyskillselected ? employmentForm.keyskillselected.map(skill => skill.value).join(',') : ''
         };
@@ -727,33 +728,37 @@ class EditProfileCandidate extends React.Component {
             },
         })
             .then((response) => {
+                if (currentEmploymentIndex !== null) {
+                    const updatedEmployments = employments.map((employment, index) =>
+                        index === currentEmploymentIndex ? employmentForm : employment
+                    );
+                    this.setState({ employments: updatedEmployments });
+                } else {
+                    this.setState((prevState) => ({
+                        employments: [...prevState.employments, employmentForm]
+                    }));
+                }
+
                 console.log('Employment data saved successfully:', response.data);
                 this.setState({
                     responseMessage: 'Employment data saved successfully!',
                     alertVariant: 'success'
                 });
                 window.scrollTo(0, 0);
+                this.handleCloseEmploymentModal();
             })
             .catch((error) => {
                 console.error('Error saving employment data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: error.response?.data.message,
+                    responseerrorMessage: error.response?.data,
                     alertVariant: 'danger'
                 });
-                window.scrollTo(0, 0);
+
+                //window.scrollTo(0, 0);
+                // Removed invalid break statement
             });
 
-        if (currentEmploymentIndex !== null) {
-            const updatedEmployments = employments.map((employment, index) =>
-                index === currentEmploymentIndex ? employmentForm : employment
-            );
-            this.setState({ employments: updatedEmployments });
-        } else {
-            this.setState((prevState) => ({
-                employments: [...prevState.employments, employmentForm]
-            }));
-        }
-        this.handleCloseEmploymentModal();
+
     };
 
     handleShowProjectModal = (index = null) => {
@@ -810,7 +815,7 @@ class EditProfileCandidate extends React.Component {
             project_title: projectForm.projectname,
             project_description: projectForm.projectDetails,
             skill_ids: projectForm.keyskillsSelected ? projectForm.keyskillsSelected.map(skill => skill.value).join(',') : '',
-            teamsize: projectForm.teamSize
+            teamsize: projectForm.teamSize? projectForm.teamSize : 0,
         };
 
         axios.post(url, projectData, {
@@ -820,6 +825,17 @@ class EditProfileCandidate extends React.Component {
             },
         })
             .then((response) => {
+                if (currentProjectIndex !== null) {
+                    const updatedProjects = projects.map((project, index) =>
+                        index === currentProjectIndex ? projectForm : project
+                    );
+                    this.setState({ projects: updatedProjects });
+                } else {
+                    this.setState((prevState) => ({
+                        projects: [...prevState.projects, projectForm]
+                    }));
+                }
+                this.handleCloseProjectModal();
                 console.log('Project data saved successfully:', response.data);
                 this.setState({
                     responseMessage: 'Project data saved successfully!',
@@ -830,23 +846,13 @@ class EditProfileCandidate extends React.Component {
             .catch((error) => {
                 console.error('Error saving project data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: error.response?.data.message,
+                    responseerrorMessage: error.response?.data,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
             });
 
-        if (currentProjectIndex !== null) {
-            const updatedProjects = projects.map((project, index) =>
-                index === currentProjectIndex ? projectForm : project
-            );
-            this.setState({ projects: updatedProjects });
-        } else {
-            this.setState((prevState) => ({
-                projects: [...prevState.projects, projectForm]
-            }));
-        }
-        this.handleCloseProjectModal();
+    
 
 
 
@@ -867,7 +873,8 @@ class EditProfileCandidate extends React.Component {
                     degree: "",
                     specialisation: "",
                     fromYear: "",
-                    toYear: ""
+                    toYear: "",
+                    coursename: ""
                 },
                 showEducationModal: true
             });
@@ -900,9 +907,9 @@ class EditProfileCandidate extends React.Component {
             educationType: 1,
             coursename: educationForm.coursename,
             specialization: educationForm.degree,
-            coursetype: educationForm.courseType.value,
-            course_duration_from: parseInt(educationForm.fromYear, 10),
-            course_duration_to: parseInt(educationForm.toYear, 10),
+            coursetype: educationForm.courseType ? educationForm.courseType.value : "",
+            course_duration_from: parseInt(educationForm.fromYear, 10) ? parseInt(educationForm.fromYear, 10) : 0,
+            course_duration_to: parseInt(educationForm.toYear, 10) ? parseInt(educationForm.toYear, 10) : 0,
         };
 
         axios.post(url, educationData, {
@@ -912,6 +919,17 @@ class EditProfileCandidate extends React.Component {
             },
         })
             .then((response) => {
+                if (currentEducationIndex !== null) {
+                    const updatedEducationDetails = educationDetails.map((education, index) =>
+                        index === currentEducationIndex ? educationForm : education
+                    );
+                    this.setState({ educationDetails: updatedEducationDetails });
+                } else {
+                    this.setState((prevState) => ({
+                        educationDetails: [...prevState.educationDetails, educationForm]
+                    }));
+                }
+                this.handleCloseEducationModal();
                 console.log('Education data saved successfully:', response.data);
                 this.setState({
                     responseMessage: 'Education details saved successfully!',
@@ -922,23 +940,13 @@ class EditProfileCandidate extends React.Component {
             .catch((error) => {
                 console.error('Error saving education data:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: error.response?.data.message,
+                    responseerrorMessage: error.response?.data,
                     alertVariant: 'danger'
                 });
-                window.scrollTo(0, 0);
+               // window.scrollTo(0, 0);
             });
 
-        if (currentEducationIndex !== null) {
-            const updatedEducationDetails = educationDetails.map((education, index) =>
-                index === currentEducationIndex ? educationForm : education
-            );
-            this.setState({ educationDetails: updatedEducationDetails });
-        } else {
-            this.setState((prevState) => ({
-                educationDetails: [...prevState.educationDetails, educationForm]
-            }));
-        }
-        this.handleCloseEducationModal();
+
     };
     removeEducation = (index) => {
         const updatedEducationDetails = this.state.educationDetails.filter(
@@ -979,7 +987,7 @@ class EditProfileCandidate extends React.Component {
                 console.error('update failed:', error.response?.data || error.message);
 
                 this.setState({
-                    responseMessage: error.response?.data.message,
+                    responseMessage: error.response?.data,
                     alertVariant: 'danger', // Error alert variant
                 });
                 window.scrollTo(0, 0);
@@ -994,8 +1002,8 @@ class EditProfileCandidate extends React.Component {
         const careerData = {
             "candidate_career_id": this.state.candidate_career_id ? this.state.candidate_career_id : 0,
             "user_id": this.state.userId,
-            "industry_id": this.state.currentindustry.value?this.state.currentindustry.value:0,
-            "department_id": this.state.department.value?this.state.department.value:0,
+            "industry_id": this.state.currentindustry.value ? this.state.currentindustry.value : 0,
+            "department_id": this.state.department.value ? this.state.department.value : 0,
             "role_id": this.state.role_id,
             "job_type": this.state.jobType.map(option => option.value).join(','),
             "employment_type": this.state.employmentTypes.map(option => option.value).join(','),
@@ -1017,7 +1025,7 @@ class EditProfileCandidate extends React.Component {
             .catch((error) => {
                 console.error('Error updating career information:', error.response?.data || error.message);
                 this.setState({
-                    responseMessage: error.response?.data.message,
+                    responseMessage: error.response?.data,
                     alertVariant: 'danger'
                 });
                 window.scrollTo(0, 0);
@@ -1105,32 +1113,32 @@ class EditProfileCandidate extends React.Component {
                                                 <label htmlFor="email">Email</label>
                                             </div>
                                             <div className="form-group">
-                                            <label className="mobile-label" htmlFor="mobile_no">Mobile Number</label>
-                                            <div className="mobile-input d-flex align-items-center">
-                                                <Select
-                                                    className="country-code-select"
-                                                    options={this.state.phoneCodes}
-                                                    value={this.state.countryCode}
-                                                    onChange={this.handleCountryCodeChange}
-                                                    menuPortalTarget={document.body}
-                                                    styles={{
-                                                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                                                        container: (base) => ({
-                                                            ...base,
-                                                            flex: '0 0 100px', // Adjust the width as needed
-                                                        }),
-                                                    }}
-                                                />
-                                                <input
-                                                    type="text"
-                                                     className="mobile-number-input flex-grow-1"
-                                                    id="mobile_no"
-                                                    name="mobile_no"
-                                                    value={mobile_no}
-                                                    onChange={this.handleMobileChange}
-                                                />
+                                                <label className="mobile-label" htmlFor="mobile_no">Mobile Number</label>
+                                                <div className="mobile-input d-flex align-items-center">
+                                                    <Select
+                                                        className="country-code-select"
+                                                        options={this.state.phoneCodes}
+                                                        value={this.state.countryCode}
+                                                        onChange={this.handleCountryCodeChange}
+                                                        menuPortalTarget={document.body}
+                                                        styles={{
+                                                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                            container: (base) => ({
+                                                                ...base,
+                                                                flex: '0 0 100px', // Adjust the width as needed
+                                                            }),
+                                                        }}
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        className="mobile-number-input flex-grow-1"
+                                                        id="mobile_no"
+                                                        name="mobile_no"
+                                                        value={mobile_no}
+                                                        onChange={this.handleMobileChange}
+                                                    />
                                                 </div>
-                                               
+
                                             </div>
                                             <div className="form-group" style={{ position: "relative" }}>
                                                 <label
@@ -1167,6 +1175,7 @@ class EditProfileCandidate extends React.Component {
                                             <div className="form-group">
                                                 <Select
                                                     value={this.state.selectedCity}
+                                                    isClearable={true}
                                                     options={this.state.cityOptions}
                                                     placeholder="Select Location"
                                                     className="basic-multi-select"
@@ -1184,6 +1193,7 @@ class EditProfileCandidate extends React.Component {
                                                     id="preferredworklocation"
                                                     name="preferredworklocation"
                                                     value={preferredWorkLocation}
+                                                    isClearable={true}
                                                     options={[
                                                         ...this.state.cityOptions,
                                                         { value: 8, label: "Remote" },
@@ -1208,6 +1218,7 @@ class EditProfileCandidate extends React.Component {
                                                 <Select
                                                     options={noticePeriods}
                                                     value={noticePeriodSelected}
+                                                    isClearable={true}
                                                     placeholder="Select Notice Period"
                                                     className="basic-multi-select"
                                                     classNamePrefix="select"
@@ -1349,7 +1360,7 @@ class EditProfileCandidate extends React.Component {
                                                     value={currentsalary}
                                                     onChange={this.handleCurrentSalaryChange}
                                                 />
-                                                <label htmlFor="currentsalary">Current CTC</label>
+                                                <label htmlFor="currentsalary">Current CTC (LPA)</label>
                                             </div>
                                             <div className="form-group">
                                                 <input
@@ -1360,7 +1371,7 @@ class EditProfileCandidate extends React.Component {
                                                     value={expectedsalary}
                                                     onChange={this.handleExpectedSalaryChange}
                                                 />
-                                                <label htmlFor="expectedsalary">Expected CTC</label>
+                                                <label htmlFor="expectedsalary">Expected CTC (LPA)</label>
                                             </div>
                                             <div className="form-group">
                                                 <input
@@ -1435,7 +1446,7 @@ class EditProfileCandidate extends React.Component {
                                                                 style={{ fontSize: '14px' }}
                                                                 onClick={() => this.removeEmployment(index)}
                                                             >
-                                                                <i className="feather-trash" />
+                                                                <i className="fas fa-trash-alt" />
                                                             </Button>
                                                         </div>
                                                         <h5>Employment {index + 1}</h5>
@@ -1472,6 +1483,11 @@ class EditProfileCandidate extends React.Component {
                                                         <Modal.Title>{this.state.currentEmploymentIndex !== null ? 'Edit Employment' : 'Add Employment'}</Modal.Title>
                                                     </Modal.Header>
                                                     <Modal.Body>
+                                                        {this.state.responseerrorMessage && (
+                                                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseerrorMessage: '' })} dismissible>
+                                                                {this.state.responseerrorMessage}
+                                                            </Alert>
+                                                        )}
                                                         <div className="form-group">
                                                             <label htmlFor="company_name">Company Name</label>
                                                             <input
@@ -1484,7 +1500,7 @@ class EditProfileCandidate extends React.Component {
                                                             />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label htmlFor="jobtitle">Job Title</label>
+                                                            <label htmlFor="jobtitle">Job Profile</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"
@@ -1595,6 +1611,7 @@ class EditProfileCandidate extends React.Component {
                                                             <Select
                                                                 id="keyskillselected"
                                                                 name="keyskillselected"
+                                                                isClearable={true}
                                                                 value={employmentForm.keyskillselected}
                                                                 onChange={(selectedOptions) =>
                                                                     this.setState((prevState) => ({
@@ -1666,7 +1683,7 @@ class EditProfileCandidate extends React.Component {
                                                                 style={{ fontSize: '14px' }}
                                                                 onClick={() => this.removeProjects(index)}
                                                             >
-                                                                <i className="feather-trash" />
+                                                                <i className="fas fa-trash-alt" />
                                                             </Button>
                                                         </div>
                                                         <h5>Project {index + 1}</h5>
@@ -1700,6 +1717,11 @@ class EditProfileCandidate extends React.Component {
                                                         <Modal.Title>{this.state.currentProjectIndex !== null ? 'Edit Project' : 'Add Project'}</Modal.Title>
                                                     </Modal.Header>
                                                     <Modal.Body>
+                                                        {this.state.responseerrorMessage && (
+                                                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseerrorMessage: '' })} dismissible>
+                                                                {this.state.responseerrorMessage}
+                                                            </Alert>
+                                                        )}
                                                         <div className="form-group">
                                                             <label htmlFor="projectname">Project Name</label>
                                                             <input
@@ -1727,6 +1749,7 @@ class EditProfileCandidate extends React.Component {
                                                             <Select
                                                                 id="keyskills_id"
                                                                 name="keyskills_id"
+                                                                isClearable={true}
                                                                 value={this.state.projectForm.keyskillsSelected}
                                                                 options={this.state.keyskills}
                                                                 onChange={(selectedOptions) =>
@@ -1791,7 +1814,7 @@ class EditProfileCandidate extends React.Component {
                                                                     style={{ fontSize: '14px' }}
                                                                     onClick={() => this.removeEducation(index)}
                                                                 >
-                                                                    <i className="feather-trash" />
+                                                                    <i className="fas fa-trash-alt" />
                                                                 </Button>
                                                             </div>
                                                             <h5>Education {index + 1}</h5>
@@ -1815,6 +1838,11 @@ class EditProfileCandidate extends React.Component {
                                                         <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
                                                     </Modal.Header>
                                                     <Modal.Body>
+                                                    {this.state.responseerrorMessage && (
+                                                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseerrorMessage: '' })} dismissible>
+                                                                {this.state.responseerrorMessage}
+                                                            </Alert>
+                                                        )}
                                                         <div className="form-group">
                                                             <label htmlFor="coursename">Course Name</label>
                                                             <input
@@ -1920,6 +1948,7 @@ class EditProfileCandidate extends React.Component {
                                                     <Select
                                                         id="keyskills_id"
                                                         name="keyskills_id"
+                                                        isClearable={true}
                                                         value={this.state.keyskillsSelected}
                                                         options={this.state.keyskills}
                                                         onChange={(selectedOptions) =>
@@ -1961,6 +1990,7 @@ class EditProfileCandidate extends React.Component {
                                                     <Select
                                                         id="employmentTypes"
                                                         name="employmentTypes"
+                                                        isClearable={true}
                                                         value={this.state.employmentTypes}
                                                         options={this.state.employmentType}
                                                         onChange={(selectedOptions) => this.setState({ employmentTypes: selectedOptions })}
@@ -1980,6 +2010,7 @@ class EditProfileCandidate extends React.Component {
                                                     <Select
                                                         id="jobType"
                                                         name="jobType"
+                                                        isClearable={true}
                                                         value={this.state.jobType}
                                                         options={[
                                                             { value: 'Contractual', label: 'Contractual' },
@@ -2001,6 +2032,7 @@ class EditProfileCandidate extends React.Component {
                                                     <Select
                                                         id="currentindustry"
                                                         name="currentindustry"
+                                                        isClearable={true}
                                                         value={this.state.currentindustry}
                                                         options={this.state.industry}
                                                         onChange={(selectedOptions) => this.setState({ currentindustry: selectedOptions })}
@@ -2018,6 +2050,7 @@ class EditProfileCandidate extends React.Component {
                                                     <Select
                                                         id="department"
                                                         name="department"
+                                                        isClearable={true}
                                                         value={this.state.department}
                                                         options={this.state.departments}
                                                         onChange={(selectedOptions) => this.setState({ department: selectedOptions })}
