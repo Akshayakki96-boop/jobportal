@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
         super(props);
         this.state = {
             showUserDashboard: true,
-            dashBoardData:{}
+            dashBoardData: {}
         };
 
     }
@@ -35,9 +35,9 @@ class Dashboard extends React.Component {
         })
             .then((response) => {
                 console.log('dashboard data', response.data);
-                this.setState({dashBoardData:response.data.data,dashboardCounterData:response.data});
+                this.setState({ dashBoardData: response.data.data, dashboardCounterData: response.data });
                 this.getUserProfile(response.data.data.user_id);
-                
+
 
             })
             .catch((error) => {
@@ -61,7 +61,7 @@ class Dashboard extends React.Component {
         })
             .then((response) => {
                 console.log('user data', response.data);
-                this.setState({userData:response.data.data})
+                this.setState({ userData: response.data.data })
 
             })
             .catch((error) => {
@@ -130,14 +130,14 @@ class Dashboard extends React.Component {
 
     getInitials = (name) => {
         if (!name) return "U"; // Default to "U" if name is not provided
-    
+
         const parts = name.trim().split(" "); // Trim to remove extra spaces
-    
+
         return parts.length > 1
             ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
             : parts[0][0].toUpperCase(); // Single initial
     };
-    
+
 
     render() {
 
@@ -160,13 +160,13 @@ class Dashboard extends React.Component {
                                         <div className="tranr-titl">
                                             <div className="content text-center">
                                                 <h6 className="subtitle sal-animate" >Trainer</h6>
-                                                <h3 style={{textAlign:"center"}} className="title sal-animate">Learn with <span>{this.state?.userData?.basic_info.fullname}</span></h3>
+                                                <h3 style={{ textAlign: "center" }} className="title sal-animate">Learn with <span>{this.state?.userData?.basic_info.fullname}</span></h3>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
-                                            <div className="thumbnail rbt-avatars size-lg">
+                                                <div className="thumbnail rbt-avatars size-lg">
                                                     {this.state?.userData?.basic_info.profile_image ? (
                                                         <img
                                                             src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.basic_info.profile_image}`}
@@ -247,14 +247,14 @@ class Dashboard extends React.Component {
                                                                             <i className="feather-user"></i><span>My Profile</span>
                                                                         </a>
                                                                     </li>
-                                                                
+
                                                                     <li>
                                                                         <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myCourses'); }} href="#">
                                                                             <i className="feather-monitor"></i><span>My Courses</span>
                                                                         </a>
                                                                     </li>
-                                                                 
-                                                                 
+
+
                                                                     <li>
                                                                         <a onClick={(e) => { e.preventDefault(); this.handleLogout(); }} href="#">
                                                                             <i className="feather-log-out"></i><span>Logout</span>
@@ -270,7 +270,64 @@ class Dashboard extends React.Component {
                                             </div>
                                             {/* End Dashboard Sidebar   */}
                                         </div>
-                                        {this.state.showUserDashboard && <UserDashBoard dashBoardData={this.state?.dashboardCounterData} />}
+                                        {this.state.showUserDashboard && <div className="col-lg-9">
+                                            {/* Dashboard Content Wrapper */}
+                                            <div className="rbt-dashboard-content bg-color-white rbt-shadow-box mb--60">
+                                                <div className="content">
+                                                    {/* Dashboard Section Title */}
+                                                    <div className="section-title">
+                                                        <h4 className="rbt-title-style-3">Dashboard</h4>
+                                                    </div>
+                                                    <div className="row g-5">
+                                                        {/* Single Card - Enrolled Courses */}
+                                                        <div className="col-lg-4 col-md-4 col-sm-6 col-12">
+                                                        <a
+                                                                href="#"
+                                                                
+                                                            >
+                                                            <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-primary-opacity">
+                                                                <div className="inner">
+                                                                    <div className="rbt-round-icon bg-primary-opacity">
+                                                                        <i className="feather-book-open"></i>
+                                                                    </div>
+                                                                    <div className="content">
+                                                                        <h3 className="counter without-icon color-primary">
+                                                                            <span className="odometer" data-count="30">{this.state.dashboardCounterData?.applied_candidate_count}</span>
+                                                                        </h3>
+                                                                        <span className="rbt-title-style-2 d-block">Enrolled Candidates</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            </a>
+                                                        </div>
+                                                        {/* Single Card - Active Courses */}
+                                                        <div className="col-lg-4 col-md-4 col-sm-6 col-12">
+                                                            <a
+                                                                href="#"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    this.setActiveComponent('myCourses');
+                                                                }}
+                                                            >
+                                                                <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-secondary-opacity">
+                                                                    <div className="inner">
+                                                                        <div className="rbt-round-icon bg-secondary-opacity">
+                                                                            <i className="feather-monitor"></i>
+                                                                        </div>
+                                                                        <div className="content">
+                                                                            <h3 className="counter without-icon color-secondary">
+                                                                                <span className="odometer" data-count="10">{this.state.dashboardCounterData?.course_count}</span>
+                                                                            </h3>
+                                                                            <span className="rbt-title-style-2 d-block">Active Courses</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} />}
                                         {this.state.showMyCourses && <MyCourses userData={this.state.userData} />}
                                         {this.state.showAnnouncement && <Announcement />}

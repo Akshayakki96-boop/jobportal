@@ -527,11 +527,8 @@ class Header extends React.Component {
                                                         <a onClick={(e) => { e.preventDefault(); this.handleredirection(); }} href="#">
                                                             <i className="feather-log-out"></i>
                                                             <span>
-                                                                {this.props.dashBoardData?.role_id == 1
-                                                                    ? "CandidateDashboard"
-                                                                    : this.props.dashBoardData?.role_id == 2
-                                                                        ? "EmployerDashboard"
-                                                                        : "TrainerDashboard"}
+                                                                Dashboard
+                                                                   
                                                             </span>
 
                                                         </a>

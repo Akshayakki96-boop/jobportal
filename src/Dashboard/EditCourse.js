@@ -26,11 +26,13 @@ class EditCourse extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ip: "Fetching...",
             currencyCode: { value: "INR", label: "INR" },
         };
 
     }
     componentDidMount() {
+        this.fetchIP();
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
         var courseId = urlParams.get('courseId');
@@ -40,6 +42,15 @@ class EditCourse extends React.Component {
         this.getcurrencyCode();
         this.getCourseById();
     }
+    fetchIP = async () => {
+        try {
+            const response = await fetch("https://api64.ipify.org?format=json");
+            const data = await response.json();
+            this.setState({ ip: data.ip });
+        } catch (error) {
+            this.setState({ ip: "Error fetching IP" });
+        }
+    };
     getCourseById = () => {
          //this.setState({ keepSpinner: true });
          const baseUrl = process.env.REACT_APP_BASEURL;
@@ -351,16 +362,16 @@ class EditCourse extends React.Component {
                 "coursetitle": this.state.courseName,
                 "description": this.state.description,
                 "notes": "string",
-                "duration": this.state.duration,
+                "duration": this.state.duration?this.state.duration:0,
                 "course_level": this.state.courseSelected?this.state.courseSelected.value:0,
                 "course_image": this.state.fileName,
-                "course_fees": this.state.courseFee,
+                "course_fees": this.state.courseFee?this.state.courseFee:0,
                 "is_refundable": type == "Yes" ? true : false,
                 "course_materials": this.state.courseMaterial,
-                "no_of_lessons": this.state.nooflessons,
+                "no_of_lessons": this.state.nooflessons?this.state.nooflessons:0,
                 "isactive": false,
-                "ipAddress": '192.168.1.1',
-                "currency": this.state.currencyCode.value,
+                "ipAddress": this.state.ip,
+                "currency": this.state.currencyCode?this.state.currencyCode.value:"",
                 "startdate": isoString
             }
     
@@ -417,15 +428,15 @@ class EditCourse extends React.Component {
             "coursetitle": this.state.courseName,
             "description": this.state.description,
             "notes": "string",
-            "duration": this.state.duration,
+            "duration": this.state.duration? this.state.duration : 0,
             "course_level": this.state.courseSelected ? this.state.courseSelected.value : 0,
             "course_image": this.state.fileName,
-            "course_fees": this.state.courseFee,
+            "course_fees": this.state.courseFee? this.state.courseFee : 0,
             "is_refundable": type == "Yes" ? true : false,
             "course_materials": this.state.courseMaterial,
-            "no_of_lessons": this.state.nooflessons,
+            "no_of_lessons": this.state.nooflessons? this.state.nooflessons : 0,
             "isactive": false,
-            "ipAddress": '192.168.1.1',
+            "ipAddress":  this.state.ip,
             "currency": this.state.currencyCode.value,
             "startdate": isoString
         }
@@ -706,7 +717,7 @@ class EditCourse extends React.Component {
                                                 </div>
                                                 {this.state.showValisMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
-                                            <div className="form-group">
+                                            <div className="form-group" style={{paddingBottom: "50px"}}>
                                                 <ReactQuill
                                                     value={this.state.courseMaterial}
                                                     onChange={this.handleCourseMaterial}
@@ -714,10 +725,11 @@ class EditCourse extends React.Component {
                                                     modules={this.modules}
                                                     placeholder="Upload a study material ...(video url link)"
                                                     formats={this.formats}
+                                                    style={{ height: "200px"}}
                                                 />
                                             </div>
-
-                                            <div className="form-group">
+                                           
+                                            <div className="form-group" style={{paddingBottom: "50px"}}>
                                                 <ReactQuill
                                                     value={this.state.description}
                                                     onChange={this.handleDescriptionChange}
@@ -725,8 +737,14 @@ class EditCourse extends React.Component {
                                                     modules={this.modules}
                                                     placeholder="Course Description"
                                                     formats={this.formats}
+                                                    style={{ height: "200px"}}
                                                 />
                                             </div>
+                                            {this.state.description && this.state.description.length > 2000 && (
+                                                <span style={{ color: "red" }}>
+                                                    Description cannot exceed 2000 characters.
+                                                </span>
+                                            )}
 
                                             <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                                 <input
