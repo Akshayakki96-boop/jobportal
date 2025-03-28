@@ -197,7 +197,7 @@ class MyCourses extends React.Component {
                       <h1 className="title mb--0">Courses</h1>
                     </div>
                     <p className="description">
-                      Courses that help beginner designers become true unicorns.{" "}
+                    Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
                     </p>
                   </div>
                 </div>
