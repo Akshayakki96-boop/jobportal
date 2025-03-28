@@ -16,6 +16,7 @@ class CandidateDashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            dasboarddataType: this.props.datatype,
             showUserDashboard: true,
             dashBoardData: {},
             responseMessage: '',
@@ -24,6 +25,16 @@ class CandidateDashboard extends React.Component {
 
     }
     componentDidMount() {
+        if (this.state.dasboarddataType === "ApplyJobs") {
+            this.setState({ showApplyJobs: true, showUserDashboard: false }, () => {
+                console.log("ApplyJobs activated, UserDashboard hidden");
+            });
+        }
+
+        if (this.state.dasboarddataType == "EnrolledCourses") {
+            this.setState({ showEnrollCourse: true });
+        }
+
         this.getDashboardUser();
 
 
@@ -46,7 +57,7 @@ class CandidateDashboard extends React.Component {
             .then((response) => {
                 console.log('dashboard data', response.data);
                 this.getUserProfile(response.data.data.user_id);
-                this.setState({ dashBoardData: response.data.data ,dashBoardCounterData:response.data});
+                this.setState({ dashBoardData: response.data.data, dashBoardCounterData: response.data });
 
             })
             .catch((error) => {
@@ -70,8 +81,8 @@ class CandidateDashboard extends React.Component {
         })
             .then((response) => {
                 console.log('user data', response.data);
-                this.setState({ userData: response.data.data?.basic_info })
-                this.setState({CompanyName:response.data.data?.employment.length>0? response.data.data?.employment?.filter(x=>x.is_current_employment==true)[0].company_name:""});            
+                this.setState({ userData: response.data.data })
+                this.setState({ CompanyName: response.data.data?.employment.length > 0 ? response.data.data?.employment?.filter(x => x.is_current_employment == true)[0].company_name : "" });
                 this.setState({ keepSpinner: false });
 
             })
@@ -92,7 +103,7 @@ class CandidateDashboard extends React.Component {
             showApplyJobs: false,
             showEnrollCourse: false,
             showMyCourses: false,
-            showMyJobs:false
+            showMyJobs: false
 
         });
 
@@ -112,8 +123,8 @@ class CandidateDashboard extends React.Component {
             case 'mycourses':
                 this.setState({ showMyCourses: true });
                 break;
-                case 'myjobs':
-                this.setState({showMyJobs:true});
+            case 'myjobs':
+                this.setState({ showMyJobs: true });
                 break;
 
 
@@ -148,16 +159,16 @@ class CandidateDashboard extends React.Component {
     }
     getInitials = (name) => {
         if (!name) return "U"; // Default to "U" if name is not provided
-    
+
         const parts = name.trim().split(" "); // Trim to remove extra spaces
-    
+
         return parts.length > 1
             ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
             : parts[0][0].toUpperCase(); // Single initial
     };
 
     render() {
-        console.log(this.state.CompanyName)    
+        console.log(this.state.CompanyName)
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
@@ -177,16 +188,16 @@ class CandidateDashboard extends React.Component {
                                         <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
                                         <div className="tranr-titl">
                                             <div className="content text-center">
-                                            <h6 className="subtitle sal-animate" >Candidate</h6>
+                                                <h6 className="subtitle sal-animate" >Candidate</h6>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}
                                         <div className="rbt-tutor-information">
                                             <div className="rbt-tutor-information-left">
                                                 <div className="thumbnail rbt-avatars size-lg">
-                                                    {this.state?.userData?.profile_image ? (
+                                                    {this.state?.userData?.basic_info.profile_image ? (
                                                         <img
-                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state.userData.profile_image}`}
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${this.state?.userData?.basic_info.profile_image}`}
                                                             alt="Instructor"
                                                         />
                                                     ) : (
@@ -210,7 +221,7 @@ class CandidateDashboard extends React.Component {
                                                 </div>
                                                 <div className="tutor-content">
                                                     <h5 className="title">{this.state?.dashBoardData.username} (Candidate)</h5>
-                                                  
+
                                                 </div>
                                             </div>
                                             {/* <div className="rbt-tutor-information-right">
@@ -301,7 +312,64 @@ class CandidateDashboard extends React.Component {
                                             </div>
                                             {/* End Dashboard Sidebar   */}
                                         </div>
-                                        {this.state.showUserDashboard && <UserDashBoard dashBoardData={this.state?.dashBoardCounterData} message={this.state.responseMessage} />}
+
+                                        {this.state.showUserDashboard && <div className="col-lg-9">
+                                            {/* Dashboard Content Wrapper */}
+                                            <div className="rbt-dashboard-content bg-color-white rbt-shadow-box mb--60">
+                                                <div className="content">
+                                                    <div className="row g-5">
+                                                        {/* Single Card - Enrolled Courses */}
+                                                        <div className="col-lg-4 col-md-4 col-sm-6 col-12">
+                                                            <a
+                                                                href="#"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    this.setActiveComponent('myjobs');
+                                                                }}
+                                                            >
+                                                                <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-primary-opacity">
+                                                                    <div className="inner">
+                                                                        <div className="rbt-round-icon bg-primary-opacity">
+                                                                            <i className="feather-book-open"></i>
+                                                                        </div>
+                                                                        <div className="content">
+                                                                            <h3 className="counter without-icon color-primary">
+                                                                                <span className="odometer" data-count="30">{this.state.dashBoardCounterData?.applied_job_count}</span>
+                                                                            </h3>
+                                                                            <span className="rbt-title-style-2 d-block">Applied Jobs</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                        {/* Single Card - Active Courses */}
+                                                        <div className="col-lg-4 col-md-4 col-sm-6 col-12">
+                                                        <a
+                                                                href="#"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    this.setActiveComponent('mycourses');
+                                                                }}
+                                                            >
+                                                            <div className="rbt-counterup variation-01 rbt-hover-03 rbt-border-dashed bg-secondary-opacity">
+                                                                <div className="inner">
+                                                                    <div className="rbt-round-icon bg-secondary-opacity">
+                                                                        <i className="feather-monitor"></i>
+                                                                    </div>
+                                                                    <div className="content">
+                                                                        <h3 className="counter without-icon color-secondary">
+                                                                            <span className="odometer" data-count="10">{this.state.dashBoardCounterData?.applied_course_count}</span>
+                                                                        </h3>
+                                                                        <span className="rbt-title-style-2 d-block">Enrolled Courses</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>}
                                         {this.state.showProfile && <MyProfile userData={this.state.userData} CompanyName={this.state.CompanyName} />}
                                         {this.state.showApplyJobs && <ApplyJobs />}
                                         {this.state.showEnrollCourse && <EnrollCourses userData={this.state.userData} />}

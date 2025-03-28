@@ -120,6 +120,57 @@ class MyJobs extends React.Component {
                   this.props.navigate('/Login'); // Use `navigate`
               });
       }
+
+        handleDeleteJob = (jobId) => {
+          const baseUrl = process.env.REACT_APP_BASEURL;
+          const url = `${baseUrl}/api/Job/DeleteJob`;
+          const token = localStorage.getItem('authToken');
+          var request =
+          {
+            "jobId": jobId,         
+          }
+          axios.post(url, request, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          })
+            .then((response) => {
+            
+              this.setState({
+                responseMessage: (
+                  <span>
+                    Job Successfully Deleted!
+                  </span>
+                ),
+                alertVariant: 'success', // Success alert variant
+              });
+              window.scrollTo(0, 0);
+              const { currentPage, pageSize } = this.state;
+              this.setState({ currentPage }, () => {
+                this.getAllJobs(this.state.currentPage - 1, pageSize); // Maintain the current page after refresh
+              });
+      
+            })
+            .catch((error) => {
+              this.setState({
+                responseMessage: "Something went wrong !",
+                alertVariant: 'danger', // Error alert variant
+              });
+              window.scrollTo(0, 0);
+            });
+        }
+
+        getInitials = (name) => {
+          if (!name) return "U"; // Default to "U" if name is not provided
+      
+          const parts = name.trim().split(" "); // Trim to remove extra spaces
+      
+          return parts.length > 1
+              ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+              : parts[0][0].toUpperCase(); // Single initial
+      };
+
   render() {
     const { joblistingdata, currentPage, pageSize, totalRecords, searchQuery } = this.state;
     const startIndex = (currentPage - 1) * pageSize + 1;
@@ -164,7 +215,7 @@ class MyJobs extends React.Component {
                       <h1 className="title mb--0">Jobs</h1>
                     </div>
                     <h4 className="description">
-                      Find Your Dream Job – Apply for top opportunities and get hired faster with Zobskill!:
+                      Find Your Dream Job – Apply for top opportunities and get hired faster with Zobskill!
                     </h4>
                   </div>
                 </div>
@@ -221,12 +272,34 @@ class MyJobs extends React.Component {
 
                         <div className="rbt-card variation-01 rbt-hover card-list-2">
                           <div className="rbt-card-img">
-                            <a href="#">
-                              <img
-                                src={job.companylogo ? `${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                                alt="Card image"
-                              />
-                            </a>
+                          <a href="#">
+                                                                {!job.companylogo ? (
+
+                                                                    <div
+                                                                        style={{
+                                                                            display: "flex",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "center",
+                                                                            width: "60px", // Adjust as needed
+                                                                            height: "60px", // Adjust as needed
+                                                                            backgroundColor: "#ccc", // Default background color
+                                                                            color: "#fff",
+                                                                            //borderRadius: "50%",
+                                                                            fontWeight: "bold",
+                                                                            fontSize: "18px", // Adjust font size as needed
+                                                                        }}
+                                                                    >
+                                                                        {this.getInitials(job.jobtitle || "User")}
+                                                                    </div>
+                                                                )
+                                                                     : (
+                                                                        <img
+                                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}`}
+                                                                            alt="Card image"
+                                                                        />
+                                                                    )}
+
+                                                            </a>
                           </div>
                           <div className="rbt-card-body">
                             <div className="rbt-card-top">
@@ -249,6 +322,20 @@ class MyJobs extends React.Component {
 
                                 {!job.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.handlePublish(job,true)}>Publish </a> : <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.handlePublish(job,false)}>UnPublish </a>}
                               </li>
+                              {!job.isactive && <li>
+                            <a style={{ marginBottom: "10px", color: "blue" }} className="rbt-btn-link" href={`/edit-job?jobId=${job.jobid}`}>
+                              Edit Job
+                              <i className="feather-arrow-right" />
+                            </a>
+                          </li>}
+                              {!job.isactive && <li>
+                            <i
+                            title='Delete Job'
+                              className="fas fa-trash-alt"
+                              style={{ color: "red", cursor: "pointer" }}
+                              onClick={() => this.handleDeleteJob(job.jobid)}
+                            />
+                          </li>}
                             </ul>
                             {/* <p className="rbt-card-text">
                               {parse(job.description)}
