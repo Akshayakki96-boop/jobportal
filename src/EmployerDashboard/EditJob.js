@@ -94,12 +94,13 @@ class EditJob extends React.Component {
         })
             .then((response) => {
                 console.log('Editjoblistingdata', response.data.data);
+                let packagename=this.packages.filter((item) => item.id == response.data.data[0].package_id)[0];
                 this.setState({ jobId: response.data.data[0].jobid });
                 this.setState({ title: response.data.data[0].jobtitle });
                 this.setState({ description: response.data.data[0].description });
                 this.setState({ openings: response.data.data[0].no_of_openings });
                 this.setState({ selectedRole: { value: response.data.data[0].role_id, label: response.data.data[0].roleTitle } });
-                this.setState({ selectedPackage: { value: response.data.data[0].package_id, label: response.data.data[0].package_id } });
+                this.setState({ selectedPackage: { value: response.data.data[0].package_id, label: packagename.value } });
                 this.setState({ selectedEmpType: { value: response.data.data[0].emptypeid, label: response.data.data[0].empType } });
                 this.setState({ selectedDepartment: { value: response.data.data[0].deptid, label: response.data.data[0].department } });
                 this.setState({ selectedIndustry: { value: response.data.data[0].industry_id, label: response.data.data[0].industryname } });
@@ -199,6 +200,7 @@ class EditJob extends React.Component {
         })
             .then((response) => {
                 console.log('jobpostingdata', response.data);
+                this.packages= response.data.package;
                 const transformToReactSelectOptions = (array) =>
                     array.map((item) => ({
                         label: item.value,
@@ -290,7 +292,7 @@ class EditJob extends React.Component {
         const url = `${baseUrl}/api/Job/PostJob`;
         const token = localStorage.getItem('authToken');
         var request = {
-            "jobId": this.state.jobid,
+            "jobId": this.state.jobId,
             "title": this.state.title,
             "description": this.state.description,
             "experienceFrom": this.state.fromExperience,

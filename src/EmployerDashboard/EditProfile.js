@@ -34,12 +34,23 @@ class EditProfile extends React.Component {
 
     }
     componentDidMount() {
+        this.fetchIP();
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
         this.userId = urlParams.get('user_Id');
         this.getDashboardUser();
 
     }
+
+    fetchIP = async () => {
+        try {
+          const response = await fetch("https://api64.ipify.org?format=json");
+          const data = await response.json();
+          this.setState({ ip: data.ip });
+        } catch (error) {
+          this.setState({ ip: "Error fetching IP" });
+        }
+      };
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Employer/Dashboard`;
@@ -190,7 +201,7 @@ class EditProfile extends React.Component {
             "Id": this.state.userData.user_id,
             "designation": this.state.userData.designation,
             "description": this.state.userData.company_description,
-            "ipAddress": "192.168.1.1"
+            "ipAddress": this.state.ip
         };
 
         axios.post(url, userData, {
