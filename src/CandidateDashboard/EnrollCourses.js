@@ -20,6 +20,7 @@ class EnrollCourses extends React.Component {
 
     }
     componentDidMount() {
+
         this.getAllCourse(0, this.state.pageSize);
     }
 
@@ -87,8 +88,7 @@ class EnrollCourses extends React.Component {
             "course_id": this.courseId,
             "candidate_user_id": this.state.updatedUserData.basic_info.user_id,
             "ip_address": "string",
-            "status": 0,
-            "is_active": true,
+            "status": 1,
         }
 
         axios.post(url, request, {
@@ -139,7 +139,6 @@ class EnrollCourses extends React.Component {
             "candidate_user_id": this.state.updatedUserData.basic_info.user_id,
             "ip_address": "string",
             "status": 0,
-            "is_active": false,
         }
 
         axios.post(url, request, {

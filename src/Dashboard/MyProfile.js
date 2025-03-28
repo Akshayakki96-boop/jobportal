@@ -94,62 +94,108 @@ class MyProfile extends React.Component {
                         <div className="section-title text-start mt-5">
                             <h4 className="rbt-title-style-3 mb-0 pb-0">Employment</h4>
                         </div>
-                        {UpdateUserOtherInfo.employment.map((job, index) => (
-                            <div key={index} className="rbt-profile-row row row--15 mt--15">
-                                <div className="col-lg-4 col-md-4">
-                                    <div className="rbt-profile-content b2">{job.Role_Title}</div>
-                                </div>
-                                <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">
-                                        {job.Institution_Company} ({job.year_from} - {job.year_to})
+                        {UpdateUserOtherInfo.employment && UpdateUserOtherInfo.employment.length > 0 ? (
+                            UpdateUserOtherInfo.employment.map((job, index) => (
+                                <div key={index} className="rbt-profile-row row row--15 mt--15">
+                                    <div className="col-lg-4 col-md-4">
+                                        <div className="rbt-profile-content b2">
+                                            {job.Role_Title}
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-8 col-md-8">
+                                        <div className="rbt-profile-content b2">
+                                            {job.Institution_Company?.trim() ? job.Institution_Company : "NA"} (
+                                            {job.year_from} -
+                                            {job.year_to})
+                                        </div>
                                     </div>
                                 </div>
+                            ))
+                        ) : (
+                            <div className="rbt-profile-row row row--15 mt--15">
+                                <div className="col-12">
+                                    <div className="rbt-profile-content b2 text-center">NA</div>
+                                </div>
                             </div>
-                        ))}
+                        )}
+
 
                         {/* Education Section */}
                         <div className="section-title text-start mt-5">
                             <h4 className="rbt-title-style-3 mb-0 pb-0">Education</h4>
                         </div>
-                        {UpdateUserOtherInfo.education.map((edu, index) => (
-                            <div key={index} className="rbt-profile-row row row--15 mt--15">
-                                <div className="col-lg-4 col-md-4">
-                                    <div className="rbt-profile-content b2">{edu.education_title}</div>
+                        {UpdateUserOtherInfo.education && UpdateUserOtherInfo.education.length > 0 ? (
+                            UpdateUserOtherInfo.education.map((edu, index) => (
+                                <div key={index} className="rbt-profile-row row row--15 mt--15">
+                                    <div className="col-lg-4 col-md-4">
+                                        <div className="rbt-profile-content b2">
+                                            {edu.education_title?.trim() ? edu.education_title : "NA"}
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-8 col-md-8">
+                                        <div className="rbt-profile-content b2">
+                                            {edu.university_board?.trim() ? edu.university_board : "NA"} (
+                                            {edu.passing_year})
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">
-                                        {edu.university_board} ({edu.passing_year})
+                            ))
+                        ) : (
+                            <div className="rbt-profile-row row row--15 mt--15">
+                                <div className="col-12">
+                                    <div className="rbt-profile-content b2 text-center">
+                                        NA
                                     </div>
                                 </div>
                             </div>
-                        ))}
+                        )}
+
 
                         {/* Career Info Section */}
                         <div className="section-title text-start mt-5">
                             <h4 className="rbt-title-style-3 mb-0 pb-0">Career Info</h4>
                         </div>
-                        {UpdateUserOtherInfo.carrierinfo.map((info, index) => (
-                            <div key={index} className="rbt-profile-row row row--15 mt--15">
-                                <div className="col-lg-4 col-md-4">
-                                    <div className="rbt-profile-content b2">Trainer Type</div>
+                        {UpdateUserOtherInfo.carrierinfo && UpdateUserOtherInfo.carrierinfo.length > 0 ? (
+                            UpdateUserOtherInfo.carrierinfo.map((info, index) => (
+                                <div key={index} className="rbt-profile-row row row--15 mt--15">
+                                    <div className="col-lg-4 col-md-4">
+                                        <div className="rbt-profile-content b2">Trainer Type</div>
+                                    </div>
+                                    <div className="col-lg-8 col-md-8">
+                                        <div className="rbt-profile-content b2">
+                                            {info.trainer_type_id?.trim() ? info.trainer_type_id : "NA"}
+                                        </div>
+                                    </div>
+
+                                    <div className="col-lg-4 col-md-4">
+                                        <div className="rbt-profile-content b2">Experience</div>
+                                    </div>
+                                    <div className="col-lg-8 col-md-8">
+                                        <div className="rbt-profile-content b2">
+                                            {info.experience?.toString().trim() ? `${info.experience} years` : "NA"}
+                                        </div>
+                                    </div>
+
+                                    <div className="col-lg-4 col-md-4">
+                                        <div className="rbt-profile-content b2">Training Mode</div>
+                                    </div>
+                                    <div className="col-lg-8 col-md-8">
+                                        <div className="rbt-profile-content b2">
+                                            {info.training_mode?.trim() ? info.training_mode : "NA"}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">{info.trainer_type_id}</div>
-                                </div>
-                                <div className="col-lg-4 col-md-4">
-                                    <div className="rbt-profile-content b2">Experience</div>
-                                </div>
-                                <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">{info.experience} years</div>
-                                </div>
-                                <div className="col-lg-4 col-md-4">
-                                    <div className="rbt-profile-content b2">Training Mode</div>
-                                </div>
-                                <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">{info.training_mode}</div>
+                            ))
+                        ) : (
+                            <div className="rbt-profile-row row row--15 mt--15">
+                                <div className="col-12">
+                                    <div className="rbt-profile-content b2 text-center">
+                                        NA
+                                    </div>
                                 </div>
                             </div>
-                        ))}
+                        )}
+
 
 
 
@@ -157,20 +203,25 @@ class MyProfile extends React.Component {
                         <div className="section-title text-start mt-5">
                             <h4 className="rbt-title-style-3 mb-0 pb-0">Key Skills</h4>
                         </div>
-                   
-               
-                                <div className="col-lg-8 col-md-8">
-                                    <div className="rbt-profile-content b2">
-                                        {UpdateUserOtherInfo.keyskills.map((skillItem, idx) => (
-                                            <span key={idx}>
-                                                {skillItem.keyskills}
-                                                {idx < UpdateUserOtherInfo.keyskills.length - 1 && ", "}
-                                            </span>
-                                        ))}
-                                    </div>
-                                
+
+
+                        <div className="col-lg-8 col-md-8">
+                            <div className="rbt-profile-content b2">
+                                {UpdateUserOtherInfo.keyskills && UpdateUserOtherInfo.keyskills.length > 0 ? (
+                                    UpdateUserOtherInfo.keyskills.map((skillItem, idx) => (
+                                        <span key={idx}>
+                                            {skillItem.keyskills ? skillItem.keyskills : "NA"}
+                                            {idx < UpdateUserOtherInfo.keyskills.length - 1 && ", "}
+                                        </span>
+                                    ))
+                                ) : (
+                                    <span>NA</span>
+                                )}
+
                             </div>
-                        
+
+                        </div>
+
 
 
                     </div>

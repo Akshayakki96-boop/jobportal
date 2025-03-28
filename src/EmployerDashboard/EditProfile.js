@@ -44,13 +44,13 @@ class EditProfile extends React.Component {
 
     fetchIP = async () => {
         try {
-          const response = await fetch("https://api64.ipify.org?format=json");
-          const data = await response.json();
-          this.setState({ ip: data.ip });
+            const response = await fetch("https://api64.ipify.org?format=json");
+            const data = await response.json();
+            this.setState({ ip: data.ip });
         } catch (error) {
-          this.setState({ ip: "Error fetching IP" });
+            this.setState({ ip: "Error fetching IP" });
         }
-      };
+    };
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Employer/Dashboard`;
@@ -124,18 +124,18 @@ class EditProfile extends React.Component {
         if (event.target) {
             const { name, value } = event.target;
             this.setState((prevState) => ({
-            userData: {
-                ...prevState.userData,
-                [name]: value,
-            },
+                userData: {
+                    ...prevState.userData,
+                    [name]: value,
+                },
             }));
         } else {
             // Handle Quill editor value
             this.setState((prevState) => ({
-            userData: {
-                ...prevState.userData,
-                company_description: event, // `event` contains the Quill editor value
-            },
+                userData: {
+                    ...prevState.userData,
+                    company_description: event, // `event` contains the Quill editor value
+                },
             }));
         }
 
@@ -185,7 +185,6 @@ class EditProfile extends React.Component {
 
     // Save profile changes
     handleSaveProfile = () => {
-        console.log('Updated User Data:', this.state.userData);
         // Add logic to save updated data (e.g., API call)
         this.setState({ showModal: false });
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -212,13 +211,14 @@ class EditProfile extends React.Component {
         })
             .then((response) => {
                 this.setState({ keepSpinner: false });
-                this.props.navigate('/EmployerDashboard?message=profilesuccess');
+                // this.props.navigate('/EmployerDashboard?message=profilesuccess');
                 //this.props.navigate('/Login'); // Use `navigate`
                 this.setState({
                     responseMessage: "Profile updated successfully!",
                     alertVariant: 'success', // Success alert variant
-                 
+
                 });
+                window.scrollTo(0, 0); // Scroll to the top of the page
             })
             .catch((error) => {
                 console.error('Signup Error:', error.response?.data || error.message);
@@ -226,7 +226,9 @@ class EditProfile extends React.Component {
                 this.setState({
                     responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
+
                 });
+                window.scrollTo(0, 0); // Scroll to the top of the page
             });
     };
 
@@ -256,160 +258,173 @@ class EditProfile extends React.Component {
 
 
     render() {
-       
+
         const { userData, logoPreview, uploadStatus, isFormValid } = this.state;
-        const { firstname, lastname, email, CompanyName, designation,company_description } = userData;
+        const { firstname, lastname, email, CompanyName, designation, company_description } = userData;
         return (
             <><Header dashBoardData={this.state.dashBoardData} />
-            <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Employer" redirectURL="/EmployerDashboard" /><div className="rbt-become-area bg-color-white rbt-section-gap">
-                <div className="container">
-                    <div className="row pt--60 g-5">
-                        <div className="col-lg-12">
-                            <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                <h3 className="title">Update Profile</h3>
-                                <hr className="mb--30" />
-                                <form onSubmit={(e) => e.preventDefault()} className="row row--15">
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                accept="image/*"
-                                                id="companyLogo"
-                                                onChange={this.handleFileChange}
-                                            />
-                                            <span className="focus-border" />
-                                            {logoPreview && (
-                                                <div className="mt-3">
-                                                    <img
-                                                        src={logoPreview}
-                                                        alt="Logo Preview"
-                                                        style={{
-                                                            width: '100px',
-                                                            height: '100px',
-                                                            objectFit: 'cover',
-                                                            borderRadius: '50px',
-                                                        }}
-                                                    />
-                                                </div>
-                                            )}
-                                            {uploadStatus && <small className={uploadStatus == "File uploaded successfully!" ? "text-success" : "text-danger"}>{uploadStatus}</small>}
+                <AdvancedBreadcumb componentName="Edit Profile" ComponentValue="Employer" redirectURL="/EmployerDashboard" /><div className="rbt-become-area bg-color-white rbt-section-gap">
+                    <div className="container">
+                        <div className="container mt-5">
+                            {this.state.responseMessage && (
+                                <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                                    {this.state.responseMessage}
+                                </Alert>
+                            )}
+                        </div>
+                        <div className="row pt--60 g-5">
+                            <div className="col-lg-12">
+                                <div className="rbt-contact-form contact-form-style-1 max-width-auto">
+                                    <h3 className="title">Update Profile</h3>
+                                    <hr className="mb--30" />
+                                    <form onSubmit={(e) => e.preventDefault()} className="row row--15">
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input
+                                                    type="file"
+                                                    className="form-control"
+                                                    accept="image/*"
+                                                    id="companyLogo"
+                                                    onChange={this.handleFileChange}
+                                                />
+                                                <span className="focus-border" />
+                                                {logoPreview && (
+                                                    <div className="mt-3">
+                                                        <img
+                                                            src={logoPreview}
+                                                            alt="Logo Preview"
+                                                            style={{
+                                                                width: '100px',
+                                                                height: '100px',
+                                                                objectFit: 'cover',
+                                                                borderRadius: '50px',
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )}
+                                                {uploadStatus && <small className={uploadStatus == "File uploaded successfully!" ? "text-success" : "text-danger"}>{uploadStatus}</small>}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input
-                                                type="text"
-                                                name="firstname"
-                                                className="form-control"
-                                                value={firstname}
-                                                onChange={this.handleInputChange}
-                                                id="firstname"
-                                            />
-                                            <label htmlFor="firstname">First Name</label>
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    name="firstname"
+                                                    className="form-control"
+                                                    value={firstname}
+                                                    onChange={this.handleInputChange}
+                                                    id="firstname"
+                                                />
+                                                <label htmlFor="firstname">First Name</label>
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input
-                                                type="text"
-                                                name="lastname"
-                                                className="form-control"
-                                                value={lastname}
-                                                onChange={this.handleInputChange}
-                                                id="lastname"
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    name="lastname"
+                                                    className="form-control"
+                                                    value={lastname}
+                                                    onChange={this.handleInputChange}
+                                                    id="lastname"
 
-                                            />
-                                            <label htmlFor="lastname">Last Name</label>
-                                            <span className="focus-border" />
+                                                />
+                                                <label htmlFor="lastname">Last Name</label>
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                className="form-control"
-                                                value={email}
-                                                readOnly
-                                                id="email"
-                                                onChange={this.handleInputChange}
-                                            />
-                                            <label htmlFor="email">Email</label>
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    className="form-control"
+                                                    value={email}
+                                                    readOnly
+                                                    id="email"
+                                                    onChange={this.handleInputChange}
+                                                />
+                                                <label htmlFor="email">Email</label>
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input
-                                                type="text"
-                                                name="CompanyName"
-                                                className="form-control"
-                                                value={CompanyName}
-                                                readOnly
-                                                id="CompanyName"
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    name="CompanyName"
+                                                    className="form-control"
+                                                    value={CompanyName}
+                                                    readOnly
+                                                    id="CompanyName"
 
-                                            />
-                                            <label htmlFor="CompanyName">Company Name</label>
+                                                />
+                                                <label htmlFor="CompanyName">Company Name</label>
 
-                                            <span className="focus-border" />
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-lg-12">
-                                        <div className="form-group">
-                                            <input
-                                                type="text"
-                                                name="designation"
-                                                className="form-control"
-                                                value={designation}
-                                                onChange={this.handleInputChange}
-                                                id="designation"
-                                            />
-                                            <label htmlFor="designation">Designation</label>
-                                            <span className="focus-border" />
+                                        <div className="col-lg-12">
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    name="designation"
+                                                    className="form-control"
+                                                    value={designation}
+                                                    onChange={this.handleInputChange}
+                                                    id="designation"
+                                                />
+                                                <label htmlFor="designation">Designation</label>
+                                                <span className="focus-border" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className='col-lg-12'>
-                                        <div className="form-group">
-                                            <ReactQuill
-                                                value={company_description}
-                                                onChange={this.handleInputChange}
-                                                theme="snow"
-                                                modules={this.modules}
-                                                placeholder="Description"
-                                                formats={this.formats}
-                                            />
+                                        <div className='col-lg-12'>
+                                            <div className="form-group" style={{paddingBottom: "50px"}}>
+                                                <ReactQuill
+                                                    value={company_description}
+                                                    onChange={this.handleInputChange}
+                                                    theme="snow"
+                                                    modules={this.modules}
+                                                    placeholder="Description"
+                                                    formats={this.formats}
+                                                    style={{ height: "200px"}}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div className="col-lg-12">
-                                        <div className="form-submit-group">
-                                            <button
-                                                type="button"
-                                                className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                onClick={this.handleSaveProfile}
-                                            >
-                                                <span className="icon-reverse-wrapper">
-                                                    <span className="btn-text">Update Profile</span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right" />
-                                                    </span>
-                                                    <span className="btn-icon">
-                                                        <i className="feather-arrow-right" />
-                                                    </span>
+                                        {company_description && company_description.length > 2000 && (
+                                                <span style={{ color: "red" }}>
+                                                    Description cannot exceed 2000 characters.
                                                 </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                            )}
 
+                                        <div className="col-lg-12">
+                                            <div className="form-submit-group">
+                                                <button
+                                                    type="button"
+                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                    onClick={this.handleSaveProfile}
+                                                >
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Update Profile</span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right" />
+                                                        </span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div></>
+                </div></>
 
 
         );

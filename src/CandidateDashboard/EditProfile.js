@@ -15,6 +15,7 @@ class EditProfileCandidate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ip: "Fetching...",
             mobile_no: "",
             profile_summary: "",
             company_name: "",
@@ -86,6 +87,7 @@ class EditProfileCandidate extends React.Component {
 
     }
     componentDidMount() {
+        this.fetchIP();
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
         this.userId = urlParams.get('user_Id');
@@ -98,6 +100,15 @@ class EditProfileCandidate extends React.Component {
         this.getDepartments();
         this.getPhoneCode();
     }
+    fetchIP = async () => {
+        try {
+            const response = await fetch("https://api64.ipify.org?format=json");
+            const data = await response.json();
+            this.setState({ ip: data.ip });
+        } catch (error) {
+            this.setState({ ip: "Error fetching IP" });
+        }
+    };
 
     getPhoneCode = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -576,7 +587,7 @@ class EditProfileCandidate extends React.Component {
             "resumefile": this.state.resumefileName ? this.state.resumefileName : null,
             "fullname": this.state.fullname,
             "mobileno": this.state.mobile_no,
-            "ipaddress": "192.168.1.1",
+            "ipaddress": this.state.ip,
             "resumeheadline": this.state.resume_summary,
             "profilesummary": this.state.profile_summary,
             "expereince": this.state.experience ? this.state.experience : 0,
@@ -962,7 +973,7 @@ class EditProfileCandidate extends React.Component {
         var updateSkills = {
             "user_id": this.state.userId,
             "keyskill_ids": this.state.keyskillsSelected.map(skill => skill.value).join(","),
-            "ipaddress": "192.168.1.1",
+            "ipaddress": this.state.ip,
             "keyskills": this.state.keyskillsSelected.map(skill => skill.label).join(","),
         };
 
