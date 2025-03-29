@@ -4,12 +4,14 @@ import withNavigation from '../withNavigation';
 import Header from '../Header/header';
 import parse from 'html-react-parser';
 import { Alert, Button } from 'react-bootstrap';
+import Swal from "sweetalert2";
 
 
 class CourseDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            ip: "Fetching...",
             showUserDashboard: true,
             dashBoardData: {},
             activeSection: 'overview',
@@ -18,6 +20,7 @@ class CourseDetails extends React.Component {
         this.observer = null;
     }
     componentDidMount() {
+        this.fetchIP();
         let url = window.location.search;
         var urlParams = new URLSearchParams(url);
         var courseId = urlParams.get('courseId');
@@ -37,11 +40,112 @@ class CourseDetails extends React.Component {
         }
         else {
             this.setState({ dashBoardData: "" });
+            this.getAllCourse(this.courseId);
+        }
+    }
+
+    fetchIP = async () => {
+        try {
+            const response = await fetch("https://api64.ipify.org?format=json");
+            const data = await response.json();
+            this.setState({ ip: data.ip });
+        } catch (error) {
+            this.setState({ ip: "Error fetching IP" });
+        }
+    };
+
+    handlePayment = async () => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Payment/CreateCourseEnrollmentOrder`;
+        const token = localStorage.getItem('authToken');
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to continue?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, continue!',
+            cancelButtonText: 'No, cancel!',
+        });
+
+        if (!result.isConfirmed) {
+            return; // Exit the function if the user cancels
+        }
+        // Call C# backend to create an order
+        var req =
+        {
+            "applied_course_id": 0,
+            "course_id": this.courseId,
+            "candidate_user_id": this.state.dashBoardData.role_id == 1 ? this.state.dashBoardData.user_id : 0,
+            "ip_address": this.state.ip,
+            "status": 0,
+            "courseFee": this.state.courseListingData?.course_fees,
+            "currency": this.state.courseListingData?.currency,
         }
 
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify(req),
+        });
 
+        const order = await response.json();
+        console.log("Order Response:", order);
 
-    }
+        const options = {
+            key: "rzp_test_XVm07SAlt5XeKR", // Replace with your Razorpay Key ID
+            amount: order.amountInPaisa,
+            currency: this.state.courseListingData?.currency,
+            name: "Your Company Name",
+            description: "Test Transaction",
+            order_id: order.order_id, // Order ID from backend
+            handler: async (response) => {
+                console.log("Payment Response:", response);
+                var verifyRequest = {
+                    "orderId": order.order_id,
+                    "paymentId": response.razorpay_payment_id,
+                    "signature": response.razorpay_signature,
+                    "rzrpay_request": "",
+                    "rzrpay_response": JSON.stringify(response)
+                }
+                // Verify payment with C# backend
+                const verifyRes = await fetch(`${baseUrl}/api/Payment/VerifyCoursePayment`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                    body: JSON.stringify(verifyRequest),
+                });
+
+                const data = await verifyRes.json();
+                if (data.success) {
+                    //alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Payment Successful! Payment ID: " + response.razorpay_payment_id ,
+                        icon: "success",
+                        confirmButtonText: "OK",
+                      });
+                    this.getAllCourseCandidate(0, 10); // Refresh the course details after enrollment
+                } else {
+                    //alert("Payment verification failed!");
+                    Swal.fire({
+                        title: "error!",
+                        text: "Payment Failed !" ,
+                        icon: "error",
+                        confirmButtonText: "OK",
+                      });
+                }
+            },
+            prefill: {
+                //name: this.state.dashBoardData.username,
+                //email: this.state.dashBoardData.email,
+                //contact: "8318461873",
+            },
+            theme: { color: "#3399cc" },
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+    };
+
 
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
@@ -55,7 +159,7 @@ class CourseDetails extends React.Component {
             },
         })
             .then((response) => {
-                console.log('dashboard data', response.data);
+                console.log('dashboard data course details', response.data);
                 this.setState({ dashBoardData: response.data.data });
                 if (response.data.data.role_id == 1) {
                     setTimeout(() => {
@@ -298,7 +402,7 @@ class CourseDetails extends React.Component {
                                 <div className="content text-start course-dp">
                                     <ul className="page-list">
                                         <li className="rbt-breadcrumb-item">
-                                            <a href={this.state.dashBoardData.role_id==3 ? "/TrainerDashboard" : this.state.dashBoardData.role_id==1 ?"/CandidateDashboard": "/"}>{this.state.dashBoardData ? "Dashboard" : "Home"}</a>
+                                            <a href={this.state.dashBoardData.role_id == 3 ? "/TrainerDashboard" : this.state.dashBoardData.role_id == 1 ? "/CandidateDashboard" : "/"}>{this.state.dashBoardData ? "Dashboard" : "Home"}</a>
                                         </li>
                                         <li>
                                             <div className="icon-right">
@@ -314,17 +418,6 @@ class CourseDetails extends React.Component {
                                         {this.state.dashBoardData && this.state.dashBoardData.role_id == 3 && <a className="rbt-btn btn-md hover-icon-reverse" href={`/edit-course?courseId=${this.courseId}`}>
                                             <span className="icon-reverse-wrapper">
                                                 <span className="btn-text">Edit Course</span>
-                                                <span className="btn-icon">
-                                                    <i className="feather-arrow-right"></i>
-                                                </span>
-                                                <span className="btn-icon">
-                                                    <i className="feather-arrow-right"></i>
-                                                </span>
-                                            </span>
-                                        </a>}
-                                        {this.state.dashBoardData && this.state.dashBoardData.role_id == 1 && !this.state.courseListingData?.is_applied && <a className="rbt-btn btn-md hover-icon-reverse" href="#" onClick={this.enrollCourse}>
-                                            <span className="icon-reverse-wrapper">
-                                                <span className="btn-text">Enroll Course</span>
                                                 <span className="btn-icon">
                                                     <i className="feather-arrow-right"></i>
                                                 </span>
@@ -1925,172 +2018,7 @@ class CourseDetails extends React.Component {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="row g-5">
-                                        {/* Start Single Card  */}
-                                        <div
-                                            className="col-lg-6 col-md-6 col-sm-6 col-12"
-                                            data-sal-delay={150}
-                                            data-sal="slide-up"
-                                            data-sal-duration={800}
-                                        >
-                                            <div className="rbt-card variation-01 rbt-hover">
-                                                <div className="rbt-card-img">
-                                                    <a href="course-details.html">
-                                                        <img
-                                                            src="assets/images/course/course-online-01.jpg"
-                                                            alt="Card image"
-                                                        />
-                                                        <div className="rbt-badge-3 bg-white">
-                                                            <span>-40%</span>
-                                                            <span>Off</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <div className="rbt-card-body">
-                                                    <div className="rbt-card-top">
-                                                        <div className="rbt-review">
-                                                            <div className="rating">
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                            </div>
-                                                            <span className="rating-count"> (15 Reviews)</span>
-                                                        </div>
-                                                        <div className="rbt-bookmark-btn">
-                                                            <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                                <i className="feather-bookmark" />
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <h4 className="rbt-card-title">
-                                                        <a href="course-details.html">React Front To Back</a>
-                                                    </h4>
-                                                    <ul className="rbt-meta">
-                                                        <li>
-                                                            <i className="feather-book" />
-                                                            12 Lessons
-                                                        </li>
-                                                        <li>
-                                                            <i className="feather-users" />
-                                                            50 Students
-                                                        </li>
-                                                    </ul>
-                                                    <p className="rbt-card-text">
-                                                        It is a long established fact that a reader will be
-                                                        distracted.
-                                                    </p>
-                                                    <div className="rbt-author-meta mb--10">
-                                                        <div className="rbt-avater">
-                                                            <a href="#">
-                                                                <img
-                                                                    src="assets/images/client/avatar-02.png"
-                                                                    alt="Sophia Jaymes"
-                                                                />
-                                                            </a>
-                                                        </div>
-                                                        <div className="rbt-author-info">
-                                                            By <a href="profile.html">Angela</a> In{" "}
-                                                            <a href="#">Development</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="rbt-card-bottom">
-                                                        <div className="rbt-price">
-                                                            <span className="current-price">$60</span>
-                                                            <span className="off-price">$120</span>
-                                                        </div>
-                                                        <a className="rbt-btn-link" href="course-details.html">
-                                                            Learn More
-                                                            <i className="feather-arrow-right" />
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* End Single Card  */}
-                                        {/* Start Single Card  */}
-                                        <div
-                                            className="col-lg-6 col-md-6 col-sm-6 col-12"
-                                            data-sal-delay={150}
-                                            data-sal="slide-up"
-                                            data-sal-duration={800}
-                                        >
-                                            <div className="rbt-card variation-01 rbt-hover">
-                                                <div className="rbt-card-img">
-                                                    <a href="course-details.html">
-                                                        <img
-                                                            src="assets/images/course/course-online-02.jpg"
-                                                            alt="Card image"
-                                                        />
-                                                    </a>
-                                                </div>
-                                                <div className="rbt-card-body">
-                                                    <div className="rbt-card-top">
-                                                        <div className="rbt-review">
-                                                            <div className="rating">
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                                <i className="fas fa-star" />
-                                                            </div>
-                                                            <span className="rating-count"> (15 Reviews)</span>
-                                                        </div>
-                                                        <div className="rbt-bookmark-btn">
-                                                            <a className="rbt-round-btn" title="Bookmark" href="#">
-                                                                <i className="feather-bookmark" />
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                    <h4 className="rbt-card-title">
-                                                        <a href="course-details.html">PHP Beginner Advanced</a>
-                                                    </h4>
-                                                    <ul className="rbt-meta">
-                                                        <li>
-                                                            <i className="feather-book" />
-                                                            12 Lessons
-                                                        </li>
-                                                        <li>
-                                                            <i className="feather-users" />
-                                                            50 Students
-                                                        </li>
-                                                    </ul>
-                                                    <p className="rbt-card-text">
-                                                        It is a long established fact that a reader will be
-                                                        distracted.
-                                                    </p>
-                                                    <div className="rbt-author-meta mb--10">
-                                                        <div className="rbt-avater">
-                                                            <a href="#">
-                                                                <img
-                                                                    src="assets/images/client/avatar-02.png"
-                                                                    alt="Sophia Jaymes"
-                                                                />
-                                                            </a>
-                                                        </div>
-                                                        <div className="rbt-author-info">
-                                                            By <a href="profile.html">Angela</a> In{" "}
-                                                            <a href="#">Development</a>
-                                                        </div>
-                                                    </div>
-                                                    <div className="rbt-card-bottom">
-                                                        <div className="rbt-price">
-                                                            <span className="current-price">$60</span>
-                                                            <span className="off-price">$120</span>
-                                                        </div>
-                                                        <a
-                                                            className="rbt-btn-link left-icon"
-                                                            href="course-details.html"
-                                                        >
-                                                            <i className="feather-shopping-cart" /> Add To Cart
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {/* End Single Card  */}
-                                    </div>
+
                                 </div>
                             </div>
                             <div className="col-lg-4">
@@ -2120,16 +2048,36 @@ class CourseDetails extends React.Component {
                                         {/* End Viedo Wrapper  */}
                                         <div className="content-item-content">
                                             <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
+
                                                 <div className="rbt-price">
                                                     <span className="current-price">{this.state.courseListingData?.currency ? this.state.courseListingData?.currency + '-' + this.state.courseListingData?.course_fees : this.state.courseListingData?.course_fees}</span>
                                                     { /* <span className="off-price">$84.99</span> */}
                                                 </div>
+
                                                 <div className="discount-time">
                                                     <span className="rbt-badge color-danger bg-color-danger-opacity">
                                                         <i className="feather-clock" /> {Math.max(0, Math.ceil((new Date(this.state.courseListingData?.startdate) - new Date()) / (1000 * 60 * 60 * 24)))} days left!
                                                     </span>
                                                 </div>
                                             </div>
+                                            {!this.state.dashBoardData && <div class="add-to-card-button mt--15">
+                                                <a class="rbt-btn btn-gradient icon-hover w-100 d-block text-center" href="/login">
+                                                    <span class="btn-text">Login to pay</span>
+                                                    <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                                                </a>
+                                            </div>}
+
+
+                                            {!this.state.courseListingData?.is_applied && this.state.dashBoardData && <div class="add-to-card-button mt--15">
+                                                <a class="rbt-btn btn-gradient icon-hover w-100 d-block text-center" href="#" onClick={this.handlePayment}>
+                                                    <span class="btn-text">Pay Now</span>
+                                                    <span class="btn-icon"><i class="feather-arrow-right"></i></span>
+                                                </a>
+                                            </div>}
+                                            {this.state.courseListingData?.is_applied && this.state.dashBoardData && <div class="add-to-card-button mt--15">
+                                                    <span class="btn-text">Already Enrolled</span>
+                                                
+                                            </div>}
                                             <span className="subtitle">
                                                 <i className="feather-rotate-ccw" /> Qualifies for 50% refund
                                             </span>
@@ -2183,19 +2131,19 @@ class CourseDetails extends React.Component {
                                             </div> */}
 
                                 {/* End Viedo Wrapper  */}
-                                <div className="content-item-content">
+                                {/* <div className="content-item-content">
                                     <div className="rbt-price-wrapper d-flex flex-wrap align-items-center justify-content-between">
                                         <div className="rbt-price">
                                             <span className="current-price">{this.state.courseListingData?.currency ? this.state.courseListingData?.currency + '-' + this.state.courseListingData?.course_fees : this.state.courseListingData?.course_fees}</span>
                                             { /* <span className="off-price">$84.99</span> */}
-                                        </div>
+                                        {/* </div>
                                         <div className="discount-time">
                                             <span className="rbt-badge color-danger bg-color-danger-opacity">
                                                 <i className="feather-clock" /> {Math.max(0, Math.ceil((new Date(this.state.courseListingData?.startdate) - new Date()) / (1000 * 60 * 60 * 24)))} days left!
                                             </span>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div> */}
+                                {/* </div>  */}
 
                             </div>
                         </div>
