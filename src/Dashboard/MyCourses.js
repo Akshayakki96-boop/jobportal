@@ -154,6 +154,16 @@ class MyCourses extends React.Component {
       });
   }
 
+  getInitials = (name) => {
+    if (!name) return "U"; // Default to "U" if name is not provided
+
+    const parts = name.trim().split(" "); // Trim to remove extra spaces
+
+    return parts.length > 1
+        ? (parts[0][0] + parts[1][0]).toUpperCase() // Two initials
+        : parts[0][0].toUpperCase(); // Single initial
+};
+
   render() {
     const { courseListingData, currentPage, pageSize, totalRecords, searchQuery } = this.state;
     const startIndex = (currentPage - 1) * pageSize + 1;
@@ -197,7 +207,7 @@ class MyCourses extends React.Component {
                       <h1 className="title mb--0">Courses</h1>
                     </div>
                     <p className="description">
-                    Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
+                      Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
                     </p>
                   </div>
                 </div>
@@ -250,11 +260,29 @@ class MyCourses extends React.Component {
                     <div className="rbt-card variation-01 rbt-hover">
                       <div className="rbt-card-img">
                         <a href={`/Course-Details?courseId=${course.courseid}`}>
-                          <img
-                            src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                            // Use a default image if companylogo is missing
-                            alt="Card image"
-                          />
+                          {!course.course_image ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                width: "60px",
+                                height: "60px",
+                                backgroundColor: "#ccc",
+                                color: "#fff",
+                                borderRadius: "50%",
+                                fontWeight: "bold",
+                                fontSize: "18px",
+                              }}
+                            >
+                              {this.getInitials(course.coursetitle || "User")}
+                            </div>
+                          ) : (
+                            <img
+                              src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}`}
+                              alt="Card image"
+                            />
+                          )}
 
                         </a>
                       </div>

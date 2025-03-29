@@ -318,7 +318,7 @@ class EnrollCourses extends React.Component {
                     <i className="feather-users" />
                     50 Students
                 </li>
-                <li>
+                {/* <li>
                     {!course.is_applied ? (
                     <a
                         href="#"
@@ -336,7 +336,7 @@ class EnrollCourses extends React.Component {
                         Cancel Enrollment
                     </a>
                     )}
-                </li>
+                </li> */}
                 </ul>
 
                 <div className="rbt-card-bottom">

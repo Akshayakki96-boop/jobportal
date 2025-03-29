@@ -23,7 +23,13 @@ class Login extends React.Component {
 
   }
   componentDidMount() {
-
+  const previousUrl = document.referrer;
+  console.log('Came from URL:', previousUrl);
+  if (previousUrl.includes('Course-Details')) {
+    this.setState({ cameFromCourseDetails: true });
+  } else {
+    this.setState({ cameFromCourseDetails: false });
+  }
   }
 
 
@@ -70,15 +76,20 @@ class Login extends React.Component {
         console.log('Login Success:', response.data);
         this.setState({ keepSpinner: false });
         localStorage.setItem('authToken', response.data.token);
-        if (response.data.role_id == "2") {
-          this.props.navigate('/EmployerDashboard'); // Use `navigate`
+        if (this.state.cameFromCourseDetails) {
+          const referrerUrl = document.referrer; // Extract everything after the domain
+          window.location.href = referrerUrl;
+
+        } else {
+          if (response.data.role_id == "2") {
+            this.props.navigate('/EmployerDashboard'); // Use `navigate`
+          } else if (response.data.role_id == "3") {
+            this.props.navigate('/TrainerDashboard'); // Use `navigate`
+          } else {
+            this.props.navigate('/CandidateDashboard'); // Use `navigate`
+          }
         }
-        else if (response.data.role_id == "3") {
-          this.props.navigate('/TrainerDashboard'); // Use `navigate`
-        }
-        else {
-          this.props.navigate('/CandidateDashboard'); // Use `navigate`
-        }
+      
 
       })
       .catch((error) => {
