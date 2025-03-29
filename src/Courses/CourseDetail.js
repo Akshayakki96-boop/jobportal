@@ -2068,13 +2068,13 @@ class CourseDetails extends React.Component {
                                             </div>}
 
 
-                                            {!this.state.courseListingData?.is_applied && this.state.dashBoardData && <div class="add-to-card-button mt--15">
+                                            {!this.state.courseListingData?.is_applied && this.state.dashBoardData && this.state.dashBoardData.role_id==1 && <div class="add-to-card-button mt--15">
                                                 <a class="rbt-btn btn-gradient icon-hover w-100 d-block text-center" href="#" onClick={this.handlePayment}>
                                                     <span class="btn-text">Pay Now</span>
                                                     <span class="btn-icon"><i class="feather-arrow-right"></i></span>
                                                 </a>
                                             </div>}
-                                            {this.state.courseListingData?.is_applied && this.state.dashBoardData && <div class="add-to-card-button mt--15">
+                                            {this.state.courseListingData?.is_applied && this.state.dashBoardData && this.state.dashBoardData.role_id==1 && <div class="add-to-card-button mt--15">
                                                     <span class="btn-text">Already Enrolled</span>
                                                 
                                             </div>}
