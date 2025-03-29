@@ -854,4 +854,10 @@ font-size: 11px;
   border-radius: 8px;
 }
 
+.swal2-popup {
+  width: 600px !important; /* Adjust width */
+  height: auto !important; /* Adjust height */
+  font-size: 18px !important; /* Increase font size */
+}
+
 
