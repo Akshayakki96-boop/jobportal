@@ -240,7 +240,7 @@ class MyJobs extends React.Component {
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                       <div className="rbt-short-item mt-5">
                         <form action="#" className="rbt-search-style me-0">
-                          <input type="text" placeholder="Jobid,location,title.." value={this.state.searchQuery}
+                          <input type="text" placeholder="Location,title.." value={this.state.searchQuery}
                             onChange={this.handleSearchChange} />
                           <button
                             type="button"
@@ -259,6 +259,7 @@ class MyJobs extends React.Component {
             {/* End Course Top  */}
           </div>
         </div>
+        <div>&nbsp</div>
         <div className="rbt-section-overlayping-top rbt-section-gapBottom">
           <div className="container">
             <div className="row row--30 gy-5">

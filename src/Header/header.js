@@ -671,15 +671,29 @@ class Header extends React.Component {
                         </div>
                     </div>
 
-                    {/*start Search Dropdown */}
+                    {/* Start Search Dropdown */}
                     <div className="rbt-search-dropdown">
                         <div className="wrapper">
                             <div className="row">
                                 <div className="col-lg-12">
                                     <form action="#">
-                                        <input type="text" value={this.state.SearchValue} onChange={this.handleSearchChange} placeholder="What are you looking for?" />
+                                        <input
+                                            type="text"
+                                            value={this.state.SearchValue}
+                                            onChange={this.handleSearchChange}
+                                            placeholder="What are you looking for?"
+                                        />
                                         <div className="submit-btn">
-                                            <a onClick={this.handleSearch} className="rbt-btn btn-gradient btn-md" href="#">Search</a>
+                                            <a
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    this.handleSearch();
+                                                }}
+                                                className="rbt-btn btn-gradient btn-md"
+                                                href="#"
+                                            >
+                                                Search
+                                            </a>
                                         </div>
                                     </form>
                                 </div>
@@ -692,53 +706,66 @@ class Header extends React.Component {
                             <div className="row g-4 pt--30 pb--60">
                                 <div className="col-lg-12">
                                     <div className="section-title">
-                                        <h5 className="rbt-title-style-2">Our Top Course</h5>
+                                        <h5 className="rbt-title-style-2">Search Results</h5>
                                     </div>
                                 </div>
 
-                                {filteredCourse && filteredCourse.map((course, index) => (
-                                    <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                        <div className="rbt-card variation-01 rbt-hover">
-                                            <div className="rbt-card-img">
-                                                <a href={`/Course-Details?courseId=${course.courseid}`}>
-                                                    <img  src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing
-                                                     alt="Card image" />
-                                                </a>
-                                            </div>
-                                            <div className="rbt-card-body">
-                                                <h5 className="rbt-card-title"><a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a></h5>
-                                                <div className="rbt-review">
-                                                    <div className="rating">
-                                                        <i className="fas fa-star"></i>
-                                                        <i className="fas fa-star"></i>
-                                                        <i className="fas fa-star"></i>
-                                                        <i className="fas fa-star"></i>
-                                                        <i className="fas fa-star"></i>
-                                                    </div>
-                                                    <span className="rating-count"> ({course?.reviewsCount} Reviews)</span>
+                                {filteredCourse && filteredCourse.length > 0 ? (
+                                    filteredCourse.map((course, index) => (
+                                        <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div className="rbt-card variation-01 rbt-hover">
+                                                <div className="rbt-card-img">
+                                                    <a href={`/Course-Details?courseId=${course.courseid}`}>
+                                                        <img
+                                                            src={
+                                                                course.course_image
+                                                                    ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}`
+                                                                    : "assets/images/job-zob-img.jpg"
+                                                            }
+                                                            alt="Card image"
+                                                        />
+                                                    </a>
                                                 </div>
-                                                <div className="rbt-card-bottom">
-                                                    <div className="rbt-price">
-                                                        <span className="current-price">{course.currency ? course.currency + '-' + course.course_fees : course.course_fees}</span>
-                                                        {/* <span className="off-price">${course.offPrice}</span> */}
+                                                <div className="rbt-card-body">
+                                                    <h5 className="rbt-card-title">
+                                                        <a href={`/Course-Details?courseId=${course.courseid}`}>
+                                                            {course.coursetitle}
+                                                        </a>
+                                                    </h5>
+                                                    <div className="rbt-review">
+                                                        <div className="rating">
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                            <i className="fas fa-star"></i>
+                                                        </div>
+                                                        <span className="rating-count">
+                                                            ({course?.reviewsCount} Reviews)
+                                                        </span>
+                                                    </div>
+                                                    <div className="rbt-card-bottom">
+                                                        <div className="rbt-price">
+                                                            <span className="current-price">
+                                                                {course.currency
+                                                                    ? course.currency + "-" + course.course_fees
+                                                                    : course.course_fees}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div className="col-lg-12">
+                                        <p>No results found. Please try a different keyword.</p>
                                     </div>
-                                ))}
-
-                                {/* Repeat the structure for other cards */}
-
-                               
-
-                                {/* Continue for the rest of the cards */}
-
+                                )}
                             </div>
-
                         </div>
                     </div>
-                    {/*end Search Dropdown */}
+                    {/* End Search Dropdown */}
                 </div>
 
             </header><div className={this.state.isMobileMenuOpen ? 'popup-mobile-menu active' : 'popup-mobile-menu'}>
@@ -747,7 +774,7 @@ class Header extends React.Component {
                             <div className="content">
                                 <div className="logo">
                                     <div className="logo logo-dark">
-                                        <a href="index.html">
+                                        <a href="/">
                                             <img src="assets/images/Zobskill.gif" alt="Logo Images" />
                                         </a>
                                     </div>

@@ -950,7 +950,7 @@ class EditProfileTrainer extends React.Component {
 
                             <div className="col-lg-12">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                    <h3 className="title">Update Profile</h3>
+                                    <h3 className="title">Complete Your Profile</h3>
                                     <hr className="mb--30" />
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         { /* Candidate Basic Info Section */}
@@ -1182,6 +1182,7 @@ class EditProfileTrainer extends React.Component {
                                                             padding: "0 4px",
                                                             fontSize: "17px",
                                                             color: "#6c757d",
+                                                             width:"20%"
                                                         }}
                                                     >
                                                         Profile Summary
@@ -1202,7 +1203,7 @@ class EditProfileTrainer extends React.Component {
                                                         id="resume"
                                                         onChange={this.handleFileResumeChange}
                                                     />
-                                                    <label htmlFor="resume">Update Resume</label>
+                                                    <label htmlFor="resume">Upload Profile Doc </label>
                                                     {this.state.resumePreview && (
                                                         <div className="mt-3">
                                                             {this.state.resumeType === "pdf" ? (

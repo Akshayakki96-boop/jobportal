@@ -290,7 +290,7 @@ class EmployerDashboard extends React.Component {
 
                                                                     <li>
                                                                         <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
-                                                                            <i className="feather-monitor"></i><span>Jobs</span>
+                                                                            <i className="feather-monitor"></i><span>My Jobs</span>
                                                                         </a>
                                                                     </li>
 

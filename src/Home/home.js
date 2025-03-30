@@ -88,8 +88,8 @@ class Home extends React.Component {
                 console.log('joblistingdata', response.data);
                 if (response.data.data && response.data.data.length > 0) {
                     const totalCount = response.data.data[0].TotalRecords;
-                    const topTwoJobs = response.data.data.slice(0, 2);
-                    this.setState({ joblistingdata: topTwoJobs, totalRecords: totalCount, errorMessage: "", keepSpinner: false });
+                    const topTwoJobs = response.data.data;
+                    this.setState({ joblistingdata: topTwoJobs, totalJobRecords: totalCount, errorMessage: "", keepSpinner: false });
                 }
                 else {
                     this.setState({ errorMessage: "No Jobs Found", keepSpinner: false });
@@ -167,7 +167,15 @@ class Home extends React.Component {
         this.setState({ courseListingData: limitedCourses });
         //this.getAllCourse(0, this.state.totalRecords);
     }
+    
     render() {
+        const maskMobileNumber = (number) => {
+            return number.replace(/\d(?=\d{4})/g, 'X');
+        };
+        const maskEmail = (email) => {
+            return email.replace(/.(?=.*@)/g, "*");
+
+        };
 
         return (
             <>
@@ -232,7 +240,7 @@ class Home extends React.Component {
                                                                 <a href={`/Course-Details?courseId=${course.courseid}`}>
                                                                     <img src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}// Use a default image if companylogo is missing 
                                                                         alt="Card" />
-                                                                         <div style={{ width: "76px" }} className="rbt-badge-3 bg-white">
+                                                                    <div style={{ width: "76px" }} className="rbt-badge-3 bg-white">
                                                                         <span>Applicable</span>
                                                                         <span>for refund</span>
                                                                     </div>
@@ -339,67 +347,75 @@ class Home extends React.Component {
                         </div>
                         <div className="row row--15 mt_dec--30 mt--20">
                             {/* Start Service Grid */}
-                            <div className="col-lg-4 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-12 mt--30">
-                                <div className="rbt-cat-box rbt-cat-box-1 service-card service-card-6">
-                                    <div className="inner background">
-                                        <div className="icon">
-                                            <img src="assets/images/icons/001-bulb.png" alt="icons Images" />
-                                        </div>
-                                        <div className="content">
-                                            <h6 className="title"><a href="#">Unlock Opportunities – 100+ Jobs Await You!</a></h6>
-                                            <p className="description">Explore verified listings across industries and apply with confidence.</p>
-                                        </div>
-                                        {/* <span className="number-text">1</span> */}
-                                    </div>
-                                </div>
-                            </div>
-                            {/* End Service Grid */}
+                                                        <div className="col-lg-4 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-12 mt--30">
+                                                            <a href="/jobs">
+                                                                <div className="rbt-cat-box rbt-cat-box-1 service-card service-card-6">
+                                                                    <div className="inner background">
+                                                                        <div className="icon">
+                                                                            <img src="assets/images/icons/001-bulb.png" alt="icons Images" />
+                                                                        </div>
+                                                                        <div className="content">
+                                                                            <h6 className="title">Unlock Opportunities – 100+ Jobs Await You!</h6>
+                                                                            <p className="description">Explore verified listings across industries and apply with confidence.</p>
+                                                                        </div>
+                                                                        {/* <span className="number-text">1</span> */}
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                        {/* End Service Grid */}
                             {/* Start Service Grid */}
                             <div className="col-lg-4 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-12 mt--30">
+                            <a href="/employer">
                                 <div className="rbt-cat-box rbt-cat-box-1 service-card service-card-6">
                                     <div className="inner background1">
                                         <div className="icon">
                                             <img src="assets/images/icons/002-hat.png" alt="Shape Images" />
                                         </div>
                                         <div className="content">
-                                            <h6 className="title"><a href="#">Free Job Posting – Start Hiring Now!</a></h6>
+                                            <h6 className="title">Free Job Posting – Start Hiring Now!</h6>
                                             <p className="description">Post openings at no cost and connect with the best talent effortlessly.</p>
                                         </div>
                                         {/* <span className="number-text">2</span> */}
                                     </div>
                                 </div>
+                                </a>
                             </div>
                             {/* End Service Grid */}
                             {/* Start Service Grid */}
                             <div className="col-lg-4 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-12 mt--30">
+                            <a href="/candidate">
                                 <div className="rbt-cat-box rbt-cat-box-1 service-card service-card-6">
                                     <div className="inner background2">
                                         <div className="icon">
                                             <img src="assets/images/icons/003-id-card.png" alt="Shape Images" />
                                         </div>
                                         <div className="content">
-                                            <h6 className="title"><a href="#">100% Refund on Training & Job placement (T&C Apply)</a></h6>
+                                            <h6 className="title">100% Refund on Training & Job placement (T&C Apply)</h6>
                                             <p className="description">We prioritize your satisfaction with our flexible refund policy.</p>
                                         </div>
                                         {/* <span className="number-text">3</span> */}
                                     </div>
                                 </div>
+                                </a>
                             </div>
                             {/* End Service Grid */}
                             {/* Start Service Grid */}
                             <div className="col-lg-4 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-12 mt--30">
+                            <a href="/trainer">
                                 <div className="rbt-cat-box rbt-cat-box-1 service-card service-card-6">
                                     <div className="inner background3">
                                         <div className="icon">
                                             <img src="assets/images/icons/004-pass.png" alt="Shape Images" />
                                         </div>
                                         <div className="content">
-                                            <h6 className="title"><a href="#">Job Alerts and Notifications at Your Fingertips</a></h6>
-                                            <p className="description">Never miss an opportunity with personalized job recommendations.</p>
+                                            <h6 className="title">Trainer Incentives for Excellence</h6>
+                                            <p className="description">Trainers earn incentives for every candidate who passes their relevant exam.</p>
                                         </div>
                                         {/* <span className="number-text">4</span> */}
                                     </div>
                                 </div>
+                                </a>
                             </div>
                             {/* End Service Grid */}
                         </div>
@@ -455,7 +471,7 @@ class Home extends React.Component {
                                             </li>
                                         </ul>
                                     </p>
-                                    <div style={{ textAlign: 'left' }}><a href='/login'>Join Zobskill today!</a></div>
+                                    <div style={{ textAlign: 'left', fontWeight: "300" }}><a href='/login'>Join Zobskill today!</a></div>
 
                                     <div className="about-btn mt--40">
                                         <a className="rbt-btn btn-gradient hover-icon-reverse" href="/aboutus">
@@ -667,22 +683,20 @@ class Home extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            {/* Start Card Area */}
                             <div className="row row--15">
                                 {this.state.joblistingdata && this.state.joblistingdata.length > 0 ? (
                                     this.state.joblistingdata.map((job, index) => (
                                         <div className="col-lg-6 col-md-6 col-sm-6 col-12 mt--30" style={{ width: "50%" }} key={index}>
                                             <div className="rbt-card variation-01 rbt-hover card-list-2">
-                                            {job.companylogo?(
-                                                <div className="rbt-card-img">
-                                                    <a href="#">
-                                                        <img src={job.companylogo ? `${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}` : "assets/images/job-zob-img.jpg"} />
-                                                    </a>
-                                                </div>):(
-  <div className="rbt-card-img company-logo-name">
-    <h2>{this.getInitials(job.CompanyName)}</h2></div>
-                                                )
-                                            }
+                                                {job.companylogo ? (
+                                                    <div className="rbt-card-img">
+                                                        <a href="#">
+                                                            <img src={job.companylogo ? `${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}` : "assets/images/job-zob-img.jpg"} />
+                                                        </a>
+                                                    </div>) : (
+                                                    <div className="rbt-card-img company-logo-name">
+                                                        <h2>{this.getInitials(job.CompanyName)}</h2></div>
+                                                )}
                                                 <div className="rbt-card-body">
                                                     <div className="rbt-card-top">
                                                         <div className="rbt-category">
@@ -696,9 +710,6 @@ class Home extends React.Component {
                                                         <li><i className="fas fa-building"></i> {job.CompanyName}</li>
                                                         <li><i className="fas fa-map-marker-alt"></i> {job.locations}</li>
                                                     </ul>
-                                                    {/* <p className="rbt-card-text">
-                                                        {parse(job.description)}
-                                                    </p> */}
                                                     <div className="rbt-card-bottom">
                                                         <div className="rbt-price">
                                                             <span className="current-price"><i className="fas fa-rupee-sign"></i> {job.package_notdisclosed ? "Package not disclosed" : `${job.packagefrom}L - ${job.packageto || "N/A"}L`}</span>
@@ -719,7 +730,40 @@ class Home extends React.Component {
                                     </div>
                                 )}
                             </div>
-                            {/* End Card Area */}
+                            {this.state?.totalJobRecords > 3 && (
+                                <div className="row">
+                                    <div className="col-lg-12">
+                                        <div className="load-more-btn mt--60 text-center">
+                                            {this.state.showLoadMore ? (
+                                                <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={(e) => {
+                                                    e.preventDefault();
+                                                    this.setState({ showLoadMore: false });
+                                                    this.getAllJobs(0, this.state.totalJobRecords);
+                                                }}>
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Load More Jobs</span>
+                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                                    </span>
+                                                </a>
+                                            ) : (
+                                                <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={(e) => {
+                                                    e.preventDefault();
+                                                    this.setState({ showLoadMore: true });
+                                                    const limitedJobs = this.state.joblistingdata.slice(0, this.state.pageSize);
+                                                    this.setState({ joblistingdata: limitedJobs });
+                                                }}>
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">See Less</span>
+                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                                    </span>
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="rbt-brand-area bg-color-white rbt-section-gap">
@@ -774,7 +818,7 @@ class Home extends React.Component {
                                                         <span className="designation theme-gradient">UX Designer</span>
                                                         <span className="team-form">
                                                             <i className="feather-map-pin"></i>
-                                                            <span className="location">CO Miego, AD, USA</span>
+                                                            <span className="location">Noida, India</span>
                                                         </span>
                                                     </div>
                                                     <p> R.K. Dhiman specializes in creating user friendly designs...{" "}</p>
@@ -784,8 +828,8 @@ class Home extends React.Component {
                                                         <li><a href="https://www.instagram.com/"><i className="feather-instagram"></i></a></li>
                                                     </ul>
                                                     <ul className="rbt-information-list mt--25">
-                                                        <li><a href="#"><i className="feather-phone"></i>+1-202-555-0174</a></li>
-                                                        <li><a href="mailto:hello@example.com"><i className="feather-mail"></i>example@gmail.com</a></li>
+                                                        <li><a href="#"><i className="feather-phone"></i>xxxxxxxx</a></li>
+                                                        <li><a href="#"><i className="feather-mail"></i>xxxxxxxxxxxxxxx</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -835,13 +879,13 @@ class Home extends React.Component {
                                                         <li>
                                                             <a href="#">
                                                                 <i className="feather-phone" />
-                                                                +1-202-555-0174
+                                                                xxxxxxxxxxx
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <a href="mailto:hello@example.com">
                                                                 <i className="feather-mail" />
-                                                                example@gmail.com
+                                                                xxxx@xxxx.com
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -894,13 +938,13 @@ class Home extends React.Component {
                                                         <li>
                                                             <a href="#">
                                                                 <i className="feather-phone" />
-                                                                +1-202-555-0174
+                                                                xxxxxxxxxxx
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="mailto:hello@example.com">
+                                                            <a href="#">
                                                                 <i className="feather-mail" />
-                                                                example@gmail.com
+                                                                xxxx@xxxx.com
                                                             </a>
                                                         </li>
                                                     </ul>

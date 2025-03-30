@@ -275,7 +275,7 @@ class EditProfile extends React.Component {
                         <div className="row pt--60 g-5">
                             <div className="col-lg-12">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                    <h3 className="title">Update Profile</h3>
+                                    <h3 className="title">Complete Your Profile</h3>
                                     <hr className="mb--30" />
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         <div className="col-lg-12">

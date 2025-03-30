@@ -670,7 +670,7 @@ class EditJob extends React.Component {
                                                     style={{ width: "16px", height: "16px", cursor: "pointer" }}
                                                 />
                                                 <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
-                                                    is Package Not disclosed
+                                                Don't want to disclose package ?
                                                 </label>
                                             </div>
 
