@@ -336,62 +336,18 @@ class CourseDetails extends React.Component {
         return (
             <>
                 <Header dashBoardData={this.state.dashBoardData} />
-                {this.state.showConfirmPopup && (
-                    <>
-                        {/* Background overlay */}
-                        <div className="modal-backdrop show"></div>
+           
 
-                        {/* Modal */}
-                        <div className="modal show d-block" tabIndex="-1" role="dialog">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    <div className="modal-header">
-                                        <h5 className="modal-title">Confirm Enrollment</h5>
-                                        <button
-                                            type="button"
-                                            className="btn-close"
-                                            aria-label="Close"
-                                            onClick={() => this.setState({ showConfirmPopup: false })}
-                                        ></button>
-                                    </div>
-                                    <div className="modal-body">
-                                        <p>Are you sure you want to enroll for the course?</p>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button
-                                            type="button"
-                                            className="btn btn-primary btn-lg" // Increased size
-                                            onClick={() => {
-                                                this.setState({ showConfirmPopup: false });
-                                                this.applyCourse();
-                                            }}
-                                        >
-                                            OK
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn btn-secondary btn-lg" // Increased size
-                                            onClick={() => this.setState({ showConfirmPopup: false })}
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                )}
-
-                <div className="container mt-5">
+                
                     {this.state.responseMessage && (
                         <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
                             {this.state.responseMessage}
                         </Alert>
                     )}
-                </div>
+               
 
                 {/* Start breadcrumb Area */}
-                <div className="rbt-breadcrumb-default rbt-breadcrumb-style-3">
+                <div style={{padding:"0px"}} className="rbt-breadcrumb-default rbt-breadcrumb-style-3">
                     <div className="breadcrumb-inner breadcrumb-dark">
                         <img src="assets/images/bg/bg-image-10.jpg" alt="Education Images" />
                     </div>
@@ -427,13 +383,13 @@ class CourseDetails extends React.Component {
                                             </span>
                                         </a>}
                                     </div>
-                                    <p className="description">
+                                    {/* <p className="description">
                                         {parse(
                                             this.state.courseListingData?.description.split(" ").length > 20
                                                 ? this.state.courseListingData?.description.split(" ").slice(0, 20).join(" ") + "..."
                                                 : this.state.courseListingData?.description || ""
                                         )}
-                                    </p>
+                                    </p> */}
                                     <div className="d-flex align-items-center mb--20 flex-wrap rbt-course-details-feature">
                                         {/* <div className="feature-sin best-seller-badge">
                                                                             <span className="rbt-badge-2">

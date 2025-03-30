@@ -18929,8 +18929,8 @@ span.transparent-button:hover i {
 }
 .form-group input,
 .form-group textarea {
-  border: 0;
-  border-bottom: 2px solid var(--color-border);
+  /* border: 0; */
+  border: 2px solid var(--color-border);
   background-color: transparent;
   padding-bottom: 8px;
   padding-top: 20px;
@@ -18954,10 +18954,10 @@ span.transparent-button:hover i {
   color: #ffffff;
 }
 .form-group textarea {
-  border: 0;
+  /* border: 0; */
   padding-bottom: 8px;
   padding-top: 8px;
-  border-bottom: 2px solid var(--color-border);
+  border: 2px solid var(--color-border);
   background-color: transparent;
   resize: none;
   min-height: 133px;

@@ -811,11 +811,11 @@ font-size: 11px;
     width: 100px;
     height: 100px;
     vertical-align: middle;
-    padding-top: 20px;
+    /* padding-top: 20px; */
 
 }
 .company-logo-name h2{
-
+margin-top: revert;
   color: #0048ac;
   
   vertical-align: middle;

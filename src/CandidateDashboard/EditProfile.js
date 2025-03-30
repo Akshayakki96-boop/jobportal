@@ -1065,7 +1065,7 @@ class EditProfileCandidate extends React.Component {
                         <div className="row pt--60 g-5">
                             <div className="col-lg-12">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                    <h3 className="title">Update Profile</h3>
+                                    <h3 className="title">Complete Your Profile</h3>
                                     <hr className="mb--30" />
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         {/* Candidate Basic Info Section */}
@@ -1251,6 +1251,7 @@ class EditProfileCandidate extends React.Component {
                                                     padding: "0 4px",
                                                     fontSize: "17px",
                                                     color: "#6c757d",
+                                                    width:"20%"
                                                 }} htmlFor="profile_summary">Profile Summary</label>
                                                 <textarea
                                                     className="form-control"
@@ -1310,6 +1311,7 @@ class EditProfileCandidate extends React.Component {
                                                     padding: "0 4px",
                                                     fontSize: "17px",
                                                     color: "#6c757d",
+                                                     width:"20%"
                                                 }} htmlFor="resume_summary">Resume Headline</label>
                                                 <textarea
                                                     className="form-control"
@@ -1364,7 +1366,7 @@ class EditProfileCandidate extends React.Component {
 
                                             <div className="form-group">
                                                 <input
-                                                    type="number"
+                                                    type="text"
                                                     className="form-control"
                                                     id="currentsalary"
                                                     name="currentsalary"
@@ -1375,7 +1377,7 @@ class EditProfileCandidate extends React.Component {
                                             </div>
                                             <div className="form-group">
                                                 <input
-                                                    type="number"
+                                                    type="text"
                                                     className="form-control"
                                                     id="expectedsalary"
                                                     name="expectedsalary"
@@ -1649,6 +1651,7 @@ class EditProfileCandidate extends React.Component {
                                                                 padding: "0 4px",
                                                                 fontSize: "17px",
                                                                 color: "#6c757d",
+                                                                 width:"20%"
                                                             }} htmlFor="jobprofile">Job Profile</label>
                                                             <textarea
                                                                 className="form-control"
@@ -1780,11 +1783,18 @@ class EditProfileCandidate extends React.Component {
                                                                     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                                                                 }}
                                                             />
-                                                            <label htmlFor="keyskills_id">Key Skills</label>
+                                                            <label htmlFor="keyskills_id">Used Skills</label>
                                                         </div>
 
                                                         <div className="form-group">
-                                                            <label htmlFor="projectDetails">Project Details</label>
+                                                            <label style={{position: "absolute",
+                                                                top: "-12px",
+                                                                left: "-5px",
+                                                                background: "white",
+                                                                padding: "0 4px",
+                                                                fontSize: "17px",
+                                                                color: "#6c757d",
+                                                                 width:"20%"}} htmlFor="projectDetails">Project Details</label>
                                                             <textarea
                                                                 className="form-control"
                                                                 id="projectDetails"

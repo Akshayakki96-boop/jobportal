@@ -303,6 +303,7 @@ class CandidateList extends React.Component {
 
                     </div>
                 </div>
+                <div>&nbsp</div>
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="inner">
                         <div className="container">
@@ -338,16 +339,16 @@ class CandidateList extends React.Component {
 
                                                 </div>
                                                 <h4 className="rbt-card-title">
-                                                    {course.fee_paid_status==0 ? maskName(course.fullname) : course.fullname}
+                                                    {course.fee_paid_status==0 ? "xxxxxxxxx" : course.fullname}
                                                 </h4>
                                                 <ul className="rbt-meta">
                                                     <li>
                                                         <i className="fas fa-phone" />
-                                                        {course.fee_paid_status==0 ? maskMobileNumber(course.mobile_no) : course.mobile_no}
+                                                        {course.fee_paid_status==0 ? "xxxxxxxxx" : course.mobile_no}
                                                     </li>
                                                     <li>
                                                         <i className="fas fa-envelope" />
-                                                        {course.fee_paid_status==0 ? maskEmail(course.Email) : course.Email}
+                                                        {course.fee_paid_status==0 ? "xxxxxxxxx" : course.Email}
                                                     </li>
                                                     <li>
 
