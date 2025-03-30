@@ -208,7 +208,7 @@ class CreateJob extends React.Component {
             "experienceTo": this.state.toExperience,
             "job_mode": this.state.selectedMode ? this.state.selectedMode.value : 0,
             "packageId":this.state.selectedPackage? this.state.selectedPackage.value:0,
-            "packageNotdisclosed": false,
+            "packageNotdisclosed": this.state.isPackageDisclosed,
             "roleId":this.state.selectedRole? this.state.selectedRole.value:0,
             "emptypeId": this.state.selectedEmpType ? this.state.selectedEmpType.value : 0,
             "deptId": this.state.selectedDepartment ? this.state.selectedDepartment.value : 0,
@@ -257,23 +257,24 @@ class CreateJob extends React.Component {
         const url = `${baseUrl}/api/Job/PostJob`;
         const token = localStorage.getItem('authToken');
         var request = {
-
+            "jobId": 0,
             "title": this.state.title,
             "description": this.state.description,
-            "experienceFrom": this.state.selectedExperience.value,
-            "experienceTo": this.state.selectedExperience.value,
-            "packageId": this.state.selectedPackage.value,
-            "packageNotdisclosed": false,
-            "roleId": this.state.selectedRole.value,
-            "emptypeId": this.state.selectedEmpType.value,
-            "deptId": this.state.selectedDepartment.value,
-            "industryId": this.state.selectedIndustry.value,
-            "keyskillIds": this.state.selectedKeySkills.map((item) => item.value).join(','),
-            "educationId": this.state.selectedEducation.map((item) => item.value).join(','),
+            "experienceFrom": this.state.fromExperience,
+            "experienceTo": this.state.toExperience,
+            "job_mode": this.state.selectedMode ? this.state.selectedMode.value : 0,
+            "packageId":this.state.selectedPackage? this.state.selectedPackage.value:0,
+            "packageNotdisclosed": this.state.isPackageDisclosed,
+            "roleId":this.state.selectedRole? this.state.selectedRole.value:0,
+            "emptypeId": this.state.selectedEmpType ? this.state.selectedEmpType.value : 0,
+            "deptId": this.state.selectedDepartment ? this.state.selectedDepartment.value : 0,
+            "industryId": this.state.selectedIndustry ? this.state.selectedIndustry.value : 0,
+            "keyskillIds": this.state.selectedKeySkills ? this.state.selectedKeySkills.map((item) => item.value).join(',') : "",
+            "educationId": this.state.selectedEducation ? this.state.selectedEducation.map((item) => item.value).join(',') : "",
             "noOfOpening": this.state.openings,
             "isactive": false,
             "ipAddress": this.state.ip,
-            "cityIds": this.state.selectedCity.map((item) => item.value).join(',')
+            "cityIds": this.state.selectedCity ? this.state.selectedCity.map((item) => item.value).join(',') : ""
         }
         axios.post(url, request, {
             headers: {
@@ -370,6 +371,10 @@ class CreateJob extends React.Component {
     handleToExperienceChange = (e) => {
         this.handleInputChange('toExperience', e.target.value);
         this.setState({ toExperience: e.target.value })
+    };
+
+    hanldeCheckChange = (e) => {
+        this.setState({ isPackageDisclosed: e.target.checked });
     };
 
     modules = {
@@ -629,7 +634,19 @@ class CreateJob extends React.Component {
                                                 </span>
                                             )}
                                         </div>
-
+                                        <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={this.state.isPackageDisclosed}
+                                                    id="isRefundable"
+                                                    name="isRefundable"
+                                                    onChange={this.hanldeCheckChange}
+                                                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                                                />
+                                                <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
+                                                    is Package Not disclosed
+                                                </label>
+                                            </div>
                                         <div className="col-lg-12">
                                             <div className="form-submit-group d-flex gap-3">
                                                 <button

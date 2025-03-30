@@ -372,6 +372,10 @@ class Course extends React.Component {
                                                             <img
                                                                 src={course.course_image ? `${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}` : "assets/images/job-zob-img.jpg"}
                                                                 alt="Card image"
+                                                                style={{
+                                                                    maxWidth: "500px", // Adjust as needed
+                                                                    maxHeight: "150px", // Adjust as needed
+                                                                  }}
                                                             />
                                                              <div style={{ width: "76px" }} className="rbt-badge-3 bg-white">
                                                                         <span>Applicable</span>
@@ -390,7 +394,7 @@ class Course extends React.Component {
                                                             </li>
                                                             <li>
                                                                 <i className="feather-users" />
-                                                                50 Students
+                                                                {course.applied_candidate_count} Students
                                                             </li>
                                                             <li>
                                                                 {!course.isactive ? (
@@ -416,6 +420,7 @@ class Course extends React.Component {
                                                                         <img
                                                                             src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.profile_image}`}
                                                                             alt={course.FullName}
+                                                                            
                                                                         />
                                                                     ) : (
                                                                         <div

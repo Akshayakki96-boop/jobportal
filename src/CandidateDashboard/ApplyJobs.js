@@ -207,6 +207,10 @@ class ApplyJobs extends React.Component {
                                     <img
                                       src={`${process.env.REACT_APP_BASEURL}/Uploads/${job.companylogo}`}
                                       alt="Card image"
+                                      style={{
+                                        maxWidth: "500px", // Adjust as needed
+                                        maxHeight: "150px", // Adjust as needed
+                                      }}
                                     />
                                   )}
 
