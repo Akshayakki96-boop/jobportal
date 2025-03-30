@@ -470,7 +470,7 @@ class CourseDetails extends React.Component {
                                             </a>
                                         </div> */}
                                         <div className="feature-sin total-student">
-                                            <span>616,029 students</span>
+                                            <span>{this.state.courseListingData?.applied_candidate_count} students</span>
                                         </div>
                                     </div>
                                     <div className="rbt-author-meta mb--20">
@@ -2091,7 +2091,7 @@ class CourseDetails extends React.Component {
                                                     </li>
                                                     <li>
                                                         <span>Enrolled</span>
-                                                        <span className="rbt-feature-value rbt-badge-5">100</span>
+                                                        <span className="rbt-feature-value rbt-badge-5">{this.state.courseListingData?.applied_candidate_count}</span>
                                                     </li>
                                                     <li>
                                                         <span>Lectures</span>

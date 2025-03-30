@@ -301,6 +301,10 @@ class EnrollCourses extends React.Component {
                     <img
                     src={`${process.env.REACT_APP_BASEURL}/Uploads/${course.course_image}`}
                     alt="Card image"
+                    style={{
+                        maxWidth: "500px", // Adjust as needed
+                        maxHeight: "150px", // Adjust as needed
+                      }}
                     />
                 )}
                 </a>
@@ -316,7 +320,7 @@ class EnrollCourses extends React.Component {
                 </li>
                 <li>
                     <i className="feather-users" />
-                    50 Students
+                   {course.applied_candidate_count} Students
                 </li>
                 {/* <li>
                     {!course.is_applied ? (

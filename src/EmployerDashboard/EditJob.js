@@ -107,6 +107,7 @@ class EditJob extends React.Component {
                 this.setState({ fromExperience: response.data.data[0].experience_from });
                 this.setState({ toExperience: response.data.data[0].experience_to });
                 this.setState({ selectedMode: { value: response.data.data[0].job_mode_id, label: response.data.data[0].jobmode } });
+                this.setState({isPackageDisclosed: response.data.data[0].package_notdisclosed });
                 this.setState({
                     selectedEducation: response.data.data[0].education_id.split(',').map((item, index) => ({
                         value: item,
@@ -386,7 +387,9 @@ class EditJob extends React.Component {
         this.handleInputChange('toExperience', e.target.value);
         this.setState({ toExperience: e.target.value })
     };
-
+    hanldeCheckChange = (e) => {
+        this.setState({ isPackageDisclosed: e.target.checked });
+    };
 
 
     modules = {
@@ -657,6 +660,19 @@ class EditJob extends React.Component {
                                         </div>
 
                                     </div>
+                                    <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={this.state.isPackageDisclosed}
+                                                    id="isRefundable"
+                                                    name="isRefundable"
+                                                    onChange={this.hanldeCheckChange}
+                                                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                                                />
+                                                <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
+                                                    is Package Not disclosed
+                                                </label>
+                                            </div>
 
                                     <div className="col-lg-12">
                                         <div className="form-submit-group d-flex gap-3">

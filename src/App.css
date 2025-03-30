@@ -860,4 +860,9 @@ font-size: 11px;
   font-size: 18px !important; /* Increase font size */
 }
 
+.rbt-course-grid-column .rbt-card .rbt-card-img a img {
+  transition: none;
+  /* max-height: 70px; */
+}
+
 

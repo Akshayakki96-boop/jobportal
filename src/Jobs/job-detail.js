@@ -266,7 +266,7 @@ class jobDetails extends React.Component {
                         {/* Start Breadcrumb Area  */}
                         <ul style={{ textAlign: 'left' }} className="page-list">
                           <li className="rbt-breadcrumb-item">
-                            <a href="/">Home</a>
+                            <a href="/EmployerDashboard">Dashboard</a>
                           </li>
                           <li>
                             <div className="icon-right">
@@ -283,7 +283,7 @@ class jobDetails extends React.Component {
                           <a href="#" className="rbt-badge-2" style={{ marginRight: "10px" }}>
                             {this.state.jobDescription && this.state.jobDescription.empType}
                           </a>
-                          {this.state.dashBoardData && this.state.dashBoardData?.role_id == 2 && <a className="rbt-btn btn-md hover-icon-reverse" href={`/edit-job`}>
+                          {this.state.dashBoardData && this.state.dashBoardData?.role_id == 2 && <a className="rbt-btn btn-md hover-icon-reverse" href={`/edit-job?jobId=${this.state.jobDescription?.jobid}`}>
                             <span className="icon-reverse-wrapper">
                               <span className="btn-text">Edit Job</span>
                               <span className="btn-icon">

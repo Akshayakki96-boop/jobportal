@@ -245,7 +245,7 @@ class Home extends React.Component {
                                                             <div className="rbt-card-body">
                                                                 <ul className="rbt-meta">
                                                                     <li><i className="fa fa-book"></i> {course.no_of_lessons} Lessons</li>
-                                                                    <li><i className="fa fa-users"></i> {course.students} Students</li>
+                                                                    <li><i className="fa fa-users"></i> {course.applied_candidate_count} Students</li>
                                                                 </ul>
                                                                 <h4 className="rbt-card-title">
                                                                     <a href={`/Course-Details?courseId=${course.courseid}`}>{course.coursetitle}</a>
@@ -515,7 +515,7 @@ class Home extends React.Component {
                                                 </h4>
                                                 <ul className="rbt-meta">
                                                     <li><i className="feather-book"></i>{course.no_of_lessons} Lessons</li>
-                                                    <li><i className="feather-users"></i>{course.students} Students</li>
+                                                    <li><i className="feather-users"></i>{course.applied_candidate_count} Students</li>
                                                 </ul>
                                                 {/* <p className="rbt-card-text">
                                                     {parse(
