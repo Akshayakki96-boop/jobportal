@@ -5,6 +5,7 @@ import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
 import AdvancedBreadcumb from '../Breadcumb/advancebreadcrumb';
+import Swal from "sweetalert2";
 
 class CandidatesDetail extends React.Component {
     constructor(props) {
@@ -109,9 +110,108 @@ class CandidatesDetail extends React.Component {
         this.setState({ searchQuery: e.target.value.toLowerCase() }); // Normalize to lowercase for case-insensitive search
       };
 
+  handlePayment = async (candidate) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Payment/CreateResumeViewOrder`;
+        const token = localStorage.getItem('authToken');
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "For Viewing the candidate Profile, you need to pay",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, continue!',
+            cancelButtonText: 'No, cancel!',
+        });
 
+        if (!result.isConfirmed) {
+            return; // Exit the function if the user cancels
+        }
+        // Call C# backend to create an order
+        var req =
+        {
+            "view_id": 0,
+            "employer_user_id": this.state.dashBoardData.user_id,
+            "candidate_user_id": candidate.user_id,
+        }
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify(req),
+        });
+
+        const order = await response.json();
+        console.log("Order Response:", order);
+
+        const options = {
+            key: "rzp_test_XVm07SAlt5XeKR", // Replace with your Razorpay Key ID
+            amount: order.amountInPaisa,
+            currency: order.currencyCode,
+            name: "Zobskill",
+            description: "Test Transaction",
+            order_id: order.order_id, // Order ID from backend
+            handler: async (response) => {
+                console.log("Payment Response:", response);
+                var verifyRequest = {
+                    "orderId": order.order_id,
+                    "paymentId": response.razorpay_payment_id,
+                    "signature": response.razorpay_signature,
+                    "rzrpay_request": "",
+                    "rzrpay_response": JSON.stringify(response)
+                }
+                // Verify payment with C# backend
+                const verifyRes = await fetch(`${baseUrl}/api/Payment/VerifyViewResumePayment`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                    body: JSON.stringify(verifyRequest),
+                });
+
+                const data = await verifyRes.json();
+                if (data.success) {
+                    //alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+                    Swal.fire({
+                        title: "Success!",
+                        text: "Payment Successful! Payment ID: " + response.razorpay_payment_id,
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    });
+                    const { currentPage, pageSize } = this.state;
+                    this.setState({ currentPage }, () => {
+                        this.getCandidates(this.state.currentPage - 1, pageSize); // Maintain the current page after refresh
+                    });
+                } else {
+                    //alert("Payment verification failed!");
+                    Swal.fire({
+                        title: "error!",
+                        text: "Payment Failed !",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+                }
+            },
+            prefill: {
+                //name: this.state.dashBoardData.username,
+                //email: this.state.dashBoardData.email,
+                //contact: "8318461873",
+            },
+            theme: { color: "#3399cc" },
+        };
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+    };
 
     render() {
+        const maskMobileNumber = (number) => {
+            return number.replace(/\d(?=\d{4})/g, 'X');
+        };
+        const maskEmail = (email) => {
+            return email.replace(/.(?=.*@)/g, "*");
+
+        };
+        const maskName = (name) => {
+            return name.replace(/.(?=.*\s)/g, "*");
+        };
         const { candidateListing, currentPage, pageSize, totalRecords, searchQuery } = this.state;
         const startIndex = (currentPage - 1) * pageSize + 1;
         const endIndex = Math.min(currentPage * pageSize, totalRecords);
@@ -210,31 +310,36 @@ class CandidatesDetail extends React.Component {
                                                 <div className="rbt-card-body">
                                                     <h4 className="rbt-card-title">
                                                         <a href="#">
-                                                            {job.fullname || "Job Title Unavailable"}
+                                                            {job.fee_paid_status==0 ? maskName(job.fullname) : job.fullname}
                                                         </a>
                                                     </h4>
                                                     <ul className="rbt-meta">
                                                         <li>
-                                                            <i className="fas fa-phone" /> {job.mobile_no || "Company Name"}
+                                                       
+                                                            <i className="fas fa-phone" />  {job.fee_paid_status==0 ? maskMobileNumber(job.mobile_no) : job.mobile_no}
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-id-badge" /> {job.designation || "designation"}
+                                                            <i className="fas fa-id-badge" /> {job.designation || "NA"}
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-map-marker-alt" /> {job.prefer_location || "Location Unavailable"}
+                                                            <i className="fas fa-map-marker-alt" /> {job.prefer_location || "NA"}
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-envelope" /> {job.Email || "Location Unavailable"}
+                                                            <i className="fas fa-envelope" /> {job.fee_paid_status==0 ? maskEmail(job.Email) : job.Email}
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-briefcase" /> {job.experience || "Location Unavailable"} years
+                                                            <i className="fas fa-briefcase" /> {job.experience || "NA"} years
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-money-bill-wave" /> {job.CTC || "Location Unavailable"}
+                                                            <i className="fas fa-money-bill-wave" /> {job.CTC || "NA"}
                                                         </li>
 
                                                         <li>
-                                                            <i className="fas fa-chart-line" /> {job.ExpectedCTC || "Location Unavailable"}
+                                                            <i className="fas fa-chart-line" /> {job.ExpectedCTC || "NA"}
+                                                        </li>
+
+                                                        <li>
+                                                            <i className="fas fa-user-cog"/> {job.keyskill || "NA"}
                                                         </li>
                                                     </ul>
 
@@ -245,10 +350,15 @@ class CandidatesDetail extends React.Component {
                                                                 {job.notice_periods}
                                                             </span>
                                                         </div>
-                                                        <a className="rbt-btn-link" target='_blank' href={`${process.env.REACT_APP_BASEURL}/Uploads/${job.resumefile}`}>
+                                                      
+                                                    {job.fee_paid_status==1 && <a className="rbt-btn-link" target='_blank' href={`${process.env.REACT_APP_BASEURL}/Uploads/${job.resumefile}`}>
                                                             View Profile
                                                             <i className="feather-arrow-right" />
-                                                        </a>
+                                                        </a>}
+                                                        {job.fee_paid_status==0 && <a className="rbt-btn-link" href="#" onClick={() => this.handlePayment(job)}>
+                                                        View Profile
+                                                        <i className="feather-arrow-right" />
+                                                    </a>}
                                                     </div>
                                                 </div>
                                             </div>
