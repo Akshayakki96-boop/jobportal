@@ -39,7 +39,7 @@ class Community extends React.Component {
             .then((response) => {
                 console.log('dashboard data', response.data);
                 this.getUserProfile(response.data.user_id);
-                this.getBlogs();
+                this.getBlogs(response.data.data);
                 this.setState({ dashBoardData: response.data.data });
                 this.setState({ keepSpinner: false });
 
@@ -75,19 +75,17 @@ class Community extends React.Component {
             });
     }
 
-    getBlogs = () => {
+    getBlogs = (role) => {
+        debugger;
         this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Community/GetBlogs`;
         //const token = localStorage.getItem('authToken');
         var request = {
-            "courseId": 0,
-            "coursetitle": "",
-            "isactive": false,
-            "user_id": 0,
-            "pageIndex": 0,
-            "pagesize": 10
-        }
+            "id": 0,
+            "freesearch": "",
+            "role_id": role?parseInt(role.role_id, 10):0
+          }
         axios.post(url, request, {
             headers: {
                 'Content-Type': 'application/json',
@@ -101,8 +99,8 @@ class Community extends React.Component {
 
             })
             .catch((error) => {
-                localStorage.removeItem('authToken');
-                this.props.navigate('/Login'); // Use `navigate`
+                //localStorage.removeItem('authToken');
+                //this.props.navigate('/Login'); // Use `navigate`
             });
     }
 
@@ -137,6 +135,9 @@ class Community extends React.Component {
                                             <li className="rbt-breadcrumb-item active">Community</li>
                                         </ul>
                                         {/* End Breadcrumb Area  */}
+                                        <p style={{ textAlign: "left" }} className="description">
+                                        Connect, Learn, and Grow – Engage with mentors, trainers, and recruiters in the Zobskill Community!
+                                        </p>
                                         <div style={{ textAlign: "left" }} className=" title-wrapper">
                                             <h1 className="title mb--0">Latest Blogs</h1>
                                             {/*
@@ -145,9 +146,7 @@ class Community extends React.Component {
 </a>
 */}
                                         </div>
-                                        <p style={{ textAlign: "left" }} className="description">
-                                        Connect, Learn, and Grow – Engage with mentors, trainers, and recruiters in the Zobskill Community!
-                                        </p>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -251,7 +250,7 @@ class Community extends React.Component {
                                         <div className="read-more-btn">
                                             <a
                                                 className="rbt-btn btn-border hover-icon-reverse btn-sm radius-round"
-                                                href="event-details.html"
+                                                href="#"
                                             >
                                                 <span className="icon-reverse-wrapper">
                                                     <span className="btn-text">Get Ticket</span>
@@ -299,7 +298,7 @@ class Community extends React.Component {
                                         <div className="read-more-btn">
                                             <a
                                                 className="rbt-btn btn-border hover-icon-reverse btn-sm radius-round"
-                                                href="event-details.html"
+                                                href="#"
                                             >
                                                 <span className="icon-reverse-wrapper">
                                                     <span className="btn-text">Get Ticket</span>
@@ -347,7 +346,7 @@ class Community extends React.Component {
                                         <div className="read-more-btn">
                                             <a
                                                 className="rbt-btn btn-border hover-icon-reverse btn-sm radius-round"
-                                                href="event-details.html"
+                                                href="#"
                                             >
                                                 <span className="icon-reverse-wrapper">
                                                     <span className="btn-text">Get Ticket</span>

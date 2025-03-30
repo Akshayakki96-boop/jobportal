@@ -3,6 +3,7 @@ import Breadcumb from '../Breadcumb/breadcumb';
 import axios from 'axios';
 import { Alert, Button } from 'react-bootstrap';
 import withNavigation from '../withNavigation';
+import parse from 'html-react-parser';
 
 class MyProfile extends React.Component {
     constructor(props) {
@@ -71,6 +72,17 @@ class MyProfile extends React.Component {
                                 </div>
                             </div>
                         ))}
+                           {/* Employment Section */}
+                           <div className="section-title text-start mt-5">
+                            <h4 className="rbt-title-style-3 mb-0 pb-0">Description</h4>
+                        </div>
+                    <div className="rbt-profile-row row row--15 mt--15">
+                        <div className="col-lg-12 col-md-12">
+                            <div className="rbt-profile-content b2">
+                                {updatedUserData.company_description ? parse(updatedUserData.company_description) : 'No description available'}
+                            </div>
+                        </div>
+                    </div>
 
                     </div>
                 </div>

@@ -281,6 +281,7 @@ class CandidatesDetail extends React.Component {
                         {/* End Course Top  */}
                     </div>
                 </div>
+                <div>&nbsp</div>
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="container">
                         <div className="row row--30 gy-5">
@@ -310,13 +311,13 @@ class CandidatesDetail extends React.Component {
                                                 <div className="rbt-card-body">
                                                     <h4 className="rbt-card-title">
                                                         <a href="#">
-                                                            {job.fee_paid_status==0 ? maskName(job.fullname) : job.fullname}
+                                                            {job.fee_paid_status==0 ? "xxxxxxxxx" : job.fullname}
                                                         </a>
                                                     </h4>
                                                     <ul className="rbt-meta">
                                                         <li>
                                                        
-                                                            <i className="fas fa-phone" />  {job.fee_paid_status==0 ? maskMobileNumber(job.mobile_no) : job.mobile_no}
+                                                            <i className="fas fa-phone" />  {job.fee_paid_status==0 ? "xxxxxxxxx" : job.mobile_no}
                                                         </li>
                                                         <li>
                                                             <i className="fas fa-id-badge" /> {job.designation || "NA"}
@@ -325,7 +326,7 @@ class CandidatesDetail extends React.Component {
                                                             <i className="fas fa-map-marker-alt" /> {job.prefer_location || "NA"}
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-envelope" /> {job.fee_paid_status==0 ? maskEmail(job.Email) : job.Email}
+                                                            <i className="fas fa-envelope" /> {job.fee_paid_status==0 ? "xxxxxxxxx" : job.Email}
                                                         </li>
                                                         <li>
                                                             <i className="fas fa-briefcase" /> {job.experience || "NA"} years
