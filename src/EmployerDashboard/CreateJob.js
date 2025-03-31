@@ -286,15 +286,18 @@ class CreateJob extends React.Component {
                 console.log('jobpostingdatasubmit', response.data);
                 this.handlePublish(response.data.data);
                 this.setState({ keepSpinner: false });
+                
 
             })
             .catch((error) => {
+
                 //console.error('Signup Error:', error.response?.data || error.message);
                 this.setState({ keepSpinner: false });
                 this.setState({
                     responseMessage: error.response?.data.message,
                     alertVariant: 'danger', // Error alert variant
                 });
+                window.scrollTo(0, 0);
             });
     }
 
@@ -426,6 +429,7 @@ class CreateJob extends React.Component {
                                         </div>
                                         <div className="col-lg-12">
                                             <div className="form-group">
+                                            <label>Role*</label>
                                                 <Select
                                                     options={reactSelectOptions?.roles}
                                                     value={this.state.selectedRole}
@@ -472,6 +476,7 @@ class CreateJob extends React.Component {
 
                                         <div className="col-lg-12">
                                             <div className="form-group">
+                                            <label>Salary (in LPA)*</label>
                                                 <Select
                                                     options={reactSelectOptions?.package}
                                                     value={this.state.selectedPackage}
@@ -623,7 +628,7 @@ class CreateJob extends React.Component {
                                                     onChange={this.handleJobDescription}
                                                     theme="snow"
                                                     modules={this.modules}
-                                                    placeholder="Write job description here upto 2000 characters..."
+                                                    placeholder="Write job description..."
                                                     formats={this.formats}
                                                     style={{ height: "200px"}}
                                                 />

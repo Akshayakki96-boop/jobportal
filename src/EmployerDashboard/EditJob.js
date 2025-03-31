@@ -441,6 +441,7 @@ class EditJob extends React.Component {
                                     </div>
                                     <div className="col-lg-12">
                                         <div className="form-group">
+                                        <label>Role*</label>
                                             <Select
                                                 isClearable={true}
                                                 options={reactSelectOptions?.roles}
@@ -488,6 +489,7 @@ class EditJob extends React.Component {
 
                                     <div className="col-lg-12">
                                         <div className="form-group">
+                                        <label>Salary (in LPA)*</label>
                                             <Select
                                                 isClearable={true}
                                                 options={reactSelectOptions?.package}
@@ -648,7 +650,7 @@ class EditJob extends React.Component {
                                                 onChange={this.handleJobDescription}
                                                 theme="snow"
                                                 modules={this.modules}
-                                                placeholder="Write job description here upto 2000 characters..."
+                                                placeholder="Write job description..."
                                                 formats={this.formats}
                                                 style={{ height: "200px"}}
                                             />

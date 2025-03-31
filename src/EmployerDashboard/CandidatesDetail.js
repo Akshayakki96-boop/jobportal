@@ -217,14 +217,19 @@ class CandidatesDetail extends React.Component {
         const endIndex = Math.min(currentPage * pageSize, totalRecords);
 
         const filteredJobs = candidateListing?.filter((job) => {
-            const email = job.Email?.toString().toLowerCase() || ""; // Ensure it's a string
-            const fullname = job.fullname?.toLowerCase() || "";
-            const mobile_no = job.mobile_no?.toLowerCase() || "";
+            // const email = job.Email?.toString().toLowerCase() || ""; // Ensure it's a string
+            // const fullname = job.fullname?.toLowerCase() || "";
+            // const mobile_no = job.mobile_no?.toLowerCase() || "";
+            const designation = job.designation?.toLowerCase() || "";
+            const prefer_location = job.prefer_location?.toLowerCase() || "";
+            const experience = job.experience?.toString().toLowerCase() || ""; // Ensure it's a string
+            const keyskill = job.keyskill?.toLowerCase() || "";
 
             return (
-                email.includes(searchQuery) ||
-                fullname.includes(searchQuery) ||
-                mobile_no.includes(searchQuery)
+               designation.includes(searchQuery) ||
+                prefer_location.includes(searchQuery) ||
+                experience.includes(searchQuery) ||
+                keyskill.includes(searchQuery) 
             );
         });
         return (
@@ -262,7 +267,7 @@ class CandidatesDetail extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                             <div className="rbt-short-item mt-5">
                                                 <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="name,email,mobile.." value={this.state.searchQuery}
+                                                    <input type="text" placeholder="location,role,exp,skill.." value={this.state.searchQuery}
                                                         onChange={this.handleSearchChange} />
                                                     <button
                                                         type="button"
@@ -281,7 +286,7 @@ class CandidatesDetail extends React.Component {
                         {/* End Course Top  */}
                     </div>
                 </div>
-                <div></div>
+                <div>&nbsp;</div>
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="container">
                         <div className="row row--30 gy-5">
