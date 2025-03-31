@@ -171,6 +171,7 @@ class ApplyJobs extends React.Component {
             {/* End Course Top  */}
           </div>
         </div>
+        <div></div>
         <div className="rbt-section-overlayping-top rbt-section-gapBottom">
           <div className="container">
             <div className="row row--30 gy-5">

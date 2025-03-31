@@ -303,7 +303,7 @@ class CandidateList extends React.Component {
 
                     </div>
                 </div>
-                <div>&nbsp</div>
+                <div></div>
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="inner">
                         <div className="container">
