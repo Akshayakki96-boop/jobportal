@@ -39,7 +39,7 @@ class jobDetailsOutside extends React.Component {
       "industryId": 0,
       "keyskillIds": "",
       "educationId": "",
-      "active": false,
+      "active": true,
       "user_id": 0,
       "cityIds": "1,2"
     }
