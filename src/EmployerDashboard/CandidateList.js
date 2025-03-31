@@ -224,14 +224,20 @@ class CandidateList extends React.Component {
 
         const filteredCandidates = candidateListing?.filter((job) => {
             const prefer_location = job.prefer_location?.toString().toLowerCase() || ""; // Ensure it's a string
+            const keyskills = job.keyskill?.toString().toLowerCase() || ""; // Ensure it's a string
+            const experience = job.experience?.toString().toLowerCase() || ""; // Ensure it's a string
+            const designation = job.designation?.toString().toLowerCase() || ""; // Ensure it's a string
+
+            return (
+                prefer_location.includes(searchQuery) ||
+                keyskills.includes(searchQuery)||
+                experience.includes(searchQuery) ||
+                designation.includes(searchQuery) 
+            );
             // const fullname = job.fullname?.toLowerCase() || "";
             // const mobile_no = job.mobile_no?.toLowerCase() || "";
 
-            return (
-                prefer_location.includes(searchQuery)
-                // fullname.includes(searchQuery) ||
-                // mobile_no.includes(searchQuery)
-            );
+          
         });
         return (
             <div className="col-lg-9">
@@ -283,7 +289,7 @@ class CandidateList extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                             <div className="rbt-short-item mt-5">
                                                 <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="Search by location.." value={this.state.searchQuery}
+                                                    <input type="text" placeholder="Search by location,designation,keyskills,exp.." value={this.state.searchQuery}
                                                         onChange={this.handleSearchChange} />
                                                     <button
                                                         type="button"
@@ -303,7 +309,7 @@ class CandidateList extends React.Component {
 
                     </div>
                 </div>
-                <div></div>
+                <div>&nbsp;</div>
                 <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                     <div className="inner">
                         <div className="container">
