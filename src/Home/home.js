@@ -734,10 +734,10 @@ class Home extends React.Component {
                                 <div className="row">
                                     <div className="col-lg-12">
                                         <div className="load-more-btn mt--60 text-center">
-                                            {this.state.showLoadMore ? (
+                                            {this.state.showLoadMoreJobs ? (
                                                 <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={(e) => {
                                                     e.preventDefault();
-                                                    this.setState({ showLoadMore: false });
+                                                    this.setState({ showLoadMoreJobs: false });
                                                     this.getAllJobs(0, this.state.totalJobRecords);
                                                 }}>
                                                     <span className="icon-reverse-wrapper">
@@ -749,7 +749,7 @@ class Home extends React.Component {
                                             ) : (
                                                 <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={(e) => {
                                                     e.preventDefault();
-                                                    this.setState({ showLoadMore: true });
+                                                    this.setState({ showLoadMoreJobs: true });
                                                     const limitedJobs = this.state.joblistingdata.slice(0, this.state.pageSize);
                                                     this.setState({ joblistingdata: limitedJobs });
                                                 }}>

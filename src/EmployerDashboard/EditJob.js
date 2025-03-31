@@ -652,11 +652,7 @@ class EditJob extends React.Component {
                                                 formats={this.formats}
                                                 style={{ height: "200px"}}
                                             />
-                                            {this.state.description && this.state.description.length > 2000 && (
-                                                <span style={{ color: "red" }}>
-                                                    Description cannot exceed 2000 characters.
-                                                </span>
-                                            )}
+                                          
                                         </div>
 
                                     </div>

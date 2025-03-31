@@ -628,11 +628,7 @@ class CreateJob extends React.Component {
                                                     style={{ height: "200px"}}
                                                 />
                                             </div>
-                                            {this.state.description && this.state.description.length > 2000 && (
-                                                <span style={{ color: "red" }}>
-                                                    Description cannot exceed 2000 characters.
-                                                </span>
-                                            )}
+                                           
                                         </div>
                                         <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                                 <input

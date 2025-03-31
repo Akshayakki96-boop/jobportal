@@ -358,7 +358,7 @@ class Course extends React.Component {
                             {/* End Course Top  */}
                         </div>
                     </div>
-                    <div>&nbsp</div>
+                    <div></div>
                     <div className="rbt-section-overlayping-top rbt-section-gapBottom">
                         <div className="inner">
                             {!this.state.errorMessage ? (
