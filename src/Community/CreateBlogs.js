@@ -115,6 +115,15 @@ class CreateBlog extends React.Component {
     handleSaveBlogs = () => {
         // Add logic to save updated data (e.g., API call)
        // this.setState({ showModal: false });
+       if(!this.state.title || !this.state.description|| !this.state.fileName){
+        this.setState({
+            responseMessage: "Please fill all the fields!",
+            alertVariant: 'danger', // Error alert variant
+
+        });
+        window.scrollTo(0, 0); // Scroll to the top of the page
+        return;
+       }
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Community/AddUpdateBlogs`;
         const token = localStorage.getItem('authToken');
