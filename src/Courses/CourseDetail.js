@@ -58,18 +58,18 @@ class CourseDetails extends React.Component {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Payment/CreateCourseEnrollmentOrder`;
         const token = localStorage.getItem('authToken');
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: "Do you want to continue?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, continue!',
-            cancelButtonText: 'No, cancel!',
-        });
+        // const result = await Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "Do you want to continue?",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonText: 'Yes, continue!',
+        //     cancelButtonText: 'No, cancel!',
+        // });
 
-        if (!result.isConfirmed) {
-            return; // Exit the function if the user cancels
-        }
+        // if (!result.isConfirmed) {
+        //     return; // Exit the function if the user cancels
+        // }
         // Call C# backend to create an order
         var req =
         {
@@ -352,7 +352,6 @@ class CourseDetails extends React.Component {
                         <img src="assets/images/bg/bg-image-10.jpg" alt="Education Images" />
                     </div>
                     <div className="container">
-
                         <div className="row">
                             <div className="col-lg-8">
                                 <div className="content text-start course-dp">
