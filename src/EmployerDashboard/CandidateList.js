@@ -119,18 +119,18 @@ class CandidateList extends React.Component {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Payment/CreateResumeViewOrder`;
         const token = localStorage.getItem('authToken');
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: "For Viewing the candidate Profile, you need to pay",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, continue!',
-            cancelButtonText: 'No, cancel!',
-        });
+        // const result = await Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "For Viewing the candidate Profile, you need to pay",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonText: 'Yes, continue!',
+        //     cancelButtonText: 'No, cancel!',
+        // });
 
-        if (!result.isConfirmed) {
-            return; // Exit the function if the user cancels
-        }
+        // if (!result.isConfirmed) {
+        //     return; // Exit the function if the user cancels
+        // }
         // Call C# backend to create an order
         var req =
         {
@@ -345,16 +345,16 @@ class CandidateList extends React.Component {
 
                                                 </div>
                                                 <h4 className="rbt-card-title">
-                                                    {course.fee_paid_status==0 ? "xxxxxxxxx" : course.fullname}
+                                                    {course.fee_paid_status==0 ? maskName(course.fullname) : course.fullname}
                                                 </h4>
                                                 <ul className="rbt-meta">
                                                     <li>
                                                         <i className="fas fa-phone" />
-                                                        {course.fee_paid_status==0 ? "xxxxxxxxx" : course.mobile_no}
+                                                        {course.fee_paid_status==0 ? maskMobileNumber(course.mobile_no) : course.mobile_no}
                                                     </li>
                                                     <li>
                                                         <i className="fas fa-envelope" />
-                                                        {course.fee_paid_status==0 ? "xxxxxxxxx" : course.Email}
+                                                        {course.fee_paid_status==0 ? maskEmail(course.Email) : course.Email}
                                                     </li>
                                                     <li>
 

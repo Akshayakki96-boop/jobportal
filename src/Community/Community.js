@@ -3,6 +3,7 @@ import axios from 'axios';
 import withNavigation from '../withNavigation';
 import Header from '../Header/header';
 import parse from 'html-react-parser';
+import { Alert, Button } from 'react-bootstrap';
 
 class Community extends React.Component {
     constructor(props) {
@@ -76,16 +77,16 @@ class Community extends React.Component {
     }
 
     getBlogs = (role) => {
-        debugger;
         this.setState({ keepSpinner: true });
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Community/GetBlogs`;
         //const token = localStorage.getItem('authToken');
         var request = {
             "id": 0,
+            "user_id": role?parseInt(role.user_id, 10):0,
             "freesearch": "",
-            "role_id": role?parseInt(role.role_id, 10):0
-          }
+            "role_id": role ? parseInt(role.role_id, 10) : 0
+        }
         axios.post(url, request, {
             headers: {
                 'Content-Type': 'application/json',
@@ -105,6 +106,50 @@ class Community extends React.Component {
     }
 
 
+    handleDeleteBlogs = (blogId) => {
+        const baseUrl = process.env.REACT_APP_BASEURL;
+        const url = `${baseUrl}/api/Community/RemoveBlog`;
+        const token = localStorage.getItem('authToken');
+        const blogData = {
+            
+                "id": blogId,
+                "title": "string",
+                "description": "string",
+                "blog_image": "string",
+                "role_id": this.state.dashBoardData.role_id,
+              
+        };
+        axios.post(url, blogData, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                console.log('delete blog data', response.data);
+
+                this.setState({
+                    responseMessage: "Blogs Deleted successfully!",
+                    alertVariant: 'success', // Success alert variant
+
+                });
+                window.scrollTo(0, 0); // Scroll to the top of the page
+                this.getBlogs(this.state.dashBoardData);
+
+                this.setState({ keepSpinner: false });
+            })
+            .catch((error) => {
+                this.setState({
+                    responseMessage: error.response?.data.message,
+                    alertVariant: 'danger', // Error alert variant
+
+
+                });
+                window.scrollTo(0, 0); // Scroll to the top of the page
+            });
+    }
+
+
 
 
     render() {
@@ -112,6 +157,11 @@ class Community extends React.Component {
         return (
             <><>
                 <Header dashBoardData={this.state.dashBoardData} />
+                {this.state.responseMessage && (
+                    <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                        {this.state.responseMessage}
+                    </Alert>
+                )}
                 <div className="rbt-page-banner-wrapper">
                     {/* Start Banner BG Image  */}
                     <div className="rbt-banner-image" />
@@ -136,17 +186,30 @@ class Community extends React.Component {
                                         </ul>
                                         {/* End Breadcrumb Area  */}
                                         <p style={{ textAlign: "left" }} className="description">
-                                        Connect, Learn, and Grow – Engage with mentors, trainers, and recruiters in the Zobskill Community!
+                                            Connect, Learn, and Grow – Engage with mentors, trainers, and recruiters in the Zobskill Community!
                                         </p>
                                         <div style={{ textAlign: "left" }} className=" title-wrapper">
                                             <h1 className="title mb--0">Latest Blogs</h1>
+                                            <div style={{ marginLeft: "721px" }}>
+                                                {localStorage.getItem('authToken') && this.state.dashBoardData?.role_id != 1 && <a className="rbt-btn btn-md hover-icon-reverse" href={`/CreateBlogs`}>
+                                                    <span className="icon-reverse-wrapper">
+                                                        <span className="btn-text">Add Blogs</span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right"></i>
+                                                        </span>
+                                                        <span className="btn-icon">
+                                                            <i className="feather-arrow-right"></i>
+                                                        </span>
+                                                    </span>
+                                                </a>}
+                                            </div>
                                             {/*
 <a href="#" class="rbt-badge-2">
 <div class="image">🎉</div> 50 Articles
 </a>
 */}
                                         </div>
-                                       
+
                                     </div>
                                 </div>
                             </div>
@@ -164,47 +227,85 @@ class Community extends React.Component {
                                     <div class="loader-spinner"></div>
                                     <p class="loader-text">Please Wait while Blogs  are loading...</p>
                                 </div>}
-                            {/* Start Card Area */}
-                                                            <div className="row g-5">
-                                                                <div className="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                                    {this.state.blogsList && this.state.blogsList.map((blog, index) => (
-                                                                        <div key={blog.blog_id} className={`blglst rbt-card card-list variation-02 rbt-hover mt--30 ${index % 2 === 0 ? 'image-left' : 'image-right'}`}>
-                                                                            <div className="rbt-card-img">
-                                                                                {/* Generating dynamic images */}
-                                                                                <a href="#">
-                                                                                    <img 
-                                                                                      src={`${process.env.REACT_APP_BASEURL}/Uploads/${blog.blogimage}`}
-                                                                                    alt="Card image" />
-                                                                                </a>
-                                                                            </div>
-                                                                            <div style={{ textAlign: "left" }} className="rbt-card-body">
-                                                                                <h6 style={{fontSize:'18px'}} className="rbt-card-title">
-                                                                                    <a href={`/community-details?blogId=${blog.blog_id}`}>{blog.title}</a>
-                                                                                </h6>
-                                                                                {/* <p style={{ fontSize: '12px' }} className="rbt-card-text"> */}
-                                                                                    {parse(blog.description.length > 50 ? `${blog.description.substring(0, 300)}...` : blog.description)}
-                                                                                {/* </p> */}
-                                                                                <div className="rbt-card-bottom">
-                                                                                    <a className="transparent-button" href={`/community-details?blogId=${blog.blog_id}`}>
-                                                                                        Read More
-                                                                                        <i>
-                                                                                            <svg width={17} height={12} xmlns="http://www.w3.org/2000/svg">
-                                                                                                <g stroke="#27374D" fill="none" fillRule="evenodd">
-                                                                                                    <path d="M10.614 0l5.629 5.629-5.63 5.629" />
-                                                                                                    <path strokeLinecap="square" d="M.663 5.572h14.594" />
-                                                                                                </g>
-                                                                                            </svg>
-                                                                                        </i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                            </div>
-                                                            {/* End Card Area */}
+                                {/* Start Card Area */}
+                                <div className="row g-5">
+                                    <div className="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        {this.state.blogsList && this.state.blogsList.map((blog, index) => (
+                                            <div key={blog.blog_id} className={`blglst rbt-card card-list variation-02 rbt-hover mt--30 ${index % 2 === 0 ? 'image-left' : 'image-right'}`}>
+                                                <div className="rbt-card-img">
+                                                    {/* Generating dynamic images */}
+                                                    <a href="#">
+                                                        <img
+                                                            src={`${process.env.REACT_APP_BASEURL}/Uploads/${blog.blogimage}`}
+                                                            alt="Card image" />
+                                                    </a>
+                                                </div>
+                                                <div style={{ textAlign: "left" }} className="rbt-card-body">
+                                                    <h6 style={{ fontSize: '18px' }} className="rbt-card-title">
+                                                        <a href={`/community-details?blogId=${blog.blog_id}`}>{blog.title}</a>
+                                                    </h6>
+                                                    {/* <p style={{ fontSize: '12px' }} className="rbt-card-text"> */}
+                                                    {parse(blog.description.length > 50 ? `${blog.description.substring(0, 300)}...` : blog.description)}
+                                                    {/* </p> */}
+                                                    {/* <ul className="rbt-meta">
+
+
+                                                        {localStorage.getItem('authToken') && <li>
+                                                            <a style={{ marginBottom: "10px", color: "blue", cursor: 'pointer' }} className="rbt-btn-link" href={`/edit-blogs?blogId=${blog.blog_id}`}>
+                                                                <i
+                                                                    style={{ color: "blue" }}
+                                                                    //onClick={() => this.handleDeleteCourse()}
+                                                                    className="fas fa-edit" />
+                                                            </a>
+                                                        </li>}
+                                                        {localStorage.getItem('authToken') && <li>
+                                                            <i
+                                                                className="fas fa-trash-alt"
+                                                                title='Edit blogs'
+                                                                style={{ color: "red", cursor: "pointer" }}
+                                                                onClick={() => this.handleDeleteCourse()}
+                                                            />
+                                                        </li>}
+                                                        <li textAlign="right">
+                                                          
+                                                        </li>
+
+                                                    </ul> */}
+                                                    <div className="rbt-card-bottom" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                                        {/* Icons Section */}
+                                                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                            {localStorage.getItem('authToken') && this.state.dashBoardData?.role_id != 1 && (
+                                                                <a style={{ color: "blue", cursor: "pointer" }} className="rbt-btn-link" href={`/edit-blogs?blogId=${blog.blog_id}`}>
+                                                                    <i className="fas fa-edit" style={{ color: "blue", fontSize: "16px" }} />
+                                                                </a>
+                                                            )}
+
+                                                            {localStorage.getItem('authToken') && this.state.dashBoardData?.role_id != 1 && (
+                                                                <i className="fas fa-trash-alt" title="Delete blog" style={{ color: "red", cursor: "pointer", fontSize: "16px" }} onClick={() => this.handleDeleteBlogs()} />
+                                                            )}
+                                                        </div>
+
+                                                        {/* Read More Section */}
+                                                        <a className="transparent-button" href={`/community-details?blogId=${blog.blog_id}`} style={{ display: "flex", alignItems: "center", gap: "5px", textDecoration: "none" }}>
+                                                            Read More
+                                                            <svg width={17} height={12} xmlns="http://www.w3.org/2000/svg">
+                                                                <g stroke="#27374D" fill="none" fillRule="evenodd">
+                                                                    <path d="M10.614 0l5.629 5.629-5.63 5.629" />
+                                                                    <path strokeLinecap="square" d="M.663 5.572h14.594" />
+                                                                </g>
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* End Card Area */}
                     </>
                 </>
                 {/* End Card Style */}
@@ -411,7 +512,7 @@ class Community extends React.Component {
                                             </h6>
                                             <span className="team-form">
                                                 <span className="location">
-                                                Gautam has 5 years of experience in software development...
+                                                    Gautam has 5 years of experience in software development...
                                                 </span>
                                             </span>
                                         </div>
@@ -437,7 +538,7 @@ class Community extends React.Component {
                                             <h6 className="subtitle theme-gradient">Project Manager</h6>
                                             <span className="team-form">
                                                 <span className="location">
-                                                Ayush is an expert in managing complex projects...
+                                                    Ayush is an expert in managing complex projects...
                                                 </span>
                                             </span>
                                         </div>
@@ -463,7 +564,7 @@ class Community extends React.Component {
                                             <h6 className="subtitle theme-gradient">UX Designer</h6>
                                             <span className="team-form">
                                                 <span className="location">
-                                                R.K. Dhiman specializes in creating user friendly designs...{" "}
+                                                    R.K. Dhiman specializes in creating user friendly designs...{" "}
                                                 </span>
                                             </span>
                                         </div>

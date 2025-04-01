@@ -114,18 +114,18 @@ class CandidatesDetail extends React.Component {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Payment/CreateResumeViewOrder`;
         const token = localStorage.getItem('authToken');
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: "For Viewing the candidate Profile, you need to pay",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, continue!',
-            cancelButtonText: 'No, cancel!',
-        });
+        // const result = await Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "For Viewing the candidate Profile, you need to pay",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonText: 'Yes, continue!',
+        //     cancelButtonText: 'No, cancel!',
+        // });
 
-        if (!result.isConfirmed) {
-            return; // Exit the function if the user cancels
-        }
+        // if (!result.isConfirmed) {
+        //     return; // Exit the function if the user cancels
+        // }
         // Call C# backend to create an order
         var req =
         {
@@ -316,13 +316,13 @@ class CandidatesDetail extends React.Component {
                                                 <div className="rbt-card-body">
                                                     <h4 className="rbt-card-title">
                                                         <a href="#">
-                                                            {job.fee_paid_status==0 ? "xxxxxxxxx" : job.fullname}
+                                                            {job.fee_paid_status==0 ? maskName(job.fullname) : job.fullname}
                                                         </a>
                                                     </h4>
                                                     <ul className="rbt-meta">
                                                         <li>
                                                        
-                                                            <i className="fas fa-phone" />  {job.fee_paid_status==0 ? "xxxxxxxxx" : job.mobile_no}
+                                                            <i className="fas fa-phone" />  {job.fee_paid_status==0 ? maskMobileNumber(job.mobile_no) : job.mobile_no}
                                                         </li>
                                                         <li>
                                                             <i className="fas fa-id-badge" /> {job.designation || "NA"}
@@ -331,7 +331,7 @@ class CandidatesDetail extends React.Component {
                                                             <i className="fas fa-map-marker-alt" /> {job.prefer_location || "NA"}
                                                         </li>
                                                         <li>
-                                                            <i className="fas fa-envelope" /> {job.fee_paid_status==0 ? "xxxxxxxxx" : job.Email}
+                                                            <i className="fas fa-envelope" /> {job.fee_paid_status==0 ? maskEmail(job.Email) : job.Email}
                                                         </li>
                                                         <li>
                                                             <i className="fas fa-briefcase" /> {job.experience || "NA"} years

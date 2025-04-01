@@ -167,6 +167,20 @@ class Home extends React.Component {
         this.setState({ courseListingData: limitedCourses });
         //this.getAllCourse(0, this.state.totalRecords);
     }
+
+    loadMoreJobs = (e) => {
+        e.preventDefault();
+        this.setState({ showJobMore: false });
+        this.getAllJobs(0, this.state.totalJobRecords);
+    }
+
+    seeLessJobs = (e) => {
+        e.preventDefault();
+        this.setState({ showJobMore: true });
+        const limitedJobs = this.state.joblistingdata.slice(0, 3);
+        this.setState({ joblistingdata: limitedJobs });
+        //this.getAllCourse(0, this.state.totalRecords);
+    }
     
     render() {
         const maskMobileNumber = (number) => {
@@ -730,40 +744,30 @@ class Home extends React.Component {
                                     </div>
                                 )}
                             </div>
-                            {this.state?.totalJobRecords > 3 && (
-                                <div className="row">
-                                    <div className="col-lg-12">
-                                        <div className="load-more-btn mt--60 text-center">
-                                            {this.state.showLoadMoreJobs ? (
-                                                <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={(e) => {
-                                                    e.preventDefault();
-                                                    this.setState({ showLoadMoreJobs: false });
-                                                    this.getAllJobs(0, this.state.totalJobRecords);
-                                                }}>
-                                                    <span className="icon-reverse-wrapper">
-                                                        <span className="btn-text">Load More Jobs</span>
-                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
-                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
-                                                    </span>
-                                                </a>
-                                            ) : (
-                                                <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={(e) => {
-                                                    e.preventDefault();
-                                                    this.setState({ showLoadMoreJobs: true });
-                                                    const limitedJobs = this.state.joblistingdata.slice(0, this.state.pageSize);
-                                                    this.setState({ joblistingdata: limitedJobs });
-                                                }}>
-                                                    <span className="icon-reverse-wrapper">
-                                                        <span className="btn-text">See Less</span>
-                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
-                                                        <span className="btn-icon"><i className="feather-arrow-right"></i></span>
-                                                    </span>
-                                                </a>
-                                            )}
-                                        </div>
-                                    </div>
+                            {this.state?.totalJobRecords > 3 && <div className="row">
+                            <div className="col-lg-12">
+                                <div className="load-more-btn mt--60 text-center">
+                                    {this.state.showJobMore ? (
+                                        <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={this.loadMoreJobs}>
+                                            <span className="icon-reverse-wrapper">
+                                                <span className="btn-text">Load More Jobs</span>
+                                                <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                                <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                            </span>
+                                        </a>
+                                    ) : (
+                                        <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={this.seeLessJobs}>
+                                            <span className="icon-reverse-wrapper">
+                                                <span className="btn-text">See less</span>
+                                                <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                                <span className="btn-icon"><i className="feather-arrow-right"></i></span>
+                                            </span>
+                                        </a>
+                                    )}
                                 </div>
-                            )}
+                            </div>
+                        </div>
+                        }
                         </div>
                     </div>
                     <div className="rbt-brand-area bg-color-white rbt-section-gap">
