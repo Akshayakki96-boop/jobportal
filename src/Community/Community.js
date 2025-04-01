@@ -281,7 +281,7 @@ class Community extends React.Component {
                                                             )}
 
                                                             {localStorage.getItem('authToken') && this.state.dashBoardData?.role_id != 1 && (
-                                                                <i className="fas fa-trash-alt" title="Delete blog" style={{ color: "red", cursor: "pointer", fontSize: "16px" }} onClick={() => this.handleDeleteBlogs()} />
+                                                                <i className="fas fa-trash-alt" title="Delete blog" style={{ color: "red", cursor: "pointer", fontSize: "16px" }} onClick={() => this.handleDeleteBlogs(blog.blog_id)} />
                                                             )}
                                                         </div>
 
