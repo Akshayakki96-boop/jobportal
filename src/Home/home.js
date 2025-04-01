@@ -22,13 +22,14 @@ class Home extends React.Component {
             pageSize: 4, // Number of records per page
             totalPages: 1,
             totalRecords: 0, // Total number of records
-            showLoadMore: true
+            showLoadMore: true,
+            showJobMore: true
         };
 
     }
     componentDidMount() {
         this.getDashboardUser();
-        this.getAllJobs(0, this.state.pageSize);
+        this.getAllJobs(0,3);
         this.getAllCourse(0, 3);
     }
 
@@ -88,8 +89,7 @@ class Home extends React.Component {
                 console.log('joblistingdata', response.data);
                 if (response.data.data && response.data.data.length > 0) {
                     const totalCount = response.data.data[0].TotalRecords;
-                    const topTwoJobs = response.data.data;
-                    this.setState({ joblistingdata: topTwoJobs, totalJobRecords: totalCount, errorMessage: "", keepSpinner: false });
+                    this.setState({ joblistingdata: response.data.data, totalJobRecords: totalCount, errorMessage: "", keepSpinner: false });
                 }
                 else {
                     this.setState({ errorMessage: "No Jobs Found", keepSpinner: false });
