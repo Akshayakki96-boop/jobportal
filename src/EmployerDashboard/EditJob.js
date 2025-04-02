@@ -35,13 +35,13 @@ class EditJob extends React.Component {
 
     fetchIP = async () => {
         try {
-          const response = await fetch("https://api64.ipify.org?format=json");
-          const data = await response.json();
-          this.setState({ ip: data.ip });
+           let response = await fetch("https://checkip.amazonaws.com");
+           let data = await response.text();
+            this.setState({ ip: data.trim() });
         } catch (error) {
-          this.setState({ ip: "Error fetching IP" });
+            this.setState({ ip: "Error fetching IP" });
         }
-      };
+    };
     getDashboardUser = () => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Employer/Dashboard`;
