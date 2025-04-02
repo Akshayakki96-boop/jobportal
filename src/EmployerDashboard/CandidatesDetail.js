@@ -144,7 +144,7 @@ class CandidatesDetail extends React.Component {
         console.log("Order Response:", order);
 
         const options = {
-            key: "rzp_test_XVm07SAlt5XeKR", // Replace with your Razorpay Key ID
+            key: process.env.RAZOR_PAY_KEY, // Replace with your Razorpay Key ID
             amount: order.amountInPaisa,
             currency: order.currencyCode,
             name: "Zobskill",
