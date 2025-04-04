@@ -34,7 +34,7 @@ class Footer extends React.Component {
                 this.setState({ keepSpinner: false });
                 Swal.fire({
                     title: "Success!",
-                    text: "Email sent successfully.",
+                    text: "Thanks for Subscribing us, we will reach out to you shortly.",
                     icon: "success",
                     confirmButtonText: "OK",
                 });
