@@ -524,9 +524,9 @@ class EditProfileTrainer extends React.Component {
                     },
                 });
 
-                console.log('File uploaded successfully:', response.data);
+                console.log('Doc uploaded successfully:', response.data);
                 this.setState({ resumefileName: response.data.filePath })
-                this.setState({ uploadResumeStatus: 'Resume uploaded successfully!' });
+                this.setState({ uploadResumeStatus: 'Doc uploaded successfully!' });
             } catch (error) {
                 console.error('Error uploading file:', error);
                 this.setState({ uploadResumeStatus: 'Error uploading file!' });
@@ -1009,9 +1009,9 @@ class EditProfileTrainer extends React.Component {
                                                     />
                                                     <label htmlFor="email">Email</label>
                                                 </div>
-                                                <div className="form-group">
-                                                    <label className="mobile-label">Mobile Number *</label>
-                                                    <div className="mobile-input d-flex align-items-center">
+                                                <div className="form-group phone-input-group">
+                                                <label htmlFor="mobile_no">Mobile Number</label>
+                                                    <div className="phone-row">
                                                         <Select
                                                             isClearable={true}
                                                             className="country-code-select"
@@ -1021,15 +1021,38 @@ class EditProfileTrainer extends React.Component {
                                                             menuPortalTarget={document.body}
                                                             styles={{
                                                                 menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                                control: (base) => ({
+                                                                    ...base,
+                                                                    height: '40px',
+                                                                    minHeight: '40px',
+                                                                    fontSize: '16px',
+                                                                    borderRadius: '4px',
+                                                                    minWidth: '70px',         // Optional: minimum width
+                                                                    width: 'max-content',            // Let it grow
+                                                                    paddingRight: '4px'
+                                                                }),
                                                                 container: (base) => ({
                                                                     ...base,
-                                                                    flex: '0 0 100px', // Adjust the width as needed
+                                                                    flexShrink: 0,            // Prevent shrinking
+                                                                    width: 'max-content',      // Let it grow
+                                                                }),
+                                                                valueContainer: (base) => ({
+                                                                    ...base,
+                                                                    padding: '0 8px',
+                                                                }),
+                                                                indicatorsContainer: (base) => ({
+                                                                    ...base,
+                                                                    height: '40px',
+                                                                }),
+                                                                singleValue: (base) => ({
+                                                                    ...base,
+                                                                    lineHeight: '40px',
                                                                 }),
                                                             }}
                                                         />
                                                         <input
                                                             type="text"
-                                                            className="mobile-number-input flex-grow-1"
+                                                            className="form-control"
                                                             id="mobile_no"
                                                             name="mobile_no"
                                                             value={mobile_no}
@@ -1040,15 +1063,6 @@ class EditProfileTrainer extends React.Component {
                                                 <div className="form-group" style={{ position: "relative" }}>
                                                     <label
                                                         htmlFor="dob"
-                                                        style={{
-                                                            position: "absolute",
-                                                            top: "-12px",
-                                                            left: "10px",
-                                                            background: "white",
-                                                            padding: "0 4px",
-                                                            fontSize: "12px",
-                                                            color: "#6c757d",
-                                                        }}
                                                     >
                                                         Date of Birth
                                                     </label>
@@ -1174,16 +1188,6 @@ class EditProfileTrainer extends React.Component {
                                                 <div className="form-group" style={{ position: "relative" }}>
                                                     <label
                                                         htmlFor="profile_summary"
-                                                        style={{
-                                                            position: "absolute",
-                                                            top: "-12px",
-                                                            left: "10px",
-                                                            background: "white",
-                                                            padding: "0 4px",
-                                                            fontSize: "17px",
-                                                            color: "#6c757d",
-                                                             width:"20%"
-                                                        }}
                                                     >
                                                         Profile Summary
                                                     </label>
@@ -1225,14 +1229,14 @@ class EditProfileTrainer extends React.Component {
                                                                         rel="noopener noreferrer"
                                                                         className="btn btn-primary"
                                                                     >
-                                                                        Download Resume
+                                                                        Download doc
                                                                     </a>
                                                                 </div>
                                                             )}
                                                         </div>
                                                     )}
 
-                                                    {this.state.uploadResumeStatus && <small className={this.state.uploadResumeStatus == "Resume uploaded successfully!" ? "text-success" : "text-danger"}>{this.state.uploadResumeStatus}</small>}
+                                                    {this.state.uploadResumeStatus && <small className={this.state.uploadResumeStatus == "Doc uploaded successfully!" ? "text-success" : "text-danger"}>{this.state.uploadResumeStatus}</small>}
                                                 </div>
                                                 <div className="col-lg-12">
                                                     <div className="form-submit-group">

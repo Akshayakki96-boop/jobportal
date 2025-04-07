@@ -795,7 +795,7 @@ font-size: 11px;
   position: absolute;
   left: 0;
   width: 100%;
-  top: 9px;
+  top: -12px;
   color: var(--color-body);
   transition: 0.3s;
   z-index: 1;
@@ -864,5 +864,41 @@ margin-top: revert;
   transition: none;
   /* max-height: 70px; */
 }
+
+
+.phone-input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+}
+
+.phone-input-group label {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.phone-row {
+  display: flex;
+  gap: 8px;
+}
+
+.phone-row .country-code-select {
+  flex: 0 0 100px;
+}
+
+.phone-row .form-control {
+  flex: 1;
+  height: 40px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.phone-row .country-code-select {
+  margin-right: 8px;
+  max-width: fit-content;
+}
+
+
 
 

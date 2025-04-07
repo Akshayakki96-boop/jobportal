@@ -159,7 +159,7 @@ class MyJobs extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                             <div className="rbt-short-item mt-5">
                                                 <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="Search by Location,title.." value={this.state.searchQuery}
+                                                    <input type="text" placeholder="Search by Location,Title.." value={this.state.searchQuery}
                                                         onChange={this.handleSearchChange} />
                                                     <button
                                                         type="button"

@@ -102,8 +102,8 @@ class EditProfileCandidate extends React.Component {
     }
     fetchIP = async () => {
         try {
-           let response = await fetch("https://checkip.amazonaws.com");
-           let data = await response.text();
+            let response = await fetch("https://checkip.amazonaws.com");
+            let data = await response.text();
             this.setState({ ip: data.trim() });
         } catch (error) {
             this.setState({ ip: "Error fetching IP" });
@@ -594,8 +594,8 @@ class EditProfileCandidate extends React.Component {
             "ctc": this.state.currentsalary ? this.state.currentsalary : 0,
             "ex_ctc": this.state.expectedsalary ? this.state.expectedsalary : 0,
             "current_cities": this.state.selectedCity ? this.state.selectedCity.value : "",
-            "preferred_location":this.state.preferredWorkLocation? this.state.preferredWorkLocation.map((item) => item.value).join(','):"",
-            "notice_period_id": this.state.noticePeriodSelected? this.state.noticePeriodSelected.value : 0,
+            "preferred_location": this.state.preferredWorkLocation ? this.state.preferredWorkLocation.map((item) => item.value).join(',') : "",
+            "notice_period_id": this.state.noticePeriodSelected ? this.state.noticePeriodSelected.value : 0,
             "languague_name": this.state.languague_name,
             "dob": this.state.selectedDate ? `${this.state.selectedDate.getFullYear()}-${String(this.state.selectedDate.getMonth() + 1).padStart(2, '0')}-${String(this.state.selectedDate.getDate()).padStart(2, '0')}` : null
         }
@@ -727,7 +727,7 @@ class EditProfileCandidate extends React.Component {
             joiningdate_month: employmentForm.workedFromMonth ? employmentForm.workedFromMonth : 0,
             leavingdate_month: employmentForm.workedToMonth ? employmentForm.workedToMonth : 0,
             company_name: employmentForm.company_name,
-            employmentType: employmentForm.employmentType? employmentForm.employmentType : 0,
+            employmentType: employmentForm.employmentType ? employmentForm.employmentType : 0,
             jobprofile: employmentForm.jobprofile,
             keyskill_ids: employmentForm.keyskillselected ? employmentForm.keyskillselected.map(skill => skill.value).join(',') : ''
         };
@@ -826,7 +826,7 @@ class EditProfileCandidate extends React.Component {
             project_title: projectForm.projectname,
             project_description: projectForm.projectDetails,
             skill_ids: projectForm.keyskillsSelected ? projectForm.keyskillsSelected.map(skill => skill.value).join(',') : '',
-            teamsize: projectForm.teamSize? projectForm.teamSize : 0,
+            teamsize: projectForm.teamSize ? projectForm.teamSize : 0,
         };
 
         axios.post(url, projectData, {
@@ -863,7 +863,7 @@ class EditProfileCandidate extends React.Component {
                 window.scrollTo(0, 0);
             });
 
-    
+
 
 
 
@@ -954,7 +954,7 @@ class EditProfileCandidate extends React.Component {
                     responseerrorMessage: error.response?.data,
                     alertVariant: 'danger'
                 });
-               // window.scrollTo(0, 0);
+                // window.scrollTo(0, 0);
             });
 
 
@@ -1123,9 +1123,9 @@ class EditProfileCandidate extends React.Component {
                                                 />
                                                 <label htmlFor="email">Email</label>
                                             </div>
-                                            <div className="form-group">
-                                                <label className="mobile-label" htmlFor="mobile_no">Mobile Number</label>
-                                                <div className="mobile-input d-flex align-items-center">
+                                            <div className="form-group phone-input-group">
+                                                <label htmlFor="mobile_no">Mobile Number</label>
+                                                <div className="phone-row">
                                                     <Select
                                                         className="country-code-select"
                                                         options={this.state.phoneCodes}
@@ -1134,35 +1134,51 @@ class EditProfileCandidate extends React.Component {
                                                         menuPortalTarget={document.body}
                                                         styles={{
                                                             menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                            control: (base) => ({
+                                                                ...base,
+                                                                height: '40px',
+                                                                minHeight: '40px',
+                                                                fontSize: '16px',
+                                                                borderRadius: '4px',
+                                                                minWidth: '70px',         // Optional: minimum width
+                                                                width: 'max-content',            // Let it grow
+                                                                paddingRight: '4px'
+                                                            }),
                                                             container: (base) => ({
                                                                 ...base,
-                                                                flex: '0 0 100px', // Adjust the width as needed
+                                                                flexShrink: 0,            // Prevent shrinking
+                                                                width: 'max-content',      // Let it grow
+                                                            }),
+                                                            valueContainer: (base) => ({
+                                                                ...base,
+                                                                padding: '0 8px',
+                                                            }),
+                                                            indicatorsContainer: (base) => ({
+                                                                ...base,
+                                                                height: '40px',
+                                                            }),
+                                                            singleValue: (base) => ({
+                                                                ...base,
+                                                                lineHeight: '40px',
                                                             }),
                                                         }}
                                                     />
+
                                                     <input
                                                         type="text"
-                                                        className="mobile-number-input flex-grow-1"
+                                                        className="form-control"
                                                         id="mobile_no"
                                                         name="mobile_no"
                                                         value={mobile_no}
                                                         onChange={this.handleMobileChange}
                                                     />
                                                 </div>
-
                                             </div>
+
+
                                             <div className="form-group" style={{ position: "relative" }}>
                                                 <label
                                                     htmlFor="dob"
-                                                    style={{
-                                                        position: "absolute",
-                                                        top: "-12px", // Adjust the position to align properly
-                                                        left: "10px", // Align the label horizontally
-                                                        background: "white", // Ensure the label background is white
-                                                        padding: "0 4px", // Add padding to match other inputs
-                                                        fontSize: "12px", // Match the label font size
-                                                        color: "#6c757d", // Add a subtle label color
-                                                    }}
                                                 >
                                                     Date of Birth
                                                 </label>
@@ -1243,16 +1259,7 @@ class EditProfileCandidate extends React.Component {
                                                 <label htmlFor="notice_period_id">Notice Period</label>
                                             </div>
                                             <div className="form-group">
-                                                <label style={{
-                                                    position: "absolute",
-                                                    top: "-12px",
-                                                    left: "10px",
-                                                    background: "white",
-                                                    padding: "0 4px",
-                                                    fontSize: "17px",
-                                                    color: "#6c757d",
-                                                    width:"20%"
-                                                }} htmlFor="profile_summary">Profile Summary</label>
+
                                                 <textarea
                                                     className="form-control"
                                                     id="profile_summary"
@@ -1260,6 +1267,7 @@ class EditProfileCandidate extends React.Component {
                                                     value={profile_summary}
                                                     onChange={this.handleProfileChange}
                                                 ></textarea>
+                                                <label htmlFor="profile_summary">Profile Summary</label>
 
                                             </div>
                                             <div className="form-group">
@@ -1303,16 +1311,7 @@ class EditProfileCandidate extends React.Component {
                                             </div>
 
                                             <div className="form-group">
-                                                <label style={{
-                                                    position: "absolute",
-                                                    top: "-12px",
-                                                    left: "10px",
-                                                    background: "white",
-                                                    padding: "0 4px",
-                                                    fontSize: "17px",
-                                                    color: "#6c757d",
-                                                     width:"20%"
-                                                }} htmlFor="resume_summary">Resume Headline</label>
+
                                                 <textarea
                                                     className="form-control"
                                                     id="resume_summary"
@@ -1320,6 +1319,7 @@ class EditProfileCandidate extends React.Component {
                                                     value={resume_summary}
                                                     onChange={this.handleResumeChange}
                                                 ></textarea>
+                                                <label htmlFor="resume_summary">Resume Headline</label>
                                             </div>
                                             {/* <div className="form-group">
                                             <Select
@@ -1643,16 +1643,7 @@ class EditProfileCandidate extends React.Component {
                                                             />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label style={{
-                                                                position: "absolute",
-                                                                top: "-12px",
-                                                                left: "-5px",
-                                                                background: "white",
-                                                                padding: "0 4px",
-                                                                fontSize: "17px",
-                                                                color: "#6c757d",
-                                                                 width:"20%"
-                                                            }} htmlFor="jobprofile">Job Profile</label>
+
                                                             <textarea
                                                                 className="form-control"
                                                                 id="jobprofile"
@@ -1660,7 +1651,7 @@ class EditProfileCandidate extends React.Component {
                                                                 value={employmentForm.jobprofile}
                                                                 onChange={this.handleEmploymentFormChange}
                                                             ></textarea>
-
+                                                            <label htmlFor="jobprofile">Job Profile</label>
                                                         </div>
                                                     </Modal.Body>
                                                     <Modal.Footer>
@@ -1787,14 +1778,7 @@ class EditProfileCandidate extends React.Component {
                                                         </div>
 
                                                         <div className="form-group">
-                                                            <label style={{position: "absolute",
-                                                                top: "-12px",
-                                                                left: "-5px",
-                                                                background: "white",
-                                                                padding: "0 4px",
-                                                                fontSize: "17px",
-                                                                color: "#6c757d",
-                                                                 width:"20%"}} htmlFor="projectDetails">Project Details</label>
+
                                                             <textarea
                                                                 className="form-control"
                                                                 id="projectDetails"
@@ -1802,6 +1786,7 @@ class EditProfileCandidate extends React.Component {
                                                                 value={this.state.projectForm.projectDetails}
                                                                 onChange={this.handleProjectFormChange}
                                                             ></textarea>
+                                                            <label htmlFor="projectDetails">Project Details</label>
                                                         </div>
                                                     </Modal.Body>
                                                     <Modal.Footer>
@@ -1859,7 +1844,7 @@ class EditProfileCandidate extends React.Component {
                                                         <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
                                                     </Modal.Header>
                                                     <Modal.Body>
-                                                    {this.state.responseerrorMessage && (
+                                                        {this.state.responseerrorMessage && (
                                                             <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseerrorMessage: '' })} dismissible>
                                                                 {this.state.responseerrorMessage}
                                                             </Alert>
