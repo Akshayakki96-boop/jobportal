@@ -333,22 +333,22 @@ class Header extends React.Component {
                                         <div className="header-info d-none d-xl-block">
                                             <ul className="social-share-transparent">
                                                 <li>
-                                                    <a href="#">
+                                                    <a target='_blank' href="https://www.facebook.com/zobskill">
                                                         <i className="fab fa-facebook-f"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#">
+                                                    <a target='_blank' href="https://x.com/zobskill">
                                                         <i className="fab fa-twitter"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#">
+                                                    <a target='_blank' href="https://www.linkedin.com/company/105906876">
                                                         <i className="fab fa-linkedin-in"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#">
+                                                    <a target='_blank' href="https://www.instagram.com/zobskill/">
                                                         <i className="fab fa-instagram"></i>
                                                     </a>
                                                 </li>
