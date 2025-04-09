@@ -74,7 +74,7 @@ class MyProfile extends React.Component {
                         ))}
                            {/* Employment Section */}
                            <div className="section-title text-start mt-5">
-                            <h4 className="rbt-title-style-3 mb-0 pb-0">Description</h4>
+                            <h4 className="rbt-title-style-3 mb-0 pb-0">About the Company</h4>
                         </div>
                     <div className="rbt-profile-row row row--15 mt--15">
                         <div className="col-lg-12 col-md-12">
