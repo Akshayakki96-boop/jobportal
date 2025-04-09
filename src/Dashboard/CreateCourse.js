@@ -272,22 +272,22 @@ class CreateCourse extends React.Component {
 
     handleCourseSave = () => {
 
-        if (!this.state.isRefundable) {
-            this.setState({ showRefundablePopup: true });
-        }
-        else {
-            this.createSaveCourse("Yes");
-        }
+        // if (!this.state.isRefundable) {
+        //     this.setState({ showRefundablePopup: true });
+        // }
+        // else {
+            this.createSaveCourse("No");
+        //}
     }
 
 
     handleCourseSubmit = () => {
-        if (!this.state.isRefundable) {
-            this.setState({ showRefundablePopup: true });
-        }
-        else {
-            this.createCourse("Yes");
-        }
+        // if (!this.state.isRefundable) {
+        //     this.setState({ showRefundablePopup: true });
+        // }
+        // else {
+            this.createCourse("No");
+        //}
 
 
     }
@@ -494,9 +494,9 @@ class CreateCourse extends React.Component {
         }
     }
 
-    handleCourseMaterial = (e) => {
-        this.setState({ courseMaterial: e });
-    }
+    // handleCourseMaterial = (e) => {
+    //     this.setState({ courseMaterial: e });
+    // }
     handleCurrencyCodeChange = (selectedOption) => {
         this.setState({ currencyCode: selectedOption });
     };
@@ -531,16 +531,16 @@ class CreateCourse extends React.Component {
                 <AdvancedBreadcumb componentName="Create New" ComponentValue="Create New" redirectURL="/TrainerDashboard" />
                 <div className="rbt-become-area bg-color-white rbt-section-gap">
                     <div className="container">
-                        <div className="container mt-5">
-                            {this.state.responseMessage && (
+                    {this.state.responseMessage && (  <div className="container mt-5">
+                          
                                 <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
                                     {this.state.responseMessage}
                                 </Alert>
-                            )}
-                        </div>
-                        <div className="row pt--60 g-5">
+                            
+                        </div>)}
+                        <div className="row g-5">
 
-                            <div className="col-lg-10">
+                            <div className="col-lg-12">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
                                     <h3 className="title">Create New Course</h3>
                                     <hr className="mb--30" />
@@ -697,7 +697,7 @@ class CreateCourse extends React.Component {
                                             <div className="form-group" style={{paddingBottom: "50px"}}>
                                                 <ReactQuill
                                                     value={this.state.description}
-                                                    onChange={this.handleDescriptionChange}
+                                                     onChange={this.handleDescriptionChange}
                                                     theme="snow"
                                                     modules={this.modules}
                                                     placeholder="Course Description"
@@ -705,13 +705,13 @@ class CreateCourse extends React.Component {
                                                     style={{ height: "200px"}}
                                                 />
                                             </div>
-                                            {this.state.description && this.state.description.length > 2000 && (
+                                            {/* {this.state.description && this.state.description.length > 2000 && (
                                                 <span style={{ color: "red" }}>
                                                     Description cannot exceed 2000 characters.
                                                 </span>
-                                            )}
+                                            )} */}
 
-                                            <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                            {/* <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                                 <input
                                                     type="checkbox"
                                                     checked={this.state.isRefundable}
@@ -723,7 +723,7 @@ class CreateCourse extends React.Component {
                                                 <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
                                                     Course qualifies for 50% refund
                                                 </label>
-                                            </div>
+                                            </div> */}
 
 
                                             <div className="col-lg-12">
