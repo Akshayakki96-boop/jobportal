@@ -253,6 +253,11 @@ class Dashboard extends React.Component {
                                                                             <i className="feather-monitor"></i><span>My Courses</span>
                                                                         </a>
                                                                     </li>
+                                                                    <li>
+                                                                        <a className={this.state.showMyCourses ? 'active' : ''}  href={`/CreateBlogs`}>
+                                                                            <i className="feather-monitor"></i><span>Add Blog</span>
+                                                                        </a>
+                                                                    </li>
 
 
                                                                     <li>

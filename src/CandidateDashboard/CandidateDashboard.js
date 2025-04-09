@@ -188,7 +188,7 @@ class CandidateDashboard extends React.Component {
                                         <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
                                         <div className="tranr-titl">
                                             <div className="content text-center">
-                                                <h6 className="subtitle sal-animate" >Candidate</h6>
+                                                <h6 className="subtitle sal-animate" >Train, Certify, Get Hired</h6>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}
