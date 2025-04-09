@@ -372,7 +372,7 @@ class CourseDetails extends React.Component {
                                         </h2>
                                         {this.state.dashBoardData && this.state.dashBoardData.role_id == 3 && <a className="rbt-btn btn-md hover-icon-reverse" href={`/edit-course?courseId=${this.courseId}`}>
                                             <span className="icon-reverse-wrapper">
-                                                <span className="btn-text">Edit Course</span>
+                                                <span className="btn-text" style={{width: "100px"}}>Edit Course</span>
                                                 <span className="btn-icon">
                                                     <i className="feather-arrow-right"></i>
                                                 </span>
