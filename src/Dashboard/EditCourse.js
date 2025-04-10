@@ -210,11 +210,22 @@ class EditCourse extends React.Component {
         const url = `${baseUrl}/api/FileUpload/uploadlogo`;
         const token = localStorage.getItem('authToken');
         const validImageTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
+        const image = new Image();
+        image.src = URL.createObjectURL(file);
 
+        image.onload = async () => {
+            if (image.width !== 150 || image.height !== 150) {
+                this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
+                return;
+            }
+      
+        if (!file) return; // No file selected
         if (file && !validImageTypes.includes(file.type)) {
             this.setState({ uploadStatus: 'Please select a valid image file (JPEG, PNG, GIF).' });
             event.target.value = ''; // Reset the file input
-        } else {
+        } 
+        else 
+        {
             this.setState({
                 logo: file,
                 logoPreview: URL.createObjectURL(file), // Preview the uploaded file
@@ -242,6 +253,7 @@ class EditCourse extends React.Component {
                 this.setState({ uploadStatus: 'Error uploading file!' });
             }
         }
+    };
     };
 
     handleFileResumeChange = async (event) => {
@@ -581,6 +593,7 @@ class EditCourse extends React.Component {
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         { /* Candidate Basic Info Section */}
                                         <div className="section-content">
+                                                                        <p style={{ textAlign: "left" }}>Note: Please upload a Course logo with dimensions of 150x150 pixels.</p>
                                             <div className="form-group">
                                                 <input
                                                     type="file"
