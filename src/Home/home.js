@@ -613,7 +613,8 @@ class Home extends React.Component {
                             <div className="col-lg-12">
                                 <div className="load-more-btn mt--60 text-center">
                                     {this.state.showLoadMore ? (
-                                        <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={this.loadMoreCourses}>
+                                        // <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={this.loadMoreCourses}>
+                                        <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="/Course">
                                             <span className="icon-reverse-wrapper">
                                                 <span className="btn-text">Load More Courses</span>
                                                 <span className="btn-icon"><i className="feather-arrow-right"></i></span>
@@ -744,12 +745,13 @@ class Home extends React.Component {
                                     </div>
                                 )}
                             </div>
-                            {this.state?.totalJobRecords > 3 && <div className="row">
+                            {this.state?.totalJobRecords > 4 && <div className="row">
                             <div className="col-lg-12">
                                 <div className="load-more-btn mt--60 text-center">
                                     {this.state.showJobMore ? (
-                                        <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={this.loadMoreJobs}>
-                                            <span className="icon-reverse-wrapper">
+                                       // <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={this.loadMoreJobs}>
+                                       <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="/jobs" >
+                                          <span className="icon-reverse-wrapper">
                                                 <span className="btn-text">Load More Jobs</span>
                                                 <span className="btn-icon"><i className="feather-arrow-right"></i></span>
                                                 <span className="btn-icon"><i className="feather-arrow-right"></i></span>

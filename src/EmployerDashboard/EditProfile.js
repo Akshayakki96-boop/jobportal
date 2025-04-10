@@ -387,7 +387,7 @@ class EditProfile extends React.Component {
                                                     onChange={this.handleInputChange}
                                                     theme="snow"
                                                     modules={this.modules}
-                                                    placeholder="Description"
+                                                    placeholder="About the company (max 2000 character)"
                                                     formats={this.formats}
                                                     style={{ height: "200px"}}
                                                 />

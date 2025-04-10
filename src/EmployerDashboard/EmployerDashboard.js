@@ -183,7 +183,7 @@ class EmployerDashboard extends React.Component {
                                         <div className="tutor-bg-photo bg_image bg_image--22 height-350"></div>
                                         <div className="tranr-titl">
                                             <div className="content text-center">
-                                                <h6 className="subtitle sal-animate" >Employer</h6>
+                                                <h6 className="subtitle sal-animate" >Hire with  {this.state?.dashBoardData.username}</h6>
                                             </div>
                                         </div>
                                         {/* Start Tutor Information */}
@@ -291,6 +291,11 @@ class EmployerDashboard extends React.Component {
                                                                     <li>
                                                                         <a className={this.state.showMyJobs ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myJobs'); }} href="#">
                                                                             <i className="feather-monitor"></i><span>My Jobs</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a className={this.state.showMyJobs ? 'active' : ''}   href={`/CreateBlogs`}>
+                                                                            <i className="feather-monitor"></i><span>Add Blogs</span>
                                                                         </a>
                                                                     </li>
 
