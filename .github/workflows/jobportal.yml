@@ -1,9 +1,9 @@
-name: Build and Deploy React App to IIS Production
+name: Build and Deploy React App to IIS
 
 on:
   push:
     branches:
-      - master  # Trigger the action when changes are pushed to the 'master' branch
+      - Stage  # Trigger the action when changes are pushed to the 'stage' branch
 
 jobs:
   build:
@@ -68,9 +68,9 @@ jobs:
       - name: Deploy to IIS via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.0.0
         with:
-          server: ${{ secrets.FTP_SERVER_PROD }}  # Use the FTP server address stored in GitHub Secrets
-          username: ${{ secrets.FTP_USERNAME_PROD }}  # Use the FTP username stored in GitHub Secrets
-          password: ${{ secrets.FTP_PASSWORD_PROD }}  # Use the FTP password stored in GitHub Secrets
+          server: ${{ secrets.FTP_SERVER }}  # Use the FTP server address stored in GitHub Secrets
+          username: ${{ secrets.FTP_USERNAME }}  # Use the FTP username stored in GitHub Secrets
+          password: ${{ secrets.FTP_PASSWORD }}  # Use the FTP password stored in GitHub Secrets
           local-dir: /home/runner/work/jobportal/jobportal/  # Adjusted path to point directly to the root folder
-          server-dir: /httpdocs/  # Ensure this is a folder path and ends with /
+          server-dir: /  # Ensure this is a folder path and ends with /
           dry-run: false  # Set to false to perform actual deployment

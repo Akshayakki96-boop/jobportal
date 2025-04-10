@@ -31,7 +31,7 @@ class CreateCourse extends React.Component {
         };
 
     }
-    
+
     componentDidMount() {
         this.fetchIP();
         let url = window.location.search;
@@ -43,8 +43,8 @@ class CreateCourse extends React.Component {
     }
     fetchIP = async () => {
         try {
-           let response = await fetch("https://checkip.amazonaws.com");
-           let data = await response.text();
+            let response = await fetch("https://checkip.amazonaws.com");
+            let data = await response.text();
             this.setState({ ip: data.trim() });
         } catch (error) {
             this.setState({ ip: "Error fetching IP" });
@@ -141,38 +141,48 @@ class CreateCourse extends React.Component {
         const url = `${baseUrl}/api/FileUpload/uploadlogo`;
         const token = localStorage.getItem('authToken');
         const validImageTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
-
-        if (file && !validImageTypes.includes(file.type)) {
-            this.setState({ uploadStatus: 'Please select a valid image file (JPEG, PNG, GIF).' });
-            event.target.value = ''; // Reset the file input
-        } else {
-            this.setState({
-                logo: file,
-                logoPreview: URL.createObjectURL(file), // Preview the uploaded file
-                uploadStatus: null,
-                // Clear any previous error
-            }, this.validateForm);
-            // Proceed with further processing
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                // Call the API to upload the file
-                const response = await axios.post(url, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                console.log('File uploaded successfully:', response.data);
-                this.setState({ fileName: response.data.filePath })
-                this.setState({ uploadStatus: 'File uploaded successfully!' });
-            } catch (error) {
-                console.error('Error uploading file:', error);
-                this.setState({ uploadStatus: 'Error uploading file!' });
+        const image = new Image();
+        image.src = URL.createObjectURL(file);
+        image.onload = async () => {
+            if (image.width !== 150 || image.height !== 150) {
+                this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
+                return;
             }
-        }
+
+            if (!file) return; // No file selected
+            if (file && !validImageTypes.includes(file.type)) {
+                this.setState({ uploadStatus: 'Please select a valid image file (JPEG, PNG, GIF).' });
+                event.target.value = ''; // Reset the file input
+            }
+            else {
+                this.setState({
+                    logo: file,
+                    logoPreview: URL.createObjectURL(file), // Preview the uploaded file
+                    uploadStatus: null,
+                    // Clear any previous error
+                }, this.validateForm);
+                // Proceed with further processing
+                const formData = new FormData();
+                formData.append('file', file);
+
+                try {
+                    // Call the API to upload the file
+                    const response = await axios.post(url, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+
+                    console.log('File uploaded successfully:', response.data);
+                    this.setState({ fileName: response.data.filePath })
+                    this.setState({ uploadStatus: 'File uploaded successfully!' });
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                    this.setState({ uploadStatus: 'Error uploading file!' });
+                }
+            }
+        };
     };
 
     handleFileResumeChange = async (event) => {
@@ -276,7 +286,7 @@ class CreateCourse extends React.Component {
         //     this.setState({ showRefundablePopup: true });
         // }
         // else {
-            this.createSaveCourse("No");
+        this.createSaveCourse("No");
         //}
     }
 
@@ -286,14 +296,14 @@ class CreateCourse extends React.Component {
         //     this.setState({ showRefundablePopup: true });
         // }
         // else {
-            this.createCourse("No");
+        this.createCourse("No");
         //}
 
 
     }
 
     createSaveCourse = (type) => {
-        
+
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/PostCourse`;
         const token = localStorage.getItem('authToken');
@@ -305,13 +315,13 @@ class CreateCourse extends React.Component {
             "coursetitle": this.state.courseName,
             "description": this.state.description,
             "notes": "string",
-            "duration": this.state.duration?this.state.duration:0,
-            "course_level": this.state.courseSelected?this.state.courseSelected.value:0,
+            "duration": this.state.duration ? this.state.duration : 0,
+            "course_level": this.state.courseSelected ? this.state.courseSelected.value : 0,
             "course_image": this.state.fileName,
-            "course_fees": this.state.courseFee?this.state.courseFee:0,
+            "course_fees": this.state.courseFee ? this.state.courseFee : 0,
             "is_refundable": type == "Yes" ? true : false,
             "course_materials": this.state.courseMaterial,
-            "no_of_lessons": this.state.nooflessons?this.state.nooflessons:0,
+            "no_of_lessons": this.state.nooflessons ? this.state.nooflessons : 0,
             "isactive": false,
             "ipAddress": this.state.ip,
             "currency": this.state.currencyCode.value,
@@ -325,7 +335,7 @@ class CreateCourse extends React.Component {
             },
         })
             .then((response) => {
-                
+
                 this.setState({
                     courseName: '',
                     description: '',
@@ -378,16 +388,16 @@ class CreateCourse extends React.Component {
             "coursetitle": this.state.courseName,
             "description": this.state.description,
             "notes": "string",
-            "duration": this.state.duration?this.state.duration:0,
-            "course_level": this.state.courseSelected?this.state.courseSelected.value:0,
+            "duration": this.state.duration ? this.state.duration : 0,
+            "course_level": this.state.courseSelected ? this.state.courseSelected.value : 0,
             "course_image": this.state.fileName,
-            "course_fees": this.state.courseFee?this.state.courseFee:0,
+            "course_fees": this.state.courseFee ? this.state.courseFee : 0,
             "is_refundable": type == "Yes" ? true : false,
             "course_materials": this.state.courseMaterial,
-            "no_of_lessons": this.state.nooflessons?this.state.nooflessons:0,
+            "no_of_lessons": this.state.nooflessons ? this.state.nooflessons : 0,
             "isactive": false,
-            "ipAddress":  this.state.ip,
-            "currency":this.state.currencyCode? this.state.currencyCode.value:"",
+            "ipAddress": this.state.ip,
+            "currency": this.state.currencyCode ? this.state.currencyCode.value : "",
             "startdate": isoString
         }
 
@@ -398,7 +408,7 @@ class CreateCourse extends React.Component {
             },
         })
             .then((response) => {
-                
+
                 this.setState({
                     courseName: '',
                     description: '',
@@ -438,46 +448,46 @@ class CreateCourse extends React.Component {
             });
     }
 
-      ActivateCourse = (course) => {
+    ActivateCourse = (course) => {
         const baseUrl = process.env.REACT_APP_BASEURL;
         const url = `${baseUrl}/api/Course/ToggleCourse`;
         const token = localStorage.getItem('authToken');
         var request =
         {
-          "courseId": course,
-          "isactive": true,
-    
+            "courseId": course,
+            "isactive": true,
+
         }
-    
-    
+
+
         axios.post(url, request, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
         })
-          .then((response) => {
-           // this.getAllCourse(0, this.state.pageSize);
-            this.setState({
-              responseMessage: (
-                <span>
-                  Course saved and activated successfully
-                </span>
-              ),
-              alertVariant: 'success', // Success alert variant
+            .then((response) => {
+                // this.getAllCourse(0, this.state.pageSize);
+                this.setState({
+                    responseMessage: (
+                        <span>
+                            Course saved and activated successfully
+                        </span>
+                    ),
+                    alertVariant: 'success', // Success alert variant
+                });
+                window.scrollTo(0, 0);
+
+
+            })
+            .catch((error) => {
+                this.setState({
+                    responseMessage: "Something went wrong !",
+                    alertVariant: 'danger', // Error alert variant
+                });
+                window.scrollTo(0, 0);
             });
-            window.scrollTo(0, 0);
-    
-    
-          })
-          .catch((error) => {
-            this.setState({
-              responseMessage: "Something went wrong !",
-              alertVariant: 'danger', // Error alert variant
-          });
-          window.scrollTo(0, 0);
-          });
-      }
+    }
 
     hanldeCheckChange = (e) => {
         this.setState({ isRefundable: e.target.checked });
@@ -531,12 +541,12 @@ class CreateCourse extends React.Component {
                 <AdvancedBreadcumb componentName="Create New" ComponentValue="Create New" redirectURL="/TrainerDashboard" />
                 <div className="rbt-become-area bg-color-white rbt-section-gap">
                     <div className="container">
-                    {this.state.responseMessage && (  <div className="container mt-5">
-                          
-                                <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                                    {this.state.responseMessage}
-                                </Alert>
-                            
+                        {this.state.responseMessage && (<div className="container mt-5">
+
+                            <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                                {this.state.responseMessage}
+                            </Alert>
+
                         </div>)}
                         <div className="row g-5">
 
@@ -547,6 +557,7 @@ class CreateCourse extends React.Component {
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         { /* Candidate Basic Info Section */}
                                         <div className="section-content">
+                                            <p style={{ textAlign: "left" }}>Note: Please upload a Course logo with dimensions of 150x150 pixels.</p>
                                             <div className="form-group">
                                                 <input
                                                     type="file"
@@ -682,7 +693,7 @@ class CreateCourse extends React.Component {
                                                 </div>
                                                 {this.state.showValisMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
-                                            <div className="form-group" style={{paddingBottom: "50px"}}>
+                                            <div className="form-group" style={{ paddingBottom: "50px" }}>
                                                 <ReactQuill
                                                     value={this.state.courseMaterial}
                                                     onChange={this.handleCourseMaterial}
@@ -690,19 +701,19 @@ class CreateCourse extends React.Component {
                                                     modules={this.modules}
                                                     placeholder="Upload a study material ...(video url link)"
                                                     formats={this.formats}
-                                                    style={{ height: "200px"}}
+                                                    style={{ height: "200px" }}
                                                 />
                                             </div>
 
-                                            <div className="form-group" style={{paddingBottom: "50px"}}>
+                                            <div className="form-group" style={{ paddingBottom: "50px" }}>
                                                 <ReactQuill
                                                     value={this.state.description}
-                                                     onChange={this.handleDescriptionChange}
+                                                    onChange={this.handleDescriptionChange}
                                                     theme="snow"
                                                     modules={this.modules}
                                                     placeholder="Course Description"
                                                     formats={this.formats}
-                                                    style={{ height: "200px"}}
+                                                    style={{ height: "200px" }}
                                                 />
                                             </div>
                                             {/* {this.state.description && this.state.description.length > 2000 && (
@@ -728,7 +739,7 @@ class CreateCourse extends React.Component {
 
                                             <div className="col-lg-12">
                                                 <div className="form-submit-group d-flex gap-3">
-                                                <button
+                                                    <button
                                                         type="button"
                                                         className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
                                                         onClick={this.handleCourseSave}
