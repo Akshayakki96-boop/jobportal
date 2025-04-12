@@ -502,7 +502,7 @@ class CourseDetails extends React.Component {
                                                     <a href="#overview">Overview</a>
                                                 </li>
                                                 <li className={activeSection === 'coursecontent' ? 'current' : ''}>
-                                                    <a href="#coursecontent">Course Content</a>
+                                                    <a href="#coursecontent">Course Description</a>
                                                 </li>
                                                 <li className={activeSection === 'details' ? 'current' : ''}>
                                                     <a href="#details">Details</a>

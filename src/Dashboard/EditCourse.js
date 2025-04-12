@@ -593,7 +593,6 @@ class EditCourse extends React.Component {
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         { /* Candidate Basic Info Section */}
                                         <div className="section-content">
-                                                                        <p style={{ textAlign: "left" }}>Note: Please upload a Course logo with dimensions of 150x150 pixels.</p>
                                             <div className="form-group">
                                                 <input
                                                     type="file"
@@ -602,6 +601,7 @@ class EditCourse extends React.Component {
                                                     id="profile_image"
                                                     onChange={this.handleFileChange}
                                                 />
+                                                 <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px' }}>Note: Please upload a Course logo with dimensions of 150x150 pixels.</p>
                                                 <label htmlFor="profile_image">Course Image</label>
                                                 {this.state.logoPreview && (
                                                     <div className="mt-3">
@@ -633,15 +633,7 @@ class EditCourse extends React.Component {
                                             <div className="form-group" style={{ position: "relative" }}>
                                                 <label
                                                     htmlFor="startDate"
-                                                    style={{
-                                                        position: "absolute",
-                                                        top: "-12px",
-                                                        left: "10px",
-                                                        background: "white",
-                                                        padding: "0 4px",
-                                                        fontSize: "12px",
-                                                        color: "#6c757d",
-                                                    }}
+                                                   
                                                 >
                                                     Start Date
                                                 </label>
@@ -701,7 +693,7 @@ class EditCourse extends React.Component {
                                                 {this.state.showValidMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="coursefee" className="mobile-label">Course Fee*</label>
+                                                <label htmlFor="coursefee">Course Fee</label>
                                                 <div className="mobile-input d-flex align-items-center">
                                                     <Select
                                                         className="country-code-select"
@@ -731,6 +723,7 @@ class EditCourse extends React.Component {
                                                 {this.state.showValisMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group" style={{paddingBottom: "50px"}}>
+                                            <label>Course Material</label>
                                                 <ReactQuill
                                                     value={this.state.courseMaterial}
                                                     onChange={this.handleCourseMaterial}
@@ -743,6 +736,7 @@ class EditCourse extends React.Component {
                                             </div>
                                            
                                             <div className="form-group" style={{paddingBottom: "50px"}}>
+                                            <label>Course Description</label>
                                                 <ReactQuill
                                                     value={this.state.description}
                                                     onChange={this.handleDescriptionChange}
@@ -753,11 +747,7 @@ class EditCourse extends React.Component {
                                                     style={{ height: "200px"}}
                                                 />
                                             </div>
-                                            {this.state.description && this.state.description.length > 2000 && (
-                                                <span style={{ color: "red" }}>
-                                                    Description cannot exceed 2000 characters.
-                                                </span>
-                                            )}
+                                          
 
                                             <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                                 <input

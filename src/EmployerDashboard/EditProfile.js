@@ -292,7 +292,7 @@ class EditProfile extends React.Component {
                         <hr className="mb--30" />
                         <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                         <div className="col-lg-12">
-                            <p style={{ textAlign: "left" }}>Note: Please upload a Employer logo with dimensions of 150x150 pixels.</p>
+
                             <div className="form-group">
                             <input
                                 type="file"
@@ -301,6 +301,7 @@ class EditProfile extends React.Component {
                                 id="companyLogo"
                                 onChange={this.handleFileChange}
                             />
+                        <p style={{ textAlign: "left" }}>Note: Please upload a Employer logo with dimensions of 150x150 pixels.</p>
                             <span className="focus-border" />
                             {logoPreview && (
                                 <div className="mt-3">
@@ -393,6 +394,7 @@ class EditProfile extends React.Component {
                         </div>
                         <div className="col-lg-12">
                             <div className="form-group" style={{ paddingBottom: "50px" }}>
+                            <label>Company Description</label>
                             <ReactQuill
                                 value={company_description}
                                 onChange={this.handleInputChange}
@@ -404,11 +406,7 @@ class EditProfile extends React.Component {
                             />
                             </div>
                         </div>
-                        {company_description && company_description.length > 2000 && (
-                            <span style={{ color: "red" }}>
-                            Description cannot exceed 2000 characters.
-                            </span>
-                        )}
+                       
 
                         <div className="col-lg-12">
                             <div className="form-submit-group">

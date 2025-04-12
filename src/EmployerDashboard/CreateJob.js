@@ -623,6 +623,7 @@ class CreateJob extends React.Component {
                                         </div>
                                         <div className="col-lg-12">
                                             <div className="form-group" style={{paddingBottom:"50px"}}>
+                                            <label>Job Description</label>
                                                 <ReactQuill
                                                     value={this.state.description}
                                                     onChange={this.handleJobDescription}
