@@ -490,37 +490,51 @@ class EditProfileCandidate extends React.Component {
         const token = localStorage.getItem('authToken');
         const validImageTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
 
-        if (file && !validImageTypes.includes(file.type)) {
-            this.setState({ uploadStatus: 'Please select a valid image file (JPEG, PNG, GIF).' });
-            event.target.value = ''; // Reset the file input
-        } else {
-            this.setState({
-                logo: file,
-                logoPreview: URL.createObjectURL(file), // Preview the uploaded file
-                uploadStatus: null,
-                // Clear any previous error
-            }, this.validateForm);
-            // Proceed with further processing
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                // Call the API to upload the file
-                const response = await axios.post(url, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                console.log('File uploaded successfully:', response.data);
-                this.setState({ fileName: response.data.filePath })
-                this.setState({ uploadStatus: 'File uploaded successfully!' });
-            } catch (error) {
-                console.error('Error uploading file:', error);
-                this.setState({ uploadStatus: 'Error uploading file!' });
-            }
-        }
+        if (file) {
+                   const image = new Image();
+                   image.src = URL.createObjectURL(file);
+       
+                   image.onload = () => {
+                       if (image.width !== 150 || image.height !== 150) {
+                           this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
+                           return;
+                       }
+       
+                       if (!validImageTypes.includes(file.type)) {
+                           // Set an error message if the file type is not valid
+                           this.setState({ uploadStatus: 'Invalid file type! Please upload an image file.' });
+                           return;
+                       }
+       
+                       this.setState({
+                           logo: file,
+                           logoPreview: URL.createObjectURL(file), // Preview the uploaded file
+                           uploadStatus: null,
+                           // Clear any previous error
+                       }, this.validateForm);
+       
+                       // Create FormData and append the file
+                       const formData = new FormData();
+                       formData.append('file', file);
+       
+                       // Call the API to upload the file
+                       axios.post(url, formData, {
+                           headers: {
+                               'Content-Type': 'multipart/form-data',
+                               Authorization: `Bearer ${token}`,
+                           },
+                       })
+                       .then((response) => {
+                           console.log('File uploaded successfully:', response.data);
+                           this.setState({ fileName: response.data.filePath });
+                           this.setState({ uploadStatus: 'File uploaded successfully!' });
+                       })
+                       .catch((error) => {
+                           console.error('Error uploading file:', error);
+                           this.setState({ uploadStatus: 'Error uploading file!' });
+                       });
+                   };
+               }
     };
 
     handleFileResumeChange = async (event) => {
@@ -1084,6 +1098,7 @@ class EditProfileCandidate extends React.Component {
                                                     id="profile_image"
                                                     onChange={this.handleFileChange}
                                                 />
+                                                 <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px' }}>Note: Please upload a Profile pic with dimensions of 150x150 pixels.</p>
                                                 <label htmlFor="profile_image">Profile Image</label>
                                                 {logoPreview && (
                                                     <div className="mt-3">
@@ -1099,6 +1114,7 @@ class EditProfileCandidate extends React.Component {
                                                         />
                                                     </div>
                                                 )}
+                                               
                                                 {uploadStatus && <small className={uploadStatus == "File uploaded successfully!" ? "text-success" : "text-danger"}>{uploadStatus}</small>}
                                             </div>
                                             <div className="form-group">

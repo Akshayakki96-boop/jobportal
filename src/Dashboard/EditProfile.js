@@ -92,8 +92,8 @@ class EditProfileTrainer extends React.Component {
 
     fetchIP = async () => {
         try {
-           let response = await fetch("https://checkip.amazonaws.com");
-           let data = await response.text();
+            let response = await fetch("https://checkip.amazonaws.com");
+            let data = await response.text();
             this.setState({ ip: data.trim() });
         } catch (error) {
             this.setState({ ip: "Error fetching IP" });
@@ -458,36 +458,50 @@ class EditProfileTrainer extends React.Component {
         const token = localStorage.getItem('authToken');
         const validImageTypes = ['image/jpeg', 'image/png', 'image/gif']; // Allowed MIME types
 
-        if (file && !validImageTypes.includes(file.type)) {
-            this.setState({ uploadStatus: 'Please select a valid image file (JPEG, PNG, GIF).' });
-            event.target.value = ''; // Reset the file input
-        } else {
-            this.setState({
-                logo: file,
-                logoPreview: URL.createObjectURL(file), // Preview the uploaded file
-                uploadStatus: null,
-                // Clear any previous error
-            }, this.validateForm);
-            // Proceed with further processing
-            const formData = new FormData();
-            formData.append('file', file);
+        if (file) {
+            const image = new Image();
+            image.src = URL.createObjectURL(file);
 
-            try {
+            image.onload = () => {
+                if (image.width !== 150 || image.height !== 150) {
+                    this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
+                    return;
+                }
+
+                if (!validImageTypes.includes(file.type)) {
+                    // Set an error message if the file type is not valid
+                    this.setState({ uploadStatus: 'Invalid file type! Please upload an image file.' });
+                    return;
+                }
+
+                this.setState({
+                    logo: file,
+                    logoPreview: URL.createObjectURL(file), // Preview the uploaded file
+                    uploadStatus: null,
+                    // Clear any previous error
+                }, this.validateForm);
+
+                // Create FormData and append the file
+                const formData = new FormData();
+                formData.append('file', file);
+
                 // Call the API to upload the file
-                const response = await axios.post(url, formData, {
+                axios.post(url, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`,
                     },
-                });
-
-                console.log('File uploaded successfully:', response.data);
-                this.setState({ fileName: response.data.filePath })
-                this.setState({ uploadStatus: 'File uploaded successfully!' });
-            } catch (error) {
-                console.error('Error uploading file:', error);
-                this.setState({ uploadStatus: 'Error uploading file!' });
-            }
+                })
+                    .then((response) => {
+                        console.log('File uploaded successfully:', response.data);
+                        this.setState({ fileName: response.data.filePath });
+                        this.setState({ uploadStatus: 'File uploaded successfully!' });
+                    })
+                    .catch((error) => {
+                        console.error('Error uploading file:', error);
+                        this.setState({ uploadStatus: 'Error uploading file!' });
+                    });
+            };
         }
     };
 
@@ -664,7 +678,7 @@ class EditProfileTrainer extends React.Component {
         const token = localStorage.getItem('authToken');
         var updateSkills = {
             "user_id": this.state.userId,
-            "keyskill_ids":this.state.keyskillsSelected? this.state.keyskillsSelected.map(skill => skill.value).join(","):"",
+            "keyskill_ids": this.state.keyskillsSelected ? this.state.keyskillsSelected.map(skill => skill.value).join(",") : "",
             "ipaddress": this.state.ip,
             "keyskills": this.state.keyskillsSelected.map(skill => skill.label).join(","),
         };
@@ -745,8 +759,8 @@ class EditProfileTrainer extends React.Component {
             trainer_employment_id: currentEmploymentIndex !== null ? employments[currentEmploymentIndex].trainer_employment_id : 0,
             user_id: this.state.userId,
             role_title: employmentForm.jobtitle,
-            year_from: parseInt(employmentForm.workedFromYear, 10)?parseInt(employmentForm.workedFromYear, 10):0,
-            year_to: parseInt(employmentForm.workedToYear, 10)?parseInt(employmentForm.workedToYear, 10):0,
+            year_from: parseInt(employmentForm.workedFromYear, 10) ? parseInt(employmentForm.workedFromYear, 10) : 0,
+            year_to: parseInt(employmentForm.workedToYear, 10) ? parseInt(employmentForm.workedToYear, 10) : 0,
             institution: employmentForm.company_name
         };
 
@@ -784,7 +798,7 @@ class EditProfileTrainer extends React.Component {
                 window.scrollTo(0, 0);
             });
 
-       
+
     };
 
     handleShowEducationModal = (index = null) => {
@@ -834,7 +848,7 @@ class EditProfileTrainer extends React.Component {
             user_id: this.state.userId,
             university_board: educationForm.institutionName,
             education_title: educationForm.degree,
-            passing_year: parseInt(educationForm.fromYear, 10)?parseInt(educationForm.fromYear, 10):0,
+            passing_year: parseInt(educationForm.fromYear, 10) ? parseInt(educationForm.fromYear, 10) : 0,
         };
 
         axios.post(url, educationData, {
@@ -871,7 +885,7 @@ class EditProfileTrainer extends React.Component {
                 window.scrollTo(0, 0);
             });
 
- 
+
     };
     removeEducation = (index) => {
         const updatedEducationDetails = this.state.educationDetails.filter(
@@ -888,7 +902,7 @@ class EditProfileTrainer extends React.Component {
             trainer_carrierinfo_id: this.state.trainer_skill_id ? this.state.trainer_skill_id : 0,
             user_id: this.state.userId,
             trainer_type_id: this.state.trainerType ? this.state.trainerType.map(type => type.value).join(",") : '',
-            experience: parseInt(this.state.totalExperience, 10)?parseInt(this.state.totalExperience, 10):0,
+            experience: parseInt(this.state.totalExperience, 10) ? parseInt(this.state.totalExperience, 10) : 0,
             training_mode: this.state.modeOfTraining ? this.state.modeOfTraining.map(mode => mode.value).join(",") : '',
             ipaddress: this.state.ip,
         };
@@ -970,6 +984,7 @@ class EditProfileTrainer extends React.Component {
                                                         id="profile_image"
                                                         onChange={this.handleFileChange}
                                                     />
+                                                     <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px' }}>Note: Please upload a Profile pic with dimensions of 150x150 pixels.</p>
                                                     <label htmlFor="profile_image">Profile Image</label>
                                                     {logoPreview && (
                                                         <div className="mt-3">
@@ -1010,7 +1025,7 @@ class EditProfileTrainer extends React.Component {
                                                     <label htmlFor="email">Email</label>
                                                 </div>
                                                 <div className="form-group phone-input-group">
-                                                <label htmlFor="mobile_no">Mobile Number</label>
+                                                    <label htmlFor="mobile_no">Mobile Number</label>
                                                     <div className="phone-row">
                                                         <Select
                                                             isClearable={true}
@@ -1445,7 +1460,7 @@ class EditProfileTrainer extends React.Component {
                                                         <Modal.Title>{this.state.currentEducationIndex !== null ? 'Edit Education' : 'Add Education'}</Modal.Title>
                                                     </Modal.Header>
                                                     <Modal.Body>
-                                                    {this.state.responseerrorMessage && (
+                                                        {this.state.responseerrorMessage && (
                                                             <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseerrorMessage: '' })} dismissible>
                                                                 {this.state.responseerrorMessage}
                                                             </Alert>
@@ -1545,7 +1560,7 @@ class EditProfileTrainer extends React.Component {
                                                 <div className="form-group">
                                                     <label htmlFor="trainerType">Trainer Type</label>
                                                     <Select
-                                                       isClearable={true}
+                                                        isClearable={true}
                                                         id="trainerType"
                                                         name="trainerType"
                                                         value={this.state.trainerType}
@@ -1578,7 +1593,7 @@ class EditProfileTrainer extends React.Component {
                                                 <div className="form-group">
                                                     <label htmlFor="modeOfTraining">Mode of Training</label>
                                                     <Select
-                                                      isClearable={true}
+                                                        isClearable={true}
                                                         id="modeOfTraining"
                                                         name="modeOfTraining"
                                                         value={this.state.modeOfTraining}

@@ -17,12 +17,16 @@ componentDidMount()
     if (reqType !== "undefined") {
         this.setState({ type: reqType });
     }
+    if(this.props.reqType)
+    {
+        this.setState({ type: this.props.reqType });
+    }
  
 }
     render() {
         return (
             <>
-             <Header dashBoardData={this.state.dashBoardData} />
+            {!this.props.reqType && <Header dashBoardData={this.state.dashBoardData} />}
         {this.state?.type=="Candidate" &&     
         <div className="container mt-5" style={{ fontFamily: 'Arial, sans-serif', lineHeight: '1.6', margin: '20px', textAlign: 'justify' }}>
             <h4 style={{ color: '#333' }}>Terms and Conditions for Candidates/Students on Zobskill.com</h4>
