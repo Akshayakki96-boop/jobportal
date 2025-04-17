@@ -14254,6 +14254,9 @@ span.transparent-button:hover i {
   align-items: center;
   height: 100%;
 }
+.blg-height{
+  max-height: 250px !important;
+}
 @media only screen and (max-width: 767px) {
   .rbt-card.card-list {
     display: block;

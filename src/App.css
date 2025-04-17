@@ -672,9 +672,7 @@ select.form-control option {
   align-items: center;
   gap: 20px; /* Adjust spacing */
 }
-.blg-height{
-  max-height: 250px !important;
-}
+
 .blglst  p{
 margin-bottom: 0px !important;
 }
