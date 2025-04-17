@@ -14191,6 +14191,9 @@ span.transparent-button:hover i {
     flex-basis: 90%;
     font-size: 20px;
   }
+  .blg-height{
+    max-height: 250px !important;
+  }
 }
 @media only screen and (max-width: 767px) {
   .rbt-card.variation-03 .rbt-card-body .rbt-card-title {
@@ -14206,6 +14209,9 @@ span.transparent-button:hover i {
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .rbt-card.variation-03 .rbt-card-body .rbt-card-bottom {
     flex-basis: 10%;
+  }
+  .blg-height{
+    max-height: 250px !important;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -14254,9 +14260,7 @@ span.transparent-button:hover i {
   align-items: center;
   height: 100%;
 }
-.blg-height{
-  max-height: 250px !important;
-}
+
 @media only screen and (max-width: 767px) {
   .rbt-card.card-list {
     display: block;
