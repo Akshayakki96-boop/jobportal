@@ -675,6 +675,9 @@ select.form-control option {
 .blg-height{
   max-height: 250px !important;
 }
+.blglst  p{
+margin-bottom: 0px !important;
+}
 .image-left {
   flex-direction: row; /* Image on the left */
 }

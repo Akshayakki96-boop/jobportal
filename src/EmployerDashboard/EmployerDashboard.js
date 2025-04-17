@@ -294,8 +294,8 @@ class EmployerDashboard extends React.Component {
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a className={this.state.showMyJobs ? 'active' : ''}   href={`/CreateBlogs`}>
-                                                                            <i className="feather-monitor"></i><span>Add Blogs</span>
+                                                                        <a className={this.state.showMyJobs ? 'active' : ''}   href={`/Community`}>
+                                                                            <i className="feather-monitor"></i><span>My Blogs</span>
                                                                         </a>
                                                                     </li>
 
