@@ -672,7 +672,9 @@ select.form-control option {
   align-items: center;
   gap: 20px; /* Adjust spacing */
 }
-
+.blg-height{
+  max-height: 250px !important;
+}
 .image-left {
   flex-direction: row; /* Image on the left */
 }

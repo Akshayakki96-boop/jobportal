@@ -231,7 +231,7 @@ class Community extends React.Component {
                                 <div className="row g-5">
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-12">
                                         {this.state.blogsList && this.state.blogsList.map((blog, index) => (
-                                            <div key={blog.blog_id} className={`blglst rbt-card card-list variation-02 rbt-hover mt--30 ${index % 2 === 0 ? 'image-left' : 'image-right'}`}>
+                                            <div key={blog.blog_id} className={`blglst rbt-card card-list variation-02 rbt-hover mt--30 blg-height ${index % 2 === 0 ? 'image-left' : 'image-right'}`}>
                                                 <div className="rbt-card-img">
                                                     {/* Generating dynamic images */}
                                                     <a href="#">
@@ -245,7 +245,7 @@ class Community extends React.Component {
                                                         <a href={`/community-details?blogId=${blog.blog_id}`}>{blog.title}</a>
                                                     </h6>
                                                     {/* <p style={{ fontSize: '12px' }} className="rbt-card-text"> */}
-                                                    {parse(blog.description.length > 50 ? `${blog.description.substring(0, 300)}...` : blog.description)}
+                                                    {parse(blog.description.length > 50 ? `${blog.description.substring(0, 200)}...` : blog.description)}
                                                     {/* </p> */}
                                                     {/* <ul className="rbt-meta">
 
