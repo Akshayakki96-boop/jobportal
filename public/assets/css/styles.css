@@ -14202,6 +14202,12 @@ span.transparent-button:hover i {
     max-height: inherit !important;
   }
 }
+@media only screen and (min-width: 768px) {
+ 
+  .blg-height{
+    max-height: 250px !important;
+  }
+}
 .rbt-card.variation-03 .rbt-card-body .rbt-card-bottom {
   flex-basis: 20%;
   display: flex;
@@ -14223,9 +14229,7 @@ span.transparent-button:hover i {
     flex-basis: 10%;
   }
 }
-.blg-height{
-  max-height: 250px !important;
-}
+
 .rbt-card.variation-03 .card-information {
   display: flex;
   align-items: center;
