@@ -14191,14 +14191,15 @@ span.transparent-button:hover i {
     flex-basis: 90%;
     font-size: 20px;
   }
-  .blg-height{
-    max-height: 250px !important;
-  }
+ 
 }
 @media only screen and (max-width: 767px) {
   .rbt-card.variation-03 .rbt-card-body .rbt-card-title {
     flex-basis: 90%;
     font-size: 20px;
+  }
+  .blg-height{
+    max-height: inherit !important;
   }
 }
 .rbt-card.variation-03 .rbt-card-body .rbt-card-bottom {
@@ -14210,9 +14211,7 @@ span.transparent-button:hover i {
   .rbt-card.variation-03 .rbt-card-body .rbt-card-bottom {
     flex-basis: 10%;
   }
-  .blg-height{
-    max-height: 250px !important;
-  }
+ 
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .rbt-card.variation-03 .rbt-card-body .rbt-card-bottom {
@@ -14223,6 +14222,9 @@ span.transparent-button:hover i {
   .rbt-card.variation-03 .rbt-card-body .rbt-card-bottom {
     flex-basis: 10%;
   }
+}
+.blg-height{
+  max-height: 250px !important;
 }
 .rbt-card.variation-03 .card-information {
   display: flex;
