@@ -17,7 +17,7 @@ class Footer extends React.Component {
     handleSubmit = () => {
         const email = this.state.email;
         const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Community/AddUpdateBlogs`;
+        const url = `${baseUrl}/api/Subscription/Subscribe`;
         const token = localStorage.getItem('authToken');
         const blogData = {
             "email": email,
