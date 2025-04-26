@@ -474,7 +474,7 @@ class CourseDetails extends React.Component {
                                         </li>
                                         <li>
                                             <i className="feather-award" />
-                                            Certified Course
+                                            Certified Training
                                         </li>
                                     </ul>
                                 </div>
@@ -502,7 +502,7 @@ class CourseDetails extends React.Component {
                                                     <a href="#overview">Overview</a>
                                                 </li>
                                                 <li className={activeSection === 'coursecontent' ? 'current' : ''}>
-                                                    <a href="#coursecontent">Course Description</a>
+                                                    <a href="#coursecontent">Training Description</a>
                                                 </li>
                                                 <li className={activeSection === 'details' ? 'current' : ''}>
                                                     <a href="#details">Details</a>
@@ -590,7 +590,7 @@ class CourseDetails extends React.Component {
                                     >
                                         <div className="rbt-course-feature-inner">
                                             <div className="section-title">
-                                                <h4 className="rbt-title-style-3">Course Content</h4>
+                                                <h4 className="rbt-title-style-3">Training Content</h4>
                                             </div>
                                             <div style={{ textAlign: "left" }}>
                                                 {parse(this.state.courseListingData?.course_materials || "")}
@@ -1954,9 +1954,9 @@ class CourseDetails extends React.Component {
                                     <div className="row g-5 align-items-end mb--40">
                                         <div className="col-lg-8 col-md-8 col-12">
                                             <div className="section-title">
-                                                <span className="subtitle bg-pink-opacity">Top Course</span>
+                                                <span className="subtitle bg-pink-opacity">Top Training</span>
                                                 <h4 className="title">
-                                                    More Course By{" "}
+                                                    More Training By{" "}
                                                     <strong className="color-primary">{this.state.courseListingData?.FullName ? this.state.courseListingData?.FullName : ""}</strong>
                                                 </h4>
                                             </div>
@@ -1967,7 +1967,7 @@ class CourseDetails extends React.Component {
                                                     className="rbt-btn rbt-switch-btn btn-border btn-sm"
                                                     href={`/Course?user_id=${this.state.courseListingData?.posted_by}`}
                                                 >
-                                                    <span data-text="View All Course">View All Course</span>
+                                                    <span data-text="View All Training">View All Training</span>
                                                 </a>
 
                                             </div>

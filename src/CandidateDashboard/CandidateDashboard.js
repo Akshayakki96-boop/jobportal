@@ -269,12 +269,12 @@ class CandidateDashboard extends React.Component {
                                                                     </li>
                                                                     <li>
                                                                         <a className={this.state.showEnrollCourse ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('enrolledCourses'); }} href="#">
-                                                                            <i className="feather-book-open"></i><span>Enroll Course</span>
+                                                                            <i className="feather-book-open"></i><span>Enroll Training</span>
                                                                         </a>
                                                                     </li>
                                                                     <li>
                                                                         <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('mycourses'); }} href="#">
-                                                                            <i className="feather-book-open"></i><span>My Course</span>
+                                                                            <i className="feather-book-open"></i><span>My Training</span>
                                                                         </a>
                                                                     </li>
                                                                     <li>

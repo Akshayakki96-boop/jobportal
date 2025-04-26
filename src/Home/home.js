@@ -221,7 +221,7 @@ class Home extends React.Component {
                                         </h1>
                                         <h5>Marketplace for Training & Jobs</h5>
                                         <p className="description">
-                                            We specialize in offering high-quality courses and connecting you with top employers across industries. Whether you're preparing for career opportunities or exploring diverse training programs, ZobSkill is here to guide your journey.
+                                            We specialize in offering high-quality tranings and connecting you with top employers across industries. Whether you're preparing for career opportunities or exploring diverse training programs, ZobSkill is here to guide your journey.
                                         </p>
 
                                     </div>
@@ -506,8 +506,8 @@ class Home extends React.Component {
                         <div className="row mb--60">
                             <div className="col-lg-12">
                                 <div className="section-title text-center">
-                                    <span className="subtitle bg-secondary-opacity">Top Popular Course</span>
-                                    <h2 className="title">Zobskill Course student <br /> can join with us.</h2>
+                                    <span className="subtitle bg-secondary-opacity">Top Popular Training</span>
+                                    <h2 className="title">Zobskill Traning student <br /> can join with us.</h2>
                                 </div>
                             </div>
                         </div>
@@ -603,7 +603,7 @@ class Home extends React.Component {
                             ) : (
                                 <div className="col-12 mt--30">
                                     <div className="alert alert-warning" role="alert">
-                                        No Courses Found
+                                        No Training Found
                                     </div>
                                 </div>
                             )}
@@ -616,7 +616,7 @@ class Home extends React.Component {
                                         // <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="#" onClick={this.loadMoreCourses}>
                                         <a className="rbt-btn btn-gradient btn-lg hover-icon-reverse" href="/Course">
                                             <span className="icon-reverse-wrapper">
-                                                <span className="btn-text">Load More Courses</span>
+                                                <span className="btn-text">Load More Trainings</span>
                                                 <span className="btn-icon"><i className="feather-arrow-right"></i></span>
                                                 <span className="btn-icon"><i className="feather-arrow-right"></i></span>
                                             </span>
@@ -1057,7 +1057,7 @@ class Home extends React.Component {
                                                 <h3 className="counter">
                                                     <span className="odometer" data-count="800">30</span>
                                                 </h3>
-                                                <span className="subtitle">Courses & Video</span>
+                                                <span className="subtitle">Training & Video</span>
                                             </div>
                                         </div>
                                     </div>

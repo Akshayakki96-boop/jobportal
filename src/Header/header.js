@@ -391,7 +391,7 @@ class Header extends React.Component {
                                         </li>
                                         {(this.props.dashBoardData?.role_id == 1 || this.props.dashBoardData == "") && (
                                             <li className={window.location.pathname === "/Course" ? "active" : ""}>
-                                                <a href="/Course">Course</a>
+                                                <a href="/Course">Training</a>
                                             </li>
                                         )}
 

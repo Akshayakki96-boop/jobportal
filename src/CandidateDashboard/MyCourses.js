@@ -108,7 +108,7 @@ class MyCourses extends React.Component {
             <div className="col-lg-9">
                 {this.state.keepSpinner && <div class="custom-loader">
                     <div class="loader-spinner"></div>
-                    <p class="loader-text">Please Wait while Courses are loading...</p>
+                    <p class="loader-text">Please Wait while Training are loading...</p>
                 </div>}
                 <div className="container mt-5">
                     {this.state.responseMessage && (
@@ -137,10 +137,10 @@ class MyCourses extends React.Component {
                                     <div className="col-lg-12">
 
                                         <div className=" title-wrapper">
-                                            <h1 className="title mb--0">Courses</h1>
+                                            <h1 className="title mb--0">Training</h1>
                                         </div>
                                         <p className="description">
-                                            Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
+                                            Learn. Certify. Succeed. – Upskill with industry-leading trainings and unlock new career opportunities!
                                         </p>
                                     </div>
                                 </div>
@@ -164,7 +164,7 @@ class MyCourses extends React.Component {
                                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                                             <div className="rbt-short-item mt-5">
                                                 <form action="#" className="rbt-search-style me-0">
-                                                    <input type="text" placeholder="Search your courses.." value={this.state.searchQuery}
+                                                    <input type="text" placeholder="Search your training.." value={this.state.searchQuery}
                                                         onChange={this.handleSearchChange} />
                                                     <button
                                                         type="button"
@@ -255,7 +255,7 @@ class MyCourses extends React.Component {
                                     ))
                                 ) : (
                                     <div className="no-courses-found">
-                                        <p>No Courses Found</p>
+                                        <p>No Training Found</p>
                                     </div>
                                 )}
 

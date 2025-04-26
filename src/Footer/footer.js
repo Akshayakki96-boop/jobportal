@@ -101,7 +101,7 @@ class Footer extends React.Component {
 
                                     <ul className="ft-link">
                                         <li>
-                                            <a href="/Course">Courses</a>
+                                            <a href="/Course">Trainings</a>
                                         </li>
                                         <li>
                                             <a href="/Jobs">Jobs</a>

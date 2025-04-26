@@ -195,17 +195,17 @@ class Course extends React.Component {
                                                         <i className="feather-chevron-right" />
                                                     </div>
                                                 </li>
-                                                <li className="rbt-breadcrumb-item active">All Course</li>
+                                                <li className="rbt-breadcrumb-item active">All Training</li>
                                             </ul>
                                             {/* End Breadcrumb Area  */}
                                             <div className=" title-wrapper">
-                                                <h1 className="title mb--0">All Courses</h1>
+                                                <h1 className="title mb--0">All Training</h1>
                                                 <a href="#" className="rbt-badge-2">
-                                                    <div className="image">🎉</div> {totalRecords} Courses
+                                                    <div className="image">🎉</div> {totalRecords} Training
                                                 </a>
                                             </div>
                                             <p className="description">
-                                            Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
+                                            Learn. Certify. Succeed. – Upskill with industry-leading trainings and unlock new career opportunities!
                                             </p>
                                         </div>
                                     </div>

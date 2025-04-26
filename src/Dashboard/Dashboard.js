@@ -209,7 +209,7 @@ class Dashboard extends React.Component {
                                                 <div className="tutor-btn">
                                                     <a className="rbt-btn btn-md hover-icon-reverse" href="/create-new">
                                                         <span className="icon-reverse-wrapper">
-                                                            <span className="btn-text">Create a New Course</span>
+                                                            <span className="btn-text">Create a New Training</span>
                                                             <span className="btn-icon">
                                                                 <i className="feather-arrow-right"></i>
                                                             </span>
@@ -250,7 +250,7 @@ class Dashboard extends React.Component {
 
                                                                     <li>
                                                                         <a className={this.state.showMyCourses ? 'active' : ''} onClick={(e) => { e.preventDefault(); this.setActiveComponent('myCourses'); }} href="#">
-                                                                            <i className="feather-monitor"></i><span>My Courses</span>
+                                                                            <i className="feather-monitor"></i><span>My Trainings</span>
                                                                         </a>
                                                                     </li>
                                                                     <li>

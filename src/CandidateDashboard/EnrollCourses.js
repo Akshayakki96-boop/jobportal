@@ -56,7 +56,7 @@ class EnrollCourses extends React.Component {
                     this.setState({ courseListingData: response.data.data, totalRecords: totalCount, keepSpinner: false });
                 }
                 else {
-                    this.setState({ errorMessage: "No Course Found", keepSpinner: false });
+                    this.setState({ errorMessage: "No Training Found", keepSpinner: false });
                 }
 
             })
@@ -101,7 +101,7 @@ class EnrollCourses extends React.Component {
                 console.log('applyCourse', response.data);
                 this.setState({ applyCourseData: response.data.data,isEnroll:true });
 
-                    this.setState({ responseMessage: "Course Enrolled successfully", alertVariant: 'success' });
+                    this.setState({ responseMessage: "Training Enrolled successfully", alertVariant: 'success' });
                     window.scrollTo(0, 0);
                     const { currentPage, pageSize } = this.state;
                     this.setState({ currentPage }, () => {
@@ -199,7 +199,7 @@ class EnrollCourses extends React.Component {
             <div className="col-lg-9">
             {this.state.keepSpinner && <div class="custom-loader">
                 <div class="loader-spinner"></div>
-                <p class="loader-text">Please Wait while Courses are loading...</p>
+                <p class="loader-text">Please Wait while training are loading...</p>
             </div>}
             <div className="container mt-5">
                 {this.state.responseMessage && (
@@ -223,10 +223,10 @@ class EnrollCourses extends React.Component {
                         <div className="col-lg-12">
 
                         <div className=" title-wrapper">
-                            <h1 className="title mb--0">Courses</h1>
+                            <h1 className="title mb--0">Trainings</h1>
                         </div>
                         <p className="description">
-                            Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
+                            Learn. Certify. Succeed. – Upskill with industry-leading training and unlock new career opportunities!
                         </p>
                         </div>
                     </div>
@@ -250,7 +250,7 @@ class EnrollCourses extends React.Component {
                         <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                             <div className="rbt-short-item mt-5">
                             <form action="#" className="rbt-search-style me-0">
-                                <input type="text" placeholder="Search your courses.." value={this.state.searchQuery}
+                                <input type="text" placeholder="Search your training.." value={this.state.searchQuery}
                                 onChange={this.handleSearchChange} />
                                 <button
                                 type="button"
@@ -363,7 +363,7 @@ class EnrollCourses extends React.Component {
         ))
     ) : (
         <div className="no-courses-found">
-        <p>No Courses Found</p>
+        <p>No Training Found</p>
         </div>
     )}
 
@@ -506,7 +506,7 @@ class EnrollCourses extends React.Component {
                         ></button>
                         </div>
                         <div className="modal-body">
-                        <p>Are you sure you want to enroll for the course?</p>
+                        <p>Are you sure you want to enroll for the Training?</p>
                         </div>
                         <div className="modal-footer">
                         <button

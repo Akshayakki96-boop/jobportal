@@ -65,7 +65,7 @@ class TrainerDashboard extends React.Component {
                       <h3 className="counter without-icon color-secondary">
                         <span className="odometer" data-count="10">{this.state.dashBoardData?.course_count}</span>
                       </h3>
-                      <span className="rbt-title-style-2 d-block">Active Courses</span>
+                      <span className="rbt-title-style-2 d-block">Active Training</span>
                     </div>
                   </div>
                 </div>

@@ -552,7 +552,7 @@ class CreateCourse extends React.Component {
 
                             <div className="col-lg-12">
                                 <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                    <h3 className="title">Create New Course</h3>
+                                    <h3 className="title">Create New Training</h3>
                                     <hr className="mb--30" />
                                     <form onSubmit={(e) => e.preventDefault()} className="row row--15">
                                         { /* Candidate Basic Info Section */}
@@ -567,7 +567,7 @@ class CreateCourse extends React.Component {
                                                     onChange={this.handleFileChange}
                                                 />
                                                 <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px'}}>Note: Please upload a Course logo with dimensions of 150x150 pixels.</p>
-                                                <label htmlFor="profile_image">Course Image</label>
+                                                <label htmlFor="profile_image">Training Image</label>
                                                 {this.state.logoPreview && (
                                                     <div className="mt-3">
                                                         <img
@@ -593,7 +593,7 @@ class CreateCourse extends React.Component {
                                                     value={this.state.courseName}
                                                     onChange={this.handleCourseNameChange}
                                                 />
-                                                <label htmlFor="coursename">Course Name</label>
+                                                <label htmlFor="coursename">Training Name</label>
                                             </div>
                                             <div className="form-group" style={{ position: "relative" }}>
                                                 <label
@@ -657,7 +657,7 @@ class CreateCourse extends React.Component {
                                                 {this.state.showValidMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group">
-                                            <label htmlFor="coursefee">Course Fee*</label>
+                                            <label htmlFor="coursefee">Training Fee*</label>
                                                 <div className="mobile-input d-flex align-items-center">
                                                     <Select
                                                         className="country-code-select"
@@ -687,7 +687,7 @@ class CreateCourse extends React.Component {
                                                 {this.state.showValisMessage && <small className="text-danger">Enter numeric digits</small>}
                                             </div>
                                             <div className="form-group" style={{ paddingBottom: "50px" }}>
-                                            <label>Course Material</label>
+                                            <label>Training Material</label>
                                                 <ReactQuill
                                                     value={this.state.courseMaterial}
                                                     onChange={this.handleCourseMaterial}
@@ -700,13 +700,13 @@ class CreateCourse extends React.Component {
                                             </div>
 
                                             <div className="form-group" style={{ paddingBottom: "50px" }}>
-                                            <label>Course Description</label>
+                                            <label>Training Description</label>
                                                 <ReactQuill
                                                     value={this.state.description}
                                                     onChange={this.handleDescriptionChange}
                                                     theme="snow"
                                                     modules={this.modules}
-                                                    placeholder="Course Description"
+                                                    placeholder="Training Description"
                                                     formats={this.formats}
                                                     style={{ height: "200px" }}
                                                 />

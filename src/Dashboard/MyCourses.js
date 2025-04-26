@@ -52,7 +52,7 @@ class MyCourses extends React.Component {
           this.setState({ courseListingData: response.data.data, totalRecords: totalCount, keepSpinner: false });
         }
         else {
-          this.setState({ errorMessage: "No Course Found", keepSpinner: false });
+          this.setState({ errorMessage: "No Training Found", keepSpinner: false });
         }
 
       })
@@ -96,8 +96,8 @@ class MyCourses extends React.Component {
       .then((response) => {
         this.setState({
           responseMessage: isactive
-            ? "Course Activated Successfully!"
-            : "Course Deactivated Successfully!",
+            ? "Training Activated Successfully!"
+            : "Training Deactivated Successfully!",
           alertVariant: 'success', // Success alert variant
         });
         window.scrollTo(0, 0);
@@ -137,7 +137,7 @@ class MyCourses extends React.Component {
         this.setState({
           responseMessage: (
             <span>
-              Course Deleted Successfully
+              Training Deleted Successfully
             </span>
           ),
           alertVariant: 'success', // Success alert variant
@@ -183,7 +183,7 @@ class MyCourses extends React.Component {
       <div className="col-lg-9">
         {this.state.keepSpinner && <div class="custom-loader">
           <div class="loader-spinner"></div>
-          <p class="loader-text">Please Wait while Courses are loading...</p>
+          <p class="loader-text">Please Wait while training are loading...</p>
         </div>}
         <div className="container mt-5">
           {this.state.responseMessage && (
@@ -204,10 +204,10 @@ class MyCourses extends React.Component {
                   <div className="col-lg-12">
 
                     <div className=" title-wrapper">
-                      <h1 className="title mb--0">Courses</h1>
+                      <h1 className="title mb--0">Trainings</h1>
                     </div>
                     <p className="description">
-                      Learn. Certify. Succeed. – Upskill with industry-leading courses and unlock new career opportunities!
+                      Learn. Certify. Succeed. – Upskill with industry-leading training and unlock new career opportunities!
                     </p>
                   </div>
                 </div>
@@ -231,7 +231,7 @@ class MyCourses extends React.Component {
                     <div className="rbt-sorting-list d-flex flex-wrap align-items-center justify-content-start justify-content-lg-end">
                       <div className="rbt-short-item mt-5">
                         <form action="#" className="rbt-search-style me-0">
-                          <input type="text" placeholder="Search your courses.." value={this.state.searchQuery}
+                          <input type="text" placeholder="Search your training.." value={this.state.searchQuery}
                             onChange={this.handleSearchChange} />
                           <button
                             type="button"
@@ -309,7 +309,7 @@ class MyCourses extends React.Component {
                           </li>
                           {!course.isactive && <li>
                             <a style={{ marginBottom: "10px", color: "blue" }} className="rbt-btn-link" href={`/edit-course?courseId=${course.courseid}`}>
-                              Edit Course
+                              Edit Training
                               <i className="feather-arrow-right" />
                             </a>
                           </li>}
@@ -322,7 +322,7 @@ class MyCourses extends React.Component {
                           </li>}
                           <li>
 
-                            {!course.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course, true)}>Activate Course</a> : <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course, false)}>Deactivate Course</a>}
+                            {!course.isactive ? <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course, true)}>Activate Course</a> : <a href="#" style={{ textDecoration: 'underline' }} onClick={() => this.ActivateCourse(course, false)}>Deactivate Training</a>}
                           </li>
                         </ul>
 
