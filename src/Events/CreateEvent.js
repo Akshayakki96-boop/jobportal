@@ -8,6 +8,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Import styles
 import { Quill } from "react-quill";
 import AdvancedBreadcumb from '../Breadcumb/advancebreadcrumb';
+import Select from 'react-select';
 
 const Link = Quill.import('formats/link');
 Link.sanitize = function (url) {
@@ -33,8 +34,8 @@ class CreateEvent extends React.Component {
 
     fetchIP = async () => {
         try {
-           let response = await fetch("https://checkip.amazonaws.com");
-           let data = await response.text();
+            let response = await fetch("https://checkip.amazonaws.com");
+            let data = await response.text();
             this.setState({ ip: data.trim() });
         } catch (error) {
             this.setState({ ip: "Error fetching IP" });
@@ -65,108 +66,32 @@ class CreateEvent extends React.Component {
 
 
 
-    handleInputChange = (event) => {
-        this.setState({ title: event.target.value });
-    }
+    handleInputChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
+    };
 
-    handleFileChange = async (event) => {
-        const file = event.target.files[0];
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/FileUpload/UploadBlogImage`;
-        const token = localStorage.getItem('authToken');
-        const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    handleDescriptionChange = (value) => {
+        this.setState({ description: value });
+    };
+
+    handleSelectChange = (name, selectedOption) => {
+        this.setState({ [name]: selectedOption });
+    };
+
+    handleFileChange = (e, field) => {
+        const file = e.target.files[0];
         if (file) {
-            if (!validImageTypes.includes(file.type)) {
-                // Set an error message if the file type is not valid
-                this.setState({ uploadStatus: 'Invalid file type! Please upload an image file.' });
-                return;
-            }
-            this.setState({
-                logo: file,
-                logoPreview: URL.createObjectURL(file), // Preview the uploaded file
-                uploadStatus: null,
-                // Clear any previous error
-            }, this.validateForm);
-
-            // Create FormData and append the file
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                // Call the API to upload the file
-                const response = await axios.post(url, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                console.log('File uploaded successfully:', response.data);
-                this.setState({ fileName: response.data.filePath })
-                this.setState({ uploadStatus: 'File uploaded successfully!' });
-            } catch (error) {
-                console.error('Error uploading file:', error);
-                this.setState({ uploadStatus: 'Error uploading file!' });
-            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                this.setState({ [field]: file, logoPreview: reader.result });
+            };
+            reader.readAsDataURL(file);
         }
     };
 
-    // Save profile changes
-    handleSaveBlogs = () => {
-        // Add logic to save updated data (e.g., API call)
-       // this.setState({ showModal: false });
-       if(!this.state.title || !this.state.description|| !this.state.fileName){
-        this.setState({
-            responseMessage: "Please fill all the fields!",
-            alertVariant: 'danger', // Error alert variant
-
-        });
-        window.scrollTo(0, 0); // Scroll to the top of the page
-        return;
-       }
-        const baseUrl = process.env.REACT_APP_BASEURL;
-        const url = `${baseUrl}/api/Community/AddUpdateBlogs`;
-        const token = localStorage.getItem('authToken');
-        const blogData = {
-            "id": 0,
-            "title": this.state.title,
-            "description": this.state.description,
-            "blog_image": this.state.fileName,
-            //"role_id": 0
-          }
-
-        axios.post(url, blogData, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => {
-                this.setState({ keepSpinner: false });
-                // this.props.navigate('/EmployerDashboard?message=profilesuccess');
-                //this.props.navigate('/Login'); // Use `navigate`
-                this.setState({
-                    responseMessage: "Blogs Added successfully!",
-                    alertVariant: 'success', // Success alert variant
-
-                });
-                window.scrollTo(0, 0); // Scroll to the top of the page
-            })
-            .catch((error) => {
-                console.error('Signup Error:', error.response?.data || error.message);
-                this.setState({ keepSpinner: false });
-                this.setState({
-                    responseMessage: error.response?.data.message,
-                    alertVariant: 'danger', // Error alert variant
-
-                });
-                window.scrollTo(0, 0); // Scroll to the top of the page
-            });
-    };
-
-
-    handleDescriptionChange = (description) => {
-        this.setState({ description });
+    handleSaveEvent = () => {
+        // Your submit logic here
+        console.log(this.state);
     };
 
     modules = {
@@ -190,143 +115,391 @@ class CreateEvent extends React.Component {
 
 
     render() {
-
+        const eventTypeOptions = [
+            { value: 'Webinar', label: 'Webinar' },
+            { value: 'Workshop', label: 'Workshop' },
+            { value: 'Job Fair', label: 'Job Fair' },
+            { value: 'Networking Event', label: 'Networking Event' },
+            { value: 'Training', label: 'Training' }
+        ];
+        const eventCategoryOptions = [
+            { value: 'IT', label: 'IT' },
+            { value: 'Healthcare', label: 'Healthcare' },
+            { value: 'Marketing', label: 'Marketing' },
+            { value: 'Finance', label: 'Finance' }
+        ];
+        const timeZoneOptions = [
+            { value: 'EST', label: 'EST' },
+            { value: 'PST', label: 'PST' },
+            { value: 'IST', label: 'IST' },
+            { value: 'GMT', label: 'GMT' }
+        ];
+        const eventFormatOptions = [
+            { value: 'Online', label: 'Online' },
+            { value: 'Offline', label: 'Offline' },
+            { value: 'Hybrid', label: 'Hybrid' }
+        ];
+        const yesNoOptions = [
+            { value: 'Yes', label: 'Yes' },
+            { value: 'No', label: 'No' }
+        ];
+        const feeTypeOptions = [
+            { value: 'Free', label: 'Free' },
+            { value: 'Paid', label: 'Paid' }
+        ];
         return (
             <><Header dashBoardData={this.state.dashBoardData} />
-                    {this.state.responseMessage && (
-                        <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
-                            {this.state.responseMessage}
-                        </Alert>
-                    )}
-                      <div className="rbt-breadcrumb-default ptb--100 ptb_md--50 ptb_sm--30 bg-gradient-1">
-               <div className="container">
-             <div className="row">
-               <div className="col-lg-12">
-                 <div className="breadcrumb-inner text-center">
-                   <h2 className="title">Create New Event</h2>
-                   <ul className="page-list">
-                 <li className="rbt-breadcrumb-item">
-                   <a href="/community">Community</a>
-                 </li>
-                 <li>
-                   <div className="icon-right">
-                     <i className="feather-chevron-right" />
-                   </div>
-                 </li>
-                 <li className="rbt-breadcrumb-item active">Create New Event</li>
-                   </ul>
-                 </div>
-               </div>
-             </div>
-               </div>
-             </div>
+                {this.state.responseMessage && (
+                    <Alert variant={this.state.alertVariant} onClose={() => this.setState({ responseMessage: '' })} dismissible>
+                        {this.state.responseMessage}
+                    </Alert>
+                )}
+                <div className="rbt-breadcrumb-default ptb--100 ptb_md--50 ptb_sm--30 bg-gradient-1">
                     <div className="container">
-                        <div className="row pt--60 g-5">
+                        <div className="row">
                             <div className="col-lg-12">
-                                <div className="rbt-contact-form contact-form-style-1 max-width-auto">
-                                    <h3 className="title">Create New Event</h3>
-                                    <hr className="mb--30" />
-                                    <form onSubmit={(e) => e.preventDefault()} className="row row--15">
-                                   
-                                        <div className="col-lg-12">
-                                            <div className="form-group">
-                                                <input
-                                                    type="text"
-                                                    name="eventname"
-                                                    className="form-control"
-                                                    value={this.eventName}
-                                                    onChange={this.handleInputChange}
-                                                    id="eventname"
-                                                />
-                                                <label htmlFor="eventname">Event Name</label>
-                                                <span className="focus-border" />
+                                <div className="breadcrumb-inner text-center">
+                                    <h2 className="title">Create New Event</h2>
+                                    <ul className="page-list">
+                                        <li className="rbt-breadcrumb-item">
+                                            <a href="/community">Community</a>
+                                        </li>
+                                        <li>
+                                            <div className="icon-right">
+                                                <i className="feather-chevron-right" />
                                             </div>
-                                        </div>
-                                        <div className="col-lg-12">
-                                            <div className="form-group">
-                                                <input
-                                                    type="text"
-                                                    name="organizername"
-                                                    className="form-control"
-                                                    value={this.organizerName}
-                                                    onChange={this.handleInputChange}
-                                                    id="organizername"
-                                                />
-                                                <label htmlFor="organizername">Organizer Name</label>
-                                                <span className="focus-border" />
-                                            </div>
-                                        </div>
-                                        <div className='col-lg-12'>
-                                            <div className="form-group" style={{ paddingBottom: "50px" }}>
-                                                <ReactQuill
-                                                    value={this.state.description}
-                                                    onChange={this.handleDescriptionChange}
-                                                    theme="snow"
-                                                    modules={this.modules}
-                                                    placeholder="Description"
-                                                    formats={this.formats}
-                                                    style={{ height: "200px" }}
-                                                />
-                                            </div>
-                                        </div>
-                                        {this.state.description && this.state.description.length > 2000 && (
-                                            <span style={{ color: "red" }}>
-                                                Description cannot exceed 2000 characters.
-                                            </span>
-                                        )}
-     <div className="col-lg-12">
-                                            <div className="form-group">
-                                                <input
-                                                    type="file"
-                                                    className="form-control"
-                                                    accept="image/*"
-                                                    id="companyLogo"
-                                                    onChange={this.handleFileChange}
-                                                />
-                                                <span className="focus-border" />
-                                                {this.state.logoPreview && (
-                                                    <div className="mt-3">
-                                                        <img
-                                                            src={this.state.logoPreview}
-                                                            alt="Logo Preview"
-                                                            style={{
-                                                                width: '100px',
-                                                                height: '100px',
-                                                                objectFit: 'cover',
-                                                                borderRadius: '50px',
-                                                            }}
-                                                        />
-                                                    </div>
-                                                )}
-                                                {this.state.uploadStatus && <small className={this.state.uploadStatus == "File uploaded successfully!" ? "text-success" : "text-danger"}>{this.state.uploadStatus}</small>}
-                                            </div>
-                                        </div>
-                                        <div className="col-lg-12">
-                                            <div className="form-submit-group">
-                                                <button
-                                                    type="button"
-                                                    className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
-                                                    onClick={this.handleSaveBlogs}
-                                                >
-                                                    <span className="icon-reverse-wrapper">
-                                                        <span className="btn-text">Save</span>
-                                                        <span className="btn-icon">
-                                                            <i className="feather-arrow-right" />
-                                                        </span>
-                                                        <span className="btn-icon">
-                                                            <i className="feather-arrow-right" />
-                                                        </span>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-
+                                        </li>
+                                        <li className="rbt-breadcrumb-item active">Create New Event</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </>
+                </div>
+                <div className="container">
+                    <div className="row pt--60 g-5">
+                        <div className="col-lg-12">
+                            <div className="rbt-contact-form contact-form-style-1 max-width-auto">
+                                <h3 className="title">Create New Event</h3>
+                                <hr className="mb--30" />
+                                <form onSubmit={(e) => e.preventDefault()} className="row row--15">
+                                    {/* Event Name */}
+                                    <div className="col-lg-12">
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                name="eventName"
+                                                className="form-control"
+                                                value={this.state.eventName}
+                                                onChange={this.handleInputChange}
+                                                id="eventName"
+                                            />
+                                            <label htmlFor="eventName">Event Name*</label>
+                                            <span className="focus-border" />
+                                        </div>
+                                    </div>
+
+                                    {/* Organizer Name */}
+                                    <div className="col-lg-12">
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                name="organizerName"
+                                                className="form-control"
+                                                value={this.state.organizerName}
+                                                onChange={this.handleInputChange}
+                                                id="organizerName"
+                                            />
+                                            <label htmlFor="organizerName">Organizer Name*</label>
+                                            <span className="focus-border" />
+                                        </div>
+                                    </div>
+
+                                    {/* Dropdowns */}
+                                    <div className="col-lg-6">
+                                        <div className="form-group">
+                                            <label>Event Type*</label>
+                                            <Select
+                                                options={eventTypeOptions}
+                                                isClearable={true}
+                                                value={this.state.eventType}
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                                onChange={(option) => this.handleSelectChange('eventType', option)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-lg-6">
+                                        <div className="form-group">
+                                            <label>Event Category</label>
+                                            <Select
+                                                options={eventCategoryOptions}
+                                                isClearable={true}
+                                                value={this.state.eventCategory}
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                                onChange={(option) => this.handleSelectChange('eventCategory', option)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Date & Time */}
+                                    <div className="col-lg-4">
+                                        <div className="form-group">
+                                            <label>Event Date*</label>
+                                            <input
+                                                type="date"
+                                                name="eventDate"
+                                                className="form-control"
+                                                value={this.state.eventDate}
+                                                onChange={this.handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-lg-4">
+                                        <div className="form-group">
+                                            <label>Start Time*</label>
+                                            <input
+                                                type="time"
+                                                name="startTime"
+                                                className="form-control"
+                                                value={this.state.startTime}
+                                                onChange={this.handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-lg-4">
+                                        <div className="form-group">
+                                            <label>End Time*</label>
+                                            <input
+                                                type="time"
+                                                name="endTime"
+                                                className="form-control"
+                                                value={this.state.endTime}
+                                                onChange={this.handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Timezone */}
+                                    <div className="col-lg-6">
+                                        <div className="form-group">
+                                            <label>Time Zone</label>
+                                            <Select
+                                                options={timeZoneOptions}
+                                                isClearable={true}
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                                value={this.state.timeZone}
+                                                onChange={(option) => this.handleSelectChange('timeZone', option)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Format */}
+                                    <div className="col-lg-6">
+                                        <div className="form-group">
+                                            <label>Event Format*</label>
+                                            <Select
+                                                options={eventFormatOptions}
+                                                isClearable={true}
+                                                value={this.state.eventFormat}
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                                onChange={(option) => this.handleSelectChange('eventFormat', option)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Platform / Venue */}
+                                    {this.state.eventFormat?.value === 'Online' && (
+                                        <div className="col-lg-6">
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    name="eventPlatform"
+                                                    className="form-control"
+                                                    placeholder="Event Platform (If Online)"
+                                                    value={this.state.eventPlatform}
+                                                    onChange={this.handleInputChange}
+                                                />
+                                                <span className="focus-border" />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {this.state.eventFormat?.value === 'Offline' && (<div className="col-lg-6">
+                                        <div className="form-group">
+                                            <input
+                                                type="text"
+                                                name="physicalVenue"
+                                                className="form-control"
+                                                placeholder="Physical Venue (If Offline)"
+                                                value={this.state.physicalVenue}
+                                                onChange={this.handleInputChange}
+                                            />
+                                            <span className="focus-border" />
+                                        </div>
+                                    </div>
+                                    )}
+
+                                    {/* Description */}
+                                    <div className="col-lg-12">
+                                        <div className="form-group" style={{ paddingBottom: "50px" }}>
+                                            <ReactQuill
+                                                value={this.state.description}
+                                                onChange={this.handleDescriptionChange}
+                                                theme="snow"
+                                                placeholder="About the Event*"
+                                                style={{ height: "200px" }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* More text fields */}
+                                    {/* Target Audience, Key Topics, Speakers */}
+                                    {['targetAudience', 'keyTopics', 'speakers', 'registrationLink', 'contactPerson', 'contactEmail', 'contactPhone', 'socialLinks'].map((field, idx) => (
+                                        <div className="col-lg-12" key={idx}>
+                                            <div className="form-group">
+                                                <input
+                                                    type="text"
+                                                    name={field}
+                                                    className="form-control"
+                                                    placeholder={field.split(/(?=[A-Z])/).join(' ')}
+                                                    value={this.state[field]}
+                                                    onChange={this.handleInputChange}
+                                                />
+                                                <span className="focus-border" />
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {/* Fee Type and Amount */}
+                                    <div className="col-lg-6">
+                                        <div className="form-group">
+                                            <label>Fee Type*</label>
+                                            <Select
+                                                isClearable={true}
+                                                options={feeTypeOptions}
+                                                value={this.state.feeType}
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                                onChange={(option) => this.handleSelectChange('feeType', option)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {this.state.feeType?.value === 'Paid' && (
+                                        <div className="col-lg-6">
+                                            <div className="form-group">
+                                                <input
+                                                    type="number"
+                                                    name="feeAmount"
+                                                    className="form-control"
+                                                    placeholder="Enter Fee Amount"
+                                                    value={this.state.feeAmount}
+                                                    onChange={this.handleInputChange}
+                                                />
+                                                <span className="focus-border" />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Upload banner and logo */}
+                                    {['bannerImage', 'companyLogo'].map((field, idx) => (
+                                        <div className="col-lg-12" key={idx}>
+                                            <div className="form-group">
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="form-control"
+                                                    id={field}
+                                                    onChange={(e) => this.handleFileChange(e, field)}
+                                                />
+                                                <label htmlFor={field}>
+                                                    {field === 'bannerImage' ? 'Event Banner Image' : 'Company Logo'}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    ))}
+
+
+                                    {/* Yes/No Options */}
+                                    <div className="col-lg-6">
+                                        <div className="form-group">
+                                            <label>Allow Questions Before Event?</label>
+                                            <Select
+                                                options={yesNoOptions}
+                                                isClearable={true}
+                                                value={this.state.allowQuestions}
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                                onChange={(option) => this.handleSelectChange('allowQuestions', option)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-lg-6">
+                                        <div className="form-group">
+                                            <label>Promote Event by Zobskill?</label>
+                                            <Select
+                                                options={yesNoOptions}
+                                                isClearable={true}
+                                                value={this.state.promoteEvent}
+                                                classNamePrefix="select"
+                                                menuPortalTarget={document.body}
+                                                styles={{
+                                                    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                                                }}
+                                                onChange={(option) => this.handleSelectChange('promoteEvent', option)}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Save button */}
+                                    <div className="col-lg-12">
+                                        <div className="form-submit-group">
+                                            <button
+                                                type="button"
+                                                className="rbt-btn btn-md btn-gradient hover-icon-reverse w-100"
+                                                onClick={this.handleSaveEvent}
+                                            >
+                                                <span className="icon-reverse-wrapper">
+                                                    <span className="btn-text">Save</span>
+                                                    <span className="btn-icon"><i className="feather-arrow-right" /></span>
+                                                    <span className="btn-icon"><i className="feather-arrow-right" /></span>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>
 
 
         );

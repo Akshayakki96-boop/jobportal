@@ -29,7 +29,7 @@ class Home extends React.Component {
     }
     componentDidMount() {
         this.getDashboardUser();
-        this.getAllJobs(0,3);
+        this.getAllJobs(0,4);
         this.getAllCourse(0, 3);
     }
 
