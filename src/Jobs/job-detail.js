@@ -279,7 +279,7 @@ class jobDetails extends React.Component {
                         </ul>
                         {/* End Breadcrumb Area  */}
                         <div className=" title-wrapper">
-                          <h1 className="title mb--0">   {this.state.jobDescription && this.state.jobDescription.jobtitle}</h1>
+                          <h1 className="title mb--0 title-width">   {this.state.jobDescription && this.state.jobDescription.jobtitle}</h1>
                           <a href="#" className="rbt-badge-2" style={{ marginRight: "10px" }}>
                             {this.state.jobDescription && this.state.jobDescription.empType}
                           </a>
@@ -471,7 +471,7 @@ class jobDetails extends React.Component {
                         </div>
                         <p>
                           <span className="d-block mb--5">
-                            <strong>Role:</strong> {this.state.jobDescription && this.state.jobDescription.posted_by_designation}
+                            <strong>Role:</strong> {this.state.jobDescription && this.state.jobDescription.roleTitle}
                           </span>
                           <span className="d-block mb--5">
                             <strong>Industry Type:</strong> {this.state.jobDescription && this.state.jobDescription.industryname}
@@ -482,9 +482,9 @@ class jobDetails extends React.Component {
                           <span className="d-block mb--5">
                             <strong>Employment Type:</strong> {this.state.jobDescription && this.state.jobDescription.empType}
                           </span>
-                          <span className="d-block mb--5">
+                          {/* <span className="d-block mb--5">
                             <strong>Role Category:</strong> Digital Marketing
-                          </span>
+                          </span> */}
                         </p>
                         <h5 className="title">Education:</h5>
                         <p>
@@ -512,7 +512,7 @@ class jobDetails extends React.Component {
                         : "No keyskills available"}
                     </div>
 
-                    <div
+                    {/* <div
                       className="rbt-post-share d-flex  pt--15 mt--15"
                       style={{ borderTop: "1px solid #ccc" }}
                     >
@@ -538,7 +538,7 @@ class jobDetails extends React.Component {
                           </a>
                         </li>
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
                   {/* End Course Content  */}
                 </div>

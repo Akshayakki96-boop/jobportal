@@ -13827,6 +13827,9 @@ span.transparent-button:hover i {
 .rbt-page-banner-wrapper .rbt-banner-content-top .title {
   font-size: 42px;
 }
+.title-width{
+  width:80%;
+}
 @media only screen and (max-width: 767px) {
   .rbt-page-banner-wrapper .rbt-banner-content-top .title {
     font-size: 32px;
