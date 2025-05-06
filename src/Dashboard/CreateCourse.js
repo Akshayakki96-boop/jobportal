@@ -144,10 +144,10 @@ class CreateCourse extends React.Component {
         const image = new Image();
         image.src = URL.createObjectURL(file);
         image.onload = async () => {
-            if (image.width !== 150 || image.height !== 150) {
-                this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
-                return;
-            }
+            // if (image.width !== 150 || image.height !== 150) {
+            //     this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
+            //     return;
+            // }
 
             if (!file) return; // No file selected
             if (file && !validImageTypes.includes(file.type)) {
@@ -566,7 +566,7 @@ class CreateCourse extends React.Component {
                                                     id="profile_image"
                                                     onChange={this.handleFileChange}
                                                 />
-                                                <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px'}}>Note: Please upload a Course logo with dimensions of 150x150 pixels.</p>
+                                                {/* <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px'}}>Note: Please upload a Course logo with dimensions of 150x150 pixels.</p> */}
                                                 <label htmlFor="profile_image">Training Image</label>
                                                 {this.state.logoPreview && (
                                                     <div className="mt-3">
@@ -574,8 +574,8 @@ class CreateCourse extends React.Component {
                                                             src={this.state.logoPreview}
                                                             alt="Logo Preview"
                                                             style={{
-                                                                width: '100px',
-                                                                height: '100px',
+                                                                width: '30%',
+                                                                height: '30%',
                                                                 objectFit: 'cover',
                                                                 borderRadius: '8px',
                                                             }}
