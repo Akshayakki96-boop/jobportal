@@ -152,10 +152,10 @@ class EditProfile extends React.Component {
             image.src = URL.createObjectURL(file);
 
             image.onload = () => {
-                if (image.width !== 150 || image.height !== 150) {
-                    this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
-                    return;
-                }
+                // if (image.width !== 150 || image.height !== 150) {
+                //     this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
+                //     return;
+                // }
 
                 if (!validImageTypes.includes(file.type)) {
                     // Set an error message if the file type is not valid
@@ -301,7 +301,7 @@ class EditProfile extends React.Component {
                                 id="companyLogo"
                                 onChange={this.handleFileChange}
                             />
-                        <p style={{ textAlign: "left" }}>Note: Please upload a Employer logo with dimensions of 150x150 pixels.</p>
+                        {/* <p style={{ textAlign: "left" }}>Note: Please upload a Employer logo with dimensions of 150x150 pixels.</p> */}
                             <span className="focus-border" />
                             {logoPreview && (
                                 <div className="mt-3">
@@ -309,8 +309,8 @@ class EditProfile extends React.Component {
                                     src={logoPreview}
                                     alt="Logo Preview"
                                     style={{
-                                    width: '100px',
-                                    height: '100px',
+                                    width: '30%',
+                                    height: '30%',
                                     objectFit: 'cover',
                                     borderRadius: '50px',
                                     }}

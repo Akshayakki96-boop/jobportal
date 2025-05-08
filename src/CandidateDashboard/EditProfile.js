@@ -495,10 +495,10 @@ class EditProfileCandidate extends React.Component {
                    image.src = URL.createObjectURL(file);
        
                    image.onload = () => {
-                       if (image.width !== 150 || image.height !== 150) {
-                           this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
-                           return;
-                       }
+                    //    if (image.width !== 150 || image.height !== 150) {
+                    //        this.setState({ uploadStatus: 'Image dimensions must be 150x150 pixels!' });
+                    //        return;
+                    //    }
        
                        if (!validImageTypes.includes(file.type)) {
                            // Set an error message if the file type is not valid
@@ -1098,7 +1098,7 @@ class EditProfileCandidate extends React.Component {
                                                     id="profile_image"
                                                     onChange={this.handleFileChange}
                                                 />
-                                                 <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px' }}>Note: Please upload a Profile pic with dimensions of 150x150 pixels.</p>
+                                                 {/* <p style={{ textAlign: "left" ,fontWeight:"bold",fontSize:'13px' }}>Note: Please upload a Profile pic with dimensions of 150x150 pixels.</p> */}
                                                 <label htmlFor="profile_image">Profile Image</label>
                                                 {logoPreview && (
                                                     <div className="mt-3">
@@ -1106,8 +1106,8 @@ class EditProfileCandidate extends React.Component {
                                                             src={logoPreview}
                                                             alt="Logo Preview"
                                                             style={{
-                                                                width: '100px',
-                                                                height: '100px',
+                                                                width: '30%',
+                                                                height: '30%',
                                                                 objectFit: 'cover',
                                                                 borderRadius: '50px',
                                                             }}
