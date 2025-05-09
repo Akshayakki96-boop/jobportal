@@ -491,6 +491,19 @@ class CreateJob extends React.Component {
                                                 <span className="focus-border" />
                                             </div>
                                         </div>
+                                        <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={this.state.isPackageDisclosed}
+                                                    id="isRefundable"
+                                                    name="isRefundable"
+                                                    onChange={this.hanldeCheckChange}
+                                                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                                                />
+                                                <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
+                                                   Package Not Disclosed
+                                                </label>
+                                            </div>
                                         <div className="col-lg-12">
                                             <div className="form-group">
                                                 <input name="openings" type="text" value={this.state.openings} onChange={(e) => this.handleOpenings(e)} />
@@ -636,19 +649,7 @@ class CreateJob extends React.Component {
                                             </div>
                                            
                                         </div>
-                                        <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={this.state.isPackageDisclosed}
-                                                    id="isRefundable"
-                                                    name="isRefundable"
-                                                    onChange={this.hanldeCheckChange}
-                                                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
-                                                />
-                                                <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
-                                                    Don't want to disclose package ?
-                                                </label>
-                                            </div>
+                                       
                                         <div className="col-lg-12">
                                             <div className="form-submit-group d-flex gap-3">
                                                 <button

@@ -299,8 +299,8 @@ class EditJob extends React.Component {
             "experienceFrom": this.state.fromExperience,
             "experienceTo": this.state.toExperience,
             "job_mode": this.state.selectedMode ? this.state.selectedMode.value : 0,
-            "packageId": this.state.selectedPackage.value,
-            "packageNotdisclosed": false,
+            "packageId":this.state.selectedPackage? this.state.selectedPackage.value:0,
+            "packageNotdisclosed": this.state.isPackageDisclosed,
             "roleId": this.state.selectedRole ? this.state.selectedRole.value : 0,
             "emptypeId": this.state.selectedEmpType ? this.state.selectedEmpType.value : 0,
             "deptId": this.state.selectedDepartment ? this.state.selectedDepartment.value : 0,
@@ -505,6 +505,19 @@ class EditJob extends React.Component {
                                             <span className="focus-border" />
                                         </div>
                                     </div>
+                                    <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={this.state.isPackageDisclosed}
+                                                    id="isRefundable"
+                                                    name="isRefundable"
+                                                    onChange={this.hanldeCheckChange}
+                                                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                                                />
+                                                <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
+                                                Package Not Disclosed
+                                                </label>
+                                            </div>
 
                                     <div className="col-lg-12">
                                         <div className="form-group">
@@ -658,20 +671,7 @@ class EditJob extends React.Component {
                                         </div>
 
                                     </div>
-                                    <div className="form-group-check" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={this.state.isPackageDisclosed}
-                                                    id="isRefundable"
-                                                    name="isRefundable"
-                                                    onChange={this.hanldeCheckChange}
-                                                    style={{ width: "16px", height: "16px", cursor: "pointer" }}
-                                                />
-                                                <label htmlFor="isRefundable" style={{ cursor: "pointer", marginBottom: "0px" }}>
-                                                Don't want to disclose package ?
-                                                </label>
-                                            </div>
-
+                                  
                                     <div className="col-lg-12">
                                         <div className="form-submit-group d-flex gap-3">
                                             {/* <button
