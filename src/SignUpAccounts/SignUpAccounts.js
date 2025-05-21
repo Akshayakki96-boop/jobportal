@@ -12,6 +12,7 @@ class SignUpAccounts extends Component {
             columnDefs: [
             { field: "UserName", headerName: "UserName", sortable: true, filter: true },
             { field: "Email", headerName: "Email", sortable: true, filter: true,width:213 },
+            { field: "mobile_no", headerName: "Mobile No", sortable: true, filter: true,width:213 },
             { field: "user_role", headerName: "Role", sortable: true, filter: true },
             { field: "EmailStatus", headerName: "EmailStatus", sortable: true, filter: true },
             { field: "status", headerName: "Status", sortable: true, filter: true, width: 100 },
