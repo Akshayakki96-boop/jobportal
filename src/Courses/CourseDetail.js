@@ -97,6 +97,8 @@ class CourseDetails extends React.Component {
             currency: this.state.courseListingData?.currency,
             name: "Your Company Name",
             description: "Test Transaction",
+            tax_inclusive: false,
+            tax: order.tax_amountInPaisa, 
             order_id: order.order_id, // Order ID from backend
             handler: async (response) => {
                 console.log("Payment Response:", response);
